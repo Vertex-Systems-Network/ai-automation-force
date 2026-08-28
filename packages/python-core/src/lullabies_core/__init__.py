@@ -31,6 +31,15 @@ from .legacy_import import (
     reconcile_legacy_content_import,
 )
 from .lineage import ProductionLineageBundle
+from .persistence import (
+    PersistResult,
+    PersistenceConflictError,
+    PersistenceError,
+    PersistenceNotFoundError,
+    PersistenceReferenceError,
+    PersistenceShapeError,
+    PostgresProductionRepository,
+)
 from .production import (
     Approval,
     Asset,
@@ -93,6 +102,13 @@ __all__ = [
     "Location",
     "LockScope",
     "OutputProfile",
+    "PersistResult",
+    "PersistenceConflictError",
+    "PersistenceError",
+    "PersistenceNotFoundError",
+    "PersistenceReferenceError",
+    "PersistenceShapeError",
+    "PostgresProductionRepository",
     "ProductionLineageBundle",
     "Project",
     "ProjectBundle",
