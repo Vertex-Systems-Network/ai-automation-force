@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "generation-ledger.schema.json",
+  "title": "Generation Ledger",
+  "type": "object",
+  "required": ["schema_version", "updated_at", "attempts"],
+  "properties": {
+    "schema_version": {"type": "integer", "minimum": 1},
+    "updated_at": {"type": "string"},
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["run_id", "asset_type", "provider", "model", "status", "created_at"],
+        "properties": {
+          "run_id": {"type": "string"},
+          "content_id": {"type": ["string", "null"]},
+          "video_id": {"type": ["string", "null"]},
+          "shot_id": {"type": ["string", "null"]},
+          "attempt_number": {"type": ["integer", "null"], "minimum": 1},
+          "asset_type": {"enum": ["speech", "music", "image", "video", "video_edit", "mix", "other"]},
+          "provider": {"type": "string"},
+          "model": {"type": "string"},
+          "access_class": {"type": ["string", "null"]},
+          "prompt_hash": {"type": ["string", "null"]},
+          "source_asset_hashes": {"type": "array", "items": {"type": "string"}},
+          "first_frame_hash": {"type": ["string", "null"]},
+          "last_frame_hash": {"type": ["string", "null"]},
+          "provider_generation_id": {"type": ["string", "null"]},
+          "requested_duration_seconds": {"type": ["number", "null"], "minimum": 0},
+          "actual_duration_seconds": {"type": ["number", "null"], "minimum": 0},
+          "output_hash": {"type": ["string", "null"]},
+          "output_location": {"type": ["string", "null"]},
+          "continuity_scores": {"type": ["object", "null"]},
+          "qa_status": {"type": ["string", "null"]},
+          "rejection_reason": {"type": ["string", "null"]},
+          "quota_consumed": {"type": ["number", "null"], "minimum": 0},
+          "estimated_cost_usd": {"type": ["number", "null"], "minimum": 0},
+          "license_status": {"type": ["string", "null"]},
+          "watermark": {"type": ["boolean", "null"]},
+          "status": {"enum": ["queued", "running", "succeeded", "qa_failed", "failed", "approved"]},
+          "created_at": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}
