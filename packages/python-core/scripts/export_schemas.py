@@ -5,6 +5,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from pydantic import BaseModel
+
 from ai_automation_force_core import (
     SCHEMA_VERSION,
     Act,
@@ -35,7 +37,7 @@ from ai_automation_force_core import (
 
 SCHEMA_BASE_ID = f"urn:ai-automation-force:schema:v{SCHEMA_VERSION}"
 
-MODELS = {
+MODELS: dict[str, type[BaseModel]] = {
     "project": Project,
     "project-bundle": ProjectBundle,
     "character": Character,
@@ -63,7 +65,7 @@ MODELS = {
 }
 
 
-def render_schema(name: str, model: type) -> str:
+def render_schema(name: str, model: type[BaseModel]) -> str:
     schema = model.model_json_schema(mode="validation")
     schema["$schema"] = "https://json-schema.org/draft/2020-12/schema"
     schema["$id"] = f"{SCHEMA_BASE_ID}:{name}"
