@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from lullabies_core import (
+    Act,
     Approval,
     Asset,
     Character,
@@ -15,6 +16,7 @@ from lullabies_core import (
     Job,
     Location,
     Project,
+    ProjectBundle,
     Prop,
     QARecord,
     RightsRecord,
@@ -26,11 +28,11 @@ from lullabies_core import (
     Timeline,
     VoiceProfile,
     World,
-    Act,
 )
 
 MODELS = {
     "project": Project,
+    "project-bundle": ProjectBundle,
     "character": Character,
     "character-version": CharacterVersion,
     "world": World,
