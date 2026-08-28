@@ -1126,11 +1126,11 @@ class BundleReader:
         attempts: list[GenerationAttempt],
         takes: list[Take],
     ) -> list[QARecord]:
-        wanted = {
-            qa_id
-            for item in [*attempts, *takes]
-            for qa_id in item.qa_record_ids
-        }
+        wanted: set[str] = set()
+        for attempt in attempts:
+            wanted.update(attempt.qa_record_ids)
+        for take in takes:
+            wanted.update(take.qa_record_ids)
         table = self.db.table("qa_records")
         if subject_ids:
             rows = connection.execute(
@@ -1290,4 +1290,4 @@ class BundleReader:
 
     @staticmethod
     def _decimal(value: object) -> Decimal | None:
-        return Decimal(value) if value is not None else None
+        return Decimal(str(value)) if value is not None else None
