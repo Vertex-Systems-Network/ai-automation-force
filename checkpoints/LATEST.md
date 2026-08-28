@@ -1,7 +1,7 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m01-wp5-postgresql-architecture-complete.md`
+`checkpoints/2026-08-29-m01-wp6-migrations-complete.md`
 
 Current phase: **M01 — Core Domain & Persistence Boundary**
 
@@ -57,7 +57,10 @@ Checkpoint:
 
 ### WP5 — PostgreSQL persistence architecture
 
-Architecture contract complete on PR #5.
+Merged via PR #5.
+
+Merge commit:
+`b456c1732dcd01e0505f501b3560387613ce54be`
 
 Checkpoint:
 `checkpoints/2026-08-29-m01-wp5-postgresql-architecture-complete.md`
@@ -65,17 +68,29 @@ Checkpoint:
 Canonical mapping:
 `docs/architecture/POSTGRESQL-PERSISTENCE-ARCHITECTURE.md`
 
-The persistence boundary now defines internal UUID keys vs stable external IDs, relational/JSONB/array mappings for every current M01 entity/value object, deterministic ordered joins, same-owner deferred selection/pin constraints, indexes, transaction/revision policy, fail-closed Rights checks, legacy import ledger design, and explicit DB-vs-aggregate invariant ownership.
+### WP6 — Reversible PostgreSQL migration scaffold
+
+Implementation and PostgreSQL 18 verification complete on PR #6.
+
+Checkpoint:
+`checkpoints/2026-08-29-m01-wp6-migrations-complete.md`
+
+Verified executable head:
+`43a11c5a2ef386298685341aacaab044fd9af0ba`
+
+Verified GitHub Actions run/job:
+`33219768541 / 99011168309`
+
+The permanent Python 3.12 workflow passed Ruff, strict mypy, unit tests, real PostgreSQL migration lifecycle/constraint tests, generated-schema synchronization, compile checks and PostgreSQL container cleanup.
 
 ## Current next step
 
-`WP6 — Reversible initial database migration scaffold`
+`WP7 — Persistence repositories and round-trip verification`
 
 ## Remaining M01 sequence
 
-1. WP6 — reversible migration scaffold;
-2. WP7 — repositories and short/long project round-trip verification;
-3. WP8 — complete M01 verification and final checkpoint.
+1. WP7 — repositories and short/long project round-trip verification;
+2. WP8 — complete M01 verification and final checkpoint.
 
 ## Scope boundary
 
