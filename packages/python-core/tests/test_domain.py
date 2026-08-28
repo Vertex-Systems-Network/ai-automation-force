@@ -129,7 +129,7 @@ def test_ninety_minute_movie_contract_validates() -> None:
         audit=audit(),
     )
 
-    assert project.content_format is ContentFormat.MOVIE
+    assert project.content_format == ContentFormat.MOVIE
     assert timeline.duration_seconds == 5400
     assert len(timeline.act_ids) == 3
 
