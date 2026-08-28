@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from datetime import datetime
 from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated, Final, Literal
@@ -22,6 +21,33 @@ def external_id_pattern(prefix: str) -> str:
     """
 
     return rf"^{prefix}-[0-9]{{6,20}}$"
+
+
+ProjectId = Annotated[str, Field(pattern=external_id_pattern("PRJ"))]
+ContentId = Annotated[str, Field(pattern=external_id_pattern("CNT"))]
+ContentVersionId = Annotated[str, Field(pattern=external_id_pattern("CTV"))]
+CharacterId = Annotated[str, Field(pattern=external_id_pattern("CHR"))]
+CharacterVersionId = Annotated[str, Field(pattern=external_id_pattern("CHV"))]
+LookId = Annotated[str, Field(pattern=external_id_pattern("LOOK"))]
+WorldId = Annotated[str, Field(pattern=external_id_pattern("WRL"))]
+LocationId = Annotated[str, Field(pattern=external_id_pattern("LOC"))]
+PropId = Annotated[str, Field(pattern=external_id_pattern("PRP"))]
+StyleProfileId = Annotated[str, Field(pattern=external_id_pattern("STY"))]
+VoiceProfileId = Annotated[str, Field(pattern=external_id_pattern("VOC"))]
+ActId = Annotated[str, Field(pattern=external_id_pattern("ACT"))]
+SequenceId = Annotated[str, Field(pattern=external_id_pattern("SEQ"))]
+SceneId = Annotated[str, Field(pattern=external_id_pattern("SCN"))]
+ShotId = Annotated[str, Field(pattern=external_id_pattern("SHT"))]
+TakeId = Annotated[str, Field(pattern=external_id_pattern("TAK"))]
+TimelineId = Annotated[str, Field(pattern=external_id_pattern("TML"))]
+TrackId = Annotated[str, Field(pattern=external_id_pattern("TRK"))]
+AssetId = Annotated[str, Field(pattern=external_id_pattern("AST"))]
+JobId = Annotated[str, Field(pattern=external_id_pattern("JOB"))]
+AttemptId = Annotated[str, Field(pattern=external_id_pattern("ATT"))]
+QARecordId = Annotated[str, Field(pattern=external_id_pattern("QAR"))]
+CostRecordId = Annotated[str, Field(pattern=external_id_pattern("CST"))]
+RightsRecordId = Annotated[str, Field(pattern=external_id_pattern("RGT"))]
+ApprovalId = Annotated[str, Field(pattern=external_id_pattern("APR"))]
 
 
 class StrictModel(BaseModel):
