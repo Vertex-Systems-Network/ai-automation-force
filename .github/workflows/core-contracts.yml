@@ -20,7 +20,23 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ai_automation_force_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ai_automation_force_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/ai_automation_force_test
     steps:
       - uses: actions/checkout@v7
 
@@ -37,13 +53,16 @@ jobs:
         run: ruff check packages/python-core
 
       - name: Mypy
-        run: mypy packages/python-core/src packages/python-core/scripts
+        run: mypy packages/python-core/src packages/python-core/scripts packages/python-core/migrations
 
-      - name: Unit tests
+      - name: Unit and PostgreSQL integration tests
         run: pytest packages/python-core/tests
 
       - name: Verify generated schemas are synchronized
         run: python packages/python-core/scripts/export_schemas.py --check
 
-      - name: Compile package
-        run: python -m compileall -q packages/python-core/src
+      - name: Compile package and migrations
+        run: >-
+          python -m compileall -q
+          packages/python-core/src
+          packages/python-core/migrations
