@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from decimal import Decimal
 from typing import Annotated, Any
 
 from pydantic import AwareDatetime, Field, model_validator
@@ -171,8 +172,8 @@ class CostRecord(StrictModel):
     provider_id: str
     model_provider_id: str | None = None
     model_id: str
-    free_credits_used: NonNegativeDecimal = 0
-    paid_cost: NonNegativeDecimal = 0
+    free_credits_used: NonNegativeDecimal = Decimal("0")
+    paid_cost: NonNegativeDecimal = Decimal("0")
     currency: str = Field(default="USD", min_length=3, max_length=3)
     estimated: bool = False
     recorded_at: AwareDatetime
