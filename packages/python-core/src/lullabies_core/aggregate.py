@@ -117,6 +117,10 @@ class ProjectBundle(StrictModel):
                 )
             self._assert_unique_orders(owned_scenes, sequence.sequence_id, "Scene")
 
+        for shot in self.shots:
+            if shot.scene_id not in scenes:
+                raise ValueError(f"shot {shot.shot_id} has missing parent scene")
+
         for scene in self.scenes:
             if scene.sequence_id not in sequences:
                 raise ValueError(f"scene {scene.scene_id} has missing parent sequence")
@@ -246,6 +250,7 @@ class ProjectBundle(StrictModel):
                 f"project references missing characters: {sorted(missing_declared)}"
             )
 
+        scenes = {scene.scene_id: scene for scene in self.scenes}
         used: set[str] = set()
         for scene in self.scenes:
             self._assert_unique_refs(
@@ -259,8 +264,9 @@ class ProjectBundle(StrictModel):
                 f"shot {shot.shot_id} character_ids",
             )
             used.update(shot.character_ids)
-            scene = next(item for item in self.scenes if item.scene_id == shot.scene_id)
-            undeclared_in_scene = set(shot.character_ids) - set(scene.character_ids)
+            undeclared_in_scene = set(shot.character_ids) - set(
+                scenes[shot.scene_id].character_ids
+            )
             if undeclared_in_scene:
                 raise ValueError(
                     f"shot {shot.shot_id} uses characters not declared by scene: "
@@ -292,6 +298,7 @@ class ProjectBundle(StrictModel):
             if location.world_id is not None and location.world_id not in worlds:
                 raise ValueError(f"location {location.location_id} references missing world")
 
+        scenes = {scene.scene_id: scene for scene in self.scenes}
         required_location_ids: set[str] = set()
         for scene in self.scenes:
             if scene.location_id is not None:
@@ -299,7 +306,7 @@ class ProjectBundle(StrictModel):
         for shot in self.shots:
             if shot.location_id is not None:
                 required_location_ids.add(shot.location_id)
-            scene = next(item for item in self.scenes if item.scene_id == shot.scene_id)
+            scene = scenes[shot.scene_id]
             if (
                 scene.location_id is not None
                 and shot.location_id is not None
