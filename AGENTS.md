@@ -12,7 +12,7 @@ The repository is the canonical engineering/policy/history source during the cur
 
 The normal operator command is `next`.
 
-`next` does not always mean "write new content". It means inspect canonical project state and autonomously execute the highest-value safe next unit of work in the lifecycle.
+`next` does not always mean "write new content". It means inspect canonical project state and autonomously execute the highest-value safe next unit of work that is permitted by current policy and consent state.
 
 ## Mandatory startup sequence
 
@@ -20,26 +20,48 @@ Before doing project work:
 
 1. Read `README.md`.
 2. Read `AGENTS.md`.
-3. Read `ai-native/ENGINEERING-CONTRACT.md`.
-4. Read `ai-native/MASTER-PLAN.md`.
-5. Read `docs/architecture/DEVELOPMENT-PLAN.md` when development is relevant.
-6. Read `docs/architecture/TECH-STACK.md` when architecture/code is relevant.
-7. Read `config/project-taxonomy.yaml`.
-8. Read `config/execution-policy.yaml`.
-9. Read `config/content-policy.yaml` for child/content-policy work.
-10. Read `config/provider-registry.yaml`.
-11. Read `config/update-policy.yaml` when provider research/self-update is relevant.
-12. Read `ai-native/SYSTEM.md` and `ai-native/WORKFLOW.md` where applicable.
-13. Read `ai-native/QUALITY-GATES.md` and `ai-native/MEMORY-BANK.md`.
-14. Read `ai-native/AUDIO-ROUTER.md` when audio is relevant.
-15. Read `ai-native/VIDEO-CONTINUITY.md` when visual/video work is relevant.
-16. Read `ai-native/FREE-TIER-ROUTER.md` when provider routing/cost is relevant.
-17. Read product docs for character/timeline/project-option work.
-18. Read all machine-readable state/ledger files required for the current job.
-19. Inspect current implementation, tests and recent relevant Git history.
-20. Determine the first incomplete or highest-value eligible job.
+3. Read `ai-native/DEVELOPMENT-CONSENT-GATE.md`.
+4. Read `ai-native/ENGINEERING-CONTRACT.md`.
+5. Read `ai-native/MASTER-PLAN.md`.
+6. Read `docs/architecture/DEVELOPMENT-PLAN.md` when development is relevant.
+7. Read `docs/architecture/TECH-STACK.md` when architecture/code is relevant.
+8. Read `config/project-taxonomy.yaml`.
+9. Read `config/execution-policy.yaml`.
+10. Read `config/content-policy.yaml` for child/content-policy work.
+11. Read `config/provider-registry.yaml`.
+12. Read `config/update-policy.yaml` when provider research/self-update is relevant.
+13. Read `ai-native/SYSTEM.md` and `ai-native/WORKFLOW.md` where applicable.
+14. Read `ai-native/QUALITY-GATES.md` and `ai-native/MEMORY-BANK.md`.
+15. Read `ai-native/AUDIO-ROUTER.md` when audio is relevant.
+16. Read `ai-native/VIDEO-CONTINUITY.md` when visual/video work is relevant.
+17. Read `ai-native/FREE-TIER-ROUTER.md` when provider routing/cost is relevant.
+18. Read product docs for character/timeline/project-option work.
+19. Read all machine-readable state/ledger files required for the current job.
+20. Inspect current implementation, tests and recent relevant Git history.
+21. Determine the first incomplete or highest-value eligible job.
+22. Before crossing from planning into executable development, verify that explicit operator consent exists for the exact development scope.
 
 Never rely only on chat memory when repository/runtime state exists.
+
+## Mandatory development consent gate
+
+`ai-native/DEVELOPMENT-CONSENT-GATE.md` is authoritative.
+
+Research, audit, planning, architecture analysis and non-executable documentation may continue without development consent.
+
+Executable development must not begin or resume until the operator explicitly approves a scoped Development Consent Brief.
+
+A generic `continue`, `next`, `resume` or similar command is not development consent unless the operator explicitly authorizes implementation/code development.
+
+When the next meaningful action is executable development and approval has not been given:
+
+1. finish the planning/audit needed to define the scope;
+2. prepare the Development Consent Brief required by the consent-gate document;
+3. set/describe project state as `PLANNING_READY_FOR_CONSENT` where appropriate;
+4. stop before implementation;
+5. ask the operator for explicit consent.
+
+Do not interpret prior consent for one milestone as blanket authorization for later milestones or materially expanded scope.
 
 ## Product model invariants
 
@@ -89,15 +111,17 @@ A normal `next` run must:
 - choose the highest-value eligible job;
 - refresh research/provider facts if stale and material;
 - preserve idempotency and job history;
-- execute only within safety, rights, licensing and cost policy;
-- route across free or paid providers using execution policy;
+- execute only within safety, rights, licensing, cost and consent policy;
+- route across free or paid providers using execution policy when that production scope is authorized;
 - run mandatory QA;
 - save canonical artifacts/manifests only after relevant gates pass;
 - record rejected attempts as history;
 - update state atomically;
 - summarize completed work, remaining work and genuine blocks.
 
-If no production item is in progress, `next` may begin a content/project planning cycle according to project settings and portfolio policy.
+If the next job is executable development and no matching development consent exists, `next` must prepare the development brief and stop at the consent gate rather than implement.
+
+If no production item is in progress, `next` may begin a content/project planning cycle according to project settings and portfolio policy, subject to consent whenever executable development is involved.
 
 ## Non-negotiable rules
 
@@ -160,7 +184,7 @@ Do not optimize output count at the expense of originality, coherence, continuit
 
 ## Engineering contract
 
-All implementation/maintenance work must follow `ai-native/ENGINEERING-CONTRACT.md`.
+All implementation/maintenance work must follow `ai-native/ENGINEERING-CONTRACT.md` and the development consent gate.
 
 This includes architecture-first work, impact analysis, current official-source research when material, security, risk-based testing, durable workflows, provider abstraction, data/media integrity, provenance, observability, controlled dependencies, checkpoints and honest completion status.
 
@@ -172,7 +196,7 @@ The daily scout is controlled by:
 - `config/update-policy.yaml`;
 - `config/provider-sources.json`.
 
-It may auto-merge only permitted low-risk Class A/B changes after validation and repository rules.
+It may auto-merge only permitted low-risk Class A/B changes after validation and repository rules, and only when those changes are explicitly classified as non-development under `ai-native/DEVELOPMENT-CONSENT-GATE.md`.
 
 It must not blindly self-merge:
 - new provider integrations;
@@ -183,7 +207,7 @@ It must not blindly self-merge:
 - publishing behavior;
 - destructive changes.
 
-A newly discovered provider starts disabled/evaluation-only until adapter, tests, license and capability validation exist.
+A newly discovered provider starts disabled/evaluation-only until adapter, tests, license and capability validation exist and any required development consent has been granted.
 
 ## Lifecycle/history
 
@@ -212,11 +236,12 @@ Failed history is valuable and must not be discarded merely because the asset wa
 - Never commit secrets.
 - Use deterministic IDs/checksums.
 - Do not overwrite the only canonical approved asset/version.
-- Do not silently weaken safety, licensing, cost or review controls.
+- Do not silently weaken safety, licensing, cost, review or consent controls.
 
 ## Human escalation
 
 Human/independent approval remains required when configured or materially necessary, especially for:
+- any executable development scope not already explicitly approved;
 - public publishing until policy explicitly enables otherwise;
 - paid use without configured authorization/caps;
 - destructive deletion of canonical history/assets;
@@ -225,4 +250,4 @@ Human/independent approval remains required when configured or materially necess
 - unresolved commercial-use/consent/license state;
 - Class C/D automated self-update changes.
 
-Routine research, planning, generation, QA, provider routing and already-authorized paid calls may proceed without unnecessary per-step questions.
+Routine research, planning, audits, non-executable documentation and analysis may proceed without unnecessary per-step questions. Executable implementation may proceed only inside an explicitly approved development scope.
