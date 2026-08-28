@@ -32,12 +32,12 @@ from .legacy_import import (
 )
 from .lineage import ProductionLineageBundle
 from .persistence import (
-    PersistResult,
     PersistenceConflictError,
     PersistenceError,
     PersistenceNotFoundError,
     PersistenceReferenceError,
     PersistenceShapeError,
+    PersistResult,
     PostgresProductionRepository,
 )
 from .production import (
@@ -59,7 +59,16 @@ from .project import (
     Project,
     ProviderPolicyRef,
 )
-from .timeline import Act, ContinuityState, Scene, Sequence, Shot, Take, Timeline, TimelineTrack
+from .timeline import (
+    Act,
+    ContinuityState,
+    Scene,
+    Sequence,
+    Shot,
+    Take,
+    Timeline,
+    TimelineTrack,
+)
 
 __all__ = [
     "LEGACY_CONTENT_MAPPING_VERSION",
