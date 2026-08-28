@@ -1,0 +1,46 @@
+name: Core Domain Contracts
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "packages/python-core/**"
+      - "schemas/**"
+      - ".github/workflows/core-contracts.yml"
+  pull_request:
+    paths:
+      - "packages/python-core/**"
+      - "schemas/**"
+      - ".github/workflows/core-contracts.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: packages/python-core/pyproject.toml
+
+      - name: Install core package
+        run: python -m pip install -e "packages/python-core[dev]"
+
+      - name: Ruff
+        run: ruff check packages/python-core
+
+      - name: Unit tests
+        run: pytest packages/python-core/tests
+
+      - name: Verify schema exporter
+        run: python packages/python-core/scripts/export_schemas.py
+
+      - name: Compile package
+        run: python -m compileall -q packages/python-core/src
