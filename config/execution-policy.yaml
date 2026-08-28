@@ -1,0 +1,107 @@
+schema_version: 1
+execution_mode: HYBRID_SMART
+
+operator:
+  default_command: next
+  public_publish_requires_approval: true
+  destructive_actions_require_approval: true
+
+routing:
+  provider_agnostic_core: true
+  free_capacity_preferred_when_fit: true
+  allow_manual_free_handoff: true
+  allow_paid_api: true
+  allow_paid_automatic_within_caps: false
+  quality_may_override_free_preference: true
+  continuity_may_override_free_preference: true
+  commercial_license_required_for_publish: true
+  stale_provider_facts_require_refresh: true
+
+modes:
+  FREE_ONLY:
+    paid_api_allowed: false
+    manual_free_allowed: true
+    stop_when_no_eligible_free_route: true
+  FREE_FIRST:
+    paid_api_allowed: true
+    paid_requires_explicit_run_approval: true
+    free_preferred: true
+  HYBRID_SMART:
+    paid_api_allowed: true
+    free_preferred_when_expected_quality_is_sufficient: true
+    choose_by_expected_accepted_output_cost: true
+    paid_requires_budget_authorization: true
+  BUDGET_CAPPED:
+    paid_api_allowed: true
+    enforce_all_budget_caps: true
+    choose_best_route_inside_budget: true
+  QUALITY_FIRST:
+    paid_api_allowed: true
+    free_preference: false
+    choose_highest_expected_accepted_quality: true
+    still_enforce_hard_budget_caps: true
+
+budget:
+  currency: USD
+  per_attempt_cap: null
+  per_shot_cap: null
+  per_content_cap: null
+  per_run_cap: null
+  daily_cap: null
+  monthly_cap: null
+  reserve_estimated_cost_before_paid_call: true
+  reconcile_actual_cost_after_call: true
+  estimate_retry_adjusted_cost: true
+  silent_overspend_allowed: false
+
+quality:
+  same_qa_for_free_and_paid: true
+  rejected_output_never_becomes_canonical: true
+  critical_safety_failures_are_hard_failures: true
+  critical_continuity_failures_are_hard_failures: true
+  unresolved_license_is_hard_publish_block: true
+
+history:
+  record_successful_attempts: true
+  record_rejected_attempts: true
+  record_manual_handoffs: true
+  record_provider_and_model: true
+  record_prompt_hash: true
+  record_input_asset_hashes: true
+  record_output_hash: true
+  record_quota_usage: true
+  record_paid_cost: true
+  preserve_failed_attempt_history: true
+
+resilience:
+  idempotency_required: true
+  atomic_state_updates: true
+  job_locks_required: true
+  retry_budget_required: true
+  provider_circuit_breaker: true
+  partial_pipeline_resume: true
+  never_restart_completed_shots_on_provider_switch: true
+
+video:
+  long_form_strategy: storyboard_keyframes_short_shots
+  provider_selection_scope: per_shot
+  canonical_continuity_state: true
+  preferred_routes:
+    - native_extension
+    - first_last_frame
+    - image_to_video_reference
+    - reference_video
+    - text_to_video
+  text_only_for_strict_continuity: false
+
+storage:
+  git_is_canonical_state: true
+  raw_media_in_git_by_default: false
+  store_media_hashes_and_manifests: true
+  secrets_in_git: false
+
+publishing:
+  default_upload_privacy: private
+  made_for_kids_review_required: true
+  synthetic_media_review_required: true
+  human_gate_before_public: true
