@@ -1,0 +1,304 @@
+schema_version: 1
+product_scope:
+  profile: general-ai-media-studio
+  initial_niche_profile: kids
+  extensible: true
+
+audience:
+  classes:
+    - baby
+    - toddler
+    - preschool
+    - child
+    - preteen
+    - teen
+    - general
+    - adult
+    - family
+    - custom
+  child_directed_requires_age_band: true
+
+cast:
+  age_composition:
+    - none
+    - baby
+    - child
+    - teen
+    - adult
+    - senior
+    - mixed
+    - non-human
+    - custom
+  gender_composition:
+    - none
+    - male
+    - female
+    - mixed
+    - unspecified
+    - non-human
+    - custom
+  ui_presets:
+    kids:
+      audience_hint: child
+      cast_age_hint: child
+    adults:
+      audience_hint: adult
+      cast_age_hint: adult
+    men:
+      cast_age_hint: adult
+      cast_gender_hint: male
+    women:
+      cast_age_hint: adult
+      cast_gender_hint: female
+    both:
+      cast_age_hint: adult
+      cast_gender_hint: mixed
+    mixed:
+      cast_age_hint: mixed
+      cast_gender_hint: mixed
+
+character_strategy:
+  values:
+    - locked-existing
+    - new-and-lock
+    - mixed
+    - one-off
+    - no-character
+    - ai-decide
+  reuse_policy:
+    - reuse_only
+    - new_only
+    - reuse_preferred
+    - new_preferred
+    - mixed
+    - ai_decide
+  recurring_character_requires_lock: true
+
+character_types:
+  human:
+    - baby
+    - toddler
+    - boy
+    - girl
+    - teen-boy
+    - teen-girl
+    - adult-man
+    - adult-woman
+    - senior-man
+    - senior-woman
+    - family-group
+  non_human:
+    - realistic-animal
+    - anthropomorphic-animal
+    - fantasy-creature
+    - friendly-monster
+    - robot
+    - toy-mascot
+    - object-character
+    - vehicle-character
+    - nature-character
+    - alien-fictional-creature
+    - custom
+
+content_formats:
+  - song
+  - sung-lullaby
+  - spoken-lullaby
+  - poem
+  - rhyme
+  - story
+  - bedtime-story
+  - guided-imagination
+  - educational-video
+  - explainer
+  - music-video
+  - dialogue-scene
+  - short-film
+  - episode
+  - series-episode
+  - movie
+  - documentary
+  - cinematic-sequence
+  - compilation
+  - trailer-teaser
+  - short-social
+  - custom
+
+creative_treatments:
+  - cinematic
+  - animated-2d
+  - animated-3d
+  - stylized-3d
+  - realistic-live-action
+  - storybook
+  - stop-motion-inspired
+  - clay-inspired
+  - paper-cut-inspired
+  - sketch-illustrative
+  - educational-clean
+  - musical
+  - adventure
+  - fantasy
+  - science-fiction
+  - mystery
+  - comedy
+  - emotional-drama
+  - bedtime-gentle
+  - documentary
+  - nature
+  - historical
+  - action
+  - dance-performance
+  - surreal
+  - abstract
+  - custom
+
+style_policy:
+  protected_franchise_imitation_presets: prohibited
+  living_artist_style_imitation_presets: prohibited
+
+duration:
+  unit: seconds
+  minimum: 60
+  recommended_short_default: 120
+  maximum: 10800
+  presets:
+    - [60, 60]
+    - [120, 120]
+    - [180, 300]
+    - [300, 600]
+    - [600, 1800]
+    - [1800, 3600]
+    - [3600, 5400]
+    - [5400, 7200]
+    - [7200, 10800]
+  custom_allowed: true
+  single_provider_call_not_required: true
+
+languages:
+  fields:
+    - source_language
+    - narration_language
+    - dialogue_languages
+    - lyric_language
+    - subtitle_languages
+    - metadata_language
+    - localization_targets
+    - accent_dialect
+    - pronunciation_dictionary
+
+visual:
+  aspect_ratios:
+    - 16:9
+    - 9:16
+    - 1:1
+    - 4:3
+    - 3:4
+    - 21:9
+    - custom
+  target_resolutions:
+    - draft
+    - 720p
+    - 1080p
+    - 1440p
+    - 4k
+  frame_rates:
+    - 24
+    - 25
+    - 30
+    - 50
+    - 60
+    - custom
+  shot_sizes:
+    - extreme-wide
+    - wide
+    - medium-wide
+    - medium
+    - medium-close
+    - close
+    - extreme-close
+  angles:
+    - eye-level
+    - high
+    - low
+    - top-down
+    - dutch
+    - over-shoulder
+    - pov
+  camera_movements:
+    - static
+    - pan
+    - tilt
+    - dolly
+    - truck
+    - pedestal
+    - orbit
+    - crane
+    - handheld
+    - stabilized-follow
+    - zoom
+    - rack-focus
+
+pacing:
+  profiles:
+    - very-gentle
+    - gentle
+    - balanced
+    - energetic
+    - fast
+    - cinematic-dynamic
+    - music-synced
+    - dialogue-led
+    - custom
+  timeline_owned: true
+  provider_clip_limit_is_not_artistic_shot_length: true
+
+transitions:
+  - hard-cut
+  - match-cut
+  - action-cut
+  - j-cut
+  - l-cut
+  - cross-dissolve
+  - fade
+  - dip-to-color
+  - wipe
+  - morph-generative
+  - camera-motion-match
+  - object-shape-match
+  - beat-synced-cut
+  - scene-bridge
+
+provider_execution_modes:
+  - FREE_ONLY
+  - FREE_FIRST
+  - HYBRID_SMART
+  - BUDGET_CAPPED
+  - QUALITY_FIRST
+
+review_modes:
+  - fully-manual-per-stage
+  - character-lock-and-final-master
+  - paid-spend-and-publication-gates
+  - policy-driven-with-publication-gate
+  - custom
+
+exports:
+  supports:
+    - master-video
+    - web-video
+    - audio-master
+    - subtitles
+    - thumbnail
+    - poster-frame
+    - chapter-markers
+    - platform-derivatives
+    - project-manifest
+    - provenance-manifest
+    - provider-prompt-history
+    - checksums
+
+registry_rules:
+  ui_must_read_versioned_registry: true
+  core_orchestrator_must_not_hardcode_taxonomy: true
+  additions_require_schema_validation: true
