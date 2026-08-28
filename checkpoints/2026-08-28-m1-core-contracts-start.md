@@ -44,6 +44,7 @@ Implemented contracts for:
 - CostRecord
 - RightsRecord
 - Approval
+- ProjectBundle aggregate validator
 
 ### Domain invariants implemented
 
@@ -58,10 +59,21 @@ Implemented contracts for:
 - Job selected GenerationAttempt must belong to Job attempt list.
 - Asset SHA-256 and stable ID formats validate.
 - Rights records default to publication-blocked until resolved.
+- ProjectBundle validates Project/Timeline ownership.
+- ProjectBundle requires timeline duration to match project target duration.
+- Acts/Sequences/Scenes/Shots must have unique IDs and sibling order values.
+- Parent/child membership must be internally consistent.
+- Shots cannot extend beyond timeline duration.
+- Shot order cannot move backward in time inside a scene.
+- Take membership and parent Shot references are validated.
+- Loaded locked CharacterVersion must belong to the same Character.
+- Character/World/Location/Prop references must resolve inside the loaded project graph.
 
 ### Schema export
 
 Added `packages/python-core/scripts/export_schemas.py` to export Pydantic validation contracts as JSON Schema Draft 2020-12 documents under `schemas/generated/`.
+
+The exporter now includes the `ProjectBundle` aggregate schema in addition to individual entity schemas.
 
 ### Tests
 
@@ -71,6 +83,12 @@ Added `packages/python-core/tests/test_domain.py` covering:
 - >3-hour project rejection;
 - locked character version requirement;
 - look-lock look-pin requirement.
+
+Added `packages/python-core/tests/test_aggregate.py` covering:
+- valid cross-entity project graph;
+- timeline/project duration mismatch rejection;
+- missing Shot reference rejection;
+- duplicate Shot order rejection.
 
 ### CI
 
@@ -91,12 +109,14 @@ Existing `schemas/content-package.schema.json` remains untouched and importable.
 ### Verified locally in isolated Python environment
 
 - Pydantic import/model construction works.
-- 23 primary domain models successfully produce validation JSON Schema.
-- representative tests: 5/5 passed.
+- 23 primary individual domain models successfully produced validation JSON Schema before the aggregate layer was added.
+- Aggregate ProjectBundle was subsequently imported and validated successfully.
+- representative tests after aggregate layer: 9/9 passed.
 - two-minute project validated.
 - 90-minute project validated.
 - 10,801-second project rejected.
 - invalid project/look character locks rejected.
+- aggregate duration mismatch, missing Shot reference, and duplicate Shot order were rejected.
 
 Local verification runtime used Python 3.13 + Pydantic 2.13, which is compatible with but not identical to the target Python 3.12 environment.
 
@@ -116,14 +136,8 @@ This indicates GitHub Actions runner/infrastructure/organization configuration f
 
 1. Run CI on an available GitHub-hosted or configured self-hosted runner.
 2. Commit/reconcile exported `schemas/generated/*.schema.json` outputs or formally decide build-generated-only policy.
-3. Add cross-entity aggregate validators/services for:
-   - unique ordering inside hierarchy;
-   - timeline/project duration agreement;
-   - scene/shot duration boundaries;
-   - reference existence;
-   - version pin existence;
-   - no overlapping canonical primary video edits where disallowed.
-4. Add test fixtures for full Character/Asset/Job/Attempt/QA/Rights lineage.
+3. Add lineage fixtures for full Character/Asset/Job/Attempt/QA/Rights flow.
+4. Add aggregate rules for canonical primary-video overlap/transition semantics once track ownership is typed.
 5. Add explicit legacy `content-package.schema.json` -> `Content/ContentVersion` importer design/implementation.
 6. Decide runtime internal primary-key strategy (recommended DB UUID/ULID + stable external IDs) during PostgreSQL schema work.
 7. Add PostgreSQL table/migration design only after core contracts stabilize.
@@ -138,4 +152,4 @@ This indicates GitHub Actions runner/infrastructure/organization configuration f
 
 ## Recommended next action
 
-Continue Milestone 1 with aggregate validation + committed schema artifacts + lineage fixtures. Then design PostgreSQL persistence mapping without beginning Temporal/provider integrations yet.
+Continue Milestone 1 with committed schema artifacts + lineage fixtures + legacy content importer contract. Then design PostgreSQL persistence mapping without beginning Temporal/provider integrations yet.
