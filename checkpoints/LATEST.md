@@ -1,7 +1,7 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m01-wp2-lineage-complete.md`
+`checkpoints/2026-08-29-m01-wp3-aggregate-hardening-complete.md`
 
 Current phase: **M01 — Core Domain & Persistence Boundary**
 
@@ -25,31 +25,36 @@ Merged via PR #1.
 Merge commit:
 `89e2c69f939a2d2c2350d3f0715da0b310ebeff7`
 
-Verified on Python 3.12 with Ruff, strict mypy, tests, generated-schema synchronization, and compile checks.
+### WP2 — Full production lineage
 
-### WP2 — Full lineage model fixture
+Merged via PR #2.
 
-Implementation and verification complete on the WP2 branch/PR.
+Merge commit:
+`d3aa6ba6c36482628a5540473bac0386b40b808c`
 
 Checkpoint:
 `checkpoints/2026-08-29-m01-wp2-lineage-complete.md`
 
-The full provider-neutral production lineage now validates Project/Content/Character/Timeline/Take/Job/Attempt/Asset/QA/Cost/Rights ownership and fail-closed rights behavior.
+### WP3 — Aggregate validation hardening
+
+Implementation and Python 3.12 verification complete on the WP3 branch/PR.
+
+Checkpoint:
+`checkpoints/2026-08-29-m01-wp3-aggregate-hardening-complete.md`
+
+The project graph now rejects duplicate/missing hierarchy references, invalid character/version/look/lock ownership, undeclared character/world/prop use, inconsistent scene locations, and invalid explicit primary-video timing while preserving parallel B-roll timing.
 
 ## Current next step
 
-`WP3 — Aggregate validation hardening`
-
-WP3 may proceed under the existing M01 consent after WP2 is merged. Only invariants supported by current canonical contracts may be added; unresolved advanced editorial semantics remain deferred.
+`WP4 — Legacy CNT content importer boundary`
 
 ## Remaining M01 sequence
 
-1. WP3 — aggregate validation hardening;
-2. WP4 — legacy `CNT-*` content importer boundary;
-3. WP5 — PostgreSQL persistence architecture;
-4. WP6 — reversible migration scaffold;
-5. WP7 — repositories and short/long project round-trip verification;
-6. WP8 — complete M01 verification and final checkpoint.
+1. WP4 — legacy `CNT-*` content importer boundary;
+2. WP5 — PostgreSQL persistence architecture;
+3. WP6 — reversible migration scaffold;
+4. WP7 — repositories and short/long project round-trip verification;
+5. WP8 — complete M01 verification and final checkpoint.
 
 ## Scope boundary
 
