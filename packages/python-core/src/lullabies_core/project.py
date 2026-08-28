@@ -6,13 +6,18 @@ from pydantic import Field, model_validator
 
 from .common import (
     AuditFields,
+    CharacterId,
+    ContentId,
     ExecutionMode,
+    ProjectId,
     ProjectStatus,
+    PropId,
     SCHEMA_VERSION,
     SchemaVersion,
     StrictModel,
     TaxonomyValue,
-    external_id_pattern,
+    TimelineId,
+    WorldId,
 )
 
 
@@ -72,7 +77,7 @@ class ProviderPolicyRef(StrictModel):
 
 class Project(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
-    project_id: str = Field(pattern=external_id_pattern("PRJ"))
+    project_id: ProjectId
     title: str = Field(min_length=1, max_length=240)
     status: ProjectStatus = ProjectStatus.DRAFT
     audience: AudienceProfile
@@ -84,11 +89,11 @@ class Project(StrictModel):
     output: OutputProfile = Field(default_factory=OutputProfile)
     creative: CreativeProfile = Field(default_factory=CreativeProfile)
     provider_policy: ProviderPolicyRef = Field(default_factory=ProviderPolicyRef)
-    character_ids: list[str] = Field(default_factory=list)
-    world_ids: list[str] = Field(default_factory=list)
-    prop_ids: list[str] = Field(default_factory=list)
-    content_id: str | None = Field(default=None, pattern=external_id_pattern("CNT"))
-    active_timeline_id: str | None = Field(default=None, pattern=external_id_pattern("TML"))
+    character_ids: list[CharacterId] = Field(default_factory=list)
+    world_ids: list[WorldId] = Field(default_factory=list)
+    prop_ids: list[PropId] = Field(default_factory=list)
+    content_id: ContentId | None = None
+    active_timeline_id: TimelineId | None = None
     tags: list[str] = Field(default_factory=list)
     audit: AuditFields
 
