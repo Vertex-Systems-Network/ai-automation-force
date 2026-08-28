@@ -6,11 +6,16 @@ from pydantic import Field, model_validator
 
 from .common import (
     AuditFields,
+    CharacterId,
+    ContentId,
+    ContentVersionId,
+    ProjectId,
+    PropId,
     SCHEMA_VERSION,
     SchemaVersion,
     StrictModel,
     TaxonomyValue,
-    external_id_pattern,
+    WorldId,
 )
 
 
@@ -23,8 +28,8 @@ class ContentObjective(StrictModel):
 
 class ContentVersion(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
-    content_version_id: str = Field(pattern=external_id_pattern("CTV"))
-    content_id: str = Field(pattern=external_id_pattern("CNT"))
+    content_version_id: ContentVersionId
+    content_id: ContentId
     version: Annotated[int, Field(ge=1)]
     title: str = Field(min_length=1, max_length=240)
     content_format: TaxonomyValue
@@ -36,9 +41,9 @@ class ContentVersion(StrictModel):
     hook: str = ""
     script_or_lyrics: str = Field(min_length=1)
     structure_map: list[str] = Field(default_factory=list)
-    character_ids: list[str] = Field(default_factory=list)
-    world_ids: list[str] = Field(default_factory=list)
-    prop_ids: list[str] = Field(default_factory=list)
+    character_ids: list[CharacterId] = Field(default_factory=list)
+    world_ids: list[WorldId] = Field(default_factory=list)
+    prop_ids: list[PropId] = Field(default_factory=list)
     pronunciation_notes: list[str] = Field(default_factory=list)
     tags: list[str] = Field(default_factory=list)
     originality_fingerprint: str | None = None
@@ -55,9 +60,9 @@ class ContentVersion(StrictModel):
 
 class Content(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
-    content_id: str = Field(pattern=external_id_pattern("CNT"))
-    active_version_id: str = Field(pattern=external_id_pattern("CTV"))
-    project_id: str | None = Field(default=None, pattern=external_id_pattern("PRJ"))
+    content_id: ContentId
+    active_version_id: ContentVersionId
+    project_id: ProjectId | None = None
     status: str = "draft"
     source_legacy_package_path: str | None = None
     audit: AuditFields
