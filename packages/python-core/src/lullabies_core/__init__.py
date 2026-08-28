@@ -20,6 +20,16 @@ from .common import (
 )
 from .content import Content, ContentObjective, ContentVersion
 from .entities import Location, Prop, StyleProfile, VoiceProfile, World
+from .legacy_import import (
+    LEGACY_CONTENT_MAPPING_VERSION,
+    LegacyContentImportError,
+    LegacyContentImportReport,
+    LegacyContentImportResult,
+    LegacyContentPackageV1,
+    LegacyContentReconciliation,
+    import_legacy_content_package,
+    reconcile_legacy_content_import,
+)
 from .lineage import ProductionLineageBundle
 from .production import (
     Approval,
@@ -43,6 +53,8 @@ from .project import (
 from .timeline import Act, ContinuityState, Scene, Sequence, Shot, Take, Timeline, TimelineTrack
 
 __all__ = [
+    "LEGACY_CONTENT_MAPPING_VERSION",
+    "SCHEMA_VERSION",
     "Act",
     "Approval",
     "ApprovalDecision",
@@ -73,6 +85,11 @@ __all__ = [
     "GenerationRequest",
     "Job",
     "JobStatus",
+    "LegacyContentImportError",
+    "LegacyContentImportReport",
+    "LegacyContentImportResult",
+    "LegacyContentPackageV1",
+    "LegacyContentReconciliation",
     "Location",
     "LockScope",
     "OutputProfile",
@@ -85,7 +102,6 @@ __all__ = [
     "ProviderPolicyRef",
     "QARecord",
     "RightsRecord",
-    "SCHEMA_VERSION",
     "Scene",
     "Sequence",
     "Shot",
@@ -96,4 +112,6 @@ __all__ = [
     "TimelineTrack",
     "VoiceProfile",
     "World",
+    "import_legacy_content_package",
+    "reconcile_legacy_content_import",
 ]

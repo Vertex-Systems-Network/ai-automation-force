@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "content_id": "CNT-000321",
+  "run_id": "RUN-LEGACY-000321",
+  "title": "Counting Stars Together",
+  "normalized_title": "counting stars together",
+  "slug": "counting-stars-together",
+  "content_type": "song",
+  "age_band": "preschool",
+  "language": "en",
+  "status": "approved",
+  "target_duration_seconds": 120,
+  "objective": {
+    "primary": "Practice counting from one to five",
+    "entertainment": "Invite children to sing and point along",
+    "learning": "Count objects in sequence",
+    "emotional": "Calm confidence"
+  },
+  "creative": {
+    "premise": "A child counts friendly stars appearing one by one.",
+    "hook": "Each new star joins the refrain.",
+    "creative_device": "Cumulative counting chorus",
+    "characters": ["Mira"],
+    "setting": "A soft illustrated night meadow",
+    "topics": ["counting", "stars"],
+    "tags": ["preschool", "learning"]
+  },
+  "audio": {
+    "audio_mode": "music",
+    "provider_family": "lyria",
+    "preferred_model": "legacy-music-model",
+    "female_voice_required": true,
+    "selected_voice": null,
+    "prompt_version": "v1",
+    "render_status": "qa-passed"
+  },
+  "originality": {
+    "decision": "CLEAR",
+    "closest_prior_ids": [],
+    "notes": "Original repository fixture."
+  },
+  "qa": {
+    "all_mandatory_gates_passed": true,
+    "qa_file": "content/CNT-000321/qa.md"
+  },
+  "research": {
+    "research_file": "content/CNT-000321/research.md",
+    "source_count": 2
+  },
+  "fingerprints": {
+    "title": "legacy-title-fingerprint",
+    "premise": "legacy-premise-fingerprint",
+    "hook": "legacy-hook-fingerprint",
+    "exact_text": "legacy-exact-text-fingerprint"
+  },
+  "paths": {
+    "package": "content/CNT-000321",
+    "content": "content/CNT-000321/content.md",
+    "metadata": "content/CNT-000321/metadata.json",
+    "audio_prompt": "content/CNT-000321/audio-prompt.md",
+    "qa": "content/CNT-000321/qa.md",
+    "research": "content/CNT-000321/research.md"
+  },
+  "created_at": "2026-08-01T09:00:00Z",
+  "approved_at": "2026-08-01T11:30:00Z"
+}
