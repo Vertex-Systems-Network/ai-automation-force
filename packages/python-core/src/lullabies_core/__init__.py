@@ -1,3 +1,4 @@
+from .aggregate import ProjectBundle
 from .character import Character, CharacterLock, CharacterLook, CharacterVersion
 from .common import (
     AssetKind,
@@ -65,6 +66,7 @@ __all__ = [
     "LockScope",
     "OutputProfile",
     "Project",
+    "ProjectBundle",
     "ProjectStatus",
     "Prop",
     "ProviderModelRef",
