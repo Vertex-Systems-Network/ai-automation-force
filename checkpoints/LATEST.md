@@ -1,115 +1,60 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-full-project-preplanning-complete.md`
+`checkpoints/2026-08-29-m01-wp2-lineage-complete.md`
 
-Current phase: **Post-P0 — Awaiting Development Consent**
+Current phase: **M01 — Core Domain & Persistence Boundary**
 
-Status: **FULL_PROJECT_PLANNING_READY_FOR_CONSENT**
+Status: **M01_DEVELOPMENT_IN_PROGRESS**
 
-## Planning verdict
+## Consent state
 
-The Full Project Preplanning Gate is complete.
+Explicit operator consent for scoped M01 development was received on 2026-08-29.
 
-Final adversarial audit:
-`docs/product/FINAL-PREDEVELOPMENT-GAP-AUDIT-2026-08-29.md`
-
-Verdict:
-`PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND`
-
-Master planning index:
-`docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`
-
-Documentation completeness matrix:
-`docs/product/DOCUMENTATION-COMPLETENESS-MATRIX.md`
-
-## What is preplanned
-
-The foreseeable product now has canonical planning for:
-- core AI/media generation systems;
-- project types/options/presets;
-- characters/entities/worlds/locks;
-- image generation/edit/reuse/image-to-video;
-- audio/music/TTS/dialogue/SFX/dubbing;
-- storyboard/timeline/OTIO/long-form up to 3 hours;
-- provider integrations/account/quota/cost/fallback/deprecation;
-- continuity/generated-media QA;
-- assets/storage/provenance/rights/approvals;
-- memory/originality/prompts/AI roles/decision ledger;
-- AI security/threat model/evaluation/regression;
-- public landing/signup/login/onboarding;
-- web IA/design system/AI Command Center/global states/accessibility/localization;
-- workspace/RBAC/collaboration;
-- events/notifications/transactional communications;
-- plans/entitlements/usage/credits/billing;
-- developer API/webhooks/SDK/sandbox stance;
-- multi-platform social publishing/analytics;
-- social community/replies/moderation stance;
-- mobile product;
-- first-party product analytics/experimentation;
-- auth/security/privacy/legal/data lifecycle;
-- observability/SLOs/deployment/IaC/backups/DR/releases;
-- support/admin/moderation operations;
-- master QA/release gates;
-- implementation-ready M01–M15 work-package plans.
-
-Packs A–O: `READY`.
-
-## Provider roadmap
-
-Canonical:
-`docs/architecture/PROVIDER-INTEGRATION-ROADMAP.md`
-
-Multiple different providers may be connected simultaneously with one authorized connection/account per provider by default. Cross-provider fallback preserves canonical state. Same-provider account rotation to evade quota is prohibited.
-
-Provider/model/pricing/ToS/API facts are revalidated at implementation time. Current provider candidate ordering is planning guidance, not a permanent quality ranking or guaranteed future API availability.
-
-## Mutable facts vs missing planning
-
-Current external facts such as API versions, model IDs, prices, quotas, OAuth scopes, app-review rules, ToS, taxes, cloud sizing and vendor versions remain intentionally revalidated at implementation/launch.
-
-That does not reopen P0 unless a factual change invalidates a foundational architecture assumption.
-
-## Executable state is still NOT verified
-
-This checkpoint does not claim:
-- M01 code complete;
-- migrations/repositories complete;
-- FastAPI/Temporal runtime complete;
-- provider adapters working;
-- provider/social credentials configured;
-- provider scout live execution verified;
-- web/mobile/auth/billing/social implementation complete;
-- infrastructure deployed;
-- CI/runners green;
-- DR drills passed;
-- public/legal launch approved.
-
-These are future milestone implementation/verification tasks.
-
-## Development consent boundary
+The consent remains valid only for M01. It does not authorize M02+, provider execution, public publishing, paid provider behavior, or other materially expanded scope.
 
 Development consent policy:
 `ai-native/DEVELOPMENT-CONSENT-GATE.md`
 
-Full planning completion is **not** development authorization.
+## Completed work packages
 
-The next executable milestone is **M01 — Core Domain and Persistence Boundary**.
+### WP1 — Contract freeze and generated schemas
 
-Canonical M01 plan:
-`docs/milestones/M01/PLAN.md`
+Merged via PR #1.
 
-Existing detailed execution plan:
-`docs/architecture/M1-EXECUTION-PLAN.md`
+Merge commit:
+`89e2c69f939a2d2c2350d3f0715da0b310ebeff7`
 
-Before any executable M01 work, present the scoped Development Consent Brief and receive explicit operator approval.
+Verified on Python 3.12 with Ruff, strict mypy, tests, generated-schema synchronization, and compile checks.
 
-A generic `continue`, `next`, `resume`, audit or planning command is not development consent.
+### WP2 — Full lineage model fixture
+
+Implementation and verification complete on the WP2 branch/PR.
+
+Checkpoint:
+`checkpoints/2026-08-29-m01-wp2-lineage-complete.md`
+
+The full provider-neutral production lineage now validates Project/Content/Character/Timeline/Take/Job/Attempt/Asset/QA/Cost/Rights ownership and fail-closed rights behavior.
+
+## Current next step
+
+`WP3 — Aggregate validation hardening`
+
+WP3 may proceed under the existing M01 consent after WP2 is merged. Only invariants supported by current canonical contracts may be added; unresolved advanced editorial semantics remain deferred.
+
+## Remaining M01 sequence
+
+1. WP3 — aggregate validation hardening;
+2. WP4 — legacy `CNT-*` content importer boundary;
+3. WP5 — PostgreSQL persistence architecture;
+4. WP6 — reversible migration scaffold;
+5. WP7 — repositories and short/long project round-trip verification;
+6. WP8 — complete M01 verification and final checkpoint.
+
+## Scope boundary
+
+M01 still excludes Temporal runtime orchestration, provider adapters/generation calls, web/mobile product implementation, publishing/analytics, autonomous spend, and M02+ development.
 
 ## GitHub ↔ Linear
 
-GitHub remains canonical for architecture, engineering policy, implementation evidence and checkpoints. Linear mirrors planning/work/status.
-
-P0 planning issues may now be closed as planning-complete. M01 work remains Backlog until explicit development consent is received.
-
-The recurring six-hour GitHub↔Linear sync remains planning/status-only and must never infer development authorization from this checkpoint.
+GitHub remains canonical for engineering contracts, implementation evidence, and checkpoints. Linear mirrors work-package status and acceptance evidence.
