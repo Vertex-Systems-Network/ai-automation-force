@@ -39,11 +39,15 @@ This matrix is the planning source for determining whether product/AI systems ar
 | Analytics/learning | DEVELOPMENT_READY | `docs/product/ANALYTICS-LEARNING-SYSTEM.md` | Platform metrics adapters later |
 | 3-hour long-form production | DEVELOPMENT_READY | `docs/product/LONG-FORM-3H-PRODUCTION.md`, `docs/product/TIMELINE-SEQUENCE-ENGINE.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` | Progressive load/recovery tests are later executable work |
 | Project templates/presets | DEVELOPMENT_READY | `docs/product/PROJECT-PRESETS-AND-ADMIN-SETTINGS.md` | Additional presets may be added without architecture change |
-| Web UI/UX IA | DEVELOPMENT_READY conceptually | `docs/product/WEB-APP-IA.md`, `docs/architecture/TECH-STACK.md` | Detailed per-screen visual design belongs to web milestone |
+| Authenticated web app IA | DEVELOPMENT_READY conceptually | `docs/product/WEB-APP-IA.md`, `docs/architecture/TECH-STACK.md` | Detailed per-screen visual design belongs to web milestone |
+| Public landing / marketing website | DEVELOPMENT_READY conceptually | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/LANDING-PAGE-VISUAL-CONTENT-MAP.md`, `docs/product/PUBLIC-WEB-LAUNCH-PLAN.md` | Final brand visual design/copy polish belongs to public-web milestone |
+| Signup/login/email verification/password reset | DEVELOPMENT_READY conceptually | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/AUTH-ONBOARDING-EDGE-CASES.md` | Current auth library/security implementation choices revalidate before coding |
+| User onboarding / first-project handoff | DEVELOPMENT_READY | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/AUTH-ONBOARDING-EDGE-CASES.md`, `docs/product/NEW-PROJECT-WIZARD.md` | Runtime implementation later |
+| Initial workspace bootstrap | DEVELOPMENT_READY conceptually | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/AUTH-ONBOARDING-EDGE-CASES.md` | Detailed teams/RBAC remains later scope |
+| Multi-user teams/RBAC/workspace administration | PLANNED FOR LATER MILESTONE | engineering/tech-stack/public-auth docs | Dedicated roles/permissions/invites/team-management spec required before team scope |
 | Admin/settings | DEVELOPMENT_READY conceptually | `docs/product/PROJECT-PRESETS-AND-ADMIN-SETTINGS.md` | Runtime settings schemas/permissions later |
 | Daily provider scout | DOCUMENTED / IMPLEMENTATION PARTIAL | `docs/operations/DAILY-PROVIDER-SCOUT.md` | Runtime verification and compatibility wiring remain executable work requiring consent |
 | Future mobile app | PLANNED FOR LATER MILESTONE | `docs/architecture/TECH-STACK.md`, `docs/architecture/DEVELOPMENT-PLAN.md` | Detailed mobile UX spec should be written before mobile milestone, not required for M1 |
-| Authentication/workspaces/multi-user | PLANNED FOR LATER MILESTONE | engineering/tech-stack docs | Dedicated auth/RBAC/workspace product spec required before that milestone |
 | Production deployment/DR/operations | PLANNED FOR LATER MILESTONE | `docs/architecture/DEVELOPMENT-PLAN.md`, engineering contract | Dedicated deployment/runbook/backup/DR specs required before production-ops milestone |
 
 ## Documentation-completion rule
@@ -64,9 +68,16 @@ A system is not `DEVELOPMENT_READY` merely because its name appears in the maste
 
 ## Current conclusion
 
-The **core media-production product and AI systems are now documentation-ready for staged implementation**, subject to the mandatory Development Consent Gate.
+The **core media-production product, AI systems, public marketing surface and initial single-user account entry flow are now documentation-ready for staged implementation**, subject to the mandatory Development Consent Gate.
 
 This includes:
+- public landing/features/use-case architecture;
+- landing feature visuals and synthetic demo asset plan;
+- SEO/discoverability and conversion funnel planning;
+- signup/login/email verification/password reset;
+- resumable onboarding;
+- initial workspace bootstrap;
+- provider connection onboarding;
 - project creation/options;
 - content types;
 - AI roles;
@@ -87,12 +98,13 @@ This includes:
 - publishing architecture;
 - analytics learning;
 - long-form 3-hour architecture;
-- web information architecture;
+- authenticated web information architecture;
 - presets/admin defaults.
 
 Later milestones intentionally still require their own just-in-time detailed specs before executable work begins, particularly:
+- multi-user teams/RBAC/invitations;
 - mobile-specific UX;
-- authentication/RBAC/workspaces;
-- production deployment/disaster recovery/operations.
+- production deployment/disaster recovery/operations;
+- final commercial pricing/entitlement rules when the business model is approved.
 
 These later-phase gaps do **not** block Milestone 1 domain/persistence development, but development still cannot start until the operator explicitly approves the scoped M1 consent brief.
