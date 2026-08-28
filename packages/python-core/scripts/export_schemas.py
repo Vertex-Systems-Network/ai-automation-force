@@ -20,6 +20,7 @@ from ai_automation_force_core import (
     GenerationAttempt,
     Job,
     Location,
+    ProductionLineageBundle,
     Project,
     ProjectBundle,
     Prop,
@@ -40,6 +41,7 @@ SCHEMA_BASE_ID = f"urn:ai-automation-force:schema:v{SCHEMA_VERSION}"
 MODELS: dict[str, type[BaseModel]] = {
     "project": Project,
     "project-bundle": ProjectBundle,
+    "production-lineage-bundle": ProductionLineageBundle,
     "character": Character,
     "character-version": CharacterVersion,
     "world": World,
