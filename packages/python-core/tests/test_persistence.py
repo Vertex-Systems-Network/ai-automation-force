@@ -8,11 +8,11 @@ from pathlib import Path
 import pytest
 from alembic import command
 from alembic.config import Config
+from lineage_fixtures import full_lineage_bundle
 from pydantic import ValidationError
 from sqlalchemy import MetaData, create_engine, func, select
 from sqlalchemy.engine import Engine
 
-from lineage_fixtures import full_lineage_bundle
 from lullabies_core import (
     Act,
     PersistenceConflictError,
