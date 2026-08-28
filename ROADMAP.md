@@ -1,240 +1,214 @@
-# Lullabies AI-Native Studio Roadmap
+# Lullabies AI-Native Media Platform Roadmap
 
-Canonical architecture: `ai-native/MASTER-PLAN.md`
+Canonical architecture foundation: `ai-native/MASTER-PLAN.md`
+
+Engineering constitution: `ai-native/ENGINEERING-CONTRACT.md`
+
+Detailed implementation sequence: `docs/architecture/DEVELOPMENT-PLAN.md`
+
+Technical stack: `docs/architecture/TECH-STACK.md`
+
+Project options: `docs/product/PROJECT-OPTIONS.md`
 
 Default execution policy: `HYBRID_SMART` from `config/execution-policy.yaml`.
 
-The project uses one provider-agnostic production workflow with interchangeable free/manual-free/paid provider adapters. Do not build separate duplicated free and paid pipelines.
+The platform uses one provider-agnostic workflow with interchangeable free/manual-free/paid provider adapters. The initial niche remains kids media, but the core project model now supports general/adult audiences, many content formats and projects up to a configured three-hour duration.
 
-## Milestone 0 — Architecture Lock
+## Milestone 0 — Architecture/Documentation Lock
 
-Status: substantially implemented.
+Status: substantially complete.
 
-Includes:
-- repository-as-memory principle;
-- mandatory AI operating contract;
-- master architecture;
-- one-command `next` concept;
-- age segmentation;
-- content policy;
-- persistent content/duplicate memory;
+Implemented/documented:
+- repository-backed AI memory foundation;
+- mandatory agent contract;
+- project-specific engineering constitution;
+- provider-neutral master architecture;
+- project taxonomy;
+- audience/cast dimensions;
+- character type registry;
+- reusable character lock/version system;
+- songs/poems/stories/episodes/movies and other format registry;
+- duration model: 60 seconds to 10,800 seconds;
+- visual/camera/audio/pacing/transition option model;
+- hierarchical long-form timeline design;
+- free+paid execution policy;
 - generation history;
 - audio router;
-- free-tier/provider router;
+- provider/free-tier router;
 - video continuity design;
-- hybrid free/paid execution policy;
-- provider capability registry;
-- canonical content schema.
+- provider research study;
+- technical stack decision;
+- daily provider scout workflow/governance.
 
-Remaining architecture-lock items to add during implementation:
-- job schema;
+Remaining implementation-era schemas:
+- project schema;
+- character/entity schemas;
+- act/sequence/scene/shot/take schemas;
+- job/workflow schema;
 - asset/provenance schema;
-- character/world schemas;
-- cost/quota ledger schemas;
+- cost/quota schema;
+- timeline/OTIO mapping schema;
 - prompt registry schema;
-- publication/analytics schemas.
+- publishing/analytics schemas.
 
-## Milestone 1 — Executable Core OS
+## Milestone 1 — Core Domain + Runtime Persistence Boundary
 
-Goal: make repository state executable rather than relying only on agent interpretation.
+Build typed Python domain models and schemas for projects, audience/cast, characters/entities, content, hierarchy, assets, providers, jobs, QA, costs, rights and approvals.
 
-Build Python 3.12+ package under `studio/` with:
-- CLI entry point;
-- `lullabies next`;
-- `status`;
-- `audit`;
-- job queue/state machine;
-- deterministic IDs;
-- job locks;
-- idempotency keys;
-- atomic repository state writes;
-- interrupted-run recovery;
-- schema validation;
-- retry budgets;
-- circuit-breaker framework;
-- provider adapter interface;
-- provider router interface;
-- cost/quota reservation interface;
-- tests/fixtures.
+Design the migration from current Git-backed state to PostgreSQL operational state while keeping Git canonical for engineering policy/prompts/research/exported manifests.
 
-Exit criterion:
-`next` can safely inspect state, choose one eligible job, execute a dry-run, record the job and resume without duplication.
+Exit: sample 2-minute and 90-minute projects validate without provider calls.
 
-## Milestone 2 — Content Intelligence OS
+## Milestone 2 — Durable Workflow Control Plane
 
-Implement:
-- current/evergreen research adapters;
-- portfolio planner;
-- candidate generator;
-- lexical duplicate checks;
-- semantic duplicate checks;
-- rejected-concept memory;
-- structured content writer;
-- safety/factual/originality QA;
-- canonical package persistence;
-- first real `next content` run.
+Build FastAPI + Temporal foundation:
+- API/control plane;
+- durable workflows/workers;
+- idempotency;
+- locks/leases;
+- retries/backoff;
+- circuit breakers;
+- cancellation;
+- manual/approval waits;
+- provider polling/webhooks;
+- crash recovery;
+- logs/run IDs.
 
-Exit criterion:
-one content package is autonomously researched, selected, uniqueness-cleared, written, QA-passed and saved with complete provenance.
+Exit: synthetic 100-shot workflow resumes after interruption without duplicate completed work.
 
-## Milestone 3 — Hybrid Audio OS
+## Milestone 3 — Asset Storage + Provenance
 
-Implement:
-- autonomous audio director;
-- Gemini TTS adapter for speech;
-- music-provider adapter interface;
-- Lyria paid adapter;
-- future free/manual-free music adapters through same interface;
-- speech-with-background two-stem workflow;
-- prompt versioning;
-- transcript/lyric fidelity QA;
-- pronunciation QA;
-- loudness/clipping QA;
-- deterministic stem mixing;
-- cost/quota ledger;
-- generation history.
+Implement S3-compatible object storage, media probing/checksums, asset graph, rights/provenance and signed access.
 
-Exit criterion:
-one approved content item reaches `audio-qa-passed` with traceable provider, prompt, cost/quota and output hashes.
+Exit: every media asset is verified and traceable without bloating Git.
 
-## Milestone 4 — Visual IP Memory
+## Milestone 4 — Character/Entity Library
 
-Before scaling video generation, create provider-independent visual memory:
-- brand art direction;
-- character IDs;
-- character sheets;
-- front/side/back references;
-- expressions/poses;
-- body/face proportions;
-- wardrobe variants;
+Implement selectable reusable entities:
+- characters;
+- versions/looks;
+- lock modes;
+- reference packs;
+- voices;
+- locations/worlds;
 - props;
-- world/environment IDs;
-- palette/style rules;
-- camera/lighting rules;
-- forbidden mutations;
-- visual asset hashes/provenance.
+- styles;
+- identity QA;
+- rights/consent.
 
-Exit criterion:
-a new provider can receive canonical references without relying on prior-provider hidden state.
+Exit: one locked recurring character can be reused in multiple version-pinned projects.
 
-## Milestone 5 — Storyboard & Keyframe Compiler
+## Milestone 5 — Content Intelligence + Memory
 
-Master audio becomes timeline source.
+Generalize kids-first content intelligence into project policy profiles:
+- research;
+- candidate/format selection;
+- script/lyrics/story structures;
+- semantic duplicate/originality memory;
+- pgvector;
+- safety/profile rules;
+- content versioning.
 
-Implement:
-- audio timing/transcription;
-- story/lyric beat segmentation;
-- shot IDs/timecodes;
-- shot action/camera/motion;
-- character/environment state;
-- canonical first frames;
-- planned end frames where useful;
-- transition state;
-- negative constraints;
-- provider-neutral shot package;
-- video-plan schema.
+Exit: `next content` creates a researched, uniqueness-cleared canonical package.
 
-Exit criterion:
-one 1–2 minute audio master can be converted into a fully deterministic shot plan before video spending begins.
+## Milestone 6 — Hybrid Audio OS
 
-## Milestone 6 — Hybrid Video Provider Router
+Implement provider-neutral narration, songs/music, dialogue, ambience/SFX, stems, pronunciation, autonomous music direction, QA and deterministic mixing.
 
-Implement one workflow for both free and paid capacity.
+Exit: one song and one narrated story reach approved audio master with cost/provenance history.
 
-Capabilities:
-- refresh official provider facts when stale;
-- classify `api_free`, `api_paid`, `web_free_manual`, etc.;
-- per-shot provider selection;
-- budget/credit awareness;
-- expected retry-adjusted accepted-output cost;
-- manual-free handoff queue;
-- paid API adapter support;
-- provider fallback chain;
-- quota exhaustion checkpointing;
-- no restart of already-approved shots;
-- provider health/failure tracking.
-
-Initial adapters should be intentionally limited. Build the router first, then add providers incrementally.
-
-Exit criterion:
-a multi-shot sequence can switch providers without losing canonical continuity/history.
-
-## Milestone 7 — Continuity QA & Video Assembly
+## Milestone 7 — Storyboard + Timeline + Rhythm Engine
 
 Implement:
-- multimodal continuity judge;
-- deterministic visual checks where practical;
-- identity/wardrobe/environment/style/camera/action scoring;
-- critical-failure rejection;
-- failed-shot-only regeneration;
-- overlap/cut strategy;
-- FFmpeg assembly;
-- exact master-audio sync;
-- captions;
-- aspect-ratio derivatives;
-- final audio/video normalization;
-- render manifest and checksum.
+- Project -> Act -> Sequence -> Scene -> Shot -> Take;
+- storyboard;
+- timeline tracks;
+- beat/audio markers;
+- pacing/emotional curves;
+- incoming/outgoing continuity state;
+- keyframes;
+- handles/overlap;
+- transitions;
+- OpenTimelineIO mapping;
+- non-destructive edits.
 
-Exit criterion:
-one long-form video reaches `video-qa-passed` from multiple short generated shots without manual timeline reconstruction.
+Exit: a 10-minute project becomes an editable provider-neutral shot plan before video spending.
 
-## Milestone 8 — Rights, Provenance & Publishing OS
+## Milestone 8 — Hybrid Image/Video Router
 
-Implement:
-- asset graph;
-- commercial-use/license registry;
-- watermark status;
-- prompt/provider/output provenance;
-- YouTube OAuth;
-- resumable upload;
-- title/description/tags/language/playlist;
-- thumbnail workflow;
-- captions;
-- Made-for-Kids review;
-- synthetic-media disclosure review;
-- default private upload;
-- post-upload verification;
-- human gate before public publication.
+Implement provider capability adapters and free/paid selection by capability, continuity, expected accepted-output cost, rights and budget.
 
-Current YouTube API supports resumable uploads and child-directed/synthetic-media status fields; verify current official docs during implementation.
+Start with a small adapter set. Do not integrate every discovered AI merely because it exists.
 
-Exit criterion:
-final master can be uploaded privately, verified, and scheduled/public only after policy gates.
+Exit: same canonical shot can switch between at least two providers without losing state.
 
-## Milestone 9 — Analytics Learning Loop
+## Milestone 9 — Continuity/Generated Media QA
 
-Ingest available performance signals and connect them back to canonical attributes:
-- impressions/CTR;
-- retention/average view duration;
-- traffic sources;
-- content type;
-- age band;
-- topic;
-- character;
-- duration;
-- audio style;
-- opening hook;
-- visual style;
-- series/language.
+Implement multimodal identity/environment/camera/action/style/anatomy/text/safety QA with critical hard failures and take comparison.
 
-Store hypotheses and experiments, not just raw metrics.
+Exit: failed takes are rejected and only affected shots are regenerated.
 
-Do not blindly clone successful content; feed learning back through originality and fatigue controls.
+## Milestone 10 — Deterministic Assembly
 
-## Milestone 10 — Localization & Multi-Platform Expansion
+Implement FFmpeg-based trim/concat/audio mix/transitions/captions/aspect variants/normalization/final encodes and reproducible render manifests.
 
-Implement lineage-preserving variants for:
-- additional languages;
-- dubbed/localized video;
-- music streaming;
-- YouTube Shorts;
-- podcast/audio feeds;
-- storybooks/ebooks;
-- printables;
-- future app/game/licensing adapters.
+Exit: multi-provider project renders without manual timeline reconstruction.
 
-## Immediate next milestone
+## Milestone 11 — Web Application
 
-Proceed with Milestone 1: Executable Core OS.
+Build TypeScript + Next.js UI:
+- projects;
+- new-project wizard;
+- Character/Entity Library;
+- script/content;
+- storyboard;
+- timeline;
+- audio;
+- shot inspector/take comparison;
+- QA;
+- cost/quota;
+- publishing;
+- analytics;
+- provider research/admin.
 
-Do not begin by integrating every AI provider. First implement the stable job/state/ledger/provider-interface foundation. Then build Content Intelligence and Audio. Visual memory must be locked before serious long-form video generation.
+Exit: full 2-minute vertical slice can be operated from UI.
+
+## Milestone 12 — Publishing + Analytics
+
+Begin with YouTube private-first upload, metadata/captions/thumbnail, audience/synthetic-media reviews, approvals and analytics feedback.
+
+Exit: publish/analyze loop retains full lineage to project attributes.
+
+## Milestone 13 — Mobile/API Product
+
+Build Expo/React Native review/approval/status application using the same versioned OpenAPI backend.
+
+Exit: mobile can safely review and approve production without duplicated backend logic.
+
+## Milestone 14 — Long-Form Hardening
+
+Scale tests through 30/60/90/120/180-minute project plans and workloads. Validate workflow history, DB queries, timeline virtualization, scoped AI context, object storage, provider outages, quota waits, cost caps, incremental renders and disaster recovery.
+
+Three-hour support is a production-orchestration capability, not a single-model-generation requirement.
+
+## Milestone 15 — Production Operations
+
+Deployments, migrations, backups, monitoring/tracing, audit logs, security hardening, incident runbooks, releases and disaster recovery.
+
+## Parallel Maintenance Lane — Daily Provider Scout
+
+`.github/workflows/provider-scout.yml` researches providers daily and creates PRs only for material changes.
+
+Safe Class A/B evidence/provider facts may merge after validation when repository rules permit. New integrations, architecture/code/schema/security/budget/publishing changes require review.
+
+## Immediate Development Recommendation
+
+Proceed with **Milestone 1**, then **Milestone 2**, then **Milestone 3**.
+
+Do not start with a complex UI or ten AI integrations.
+
+First production vertical slice after foundations:
+
+**2-minute song + one locked recurring character + one environment + 12–20 planned shots + hybrid free/paid routing + continuity QA + final FFmpeg master.**
+
+After that, add multi-character narration/dialogue and increase duration progressively.
