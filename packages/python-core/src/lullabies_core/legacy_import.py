@@ -364,7 +364,10 @@ def _validate_mapping_preconditions(legacy: LegacyContentPackageV1, content_text
     if legacy.target_duration_seconds is None:
         raise LegacyContentImportError(
             "LEGACY_DURATION_REQUIRED",
-            "target_duration_seconds is optional in v1 metadata but required by the canonical model",
+            (
+                "target_duration_seconds is optional in v1 metadata "
+                "but required by the canonical model"
+            ),
             "target_duration_seconds",
         )
     if not 60 <= legacy.target_duration_seconds <= 10800:
@@ -419,7 +422,10 @@ def _originality_fingerprint(legacy: LegacyContentPackageV1, content_text: str) 
 
 def _mapping_warnings(legacy: LegacyContentPackageV1) -> list[str]:
     warnings = [
-        "legacy age_band remains source metadata; audience policy mapping belongs to project import",
+        (
+            "legacy age_band remains source metadata; "
+            "audience policy mapping belongs to project import"
+        ),
         "legacy audio direction remains source metadata; audio production mapping is outside WP4",
     ]
     if legacy.creative.topics:
