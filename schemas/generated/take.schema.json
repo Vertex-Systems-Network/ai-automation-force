@@ -1,0 +1,136 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "CanonicalStatus": {
+      "enum": [
+        "candidate",
+        "approved",
+        "rejected",
+        "superseded"
+      ],
+      "title": "CanonicalStatus",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:take",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "anyOf": [
+        {
+          "pattern": "^AST-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Asset Id"
+    },
+    "attempt_id": {
+      "anyOf": [
+        {
+          "pattern": "^ATT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Attempt Id"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "canonical_status": {
+      "$ref": "#/$defs/CanonicalStatus",
+      "default": "candidate"
+    },
+    "continuity_score": {
+      "anyOf": [
+        {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Continuity Score"
+    },
+    "qa_record_ids": {
+      "items": {
+        "pattern": "^QAR-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Qa Record Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "shot_id": {
+      "pattern": "^SHT-[0-9]{6,20}$",
+      "title": "Shot Id",
+      "type": "string"
+    },
+    "take_id": {
+      "pattern": "^TAK-[0-9]{6,20}$",
+      "title": "Take Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "take_id",
+    "shot_id",
+    "audit"
+  ],
+  "title": "Take",
+  "type": "object"
+}

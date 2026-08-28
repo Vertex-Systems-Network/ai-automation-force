@@ -1,0 +1,1833 @@
+{
+  "$defs": {
+    "Act": {
+      "additionalProperties": false,
+      "properties": {
+        "act_id": {
+          "pattern": "^ACT-[0-9]{6,20}$",
+          "title": "Act Id",
+          "type": "string"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "project_id": {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "sequence_ids": {
+          "items": {
+            "pattern": "^SEQ-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Sequence Ids",
+          "type": "array"
+        },
+        "target_duration_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Target Duration Seconds",
+          "type": "number"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "act_id",
+        "project_id",
+        "order",
+        "title",
+        "target_duration_seconds",
+        "audit"
+      ],
+      "title": "Act",
+      "type": "object"
+    },
+    "AudienceProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "age_max_years": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age Max Years"
+        },
+        "age_min_years": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age Min Years"
+        },
+        "child_directed": {
+          "default": false,
+          "title": "Child Directed",
+          "type": "boolean"
+        },
+        "family_co_viewing": {
+          "default": false,
+          "title": "Family Co Viewing",
+          "type": "boolean"
+        },
+        "kind": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "policy_profile": {
+          "default": "general",
+          "title": "Policy Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "AudienceProfile",
+      "type": "object"
+    },
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "CanonicalStatus": {
+      "enum": [
+        "candidate",
+        "approved",
+        "rejected",
+        "superseded"
+      ],
+      "title": "CanonicalStatus",
+      "type": "string"
+    },
+    "CastProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "ages": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Ages",
+          "type": "array"
+        },
+        "ai_may_decide": {
+          "default": true,
+          "title": "Ai May Decide",
+          "type": "boolean"
+        },
+        "genders": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Genders",
+          "type": "array"
+        },
+        "human_count_target": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Human Count Target"
+        },
+        "non_human_count_target": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Non Human Count Target"
+        }
+      },
+      "title": "CastProfile",
+      "type": "object"
+    },
+    "Character": {
+      "additionalProperties": false,
+      "properties": {
+        "active_version_id": {
+          "pattern": "^CHV-[0-9]{6,20}$",
+          "title": "Active Version Id",
+          "type": "string"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "character_id": {
+          "pattern": "^CHR-[0-9]{6,20}$",
+          "title": "Character Id",
+          "type": "string"
+        },
+        "lock": {
+          "$ref": "#/$defs/CharacterLock"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "reusable": {
+          "default": true,
+          "title": "Reusable",
+          "type": "boolean"
+        },
+        "rights_record_id": {
+          "anyOf": [
+            {
+              "pattern": "^RGT-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rights Record Id"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        }
+      },
+      "required": [
+        "character_id",
+        "name",
+        "active_version_id",
+        "lock",
+        "audit"
+      ],
+      "title": "Character",
+      "type": "object"
+    },
+    "CharacterLock": {
+      "additionalProperties": false,
+      "properties": {
+        "pinned_character_version_id": {
+          "anyOf": [
+            {
+              "pattern": "^CHV-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pinned Character Version Id"
+        },
+        "pinned_look_id": {
+          "anyOf": [
+            {
+              "pattern": "^LOOK-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pinned Look Id"
+        },
+        "project_id": {
+          "anyOf": [
+            {
+              "pattern": "^PRJ-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Project Id"
+        },
+        "scene_id": {
+          "anyOf": [
+            {
+              "pattern": "^SCN-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scene Id"
+        },
+        "scope": {
+          "$ref": "#/$defs/LockScope"
+        }
+      },
+      "required": [
+        "scope"
+      ],
+      "title": "CharacterLock",
+      "type": "object"
+    },
+    "CharacterLook": {
+      "additionalProperties": false,
+      "properties": {
+        "accessories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Accessories",
+          "type": "array"
+        },
+        "body_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Body Notes",
+          "type": "array"
+        },
+        "expression_defaults": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expression Defaults",
+          "type": "array"
+        },
+        "eyes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eyes"
+        },
+        "hair": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hair"
+        },
+        "look_id": {
+          "pattern": "^LOOK-[0-9]{6,20}$",
+          "title": "Look Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "palette": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Palette",
+          "type": "array"
+        },
+        "prohibited_mutations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prohibited Mutations",
+          "type": "array"
+        },
+        "reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Reference Asset Ids",
+          "type": "array"
+        },
+        "wardrobe": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Wardrobe",
+          "type": "array"
+        }
+      },
+      "required": [
+        "look_id",
+        "name"
+      ],
+      "title": "CharacterLook",
+      "type": "object"
+    },
+    "CharacterVersion": {
+      "additionalProperties": false,
+      "properties": {
+        "apparent_age": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Apparent Age"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "canonical_reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Canonical Reference Asset Ids",
+          "type": "array"
+        },
+        "character_id": {
+          "pattern": "^CHR-[0-9]{6,20}$",
+          "title": "Character Id",
+          "type": "string"
+        },
+        "character_type": {
+          "maxLength": 80,
+          "minLength": 1,
+          "title": "Character Type",
+          "type": "string"
+        },
+        "character_version_id": {
+          "pattern": "^CHV-[0-9]{6,20}$",
+          "title": "Character Version Id",
+          "type": "string"
+        },
+        "display_name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Display Name",
+          "type": "string"
+        },
+        "gender_presentation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Gender Presentation"
+        },
+        "identity_constraints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Identity Constraints",
+          "type": "array"
+        },
+        "looks": {
+          "items": {
+            "$ref": "#/$defs/CharacterLook"
+          },
+          "title": "Looks",
+          "type": "array"
+        },
+        "movement_style": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Movement Style"
+        },
+        "personality_traits": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Personality Traits",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Species"
+        },
+        "status": {
+          "$ref": "#/$defs/CanonicalStatus",
+          "default": "candidate"
+        },
+        "version": {
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        },
+        "voice_profile_id": {
+          "anyOf": [
+            {
+              "pattern": "^VOC-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Voice Profile Id"
+        }
+      },
+      "required": [
+        "character_version_id",
+        "character_id",
+        "version",
+        "display_name",
+        "character_type",
+        "audit"
+      ],
+      "title": "CharacterVersion",
+      "type": "object"
+    },
+    "ContinuityState": {
+      "additionalProperties": false,
+      "properties": {
+        "camera_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Camera State",
+          "type": "object"
+        },
+        "character_states": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Character States",
+          "type": "object"
+        },
+        "environment_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Environment State",
+          "type": "object"
+        },
+        "lighting_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Lighting State",
+          "type": "object"
+        },
+        "motion_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Motion State",
+          "type": "object"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "prop_states": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Prop States",
+          "type": "object"
+        }
+      },
+      "title": "ContinuityState",
+      "type": "object"
+    },
+    "CreativeProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "camera_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Camera Profile"
+        },
+        "genres": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Genres",
+          "type": "array"
+        },
+        "pacing_profile": {
+          "default": "balanced",
+          "title": "Pacing Profile",
+          "type": "string"
+        },
+        "transition_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transition Profile"
+        },
+        "treatment": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Treatment",
+          "type": "array"
+        },
+        "visual_style_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visual Style Id"
+        }
+      },
+      "title": "CreativeProfile",
+      "type": "object"
+    },
+    "ExecutionMode": {
+      "enum": [
+        "FREE_ONLY",
+        "FREE_FIRST",
+        "HYBRID_SMART",
+        "BUDGET_CAPPED",
+        "QUALITY_FIRST"
+      ],
+      "title": "ExecutionMode",
+      "type": "string"
+    },
+    "Location": {
+      "additionalProperties": false,
+      "properties": {
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "canonical_reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Canonical Reference Asset Ids",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "environment_constraints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Environment Constraints",
+          "type": "array"
+        },
+        "location_id": {
+          "pattern": "^LOC-[0-9]{6,20}$",
+          "title": "Location Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "world_id": {
+          "anyOf": [
+            {
+              "pattern": "^WRL-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "World Id"
+        }
+      },
+      "required": [
+        "location_id",
+        "name",
+        "audit"
+      ],
+      "title": "Location",
+      "type": "object"
+    },
+    "LockScope": {
+      "enum": [
+        "global",
+        "project",
+        "look",
+        "scene",
+        "unlocked"
+      ],
+      "title": "LockScope",
+      "type": "string"
+    },
+    "OutputProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "aspect_ratio": {
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "type": "string"
+        },
+        "fps": {
+          "default": 24,
+          "exclusiveMinimum": 0,
+          "maximum": 120,
+          "title": "Fps",
+          "type": "number"
+        },
+        "generate_vertical_derivative": {
+          "default": false,
+          "title": "Generate Vertical Derivative",
+          "type": "boolean"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height"
+        },
+        "master_container": {
+          "default": "mp4",
+          "title": "Master Container",
+          "type": "string"
+        },
+        "target_resolution_label": {
+          "default": "1080p",
+          "title": "Target Resolution Label",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width"
+        }
+      },
+      "title": "OutputProfile",
+      "type": "object"
+    },
+    "Project": {
+      "additionalProperties": false,
+      "properties": {
+        "active_timeline_id": {
+          "anyOf": [
+            {
+              "pattern": "^TML-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Active Timeline Id"
+        },
+        "audience": {
+          "$ref": "#/$defs/AudienceProfile"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "cast": {
+          "$ref": "#/$defs/CastProfile"
+        },
+        "character_ids": {
+          "items": {
+            "pattern": "^CHR-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Character Ids",
+          "type": "array"
+        },
+        "content_format": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Content Format",
+          "type": "string"
+        },
+        "content_id": {
+          "anyOf": [
+            {
+              "pattern": "^CNT-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Id"
+        },
+        "creative": {
+          "$ref": "#/$defs/CreativeProfile"
+        },
+        "custom_content_format": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Custom Content Format"
+        },
+        "language": {
+          "maxLength": 32,
+          "minLength": 2,
+          "title": "Language",
+          "type": "string"
+        },
+        "output": {
+          "$ref": "#/$defs/OutputProfile"
+        },
+        "project_id": {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "prop_ids": {
+          "items": {
+            "pattern": "^PRP-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Prop Ids",
+          "type": "array"
+        },
+        "provider_policy": {
+          "$ref": "#/$defs/ProviderPolicyRef"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "status": {
+          "$ref": "#/$defs/ProjectStatus",
+          "default": "draft"
+        },
+        "tags": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tags",
+          "type": "array"
+        },
+        "target_duration_seconds": {
+          "maximum": 10800,
+          "minimum": 60,
+          "title": "Target Duration Seconds",
+          "type": "integer"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "world_ids": {
+          "items": {
+            "pattern": "^WRL-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "World Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "project_id",
+        "title",
+        "audience",
+        "cast",
+        "content_format",
+        "language",
+        "target_duration_seconds",
+        "audit"
+      ],
+      "title": "Project",
+      "type": "object"
+    },
+    "ProjectStatus": {
+      "enum": [
+        "draft",
+        "planning",
+        "production",
+        "qa",
+        "publish-ready",
+        "published",
+        "archived"
+      ],
+      "title": "ProjectStatus",
+      "type": "string"
+    },
+    "Prop": {
+      "additionalProperties": false,
+      "properties": {
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "canonical_reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Canonical Reference Asset Ids",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "identity_constraints": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Identity Constraints",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "prop_id": {
+          "pattern": "^PRP-[0-9]{6,20}$",
+          "title": "Prop Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "prop_id",
+        "name",
+        "audit"
+      ],
+      "title": "Prop",
+      "type": "object"
+    },
+    "ProviderPolicyRef": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_manual_free_handoff": {
+          "default": true,
+          "title": "Allow Manual Free Handoff",
+          "type": "boolean"
+        },
+        "blocked_provider_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Blocked Provider Ids",
+          "type": "array"
+        },
+        "budget_policy_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Budget Policy Id"
+        },
+        "execution_mode": {
+          "$ref": "#/$defs/ExecutionMode",
+          "default": "HYBRID_SMART"
+        },
+        "preferred_provider_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preferred Provider Ids",
+          "type": "array"
+        }
+      },
+      "title": "ProviderPolicyRef",
+      "type": "object"
+    },
+    "Scene": {
+      "additionalProperties": false,
+      "properties": {
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "character_ids": {
+          "items": {
+            "pattern": "^CHR-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Character Ids",
+          "type": "array"
+        },
+        "incoming_state": {
+          "$ref": "#/$defs/ContinuityState"
+        },
+        "location_id": {
+          "anyOf": [
+            {
+              "pattern": "^LOC-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location Id"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "outgoing_state": {
+          "$ref": "#/$defs/ContinuityState"
+        },
+        "scene_id": {
+          "pattern": "^SCN-[0-9]{6,20}$",
+          "title": "Scene Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "sequence_id": {
+          "pattern": "^SEQ-[0-9]{6,20}$",
+          "title": "Sequence Id",
+          "type": "string"
+        },
+        "shot_ids": {
+          "items": {
+            "pattern": "^SHT-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Shot Ids",
+          "type": "array"
+        },
+        "summary": {
+          "default": "",
+          "title": "Summary",
+          "type": "string"
+        },
+        "target_duration_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Target Duration Seconds",
+          "type": "number"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "scene_id",
+        "sequence_id",
+        "order",
+        "title",
+        "target_duration_seconds",
+        "audit"
+      ],
+      "title": "Scene",
+      "type": "object"
+    },
+    "Sequence": {
+      "additionalProperties": false,
+      "properties": {
+        "act_id": {
+          "pattern": "^ACT-[0-9]{6,20}$",
+          "title": "Act Id",
+          "type": "string"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "scene_ids": {
+          "items": {
+            "pattern": "^SCN-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Scene Ids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "sequence_id": {
+          "pattern": "^SEQ-[0-9]{6,20}$",
+          "title": "Sequence Id",
+          "type": "string"
+        },
+        "target_duration_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Target Duration Seconds",
+          "type": "number"
+        },
+        "title": {
+          "maxLength": 240,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence_id",
+        "act_id",
+        "order",
+        "title",
+        "target_duration_seconds",
+        "audit"
+      ],
+      "title": "Sequence",
+      "type": "object"
+    },
+    "Shot": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "default": "",
+          "title": "Action",
+          "type": "string"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "camera": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Camera",
+          "type": "object"
+        },
+        "character_ids": {
+          "items": {
+            "pattern": "^CHR-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Character Ids",
+          "type": "array"
+        },
+        "end_frame_asset_id": {
+          "anyOf": [
+            {
+              "pattern": "^AST-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "End Frame Asset Id"
+        },
+        "first_frame_asset_id": {
+          "anyOf": [
+            {
+              "pattern": "^AST-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "First Frame Asset Id"
+        },
+        "generation_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Generation Notes",
+          "type": "array"
+        },
+        "handles_seconds": {
+          "default": 0.0,
+          "maximum": 10,
+          "minimum": 0,
+          "title": "Handles Seconds",
+          "type": "number"
+        },
+        "incoming_state": {
+          "$ref": "#/$defs/ContinuityState"
+        },
+        "location_id": {
+          "anyOf": [
+            {
+              "pattern": "^LOC-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Location Id"
+        },
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "outgoing_state": {
+          "$ref": "#/$defs/ContinuityState"
+        },
+        "prop_ids": {
+          "items": {
+            "pattern": "^PRP-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Prop Ids",
+          "type": "array"
+        },
+        "purpose": {
+          "default": "",
+          "title": "Purpose",
+          "type": "string"
+        },
+        "reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Reference Asset Ids",
+          "type": "array"
+        },
+        "scene_id": {
+          "pattern": "^SCN-[0-9]{6,20}$",
+          "title": "Scene Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "selected_take_id": {
+          "anyOf": [
+            {
+              "pattern": "^TAK-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Selected Take Id"
+        },
+        "shot_id": {
+          "pattern": "^SHT-[0-9]{6,20}$",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "take_ids": {
+          "items": {
+            "pattern": "^TAK-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Take Ids",
+          "type": "array"
+        },
+        "time_range": {
+          "$ref": "#/$defs/TimeRange"
+        },
+        "transition_in": {
+          "default": "cut",
+          "title": "Transition In",
+          "type": "string"
+        },
+        "transition_out": {
+          "default": "cut",
+          "title": "Transition Out",
+          "type": "string"
+        }
+      },
+      "required": [
+        "shot_id",
+        "scene_id",
+        "order",
+        "time_range",
+        "audit"
+      ],
+      "title": "Shot",
+      "type": "object"
+    },
+    "Take": {
+      "additionalProperties": false,
+      "properties": {
+        "asset_id": {
+          "anyOf": [
+            {
+              "pattern": "^AST-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Asset Id"
+        },
+        "attempt_id": {
+          "anyOf": [
+            {
+              "pattern": "^ATT-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Attempt Id"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "canonical_status": {
+          "$ref": "#/$defs/CanonicalStatus",
+          "default": "candidate"
+        },
+        "continuity_score": {
+          "anyOf": [
+            {
+              "maximum": 100,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Continuity Score"
+        },
+        "qa_record_ids": {
+          "items": {
+            "pattern": "^QAR-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Qa Record Ids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "shot_id": {
+          "pattern": "^SHT-[0-9]{6,20}$",
+          "title": "Shot Id",
+          "type": "string"
+        },
+        "take_id": {
+          "pattern": "^TAK-[0-9]{6,20}$",
+          "title": "Take Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "take_id",
+        "shot_id",
+        "audit"
+      ],
+      "title": "Take",
+      "type": "object"
+    },
+    "TimeRange": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Duration Seconds",
+          "type": "number"
+        },
+        "start_seconds": {
+          "minimum": 0,
+          "title": "Start Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "start_seconds",
+        "duration_seconds"
+      ],
+      "title": "TimeRange",
+      "type": "object"
+    },
+    "Timeline": {
+      "additionalProperties": false,
+      "properties": {
+        "act_ids": {
+          "items": {
+            "pattern": "^ACT-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Act Ids",
+          "type": "array"
+        },
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "duration_seconds": {
+          "maximum": 10800,
+          "minimum": 60,
+          "title": "Duration Seconds",
+          "type": "number"
+        },
+        "fps": {
+          "default": 24,
+          "exclusiveMinimum": 0,
+          "maximum": 120,
+          "title": "Fps",
+          "type": "number"
+        },
+        "marker_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Marker Asset Ids",
+          "type": "array"
+        },
+        "otio_asset_id": {
+          "anyOf": [
+            {
+              "pattern": "^AST-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Otio Asset Id"
+        },
+        "project_id": {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "timeline_id": {
+          "pattern": "^TML-[0-9]{6,20}$",
+          "title": "Timeline Id",
+          "type": "string"
+        },
+        "tracks": {
+          "items": {
+            "$ref": "#/$defs/TimelineTrack"
+          },
+          "title": "Tracks",
+          "type": "array"
+        },
+        "version": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Version",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "timeline_id",
+        "project_id",
+        "duration_seconds",
+        "audit"
+      ],
+      "title": "Timeline",
+      "type": "object"
+    },
+    "TimelineTrack": {
+      "additionalProperties": false,
+      "properties": {
+        "item_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Item Ids",
+          "type": "array"
+        },
+        "kind": {
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "locked": {
+          "default": false,
+          "title": "Locked",
+          "type": "boolean"
+        },
+        "muted": {
+          "default": false,
+          "title": "Muted",
+          "type": "boolean"
+        },
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "track_id": {
+          "pattern": "^TRK-[0-9]{6,20}$",
+          "title": "Track Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "track_id",
+        "kind",
+        "name"
+      ],
+      "title": "TimelineTrack",
+      "type": "object"
+    },
+    "World": {
+      "additionalProperties": false,
+      "properties": {
+        "audit": {
+          "$ref": "#/$defs/AuditFields"
+        },
+        "canonical_reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Canonical Reference Asset Ids",
+          "type": "array"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        },
+        "forbidden_mutations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Forbidden Mutations",
+          "type": "array"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "rules": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Rules",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": 1,
+          "default": 1,
+          "title": "Schema Version",
+          "type": "integer"
+        },
+        "style_profile_id": {
+          "anyOf": [
+            {
+              "pattern": "^STY-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Style Profile Id"
+        },
+        "world_id": {
+          "pattern": "^WRL-[0-9]{6,20}$",
+          "title": "World Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "world_id",
+        "name",
+        "audit"
+      ],
+      "title": "World",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:project-bundle",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Provider-neutral aggregate used to validate a complete project graph.\n\nThis is intentionally an in-memory/domain validation boundary, not the future\ndatabase storage shape. Runtime repositories may load these records from\nPostgreSQL and validate the assembled graph before high-impact operations.",
+  "properties": {
+    "acts": {
+      "items": {
+        "$ref": "#/$defs/Act"
+      },
+      "title": "Acts",
+      "type": "array"
+    },
+    "character_versions": {
+      "items": {
+        "$ref": "#/$defs/CharacterVersion"
+      },
+      "title": "Character Versions",
+      "type": "array"
+    },
+    "characters": {
+      "items": {
+        "$ref": "#/$defs/Character"
+      },
+      "title": "Characters",
+      "type": "array"
+    },
+    "locations": {
+      "items": {
+        "$ref": "#/$defs/Location"
+      },
+      "title": "Locations",
+      "type": "array"
+    },
+    "project": {
+      "$ref": "#/$defs/Project"
+    },
+    "props": {
+      "items": {
+        "$ref": "#/$defs/Prop"
+      },
+      "title": "Props",
+      "type": "array"
+    },
+    "scenes": {
+      "items": {
+        "$ref": "#/$defs/Scene"
+      },
+      "title": "Scenes",
+      "type": "array"
+    },
+    "sequences": {
+      "items": {
+        "$ref": "#/$defs/Sequence"
+      },
+      "title": "Sequences",
+      "type": "array"
+    },
+    "shots": {
+      "items": {
+        "$ref": "#/$defs/Shot"
+      },
+      "title": "Shots",
+      "type": "array"
+    },
+    "takes": {
+      "items": {
+        "$ref": "#/$defs/Take"
+      },
+      "title": "Takes",
+      "type": "array"
+    },
+    "timeline": {
+      "$ref": "#/$defs/Timeline"
+    },
+    "worlds": {
+      "items": {
+        "$ref": "#/$defs/World"
+      },
+      "title": "Worlds",
+      "type": "array"
+    }
+  },
+  "required": [
+    "project",
+    "timeline"
+  ],
+  "title": "ProjectBundle",
+  "type": "object"
+}

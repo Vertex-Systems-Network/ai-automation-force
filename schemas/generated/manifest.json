@@ -1,0 +1,30 @@
+{
+  "artifacts": {
+    "act.schema.json": "2217d76c149e430994f6612520f844d360e1038e6b59f101acef0068fc69a536",
+    "approval.schema.json": "e213a563e5efad295b8e88620017b0911ce3d045c308af0a942bfd8d9b9e069b",
+    "asset.schema.json": "31275039e327ce648962057726bc4264639be8dcb6d901b0cfbf52c38e69469b",
+    "character-version.schema.json": "a04a42accea4d8c9505af4df194d76f5d8c07d78f843541158044e1b59a2a2d7",
+    "character.schema.json": "9dbb414e5f36c7d8f1c35cc51eb51765e9db3b05ff96efabe1b0390c6e79ac36",
+    "content-version.schema.json": "b6639813fe001eddea88bfa4d18434d8096d97bb98579e074aa47365b5e5661c",
+    "content.schema.json": "5c47b94f66e18b47ae172dd7b13da378850c66f5dbbb22635dc4cf2353c713ec",
+    "cost-record.schema.json": "f8b1851342df574850fa111bc98573238c6cbb6ed4fc655421766c8ac69c69a4",
+    "generation-attempt.schema.json": "01854318caaa31d2b7f1d8a01abbdf14a0760f859c7d1bcd08e83da05b3e5664",
+    "job.schema.json": "26c2297ef20138a24851b6532c300de9d30596f6949b6b99a898f54fbf638567",
+    "location.schema.json": "97d5bee4f773b0f6a1af396a1c5be2649ee81d15286cf1d8f76d964d430fcb06",
+    "project-bundle.schema.json": "5947d85689dee9d263bbf2680cbc619a138311f952f6622f859787148a955f73",
+    "project.schema.json": "79e018e7c5d9a9d6e0b5fff4794cb0e6a219fc95607efa09d4b702c996a0756f",
+    "prop.schema.json": "a3d059cb1c6e1842c3d0628d3dba2a9599d187586673e61f4d2106777bfd3cc9",
+    "qa-record.schema.json": "1146722bbe19e2ee399f599dcd8773e3a76c3b8f9a0923a3eb14c65a87febb02",
+    "rights-record.schema.json": "b77b6148ce87accef0cfabb8625bd0d5f27fc3a46e60789b6f49c16a318225d3",
+    "scene.schema.json": "141b9641114f393cd083df84a235cd07f71546a5aed36138933dd7d3825ef62c",
+    "sequence.schema.json": "6c7412e1d4e87db6783c6641429364fbcd3b959359b1b58d005ac917cfc19c08",
+    "shot.schema.json": "c09db5f37404578987587dc8025dadb52412609a244b594b36ed0ea36f974f82",
+    "style-profile.schema.json": "e54fb4f5e5edcab9e94ef9ef3654a2b7172b5ed34adeef9e37b3ea44f88cac0c",
+    "take.schema.json": "08315a28810ffc7756c76d42bc7d5f7c4cb4c9aa175a7ac4209ff41b3bd358ee",
+    "timeline.schema.json": "325778c108bd17dfb7c0b5637cb6c9436ba8dc1260f879929e7d87f40f5cb95b",
+    "voice-profile.schema.json": "b84a563bde34eb3d468d87dc977c5b0f3bcefecf7a7c4bac273a89f6177ad6fa",
+    "world.schema.json": "0a2133cb57902b4640cf4fb710f6d06d5180be71a295ce0a974a766d047837db"
+  },
+  "schema_base_id": "urn:ai-automation-force:schema:v1",
+  "schema_version": 1
+}

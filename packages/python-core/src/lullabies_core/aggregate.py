@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Iterable
+from typing import Protocol, TypeVar
 
 from pydantic import Field, model_validator
 
@@ -9,6 +11,12 @@ from .common import StrictModel
 from .entities import Location, Prop, World
 from .project import Project
 from .timeline import Act, Scene, Sequence, Shot, Take, Timeline
+
+T = TypeVar("T")
+
+
+class Orderable(Protocol):
+    order: int
 
 
 class ProjectBundle(StrictModel):
@@ -33,7 +41,7 @@ class ProjectBundle(StrictModel):
     props: list[Prop] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validate_graph(self) -> "ProjectBundle":
+    def validate_graph(self) -> ProjectBundle:
         self._validate_project_timeline()
         self._validate_hierarchy()
         self._validate_takes()
@@ -65,10 +73,14 @@ class ProjectBundle(StrictModel):
             missing = [item for item in act.sequence_ids if item not in sequences]
             if missing:
                 raise ValueError(f"act {act.act_id} references missing sequences: {missing}")
-            owned = [sequence for sequence in self.sequences if sequence.act_id == act.act_id]
-            if set(act.sequence_ids) != {sequence.sequence_id for sequence in owned}:
+            owned_sequences = [
+                sequence for sequence in self.sequences if sequence.act_id == act.act_id
+            ]
+            if set(act.sequence_ids) != {
+                sequence.sequence_id for sequence in owned_sequences
+            }:
                 raise ValueError(f"act {act.act_id} sequence membership is inconsistent")
-            self._assert_unique_orders(owned, act.act_id, "Sequence")
+            self._assert_unique_orders(owned_sequences, act.act_id, "Sequence")
 
         for sequence in self.sequences:
             if sequence.act_id not in acts:
@@ -78,10 +90,14 @@ class ProjectBundle(StrictModel):
                 raise ValueError(
                     f"sequence {sequence.sequence_id} references missing scenes: {missing}"
                 )
-            owned = [scene for scene in self.scenes if scene.sequence_id == sequence.sequence_id]
-            if set(sequence.scene_ids) != {scene.scene_id for scene in owned}:
-                raise ValueError(f"sequence {sequence.sequence_id} scene membership is inconsistent")
-            self._assert_unique_orders(owned, sequence.sequence_id, "Scene")
+            owned_scenes = [
+                scene for scene in self.scenes if scene.sequence_id == sequence.sequence_id
+            ]
+            if set(sequence.scene_ids) != {scene.scene_id for scene in owned_scenes}:
+                raise ValueError(
+                    f"sequence {sequence.sequence_id} scene membership is inconsistent"
+                )
+            self._assert_unique_orders(owned_scenes, sequence.sequence_id, "Scene")
 
         for scene in self.scenes:
             if scene.sequence_id not in sequences:
@@ -89,12 +105,12 @@ class ProjectBundle(StrictModel):
             missing = [item for item in scene.shot_ids if item not in shots]
             if missing:
                 raise ValueError(f"scene {scene.scene_id} references missing shots: {missing}")
-            owned = [shot for shot in self.shots if shot.scene_id == scene.scene_id]
-            if set(scene.shot_ids) != {shot.shot_id for shot in owned}:
+            owned_shots = [shot for shot in self.shots if shot.scene_id == scene.scene_id]
+            if set(scene.shot_ids) != {shot.shot_id for shot in owned_shots}:
                 raise ValueError(f"scene {scene.scene_id} shot membership is inconsistent")
-            self._assert_unique_orders(owned, scene.scene_id, "Shot")
-            ordered = sorted(owned, key=lambda shot: shot.order)
-            starts = [shot.time_range.start_seconds for shot in ordered]
+            self._assert_unique_orders(owned_shots, scene.scene_id, "Shot")
+            ordered_shots = sorted(owned_shots, key=lambda shot: shot.order)
+            starts = [shot.time_range.start_seconds for shot in ordered_shots]
             if starts != sorted(starts):
                 raise ValueError(f"scene {scene.scene_id} shot time order moves backwards")
 
@@ -108,8 +124,8 @@ class ProjectBundle(StrictModel):
             missing = [take_id for take_id in shot.take_ids if take_id not in takes]
             if missing:
                 raise ValueError(f"shot {shot.shot_id} references missing takes: {missing}")
-            owned = [take for take in self.takes if take.shot_id == shot.shot_id]
-            if set(shot.take_ids) != {take.take_id for take in owned}:
+            owned_takes = [take for take in self.takes if take.shot_id == shot.shot_id]
+            if set(shot.take_ids) != {take.take_id for take in owned_takes}:
                 raise ValueError(f"shot {shot.shot_id} take membership is inconsistent")
 
     def _validate_references(self) -> None:
@@ -123,9 +139,7 @@ class ProjectBundle(StrictModel):
 
         for character in self.characters:
             if character.active_version_id not in character_versions:
-                raise ValueError(
-                    f"character {character.character_id} active version is not loaded"
-                )
+                raise ValueError(f"character {character.character_id} active version is not loaded")
             version = character_versions[character.active_version_id]
             if version.character_id != character.character_id:
                 raise ValueError(
@@ -136,7 +150,9 @@ class ProjectBundle(StrictModel):
                 if pinned not in character_versions:
                     raise ValueError(f"character {character.character_id} lock version is missing")
                 if character_versions[pinned].character_id != character.character_id:
-                    raise ValueError(f"character {character.character_id} lock pins another identity")
+                    raise ValueError(
+                        f"character {character.character_id} lock pins another identity"
+                    )
 
         required_character_ids = set(self.project.character_ids)
         for scene in self.scenes:
@@ -145,16 +161,22 @@ class ProjectBundle(StrictModel):
             required_character_ids.update(shot.character_ids)
         missing_characters = required_character_ids - set(characters)
         if missing_characters:
-            raise ValueError(f"project graph references missing characters: {sorted(missing_characters)}")
+            raise ValueError(
+                f"project graph references missing characters: {sorted(missing_characters)}"
+            )
 
+        scene_locations = (scene.location_id for scene in self.scenes)
+        shot_locations = (shot.location_id for shot in self.shots)
         required_location_ids = {
             location_id
-            for location_id in [*(scene.location_id for scene in self.scenes), *(shot.location_id for shot in self.shots)]
+            for location_id in [*scene_locations, *shot_locations]
             if location_id is not None
         }
         missing_locations = required_location_ids - set(locations)
         if missing_locations:
-            raise ValueError(f"project graph references missing locations: {sorted(missing_locations)}")
+            raise ValueError(
+                f"project graph references missing locations: {sorted(missing_locations)}"
+            )
 
         required_prop_ids = set(self.project.prop_ids)
         for shot in self.shots:
@@ -171,16 +193,17 @@ class ProjectBundle(StrictModel):
                 raise ValueError(f"location {location.location_id} references missing world")
 
     @staticmethod
-    def _unique_by_id(items: list[object], field: str, label: str) -> dict[str, object]:
-        values = [str(getattr(item, field)) for item in items]
+    def _unique_by_id(items: Iterable[T], field: str, label: str) -> dict[str, T]:
+        materialized = list(items)
+        values = [str(getattr(item, field)) for item in materialized]
         duplicates = [value for value, count in Counter(values).items() if count > 1]
         if duplicates:
             raise ValueError(f"duplicate {label} IDs: {sorted(duplicates)}")
-        return {str(getattr(item, field)): item for item in items}
+        return {str(getattr(item, field)): item for item in materialized}
 
     @staticmethod
-    def _assert_unique_orders(items: list[object], parent: str, label: str) -> None:
-        values = [int(getattr(item, "order")) for item in items]
+    def _assert_unique_orders(items: Iterable[Orderable], parent: str, label: str) -> None:
+        values = [int(item.order) for item in items]
         duplicates = [value for value, count in Counter(values).items() if count > 1]
         if duplicates:
             raise ValueError(f"duplicate {label} order under {parent}: {sorted(duplicates)}")

@@ -1,0 +1,298 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "ContinuityState": {
+      "additionalProperties": false,
+      "properties": {
+        "camera_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Camera State",
+          "type": "object"
+        },
+        "character_states": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Character States",
+          "type": "object"
+        },
+        "environment_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Environment State",
+          "type": "object"
+        },
+        "lighting_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Lighting State",
+          "type": "object"
+        },
+        "motion_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Motion State",
+          "type": "object"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "prop_states": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Prop States",
+          "type": "object"
+        }
+      },
+      "title": "ContinuityState",
+      "type": "object"
+    },
+    "TimeRange": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_seconds": {
+          "exclusiveMinimum": 0,
+          "title": "Duration Seconds",
+          "type": "number"
+        },
+        "start_seconds": {
+          "minimum": 0,
+          "title": "Start Seconds",
+          "type": "number"
+        }
+      },
+      "required": [
+        "start_seconds",
+        "duration_seconds"
+      ],
+      "title": "TimeRange",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:shot",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "action": {
+      "default": "",
+      "title": "Action",
+      "type": "string"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "camera": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Camera",
+      "type": "object"
+    },
+    "character_ids": {
+      "items": {
+        "pattern": "^CHR-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Character Ids",
+      "type": "array"
+    },
+    "end_frame_asset_id": {
+      "anyOf": [
+        {
+          "pattern": "^AST-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "End Frame Asset Id"
+    },
+    "first_frame_asset_id": {
+      "anyOf": [
+        {
+          "pattern": "^AST-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "First Frame Asset Id"
+    },
+    "generation_notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Generation Notes",
+      "type": "array"
+    },
+    "handles_seconds": {
+      "default": 0.0,
+      "maximum": 10,
+      "minimum": 0,
+      "title": "Handles Seconds",
+      "type": "number"
+    },
+    "incoming_state": {
+      "$ref": "#/$defs/ContinuityState"
+    },
+    "location_id": {
+      "anyOf": [
+        {
+          "pattern": "^LOC-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Id"
+    },
+    "order": {
+      "minimum": 1,
+      "title": "Order",
+      "type": "integer"
+    },
+    "outgoing_state": {
+      "$ref": "#/$defs/ContinuityState"
+    },
+    "prop_ids": {
+      "items": {
+        "pattern": "^PRP-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Prop Ids",
+      "type": "array"
+    },
+    "purpose": {
+      "default": "",
+      "title": "Purpose",
+      "type": "string"
+    },
+    "reference_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Reference Asset Ids",
+      "type": "array"
+    },
+    "scene_id": {
+      "pattern": "^SCN-[0-9]{6,20}$",
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "selected_take_id": {
+      "anyOf": [
+        {
+          "pattern": "^TAK-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Take Id"
+    },
+    "shot_id": {
+      "pattern": "^SHT-[0-9]{6,20}$",
+      "title": "Shot Id",
+      "type": "string"
+    },
+    "take_ids": {
+      "items": {
+        "pattern": "^TAK-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Take Ids",
+      "type": "array"
+    },
+    "time_range": {
+      "$ref": "#/$defs/TimeRange"
+    },
+    "transition_in": {
+      "default": "cut",
+      "title": "Transition In",
+      "type": "string"
+    },
+    "transition_out": {
+      "default": "cut",
+      "title": "Transition Out",
+      "type": "string"
+    }
+  },
+  "required": [
+    "shot_id",
+    "scene_id",
+    "order",
+    "time_range",
+    "audit"
+  ],
+  "title": "Shot",
+  "type": "object"
+}

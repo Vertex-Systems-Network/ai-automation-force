@@ -1,0 +1,115 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:world",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "canonical_reference_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Canonical Reference Asset Ids",
+      "type": "array"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "forbidden_mutations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Forbidden Mutations",
+      "type": "array"
+    },
+    "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Rules",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "style_profile_id": {
+      "anyOf": [
+        {
+          "pattern": "^STY-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Style Profile Id"
+    },
+    "world_id": {
+      "pattern": "^WRL-[0-9]{6,20}$",
+      "title": "World Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "world_id",
+    "name",
+    "audit"
+  ],
+  "title": "World",
+  "type": "object"
+}

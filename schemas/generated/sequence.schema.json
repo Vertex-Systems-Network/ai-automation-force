@@ -1,0 +1,101 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:sequence",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "act_id": {
+      "pattern": "^ACT-[0-9]{6,20}$",
+      "title": "Act Id",
+      "type": "string"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "order": {
+      "minimum": 1,
+      "title": "Order",
+      "type": "integer"
+    },
+    "scene_ids": {
+      "items": {
+        "pattern": "^SCN-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Scene Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sequence_id": {
+      "pattern": "^SEQ-[0-9]{6,20}$",
+      "title": "Sequence Id",
+      "type": "string"
+    },
+    "target_duration_seconds": {
+      "exclusiveMinimum": 0,
+      "title": "Target Duration Seconds",
+      "type": "number"
+    },
+    "title": {
+      "maxLength": 240,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "sequence_id",
+    "act_id",
+    "order",
+    "title",
+    "target_duration_seconds",
+    "audit"
+  ],
+  "title": "Sequence",
+  "type": "object"
+}

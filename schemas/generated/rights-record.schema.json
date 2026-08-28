@@ -1,0 +1,165 @@
+{
+  "$defs": {
+    "CommercialUseStatus": {
+      "enum": [
+        "unknown",
+        "allowed",
+        "conditional",
+        "prohibited"
+      ],
+      "title": "CommercialUseStatus",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:rights-record",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "commercial_use": {
+      "$ref": "#/$defs/CommercialUseStatus",
+      "default": "unknown"
+    },
+    "consent_reference": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Consent Reference"
+    },
+    "evidence_urls": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Evidence Urls",
+      "type": "array"
+    },
+    "model_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Id"
+    },
+    "model_provider_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Provider Id"
+    },
+    "notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Notes",
+      "type": "array"
+    },
+    "plan_or_tier": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Plan Or Tier"
+    },
+    "provider_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Id"
+    },
+    "publication_blocked": {
+      "default": true,
+      "title": "Publication Blocked",
+      "type": "boolean"
+    },
+    "rights_record_id": {
+      "pattern": "^RGT-[0-9]{6,20}$",
+      "title": "Rights Record Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_basis": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Basis"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "subject_type": {
+      "title": "Subject Type",
+      "type": "string"
+    },
+    "verified_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Verified At"
+    },
+    "watermark_required": {
+      "anyOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Watermark Required"
+    }
+  },
+  "required": [
+    "rights_record_id",
+    "subject_type",
+    "subject_id"
+  ],
+  "title": "RightsRecord",
+  "type": "object"
+}

@@ -5,19 +5,24 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
-    AudienceKind,
-    AuditFields,
-    CastAge,
-    CastGender,
-    ContentFormat,
-    ProjectStatus,
     SCHEMA_VERSION,
+    AuditFields,
+    CharacterId,
+    ContentId,
+    ExecutionMode,
+    ProjectId,
+    ProjectStatus,
+    PropId,
+    SchemaVersion,
     StrictModel,
+    TaxonomyValue,
+    TimelineId,
+    WorldId,
 )
 
 
 class AudienceProfile(StrictModel):
-    kind: AudienceKind
+    kind: TaxonomyValue
     age_min_years: Annotated[float | None, Field(ge=0)] = None
     age_max_years: Annotated[float | None, Field(ge=0)] = None
     child_directed: bool = False
@@ -25,7 +30,7 @@ class AudienceProfile(StrictModel):
     policy_profile: str = "general"
 
     @model_validator(mode="after")
-    def validate_age_range(self) -> "AudienceProfile":
+    def validate_age_range(self) -> AudienceProfile:
         if (
             self.age_min_years is not None
             and self.age_max_years is not None
@@ -36,8 +41,8 @@ class AudienceProfile(StrictModel):
 
 
 class CastProfile(StrictModel):
-    ages: list[CastAge] = Field(default_factory=list)
-    genders: list[CastGender] = Field(default_factory=list)
+    ages: list[TaxonomyValue] = Field(default_factory=list)
+    genders: list[TaxonomyValue] = Field(default_factory=list)
     human_count_target: Annotated[int | None, Field(ge=0)] = None
     non_human_count_target: Annotated[int | None, Field(ge=0)] = None
     ai_may_decide: bool = True
@@ -63,7 +68,7 @@ class CreativeProfile(StrictModel):
 
 
 class ProviderPolicyRef(StrictModel):
-    execution_mode: str = "HYBRID_SMART"
+    execution_mode: ExecutionMode = ExecutionMode.HYBRID_SMART
     budget_policy_id: str | None = None
     allow_manual_free_handoff: bool = True
     preferred_provider_ids: list[str] = Field(default_factory=list)
@@ -71,31 +76,31 @@ class ProviderPolicyRef(StrictModel):
 
 
 class Project(StrictModel):
-    schema_version: int = SCHEMA_VERSION
-    project_id: str = Field(pattern=r"^PRJ-[0-9]{6}$")
+    schema_version: SchemaVersion = SCHEMA_VERSION
+    project_id: ProjectId
     title: str = Field(min_length=1, max_length=240)
     status: ProjectStatus = ProjectStatus.DRAFT
     audience: AudienceProfile
     cast: CastProfile
-    content_format: ContentFormat
+    content_format: TaxonomyValue
     custom_content_format: str | None = None
     language: str = Field(min_length=2, max_length=32)
     target_duration_seconds: Annotated[int, Field(ge=60, le=10800)]
     output: OutputProfile = Field(default_factory=OutputProfile)
     creative: CreativeProfile = Field(default_factory=CreativeProfile)
     provider_policy: ProviderPolicyRef = Field(default_factory=ProviderPolicyRef)
-    character_ids: list[str] = Field(default_factory=list)
-    world_ids: list[str] = Field(default_factory=list)
-    prop_ids: list[str] = Field(default_factory=list)
-    content_id: str | None = None
-    active_timeline_id: str | None = None
+    character_ids: list[CharacterId] = Field(default_factory=list)
+    world_ids: list[WorldId] = Field(default_factory=list)
+    prop_ids: list[PropId] = Field(default_factory=list)
+    content_id: ContentId | None = None
+    active_timeline_id: TimelineId | None = None
     tags: list[str] = Field(default_factory=list)
     audit: AuditFields
 
     @model_validator(mode="after")
-    def validate_custom_format(self) -> "Project":
-        if self.content_format == ContentFormat.CUSTOM and not self.custom_content_format:
+    def validate_custom_format(self) -> Project:
+        if self.content_format == "custom" and not self.custom_content_format:
             raise ValueError("custom_content_format is required when content_format=custom")
-        if self.content_format != ContentFormat.CUSTOM and self.custom_content_format:
+        if self.content_format != "custom" and self.custom_content_format:
             raise ValueError("custom_content_format is only valid when content_format=custom")
         return self

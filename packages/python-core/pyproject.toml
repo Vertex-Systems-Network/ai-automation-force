@@ -3,9 +3,9 @@ requires = ["hatchling>=1.25"]
 build-backend = "hatchling.build"
 
 [project]
-name = "lullabies-core"
+name = "ai-automation-force-core"
 version = "0.1.0"
-description = "Provider-neutral core domain contracts for the AI-native media production platform"
+description = "Provider-neutral core domain contracts for AI Automation Force"
 requires-python = ">=3.12"
 dependencies = [
   "pydantic>=2.8,<3",
@@ -19,7 +19,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/lullabies_core"]
+packages = ["src/lullabies_core", "src/ai_automation_force_core"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

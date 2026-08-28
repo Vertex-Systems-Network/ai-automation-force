@@ -22,9 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -36,11 +36,14 @@ jobs:
       - name: Ruff
         run: ruff check packages/python-core
 
+      - name: Mypy
+        run: mypy packages/python-core/src packages/python-core/scripts
+
       - name: Unit tests
         run: pytest packages/python-core/tests
 
-      - name: Verify schema exporter
-        run: python packages/python-core/scripts/export_schemas.py
+      - name: Verify generated schemas are synchronized
+        run: python packages/python-core/scripts/export_schemas.py --check
 
       - name: Compile package
         run: python -m compileall -q packages/python-core/src

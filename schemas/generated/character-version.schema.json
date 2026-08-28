@@ -1,0 +1,294 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "CanonicalStatus": {
+      "enum": [
+        "candidate",
+        "approved",
+        "rejected",
+        "superseded"
+      ],
+      "title": "CanonicalStatus",
+      "type": "string"
+    },
+    "CharacterLook": {
+      "additionalProperties": false,
+      "properties": {
+        "accessories": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Accessories",
+          "type": "array"
+        },
+        "body_notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Body Notes",
+          "type": "array"
+        },
+        "expression_defaults": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Expression Defaults",
+          "type": "array"
+        },
+        "eyes": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Eyes"
+        },
+        "hair": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Hair"
+        },
+        "look_id": {
+          "pattern": "^LOOK-[0-9]{6,20}$",
+          "title": "Look Id",
+          "type": "string"
+        },
+        "name": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "palette": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Palette",
+          "type": "array"
+        },
+        "prohibited_mutations": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Prohibited Mutations",
+          "type": "array"
+        },
+        "reference_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Reference Asset Ids",
+          "type": "array"
+        },
+        "wardrobe": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Wardrobe",
+          "type": "array"
+        }
+      },
+      "required": [
+        "look_id",
+        "name"
+      ],
+      "title": "CharacterLook",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:character-version",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "apparent_age": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Apparent Age"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "canonical_reference_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Canonical Reference Asset Ids",
+      "type": "array"
+    },
+    "character_id": {
+      "pattern": "^CHR-[0-9]{6,20}$",
+      "title": "Character Id",
+      "type": "string"
+    },
+    "character_type": {
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Character Type",
+      "type": "string"
+    },
+    "character_version_id": {
+      "pattern": "^CHV-[0-9]{6,20}$",
+      "title": "Character Version Id",
+      "type": "string"
+    },
+    "display_name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Display Name",
+      "type": "string"
+    },
+    "gender_presentation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Gender Presentation"
+    },
+    "identity_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Identity Constraints",
+      "type": "array"
+    },
+    "looks": {
+      "items": {
+        "$ref": "#/$defs/CharacterLook"
+      },
+      "title": "Looks",
+      "type": "array"
+    },
+    "movement_style": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Movement Style"
+    },
+    "personality_traits": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Personality Traits",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "species": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Species"
+    },
+    "status": {
+      "$ref": "#/$defs/CanonicalStatus",
+      "default": "candidate"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "voice_profile_id": {
+      "anyOf": [
+        {
+          "pattern": "^VOC-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Voice Profile Id"
+    }
+  },
+  "required": [
+    "character_version_id",
+    "character_id",
+    "version",
+    "display_name",
+    "character_type",
+    "audit"
+  ],
+  "title": "CharacterVersion",
+  "type": "object"
+}

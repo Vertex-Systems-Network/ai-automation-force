@@ -16,8 +16,8 @@ from lullabies_core import (
     Scene,
     Sequence,
     Shot,
-    TimeRange,
     Timeline,
+    TimeRange,
 )
 from lullabies_core.common import AuditFields
 

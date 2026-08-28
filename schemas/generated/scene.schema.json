@@ -1,0 +1,195 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "ContinuityState": {
+      "additionalProperties": false,
+      "properties": {
+        "camera_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Camera State",
+          "type": "object"
+        },
+        "character_states": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Character States",
+          "type": "object"
+        },
+        "environment_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Environment State",
+          "type": "object"
+        },
+        "lighting_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Lighting State",
+          "type": "object"
+        },
+        "motion_state": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Motion State",
+          "type": "object"
+        },
+        "notes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Notes",
+          "type": "array"
+        },
+        "prop_states": {
+          "additionalProperties": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "title": "Prop States",
+          "type": "object"
+        }
+      },
+      "title": "ContinuityState",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:scene",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "character_ids": {
+      "items": {
+        "pattern": "^CHR-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Character Ids",
+      "type": "array"
+    },
+    "incoming_state": {
+      "$ref": "#/$defs/ContinuityState"
+    },
+    "location_id": {
+      "anyOf": [
+        {
+          "pattern": "^LOC-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Location Id"
+    },
+    "order": {
+      "minimum": 1,
+      "title": "Order",
+      "type": "integer"
+    },
+    "outgoing_state": {
+      "$ref": "#/$defs/ContinuityState"
+    },
+    "scene_id": {
+      "pattern": "^SCN-[0-9]{6,20}$",
+      "title": "Scene Id",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sequence_id": {
+      "pattern": "^SEQ-[0-9]{6,20}$",
+      "title": "Sequence Id",
+      "type": "string"
+    },
+    "shot_ids": {
+      "items": {
+        "pattern": "^SHT-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Shot Ids",
+      "type": "array"
+    },
+    "summary": {
+      "default": "",
+      "title": "Summary",
+      "type": "string"
+    },
+    "target_duration_seconds": {
+      "exclusiveMinimum": 0,
+      "title": "Target Duration Seconds",
+      "type": "number"
+    },
+    "title": {
+      "maxLength": 240,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    }
+  },
+  "required": [
+    "scene_id",
+    "sequence_id",
+    "order",
+    "title",
+    "target_duration_seconds",
+    "audit"
+  ],
+  "title": "Scene",
+  "type": "object"
+}

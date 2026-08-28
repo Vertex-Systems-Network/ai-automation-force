@@ -1,0 +1,162 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:voice-profile",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "articulation": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Articulation"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "emotion_defaults": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Emotion Defaults",
+      "type": "array"
+    },
+    "impersonation_prohibited": {
+      "default": true,
+      "title": "Impersonation Prohibited",
+      "type": "boolean"
+    },
+    "language": {
+      "maxLength": 32,
+      "minLength": 2,
+      "title": "Language",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "pace": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Pace"
+    },
+    "presentation": {
+      "title": "Presentation",
+      "type": "string"
+    },
+    "pronunciation_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pronunciation Rules",
+      "type": "array"
+    },
+    "provider_voice_refs": {
+      "additionalProperties": {
+        "type": "string"
+      },
+      "title": "Provider Voice Refs",
+      "type": "object"
+    },
+    "rights_record_id": {
+      "anyOf": [
+        {
+          "pattern": "^RGT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rights Record Id"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "timbre": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Timbre"
+    },
+    "voice_profile_id": {
+      "pattern": "^VOC-[0-9]{6,20}$",
+      "title": "Voice Profile Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "voice_profile_id",
+    "name",
+    "presentation",
+    "language",
+    "audit"
+  ],
+  "title": "VoiceProfile",
+  "type": "object"
+}

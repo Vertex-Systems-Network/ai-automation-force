@@ -1,0 +1,251 @@
+{
+  "$defs": {
+    "AssetKind": {
+      "enum": [
+        "image",
+        "audio",
+        "video",
+        "subtitle",
+        "document",
+        "timeline",
+        "manifest",
+        "other"
+      ],
+      "title": "AssetKind",
+      "type": "string"
+    },
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "CanonicalStatus": {
+      "enum": [
+        "candidate",
+        "approved",
+        "rejected",
+        "superseded"
+      ],
+      "title": "CanonicalStatus",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:asset",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "asset_id": {
+      "pattern": "^AST-[0-9]{6,20}$",
+      "title": "Asset Id",
+      "type": "string"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "canonical_status": {
+      "$ref": "#/$defs/CanonicalStatus",
+      "default": "candidate"
+    },
+    "duration_seconds": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Duration Seconds"
+    },
+    "generation_attempt_id": {
+      "anyOf": [
+        {
+          "pattern": "^ATT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Generation Attempt Id"
+    },
+    "height": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Height"
+    },
+    "kind": {
+      "$ref": "#/$defs/AssetKind"
+    },
+    "mime_type": {
+      "minLength": 3,
+      "title": "Mime Type",
+      "type": "string"
+    },
+    "model_provider_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Model Provider Id"
+    },
+    "parent_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Parent Asset Ids",
+      "type": "array"
+    },
+    "project_id": {
+      "anyOf": [
+        {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Project Id"
+    },
+    "provider_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Id"
+    },
+    "provider_model_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Model Id"
+    },
+    "retention_class": {
+      "default": "project",
+      "title": "Retention Class",
+      "type": "string"
+    },
+    "rights_record_id": {
+      "anyOf": [
+        {
+          "pattern": "^RGT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rights Record Id"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "size_bytes": {
+      "minimum": 0,
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "uri": {
+      "minLength": 1,
+      "title": "Uri",
+      "type": "string"
+    },
+    "width": {
+      "anyOf": [
+        {
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Width"
+    }
+  },
+  "required": [
+    "asset_id",
+    "kind",
+    "uri",
+    "sha256",
+    "mime_type",
+    "size_bytes",
+    "audit"
+  ],
+  "title": "Asset",
+  "type": "object"
+}

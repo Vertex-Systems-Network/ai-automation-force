@@ -1,0 +1,125 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:style-profile",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "camera_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Camera Rules",
+      "type": "array"
+    },
+    "lighting_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Lighting Rules",
+      "type": "array"
+    },
+    "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "negative_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Negative Constraints",
+      "type": "array"
+    },
+    "palette": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Palette",
+      "type": "array"
+    },
+    "reference_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Reference Asset Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "style_profile_id": {
+      "pattern": "^STY-[0-9]{6,20}$",
+      "title": "Style Profile Id",
+      "type": "string"
+    },
+    "texture_rules": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Texture Rules",
+      "type": "array"
+    },
+    "treatment": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Treatment",
+      "type": "array"
+    }
+  },
+  "required": [
+    "style_profile_id",
+    "name",
+    "audit"
+  ],
+  "title": "StyleProfile",
+  "type": "object"
+}

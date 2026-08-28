@@ -1,0 +1,186 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "CharacterLock": {
+      "additionalProperties": false,
+      "properties": {
+        "pinned_character_version_id": {
+          "anyOf": [
+            {
+              "pattern": "^CHV-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pinned Character Version Id"
+        },
+        "pinned_look_id": {
+          "anyOf": [
+            {
+              "pattern": "^LOOK-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Pinned Look Id"
+        },
+        "project_id": {
+          "anyOf": [
+            {
+              "pattern": "^PRJ-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Project Id"
+        },
+        "scene_id": {
+          "anyOf": [
+            {
+              "pattern": "^SCN-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Scene Id"
+        },
+        "scope": {
+          "$ref": "#/$defs/LockScope"
+        }
+      },
+      "required": [
+        "scope"
+      ],
+      "title": "CharacterLock",
+      "type": "object"
+    },
+    "LockScope": {
+      "enum": [
+        "global",
+        "project",
+        "look",
+        "scene",
+        "unlocked"
+      ],
+      "title": "LockScope",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:character",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "active_version_id": {
+      "pattern": "^CHV-[0-9]{6,20}$",
+      "title": "Active Version Id",
+      "type": "string"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "character_id": {
+      "pattern": "^CHR-[0-9]{6,20}$",
+      "title": "Character Id",
+      "type": "string"
+    },
+    "lock": {
+      "$ref": "#/$defs/CharacterLock"
+    },
+    "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "reusable": {
+      "default": true,
+      "title": "Reusable",
+      "type": "boolean"
+    },
+    "rights_record_id": {
+      "anyOf": [
+        {
+          "pattern": "^RGT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Rights Record Id"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    }
+  },
+  "required": [
+    "character_id",
+    "name",
+    "active_version_id",
+    "lock",
+    "audit"
+  ],
+  "title": "Character",
+  "type": "object"
+}

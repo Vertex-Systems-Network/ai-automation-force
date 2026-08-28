@@ -1,16 +1,21 @@
 from .aggregate import ProjectBundle
 from .character import Character, CharacterLock, CharacterLook, CharacterVersion
 from .common import (
+    SCHEMA_VERSION,
+    ApprovalDecision,
     AssetKind,
+    AttemptStatus,
     AudienceKind,
+    AuditFields,
     CanonicalStatus,
     CastAge,
     CastGender,
+    CommercialUseStatus,
     ContentFormat,
+    ExecutionMode,
     JobStatus,
     LockScope,
     ProjectStatus,
-    SCHEMA_VERSION,
     TimeRange,
 )
 from .content import Content, ContentObjective, ContentVersion
@@ -39,10 +44,13 @@ from .timeline import Act, ContinuityState, Scene, Sequence, Shot, Take, Timelin
 __all__ = [
     "Act",
     "Approval",
+    "ApprovalDecision",
     "Asset",
     "AssetKind",
+    "AttemptStatus",
     "AudienceKind",
     "AudienceProfile",
+    "AuditFields",
     "CanonicalStatus",
     "CastAge",
     "CastGender",
@@ -51,6 +59,7 @@ __all__ = [
     "CharacterLock",
     "CharacterLook",
     "CharacterVersion",
+    "CommercialUseStatus",
     "Content",
     "ContentFormat",
     "ContentObjective",
@@ -58,6 +67,7 @@ __all__ = [
     "ContinuityState",
     "CostRecord",
     "CreativeProfile",
+    "ExecutionMode",
     "GenerationAttempt",
     "GenerationRequest",
     "Job",
