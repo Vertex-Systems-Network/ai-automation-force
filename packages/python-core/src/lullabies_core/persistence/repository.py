@@ -8,6 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.exc import IntegrityError
 
+from ..common import AuditFields
 from ..content import Content, ContentVersion
 from ..legacy_import import (
     LegacyContentImportResult,
@@ -17,10 +18,10 @@ from ..legacy_import import (
 from ..lineage import ProductionLineageBundle
 from ._db import (
     DatabaseMap,
-    PersistResult,
     PersistenceConflictError,
     PersistenceError,
     PersistenceShapeError,
+    PersistResult,
 )
 from ._reader import BundleReader
 from ._writer import BundleWriter
@@ -252,7 +253,7 @@ class PostgresProductionRepository:
             )
 
     @staticmethod
-    def _audit(audit: Any) -> dict[str, Any]:
+    def _audit(audit: AuditFields) -> dict[str, Any]:
         return {
             "created_at": audit.created_at,
             "updated_at": audit.updated_at,
