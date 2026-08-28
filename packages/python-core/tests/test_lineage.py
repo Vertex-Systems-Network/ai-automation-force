@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 import pytest
+from lineage_fixtures import full_lineage_bundle
 from pydantic import ValidationError
 
 from lullabies_core import CommercialUseStatus, ProductionLineageBundle, RightsRecord
-
-from lineage_fixtures import full_lineage_bundle
 
 
 def test_full_lineage_validates_and_preserves_stable_ids() -> None:
