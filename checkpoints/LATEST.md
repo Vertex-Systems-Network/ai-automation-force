@@ -1,128 +1,139 @@
 # Latest Checkpoint
 
-Current checkpoint: `checkpoints/2026-08-28-documentation-core-complete.md`
+Current planning phase: **P0 — Full Project Preplanning Gate**
 
-Current milestone: **Milestone 1 — Core domain model and repository migration boundary**
+Status: **FULL_PROJECT_PREPLANNING_IN_PROGRESS**
 
-Status: **PLANNING_READY_FOR_CONSENT**
+## Operator requirement
 
-## Readiness truth
+No new executable development in M1–M15 may begin or resume until the entire foreseeable product is preplanned end-to-end.
 
-Core AI/media production planning is mature enough for staged implementation, but the full commercial/product platform is not yet all-milestones or production ready.
+Canonical global gate:
+`ai-native/FULL-PROJECT-PREPLANNING-GATE.md`
 
-Canonical end-to-end audit:
-`docs/product/END-TO-END-READINESS-AUDIT-2026-08-28.md`
+Canonical master index:
+`docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`
 
-Audit verdict:
-- Milestone 1: `READY_FOR_EXPLICIT_DEVELOPMENT_CONSENT`
-- Core AI/media planning: `HIGH READINESS`
-- Full web SaaS planning: `PARTIAL`
-- Commercial billing readiness: `NOT READY`
-- Team/agency collaboration readiness: `NOT READY`
-- Production security/operations readiness: `NOT READY`
-- Public production launch readiness: `NOT READY`
-- All-milestones implementation readiness: `NOT READY`
-
-The later gaps do not block M1, but must be closed before their applicable milestones/public launch.
-
-## Core documented systems
-
-The repository currently documents:
-- project options/wizard;
-- content types;
-- AI roles and prompt/versioning concepts;
-- character/entity locking;
-- audio production;
-- visual/cinematic direction;
-- image generation + approval + reuse;
-- image-to-video first/end/reference handoff;
-- storyboard/timeline/rhythm;
-- provider routing/recovery;
-- continuity/media QA;
-- memory/originality;
-- asset/provenance/rights;
-- review/approvals;
-- localization/dubbing;
-- long-form 3-hour architecture;
-- public landing + feature visual inventory;
-- signup/login/verification/reset/onboarding;
-- authenticated web IA;
-- multi-platform social publishing/analytics architecture;
-- provider scout;
-- GitHub↔Linear planning sync.
-
-## Major cross-cutting gaps discovered by deep audit
-
-Future planning/issues now explicitly track:
-- `ABD-142` — commercial plans, entitlements, usage metering and billing;
-- `ABD-143` — AI-agent security/threat model and regression-evaluation framework;
-- `ABD-144` — product design system, global AI command center, notifications/account UX;
-- `ABD-145` — multi-user workspaces, RBAC, invitations and collaboration;
-- `ABD-146` — security/privacy/secrets/upload-webhook/data-lifecycle hardening;
-- `ABD-147` — observability/SLOs/incidents/backups/DR/release operations;
-- `ABD-148` — notifications/events/public API-webhooks/large uploads/support-admin operations.
-
-Additional gaps remain documented in the readiness audit, including UI localization/global search, transactional email, bot/signup abuse protection, app product analytics, feature flags/canaries, legal launch docs, data export/deletion/retention, public developer API decision, CDN/media delivery and detailed mobile UX.
-
-## Multi-platform social publishing
-
-Canonical architecture:
-`docs/product/MULTI-PLATFORM-SOCIAL-AUTOMATION.md`
-
-Capability model:
-- `DIRECT_PUBLISH`
-- `DRAFT_UPLOAD`
-- `SCHEDULE_SUPPORTED`
-- `SYSTEM_SCHEDULED_DIRECT`
-- `MANUAL_HANDOFF`
-- `READ_ANALYTICS_ONLY`
-- `EVALUATION`
-- `UNSUPPORTED`
-- `DISABLED`
-
-Initial verified/evaluated targets include YouTube, TikTok, Instagram, Facebook, X, LinkedIn, Pinterest, Threads, Vimeo and Dailymotion. Likee remains `EVALUATION/MANUAL_HANDOFF` until an official publishing API/partner path is verified.
-
-M12 Linear work packages:
-- `ABD-137` — SOC1 capability registry/account connections
-- `ABD-138` — SOC2 publish packages/variants/scheduler/recovery
-- `ABD-139` — SOC3 YouTube/TikTok/Instagram/Facebook/X
-- `ABD-140` — SOC4 LinkedIn/Pinterest/Threads/Vimeo/Dailymotion/evaluation networks
-- `ABD-141` — SOC5 analytics normalization/learning
-
-## Linear planning mirror
-
-Linear project: **AI Automation Force**
-
-GitHub remains canonical for engineering policy, architecture, schemas, implementation/test evidence and checkpoints. Linear mirrors planning, milestones, dependencies and status.
-
-Roadmap M0–M15 is mirrored.
-
-Current M1 chain:
-- `ABD-128` — WP1 Contract freeze + generated schemas
-- `ABD-129` — WP2 Full lineage fixtures/invariants
-- `ABD-130` — WP3 Aggregate validation hardening
-- `ABD-131` — WP4 Legacy CNT importer
-- `ABD-132` — WP5 PostgreSQL persistence architecture
-- `ABD-133` — WP6 Reversible migrations
-- `ABD-134` — WP7 Persistence repositories + round trips
-- `ABD-135` — WP8 Milestone verification/checkpoint
-
-GitHub↔Linear sync policy:
-`docs/operations/GITHUB-LINEAR-SYNC.md`
-
-Recurring sync scheduler: every six hours, planning/status/documentation only, idempotent, no executable development.
-
-## Consent gate
-
-Development consent policy:
+Development consent remains separately governed by:
 `ai-native/DEVELOPMENT-CONSENT-GATE.md`
 
-M1 consent brief:
-`docs/architecture/M1-DEVELOPMENT-CONSENT-BRIEF.md`
+The previous M1 state `PLANNING_READY_FOR_CONSENT` is superseded by this stricter global preplanning gate. M1 remains technically well-scoped, but it is not authorized to start until P0 exits.
 
-M1 execution plan:
-`docs/architecture/M1-EXECUTION-PLAN.md`
+## Meaning of complete preplanning
 
-Next executable action: **M1/WP1 only after explicit operator development consent**.
+Before development, the project must already define the foreseeable:
+- product/media systems;
+- AI roles, authority, memory, evaluation and security;
+- all user-facing options/defaults;
+- complete web UI/UX and design system;
+- auth/account/workspace/RBAC/collaboration;
+- provider/API/social integrations and fallback contracts;
+- billing/entitlements/usage metering;
+- notifications/events/transactional communications;
+- public/developer API stance;
+- mobile product;
+- storage/uploads/CDN/delivery/archival;
+- security/privacy/legal/data lifecycle;
+- observability/SLOs/deployment/backups/DR/releases;
+- support/admin/moderation;
+- product analytics/experimentation;
+- social community automation stance;
+- master QA/evaluation/release acceptance;
+- implementation-ready work-package decomposition for M1–M15.
 
-A generic `continue`, `next`, or `resume` is not development consent.
+Mutable external facts such as provider API versions, current pricing, OAuth scopes, app-review rules, ToS and SDK versions may be revalidated at implementation time, but no major product architecture or business rule should need first-time invention during coding.
+
+## Existing mature core
+
+The repository already has strong planning for:
+- project creation/options/presets;
+- content formats/research/originality;
+- characters/entities/locks;
+- image generation/editing/reuse/image-to-video handoff;
+- audio/music/dialogue/SFX;
+- visual/cinematic direction;
+- storyboard/timeline/shot/take hierarchy;
+- long-form production up to three hours;
+- provider-neutral routing/failover/cost policy;
+- continuity/generated-media QA;
+- assets/provenance/rights;
+- review/approval;
+- localization/dubbing;
+- memory/learning/prompt registry/AI agent roles;
+- public landing/features/visual inventory;
+- signup/login/verification/reset/onboarding;
+- authenticated web IA;
+- multi-platform social publishing and analytics architecture;
+- daily provider scouting;
+- GitHub↔Linear planning sync.
+
+## P0 planning backlog
+
+Linear P0 gate issue:
+- `ABD-149` — Complete full-project preplanning before any development
+
+Existing deep-audit gaps moved under P0:
+- `ABD-142` — commercial plans/entitlements/usage metering/billing
+- `ABD-143` — AI-agent security/threat model/evaluation framework
+- `ABD-144` — design system/AI command center/notifications/account UX
+- `ABD-145` — workspace/RBAC/invitations/collaboration
+- `ABD-146` — security/privacy/secrets/uploads/webhooks/data lifecycle
+- `ABD-147` — observability/SLOs/incidents/backups/DR/releases
+- `ABD-148` — notifications/events/public API/uploads/support-admin
+
+Additional explicit P0 packs:
+- `ABD-150` — mobile product specification
+- `ABD-151` — product analytics/experimentation
+- `ABD-152` — social community automation/moderation stance
+- `ABD-153` — developer API/webhooks/SDK decision
+- `ABD-154` — media storage/resumable uploads/delivery/archival
+- `ABD-155` — master QA/evaluation/release acceptance matrix
+- `ABD-156` — decompose M1–M15 into implementation-ready work packages
+
+M1/WP1 (`ABD-128`) is explicitly blocked by `ABD-149`.
+
+## Preplanning packs A–O
+
+Tracked in `docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`:
+
+A. Commercial SaaS/entitlements/billing
+B. AI safety/agent security/evaluation
+C. Full design system/product interaction model
+D. Workspace/RBAC/collaboration
+E. Notifications/events/communications
+F. Public/developer API decision
+G. Storage/uploads/delivery/archival
+H. Auth hardening/security/privacy/legal
+I. Observability/environments/deployment/DR/release
+J. Support/admin/moderation
+K. Mobile product
+L. Product analytics/experimentation
+M. Social community automation stance
+N. Full M1–M15 implementation decomposition
+O. Master QA/release acceptance matrix
+
+## Exit condition
+
+P0 may close only when:
+- all Packs A–O are `READY` or explicit `NOT_SUPPORTED` decisions;
+- every major UI route/options/state is documented;
+- all privileged AI actions have authority/approval rules;
+- all persistent data domains have ownership/lifecycle rules;
+- all commercial limits/entitlements have a canonical source of truth;
+- security/privacy/DR/operations are implementation-ready on paper;
+- mobile/public API/community decisions are explicit;
+- M1–M15 each have work packages, dependencies, tests, rollback and exit criteria;
+- master QA matrix exists;
+- final end-to-end audit reports no material first-time planning gap.
+
+Only then set status to:
+
+`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
+
+and present a Development Consent Brief. Full preplanning does not itself authorize development.
+
+## GitHub ↔ Linear
+
+GitHub remains canonical for architecture/policy/specs/evidence/checkpoints. Linear mirrors P0 planning tasks, roadmap milestones, dependencies and status.
+
+Recurring sync remains enabled every six hours for planning/status/documentation only and must preserve this P0 block.
