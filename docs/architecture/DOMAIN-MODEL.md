@@ -2,291 +2,208 @@
 
 ## Status
 
-Implementation started. The canonical Python contracts live in `packages/python-core/src/lullabies_core/` and are designed to export JSON Schema for API/storage interoperability.
+M01/WP1 contract freeze implemented and verified on Python 3.12 CI.
 
-The existing repository-first kids content package is preserved. `schemas/content-package.schema.json` remains a legacy/importable contract until a migration adapter is implemented; it is not silently rewritten by Milestone 1.
+Canonical public Python import surface:
+`packages/python-core/src/ai_automation_force_core/`
+
+The historical `lullabies_core` namespace remains temporarily available only as a compatibility surface for pre-M01 repository code.
+
+The existing repository-first content packages are preserved. `schemas/content-package.schema.json` remains a legacy/importable contract until the explicit M01 importer is implemented; it is not silently rewritten.
 
 ## Domain hierarchy
 
-The editorial/production hierarchy is:
-
 `Project -> Act -> Sequence -> Scene -> Shot -> Take`
 
-Reusable entities exist outside that hierarchy and are referenced by stable IDs:
-
+Reusable/versioned entities include:
 - Character / CharacterVersion / CharacterLook
-- World / Location
-- Prop
-- StyleProfile
-- VoiceProfile
+- World / Location / Prop
+- StyleProfile / VoiceProfile
 - Content / ContentVersion
 - Asset
 - ProviderModelRef
-- GenerationAttempt
-- Job
-- QARecord
-- CostRecord
-- RightsRecord
-- Approval
+- GenerationAttempt / Job
+- QARecord / CostRecord / RightsRecord / Approval
 
-## Stable ID namespaces
+## Schema versioning
 
-Initial namespaces:
+Persisted M01 entities carry `schema_version` as an executable literal contract. Version 1 models reject incompatible version values rather than accepting an arbitrary integer.
 
-- `PRJ-######` Project
-- `CNT-######` Content
-- `CTV-######` ContentVersion
-- `CHR-######` Character
-- `CHV-######` CharacterVersion
-- `LOOK-######` CharacterLook
-- `WRL-######` World
-- `LOC-######` Location
-- `PRP-######` Prop
-- `STY-######` StyleProfile
-- `VOC-######` VoiceProfile
-- `ACT-######` Act
-- `SEQ-######` Sequence
-- `SCN-######` Scene
-- `SHT-######` Shot
-- `TAK-######` Take
-- `TML-######` Timeline
-- `TRK-######` TimelineTrack
-- `AST-######` Asset
-- `JOB-######` Job
-- `ATT-######` GenerationAttempt
-- `QAR-######` QARecord
-- `CST-######` CostRecord
-- `RGT-######` RightsRecord
-- `APR-######` Approval
+Breaking semantic changes require an explicit version/migration path; they must not be hidden behind the same schema version.
 
-Numeric suffixes are repository/test-friendly initial identifiers. Runtime database implementation may use UUID/ULID primary keys internally while preserving these stable external/public IDs.
+## Stable external IDs
+
+Canonical external/public IDs retain their existing prefixes and six-digit fixtures, but the numeric suffix can scale from 6 through 20 digits. Examples:
+- `PRJ-000001` Project
+- `CNT-000001` Content
+- `CTV-000001` ContentVersion
+- `CHR-000001` Character
+- `CHV-000001` CharacterVersion
+- `LOOK-000001` CharacterLook
+- `WRL-000001` World
+- `LOC-000001` Location
+- `PRP-000001` Prop
+- `STY-000001` StyleProfile
+- `VOC-000001` VoiceProfile
+- `ACT-000001` Act
+- `SEQ-000001` Sequence
+- `SCN-000001` Scene
+- `SHT-000001` Shot
+- `TAK-000001` Take
+- `TML-000001` Timeline
+- `TRK-000001` TimelineTrack
+- `AST-000001` Asset
+- `JOB-000001` Job
+- `ATT-000001` GenerationAttempt
+- `QAR-000001` QARecord
+- `CST-000001` CostRecord
+- `RGT-000001` RightsRecord
+- `APR-000001` Approval
+
+These IDs are durable business/audit identifiers, not a commitment to use text IDs as PostgreSQL primary keys. Persistence may use native UUIDs internally while preserving stable external IDs.
+
+## Registry-owned taxonomy boundary
+
+Audience, cast and content-format taxonomies are registry-owned product data. Core contracts therefore validate these fields structurally as non-empty bounded strings instead of making the Pydantic package the only accepted-value registry.
+
+Built-in enums remain convenience constants for known values, including `custom`, cast `none/custom`, and `trailer-teaser` compatibility.
+
+Rules:
+- registry validation is applied at the product/config boundary;
+- core schemas remain forward-compatible with approved registry additions;
+- `content_format=custom` requires `custom_content_format`;
+- a non-custom format rejects an unrelated custom-format payload.
+
+This prevents a configuration-valid project from becoming backend-invalid merely because a taxonomy entry was added without a core-package release.
 
 ## Project contract
 
-A Project owns product-level intent, not provider-specific settings.
-
-Required concepts:
+A Project owns provider-neutral product intent:
 - audience profile;
 - cast profile;
 - content format;
 - language;
-- target duration;
-- output format;
+- duration;
+- output profile;
 - creative treatment;
 - provider/cost policy reference;
 - reusable characters/worlds/props;
 - active content/timeline references.
 
-Project duration is currently constrained to `60..10800` seconds (1 minute through 3 hours).
+Project/content duration is constrained to `60..10800` seconds (1 minute through 3 hours).
 
-### Audience and cast are separate
+Audience and cast remain separate concepts; `kids|adult|man|woman|both` is not stored as one overloaded field.
 
-Do not store `kids|adult|man|woman|both` as one overloaded field.
+## Character/entity invariants
 
-Use:
-- AudienceProfile: who the media is for;
-- CastProfile.ages: apparent cast age categories;
-- CastProfile.genders: cast gender presentation categories.
+Character identity is versioned. A lock pins the required CharacterVersion and, when applicable, project/look/scene scope.
 
-This avoids ambiguity such as an adult-targeted project starring children, or a family-targeted project with adult and non-human characters.
+World, Location, Prop, StyleProfile and VoiceProfile are first-class reusable entities because continuity is broader than face identity.
 
-## Character invariants
-
-Character identity is versioned.
-
-`Character` points to an active `CharacterVersion`.
-
-A `CharacterVersion` contains canonical identity data and one or more `CharacterLook` records.
-
-Locks are explicit:
-- global;
-- project;
-- look;
-- scene;
-- unlocked.
-
-A locked scope must pin a CharacterVersion. Project and scene locks must also identify their scope target.
-
-Provider-specific references are derived data and must never replace the canonical CharacterVersion.
-
-## World/location/prop/style/voice
-
-These are first-class reusable entities because continuity failures are not limited to faces.
-
-A World establishes global setting rules.
-A Location is a reusable place, optionally inside a World.
-A Prop carries stable visual identity/constraints.
-A StyleProfile defines treatment/palette/lighting/camera/negative rules.
-A VoiceProfile stores provider-neutral voice intent plus optional provider voice references.
+All canonical entity references use typed ID aliases so malformed cross-domain IDs fail before persistence or provider execution.
 
 ## Content contracts
 
-`Content` is stable identity/lineage.
-`ContentVersion` contains versioned canonical script/lyrics and production intent.
+`Content` is stable identity/lineage. `ContentVersion` contains versioned canonical script/lyrics and production intent.
 
-Existing `CNT-*` repository packages will later be imported by an explicit adapter.
-
-No Milestone 1 change deletes or mutates existing approved packages.
+Existing `CNT-*` repository packages are imported later by an explicit idempotent adapter; no M01 migration silently mutates the source packages.
 
 ## Timeline contracts
 
 Timeline duration is independent of provider clip duration.
 
-A Shot contains:
-- exact edit time range;
-- purpose/action;
-- characters/location/props;
-- camera intent;
-- incoming continuity state;
-- outgoing continuity state;
-- optional first/end frames;
-- references;
-- generated Takes;
-- selected Take;
-- transitions;
-- render handles.
+A Shot contains exact edit time range, creative purpose/action, entity references, camera intent, incoming/outgoing continuity state, optional first/end frames, references, Takes, selected Take, transitions and render handles.
 
-Provider calls create Takes; they do not redefine the canonical Shot.
+Provider calls create Takes; they do not redefine the canonical Shot. A failed Take therefore does not invalidate the Shot plan.
 
-A failed Take therefore does not invalidate the Shot plan.
-
-## Continuity state
-
-Continuity is explicit and provider-independent.
-
-Initial fields:
-- character states;
-- prop states;
-- environment state;
-- camera state;
-- lighting state;
-- motion state;
-- notes.
-
-Later milestones may normalize frequently queried subfields into typed nested models after real production fixtures prove the required granularity.
-
-## Production and generation
+## Production/generation contracts
 
 ### Job
-
-Represents a durable unit of requested work and owns:
-- idempotency key;
-- dependencies;
-- state;
-- retry budget;
-- attempts;
-- lease/claim data;
-- blocked reason.
+Owns durable requested-work state, idempotency key, dependencies, retries, attempts, lease/claim information and blockers.
 
 ### GenerationAttempt
+Represents one provider/model attempt and records typed status, request, provider route, timestamps, outputs, normalized errors, cost/credits and QA references. Failed attempts remain history.
 
-Represents one provider/model attempt for a Job.
+Attempt timestamps are timezone-aware and cannot finish before they start.
 
-It records:
-- provider/model/access class;
-- canonical GenerationRequest;
-- provider generation ID;
-- timestamps;
-- output assets;
-- normalized error;
-- free credits / paid cost;
-- QA record IDs.
+### ProviderModelRef
+Provider provenance separates:
+- `provider_id` — API transport/billing provider;
+- `model_provider_id` — underlying model vendor;
+- `model_id` — concrete model identifier.
 
-Failed attempts remain history.
+For direct APIs, `model_provider_id` normalizes to `provider_id`. For gateways/aggregators they may differ. This distinction is mandatory for cost, rights, provenance and incident analysis.
 
 ### Asset
+Every asset records stable ID, URI, SHA-256, MIME/size, optional media dimensions/duration, parent lineage, provider/model/attempt provenance, rights, canonical status and retention class.
 
-Every media/document asset has:
-- stable ID;
-- URI;
-- SHA-256;
-- MIME;
-- size;
-- optional duration/resolution;
-- parent assets;
-- provider/attempt lineage;
-- rights record;
-- canonical status;
-- retention class.
-
-Raw binaries do not belong in normal Git history.
+Provider output URLs are not assumed to be durable canonical storage.
 
 ## QA, cost, rights and approval
 
-These are separate entities rather than fields hidden inside provider responses.
+These remain explicit entities rather than unstructured provider-response fields.
 
-- QARecord can hard-fail safety/identity/license-sensitive gates.
-- CostRecord makes free credits and paid spend auditable.
-- RightsRecord blocks publication by default until commercial-use state is resolved.
-- Approval represents explicit human/system policy decisions.
+- QARecord carries normalized gate outcomes.
+- CostRecord rejects negative credit/spend values and keeps provider/model provenance.
+- RightsRecord defaults to publication-blocked until commercial-use evidence is resolved.
+- Approval uses typed decisions.
 
-## Repository-first to PostgreSQL migration boundary
+## Audit timestamps
 
-### Current phase
+Canonical audit timestamps are timezone-aware. `updated_at` cannot precede `created_at`. Equivalent chronology checks apply to generation attempts where both endpoints exist.
 
-Git remains canonical for:
-- engineering policy;
-- schemas/contracts;
-- prompts;
-- research;
-- provider source definitions;
-- current legacy content/memory records;
-- generated/exported manifests.
+## Repository-first to PostgreSQL boundary
 
-### Runtime application phase
+Git remains canonical for engineering policy, schemas/contracts, prompts, research, provider source definitions and legacy repository records.
 
-PostgreSQL becomes canonical operational state for:
-- projects;
-- content versions;
-- reusable entities;
-- timelines;
-- jobs/attempts;
-- assets metadata;
-- QA/cost/rights/approvals;
-- publishing/analytics.
+PostgreSQL becomes canonical runtime operational state for projects, versions, reusable entities, timelines, jobs/attempts, asset metadata, QA/cost/rights/approvals and later product state. Object storage becomes canonical for large media bytes.
 
-Object storage becomes canonical for large media bytes.
+Source-of-truth migration is explicit and idempotent:
+1. read legacy Git-backed records;
+2. validate legacy schemas;
+3. map to current contracts;
+4. write transactionally/idempotently;
+5. preserve source lineage;
+6. produce reconciliation evidence;
+7. leave original Git history untouched.
 
-### Migration rule
+## Generated contract artifacts
 
-Do not switch source-of-truth silently.
+`packages/python-core/scripts/export_schemas.py` deterministically exports Draft 2020-12 JSON Schemas under `schemas/generated/`.
 
-Implement an explicit importer/reconciler that:
-1. reads existing Git-backed content/memory;
-2. validates legacy schemas;
-3. maps to current domain contracts;
-4. writes idempotently to PostgreSQL;
-5. records import lineage;
-6. emits a reconciliation report;
-7. leaves original Git history untouched.
+Schema IDs use:
+`urn:ai-automation-force:schema:v1:<artifact>`
 
-## Contract source of truth
+`schemas/generated/manifest.json` stores the schema version, base ID and SHA-256 digest for each generated artifact.
 
-Python/Pydantic models are the executable domain contract during Milestone 1.
+CI executes exporter `--check` and fails if a generated file is missing, stale or drifted.
 
-`packages/python-core/scripts/export_schemas.py` exports provider/API-neutral JSON Schemas under `schemas/generated/`.
+## Static/compatibility gates
 
-Later FastAPI OpenAPI contracts should reuse these domain types rather than redefine them independently.
+M01 core CI on Python 3.12 runs:
+- Ruff;
+- strict mypy;
+- pytest;
+- generated-schema drift verification;
+- Python compile/import validation.
 
-## Compatibility principles
+The canonical package distribution is `ai-automation-force-core`. New code imports `ai_automation_force_core`; the historical namespace is transitional compatibility only.
 
-- additive changes first;
-- schema version fields on persisted entities;
-- no silent enum/semantic changes;
-- breaking changes require migration + rollback documentation;
-- stable IDs survive provider changes;
-- provider IDs never become domain primary keys;
-- accepted Takes/assets are versioned, not destructively overwritten.
+## M01 boundaries
 
-## Milestone 1 exit criteria
+M01 does not implement provider APIs, Temporal workflows, product FastAPI endpoints, object storage, FFmpeg production rendering, web/mobile UI, auth, billing, social publishing or deployment.
 
-Before Milestone 1 is DONE:
-- domain tests must pass;
-- Ruff/static checks must pass;
-- schema export must execute;
-- committed/generated schemas must be reconciled;
-- representative 2-minute song project must validate;
-- representative 90-minute movie project must validate;
-- character lock invalid cases must fail validation;
-- legacy content import boundary must be documented;
-- checkpoint must identify remaining persistence decisions.
+Provider/model/API versions remain mutable facts and are revalidated in their later implementation milestones.
+
+## M01 exit criteria
+
+Before M01 is complete:
+- WP1 contract freeze is accepted;
+- full lineage fixtures/invariants are covered;
+- aggregate validation is hardened;
+- legacy content import is implemented idempotently;
+- PostgreSQL mapping/migrations/repositories are verified;
+- 2-minute, 90-minute and 180-minute representative round trips pass;
+- over-3-hour input is rejected;
+- rollback/recovery evidence exists;
+- final M01 checkpoint is recorded.
