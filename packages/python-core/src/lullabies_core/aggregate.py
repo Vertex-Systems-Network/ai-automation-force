@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Iterable
+from typing import Protocol
 
 from pydantic import Field, model_validator
 
@@ -9,6 +11,10 @@ from .common import StrictModel
 from .entities import Location, Prop, World
 from .project import Project
 from .timeline import Act, Scene, Sequence, Shot, Take, Timeline
+
+
+class Orderable(Protocol):
+    order: int
 
 
 class ProjectBundle(StrictModel):
@@ -33,7 +39,7 @@ class ProjectBundle(StrictModel):
     props: list[Prop] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validate_graph(self) -> "ProjectBundle":
+    def validate_graph(self) -> ProjectBundle:
         self._validate_project_timeline()
         self._validate_hierarchy()
         self._validate_takes()
@@ -80,7 +86,9 @@ class ProjectBundle(StrictModel):
                 )
             owned = [scene for scene in self.scenes if scene.sequence_id == sequence.sequence_id]
             if set(sequence.scene_ids) != {scene.scene_id for scene in owned}:
-                raise ValueError(f"sequence {sequence.sequence_id} scene membership is inconsistent")
+                raise ValueError(
+                    f"sequence {sequence.sequence_id} scene membership is inconsistent"
+                )
             self._assert_unique_orders(owned, sequence.sequence_id, "Scene")
 
         for scene in self.scenes:
@@ -136,7 +144,9 @@ class ProjectBundle(StrictModel):
                 if pinned not in character_versions:
                     raise ValueError(f"character {character.character_id} lock version is missing")
                 if character_versions[pinned].character_id != character.character_id:
-                    raise ValueError(f"character {character.character_id} lock pins another identity")
+                    raise ValueError(
+                        f"character {character.character_id} lock pins another identity"
+                    )
 
         required_character_ids = set(self.project.character_ids)
         for scene in self.scenes:
@@ -145,16 +155,22 @@ class ProjectBundle(StrictModel):
             required_character_ids.update(shot.character_ids)
         missing_characters = required_character_ids - set(characters)
         if missing_characters:
-            raise ValueError(f"project graph references missing characters: {sorted(missing_characters)}")
+            raise ValueError(
+                f"project graph references missing characters: {sorted(missing_characters)}"
+            )
 
+        scene_locations = (scene.location_id for scene in self.scenes)
+        shot_locations = (shot.location_id for shot in self.shots)
         required_location_ids = {
             location_id
-            for location_id in [*(scene.location_id for scene in self.scenes), *(shot.location_id for shot in self.shots)]
+            for location_id in [*scene_locations, *shot_locations]
             if location_id is not None
         }
         missing_locations = required_location_ids - set(locations)
         if missing_locations:
-            raise ValueError(f"project graph references missing locations: {sorted(missing_locations)}")
+            raise ValueError(
+                f"project graph references missing locations: {sorted(missing_locations)}"
+            )
 
         required_prop_ids = set(self.project.prop_ids)
         for shot in self.shots:
@@ -179,8 +195,8 @@ class ProjectBundle(StrictModel):
         return {str(getattr(item, field)): item for item in items}
 
     @staticmethod
-    def _assert_unique_orders(items: list[object], parent: str, label: str) -> None:
-        values = [int(getattr(item, "order")) for item in items]
+    def _assert_unique_orders(items: Iterable[Orderable], parent: str, label: str) -> None:
+        values = [int(item.order) for item in items]
         duplicates = [value for value, count in Counter(values).items() if count > 1]
         if duplicates:
             raise ValueError(f"duplicate {label} order under {parent}: {sorted(duplicates)}")
