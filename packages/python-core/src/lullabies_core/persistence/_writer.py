@@ -26,8 +26,12 @@ class BundleWriter:
         ids = self._allocate_ids(bundle)
         pb = bundle.project_bundle
 
-        for record in bundle.rights_records:
-            self.db.insert(connection, "rights_records", self._rights_values(record, ids))
+        for rights_record in bundle.rights_records:
+            self.db.insert(
+                connection,
+                "rights_records",
+                self._rights_values(rights_record, ids),
+            )
 
         self.db.insert(connection, "projects", self._project_values(pb.project, ids))
         self.db.insert(
@@ -133,10 +137,18 @@ class BundleWriter:
                 self._take_values(take, ids, take_positions),
             )
 
-        for record in bundle.qa_records:
-            self.db.insert(connection, "qa_records", self._qa_values(record, ids))
-        for record in bundle.cost_records:
-            self.db.insert(connection, "cost_records", self._cost_values(record, ids))
+        for qa_record in bundle.qa_records:
+            self.db.insert(
+                connection,
+                "qa_records",
+                self._qa_values(qa_record, ids),
+            )
+        for cost_record in bundle.cost_records:
+            self.db.insert(
+                connection,
+                "cost_records",
+                self._cost_values(cost_record, ids),
+            )
         for character in pb.characters:
             self.db.insert(
                 connection,
@@ -948,29 +960,29 @@ class BundleWriter:
             raise PersistenceShapeError("timeline.act_ids must follow canonical Act.order")
 
         for act in pb.acts:
-            children = sorted(
+            sequence_children = sorted(
                 [item for item in pb.sequences if item.act_id == act.act_id],
                 key=lambda item: item.order,
             )
-            if act.sequence_ids != [item.sequence_id for item in children]:
+            if act.sequence_ids != [item.sequence_id for item in sequence_children]:
                 raise PersistenceShapeError(
                     f"act {act.act_id} sequence_ids must follow Sequence.order"
                 )
         for sequence in pb.sequences:
-            children = sorted(
+            scene_children = sorted(
                 [item for item in pb.scenes if item.sequence_id == sequence.sequence_id],
                 key=lambda item: item.order,
             )
-            if sequence.scene_ids != [item.scene_id for item in children]:
+            if sequence.scene_ids != [item.scene_id for item in scene_children]:
                 raise PersistenceShapeError(
                     f"sequence {sequence.sequence_id} scene_ids must follow Scene.order"
                 )
         for scene in pb.scenes:
-            children = sorted(
+            shot_children = sorted(
                 [item for item in pb.shots if item.scene_id == scene.scene_id],
                 key=lambda item: item.order,
             )
-            if scene.shot_ids != [item.shot_id for item in children]:
+            if scene.shot_ids != [item.shot_id for item in shot_children]:
                 raise PersistenceShapeError(
                     f"scene {scene.scene_id} shot_ids must follow Shot.order"
                 )
