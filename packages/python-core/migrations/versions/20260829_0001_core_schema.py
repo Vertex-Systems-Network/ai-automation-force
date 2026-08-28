@@ -14,6 +14,9 @@ _SQL_DIR = Path(__file__).resolve().parents[1] / "sql"
 
 def _statements(filename: str) -> list[str]:
     text = (_SQL_DIR / filename).read_text(encoding="utf-8")
+    # Project.cast is a canonical domain field, while CAST is reserved by PostgreSQL.
+    # Quote the identifier without renaming the domain contract.
+    text = text.replace("\n    cast jsonb NOT NULL,", '\n    "cast" jsonb NOT NULL,')
     return [statement.strip() for statement in text.split(";\n") if statement.strip()]
 
 
@@ -24,6 +27,9 @@ def _execute(filename: str) -> None:
 
 def upgrade() -> None:
     _execute("0001_core_schema_up.sql")
+    # Content.active_version_id is mandatory in the canonical domain. The column is
+    # temporarily nullable only while its cyclic ContentVersion FK is installed.
+    op.execute("ALTER TABLE core.contents ALTER COLUMN active_version_id SET NOT NULL")
 
 
 def downgrade() -> None:
