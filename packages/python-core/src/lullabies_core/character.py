@@ -54,6 +54,8 @@ class CharacterLock(StrictModel):
             raise ValueError("locked scopes require pinned_character_version_id")
         if self.scope == LockScope.PROJECT and self.project_id is None:
             raise ValueError("project lock requires project_id")
+        if self.scope == LockScope.LOOK and self.pinned_look_id is None:
+            raise ValueError("look lock requires pinned_look_id")
         if self.scope == LockScope.SCENE and self.scene_id is None:
             raise ValueError("scene lock requires scene_id")
         return self
