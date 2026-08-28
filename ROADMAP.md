@@ -1,4 +1,4 @@
-# Lullabies AI-Native Media Platform Roadmap
+# AI Automation Force — AI-Native Media Platform Roadmap
 
 Canonical architecture foundation: `ai-native/MASTER-PLAN.md`
 
@@ -10,13 +10,15 @@ Technical stack: `docs/architecture/TECH-STACK.md`
 
 Project options: `docs/product/PROJECT-OPTIONS.md`
 
+End-to-end readiness audit: `docs/product/END-TO-END-READINESS-AUDIT-2026-08-28.md`
+
 Default execution policy: `HYBRID_SMART` from `config/execution-policy.yaml`.
 
-The platform uses one provider-agnostic workflow with interchangeable free/manual-free/paid provider adapters. The initial niche remains kids media, but the core project model now supports general/adult audiences, many content formats and projects up to a configured three-hour duration.
+The platform uses one provider-agnostic workflow with interchangeable free/manual-free/paid provider adapters. The initial niche remains kids media, but the core project model supports general/adult audiences, many content formats and projects up to a configured three-hour duration.
 
 ## Milestone 0 — Architecture/Documentation Lock
 
-Status: substantially complete.
+Status: substantially complete for the core AI/media architecture.
 
 Implemented/documented:
 - repository-backed AI memory foundation;
@@ -35,10 +37,17 @@ Implemented/documented:
 - generation history;
 - audio router;
 - provider/free-tier router;
+- image generation/approval/reuse planning;
 - video continuity design;
 - provider research study;
 - technical stack decision;
-- daily provider scout workflow/governance.
+- daily provider scout workflow/governance;
+- public landing/auth/onboarding planning;
+- multi-platform social publishing architecture;
+- GitHub↔Linear planning synchronization;
+- end-to-end readiness audit and cross-cutting gap backlog.
+
+Important: full commercial SaaS, team collaboration, production security/operations and billing are not yet documentation-complete. See the readiness audit.
 
 Remaining implementation-era schemas:
 - project schema;
@@ -127,6 +136,7 @@ Implement:
 - pacing/emotional curves;
 - incoming/outgoing continuity state;
 - keyframes;
+- image-reference strategy;
 - handles/overlap;
 - transitions;
 - OpenTimelineIO mapping;
@@ -154,9 +164,12 @@ Implement FFmpeg-based trim/concat/audio mix/transitions/captions/aspect variant
 
 Exit: multi-provider project renders without manual timeline reconstruction.
 
-## Milestone 11 — Web Application
+## Milestone 11 — Web App, Public Landing & Auth
 
-Build TypeScript + Next.js UI:
+Build TypeScript + Next.js product surfaces:
+- public landing/features/use-cases;
+- signup/login/email verification/password reset;
+- onboarding and initial workspace bootstrap;
 - projects;
 - new-project wizard;
 - Character/Entity Library;
@@ -171,13 +184,40 @@ Build TypeScript + Next.js UI:
 - analytics;
 - provider research/admin.
 
-Exit: full 2-minute vertical slice can be operated from UI.
+Before implementation, close M11 planning gaps for the design system, global AI command center, notifications/account security UX, UI localization/search and team/RBAC scope as applicable.
 
-## Milestone 12 — Publishing + Analytics
+Exit: full 2-minute vertical slice can be operated from UI and the public account-entry path works safely.
 
-Begin with YouTube private-first upload, metadata/captions/thumbnail, audience/synthetic-media reviews, approvals and analytics feedback.
+## Milestone 12 — Multi-Platform Publishing & Analytics
 
-Exit: publish/analyze loop retains full lineage to project attributes.
+Implement provider-neutral distribution and analytics for official API-capable platforms using capability-registry based adapters.
+
+Priority targets include:
+- YouTube;
+- TikTok;
+- Instagram;
+- Facebook;
+- X;
+- LinkedIn;
+- Pinterest;
+- Threads;
+- Vimeo;
+- Dailymotion;
+- other verified official API-capable networks.
+
+Networks without verified official publishing APIs remain `EVALUATION`/`MANUAL_HANDOFF` rather than using unofficial automation.
+
+Implement:
+- canonical PublishPackage/campaign/target model;
+- platform-specific media derivatives/metadata;
+- direct publish vs draft upload vs manual handoff;
+- durable scheduling;
+- idempotent publish/retry/reconciliation;
+- publication verification;
+- analytics normalization while retaining raw platform semantics;
+- learning-loop feedback.
+
+Exit: one approved project can distribute safely across multiple supported platforms without duplicate posts and retain full lineage to platform results.
 
 ## Milestone 13 — Mobile/API Product
 
@@ -193,7 +233,37 @@ Three-hour support is a production-orchestration capability, not a single-model-
 
 ## Milestone 15 — Production Operations
 
-Deployments, migrations, backups, monitoring/tracing, audit logs, security hardening, incident runbooks, releases and disaster recovery.
+Before public production launch, close the cross-cutting readiness gaps documented in the end-to-end audit.
+
+Implement/verify:
+- deployments/environments/IaC;
+- migrations;
+- backups/PITR/restore drills;
+- observability/tracing/metrics/logs;
+- SLOs/alerts/incident response;
+- audit logs;
+- security hardening;
+- secrets/KMS/credential rotation;
+- upload/webhook/SSRF/media-parser security;
+- privacy/data export/deletion/retention;
+- release/canary/rollback controls;
+- support/admin/moderation operations;
+- disaster recovery.
+
+## Cross-Cutting Product Planning Backlog
+
+The readiness audit tracks later product-platform concerns that are not blockers for M1 but must be closed before their relevant launch phase:
+- AI-agent security and regression/evaluation framework;
+- commercial plans/entitlements/usage metering/billing;
+- design system and AI-native command UX;
+- notifications/events;
+- multi-user workspace/RBAC/collaboration;
+- privacy/data lifecycle;
+- public/developer API decision;
+- transactional email/bot protection;
+- large-file resumable upload/CDN delivery;
+- production security/observability/DR;
+- support/admin/moderation.
 
 ## Parallel Maintenance Lane — Daily Provider Scout
 
@@ -209,6 +279,6 @@ Do not start with a complex UI or ten AI integrations.
 
 First production vertical slice after foundations:
 
-**2-minute song + one locked recurring character + one environment + 12–20 planned shots + hybrid free/paid routing + continuity QA + final FFmpeg master.**
+**2-minute song + one locked recurring character + one environment + 12–20 planned shots + image references where useful + hybrid free/paid routing + continuity QA + final FFmpeg master.**
 
 After that, add multi-character narration/dialogue and increase duration progressively.
