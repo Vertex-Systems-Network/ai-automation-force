@@ -268,7 +268,7 @@ class PostgresProductionRepository:
 
     @staticmethod
     def _canonical_dump(bundle: ProductionLineageBundle) -> dict[str, Any]:
-        data = bundle.model_dump(mode="json")
+        data = bundle.model_dump(mode="python")
         project_bundle = cast(dict[str, Any], data["project_bundle"])
         nested_id_fields = {
             "acts": "act_id",
