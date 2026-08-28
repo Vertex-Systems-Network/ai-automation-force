@@ -117,7 +117,7 @@ def assert_same_bundle(
     expected: ProductionLineageBundle,
     actual: ProductionLineageBundle,
 ) -> None:
-    assert actual.model_dump(mode="json") == expected.model_dump(mode="json")
+    assert actual.model_dump(mode="python") == expected.model_dump(mode="python")
 
 
 @pytest.mark.postgres
@@ -134,6 +134,9 @@ def test_two_minute_production_bundle_round_trips_and_retry_is_noop(
     assert first.action == "created"
     assert second.action == "noop"
     assert_same_bundle(bundle, restored)
+    assert restored.attempts[0].paid_cost == bundle.attempts[0].paid_cost
+    assert restored.cost_records[0].paid_cost == bundle.cost_records[0].paid_cost
+    assert restored.cost_records[0].free_credits_used == bundle.cost_records[0].free_credits_used
     assert restored.project_bundle.shots[0].selected_take_id == "TAK-000500"
     character = restored.project_bundle.characters[0]
     assert character.active_version_id == "CHV-000501"
