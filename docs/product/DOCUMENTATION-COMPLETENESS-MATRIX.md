@@ -1,110 +1,108 @@
 # Documentation Completeness Matrix
 
-Status vocabulary:
-- `PLANNED` — requirement is known but not yet fully specified.
-- `DOCUMENTED` — architecture/process is described.
-- `OPTION_COMPLETE` — user-facing and machine-facing options/decisions are enumerated with defaults/dependencies.
-- `DEVELOPMENT_READY` — behavior, states, edge cases, inputs/outputs, QA and acceptance criteria are sufficiently specified to begin implementation after consent.
+## Current status
 
-This matrix is the planning source for determining whether product/AI systems are ready for development. Development consent remains separately required by `ai-native/DEVELOPMENT-CONSENT-GATE.md`.
+`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
+
+Final closeout audit:
+`docs/product/FINAL-PREDEVELOPMENT-GAP-AUDIT-2026-08-29.md`
+
+Final verdict:
+`PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND`
+
+Development still requires explicit scoped operator consent under `ai-native/DEVELOPMENT-CONSENT-GATE.md`.
+
+## Status vocabulary
+
+- `DOCUMENTED` — architecture/process is described.
+- `OPTION_COMPLETE` — user-facing/machine-facing options and decisions are enumerated with dependencies/default behavior.
+- `DEVELOPMENT_READY` — behavior, states, edge cases, inputs/outputs, security/cost/rights, QA and acceptance criteria are sufficiently specified to implement after consent.
+- `RUNTIME_REVALIDATION` — planning is complete but mutable external/runtime facts must be verified during implementation/launch.
+
+## Matrix
 
 | Area | Status | Canonical docs | Remaining planning before development |
 |---|---|---|---|
-| Platform scope | DEVELOPMENT_READY | `ai-native/PLATFORM-SCOPE.md`, `ai-native/MASTER-PLAN.md` | Keep synchronized as scope changes |
-| Engineering constitution | DEVELOPMENT_READY | `ai-native/ENGINEERING-CONTRACT.md` | None for current architecture |
-| Development consent gate | DEVELOPMENT_READY | `ai-native/DEVELOPMENT-CONSENT-GATE.md` | None |
-| Development roadmap | DEVELOPMENT_READY | `docs/architecture/DEVELOPMENT-PLAN.md` | Milestone briefs are created before each development phase |
-| Technology stack | DEVELOPMENT_READY | `docs/architecture/TECH-STACK.md` | Revalidate mutable versions at implementation time |
-| Core domain model | DEVELOPMENT_READY for M1 | `docs/architecture/DOMAIN-MODEL.md` | Persistence mapping remains executable M1 work after consent |
-| Project options | OPTION_COMPLETE | `docs/product/PROJECT-OPTIONS.md`, `docs/product/NEW-PROJECT-WIZARD.md` | Image/reference strategy is defined separately and must be surfaced in UI implementation |
-| New Project Wizard | DEVELOPMENT_READY | `docs/product/NEW-PROJECT-WIZARD.md` | Implementation requires consent |
-| Character library/locking | DEVELOPMENT_READY | `docs/product/CHARACTER-LOCK-SYSTEM.md` | Provider-specific adapters are implementation work |
-| Content formats/types | DEVELOPMENT_READY | `docs/product/CONTENT-TYPE-BIBLE.md` | Custom types remain registry-extensible |
-| AI agent roles/authority | DEVELOPMENT_READY | `docs/product/AI-AGENT-ROLES.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` | Model/provider assignment is implementation/configuration work |
-| Prompt registry/versioning | DEVELOPMENT_READY | `docs/product/PROMPT-REGISTRY-SYSTEM.md` | Evaluation fixtures are executable development work |
-| Audio production | DEVELOPMENT_READY | `ai-native/AUDIO-ROUTER.md`, `docs/product/AUDIO-PRODUCTION-BIBLE.md` | Provider-specific adapters later |
-| Visual/cinematic system | DEVELOPMENT_READY | `docs/product/VISUAL-CINEMATIC-BIBLE.md` | Provider-specific implementation later |
-| Image generation & reuse | DEVELOPMENT_READY | `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md`, `docs/product/ASSET-MEDIA-LIBRARY.md`, `docs/product/VISUAL-CINEMATIC-BIBLE.md` | Image-provider adapters/QA runtime later |
-| Storyboard/shot planning | DEVELOPMENT_READY | `docs/product/STORYBOARD-SHOT-SPEC.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` | Runtime timeline integration later |
-| Timeline/sequence/rhythm | DEVELOPMENT_READY | `docs/product/TIMELINE-SEQUENCE-ENGINE.md` | OTIO/runtime integration later |
-| Video continuity | DEVELOPMENT_READY | `ai-native/VIDEO-CONTINUITY.md`, `docs/product/CONTINUITY-QA-SPEC.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` | Multimodal QA implementation later |
-| Provider abstraction/router | DEVELOPMENT_READY | `ai-native/FREE-TIER-ROUTER.md`, `docs/architecture/PROVIDER-CONTRACT-AND-RECOVERY.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` | Individual adapters/contract tests later |
-| Free/paid cost policy | DEVELOPMENT_READY | `config/execution-policy.yaml`, `ai-native/FREE-TIER-ROUTER.md`, `docs/product/PROJECT-PRESETS-AND-ADMIN-SETTINGS.md` | Runtime budget engine later |
-| Memory/originality/learning memory | DEVELOPMENT_READY | `ai-native/MEMORY-BANK.md`, `docs/product/MEDIA-MEMORY-LEARNING-SYSTEM.md` | PostgreSQL/pgvector runtime later |
-| Asset/media library | DEVELOPMENT_READY | `docs/product/ASSET-MEDIA-LIBRARY.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md`, `docs/architecture/TECH-STACK.md` | Object-storage implementation later |
-| Review/approval | DEVELOPMENT_READY | `docs/product/REVIEW-APPROVAL-WORKFLOW.md` | UI/workflow implementation later |
-| Rights/consent/provenance | DEVELOPMENT_READY | `docs/product/RIGHTS-CONSENT-PROVENANCE.md`, `ai-native/ENGINEERING-CONTRACT.md` | Legal/terms facts revalidated at use time |
-| Localization/dubbing | DEVELOPMENT_READY | `docs/product/LOCALIZATION-DUBBING-SYSTEM.md` | Provider voices/locales later |
-| Publishing | DEVELOPMENT_READY conceptually | `docs/product/PUBLISHING-SYSTEM.md` | Current platform API/policy facts revalidate before implementation |
-| Analytics/learning | DEVELOPMENT_READY | `docs/product/ANALYTICS-LEARNING-SYSTEM.md` | Platform metrics adapters later |
-| 3-hour long-form production | DEVELOPMENT_READY | `docs/product/LONG-FORM-3H-PRODUCTION.md`, `docs/product/TIMELINE-SEQUENCE-ENGINE.md`, `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` | Progressive load/recovery tests are later executable work |
-| Project templates/presets | DEVELOPMENT_READY | `docs/product/PROJECT-PRESETS-AND-ADMIN-SETTINGS.md` | Additional presets may be added without architecture change |
-| Authenticated web app IA | DEVELOPMENT_READY conceptually | `docs/product/WEB-APP-IA.md`, `docs/architecture/TECH-STACK.md` | Detailed per-screen visual design belongs to web milestone |
-| Public landing / marketing website | DEVELOPMENT_READY conceptually | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/LANDING-PAGE-VISUAL-CONTENT-MAP.md`, `docs/product/PUBLIC-WEB-LAUNCH-PLAN.md` | Final brand visual design/copy polish belongs to public-web milestone |
-| Signup/login/email verification/password reset | DEVELOPMENT_READY conceptually | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/AUTH-ONBOARDING-EDGE-CASES.md` | Current auth library/security implementation choices revalidate before coding |
-| User onboarding / first-project handoff | DEVELOPMENT_READY | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/AUTH-ONBOARDING-EDGE-CASES.md`, `docs/product/NEW-PROJECT-WIZARD.md` | Runtime implementation later |
-| Initial workspace bootstrap | DEVELOPMENT_READY conceptually | `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`, `docs/product/AUTH-ONBOARDING-EDGE-CASES.md` | Detailed teams/RBAC remains later scope |
-| Multi-user teams/RBAC/workspace administration | PLANNED FOR LATER MILESTONE | engineering/tech-stack/public-auth docs | Dedicated roles/permissions/invites/team-management spec required before team scope |
-| Admin/settings | DEVELOPMENT_READY conceptually | `docs/product/PROJECT-PRESETS-AND-ADMIN-SETTINGS.md` | Runtime settings schemas/permissions later |
-| Daily provider scout | DOCUMENTED / IMPLEMENTATION PARTIAL | `docs/operations/DAILY-PROVIDER-SCOUT.md` | Runtime verification and compatibility wiring remain executable work requiring consent |
-| Future mobile app | PLANNED FOR LATER MILESTONE | `docs/architecture/TECH-STACK.md`, `docs/architecture/DEVELOPMENT-PLAN.md` | Detailed mobile UX spec should be written before mobile milestone, not required for M1 |
-| Production deployment/DR/operations | PLANNED FOR LATER MILESTONE | `docs/architecture/DEVELOPMENT-PLAN.md`, engineering contract | Dedicated deployment/runbook/backup/DR specs required before production-ops milestone |
+| Platform scope | DEVELOPMENT_READY | `ai-native/PLATFORM-SCOPE.md`, `ai-native/MASTER-PLAN.md` | None; manage future scope changes through change control |
+| Engineering constitution | DEVELOPMENT_READY | `ai-native/ENGINEERING-CONTRACT.md` | None |
+| Full-project preplanning gate | DEVELOPMENT_READY/CLOSED | `ai-native/FULL-PROJECT-PREPLANNING-GATE.md`, `FULL-PROJECT-PREPLANNING-MASTER-INDEX.md` | None |
+| Development consent gate | DEVELOPMENT_READY | `ai-native/DEVELOPMENT-CONSENT-GATE.md` | Explicit consent still required |
+| Development roadmap | DEVELOPMENT_READY | `ROADMAP.md`, `docs/architecture/DEVELOPMENT-PLAN.md`, `docs/milestones/M01/`–`M15/` | None architecturally |
+| Technology stack | DEVELOPMENT_READY | `docs/architecture/TECH-STACK.md`, production-ops docs | Revalidate versions/capacity |
+| Core domain/persistence | DEVELOPMENT_READY | `docs/architecture/DOMAIN-MODEL.md`, `docs/milestones/M01/PLAN.md` | Runtime implementation/tests only |
+| Project options/wizard/presets | OPTION_COMPLETE / DEVELOPMENT_READY | `PROJECT-OPTIONS.md`, `NEW-PROJECT-WIZARD.md`, `PROJECT-PRESETS-AND-ADMIN-SETTINGS.md` | None architecturally |
+| Content formats/research/originality | DEVELOPMENT_READY | `CONTENT-TYPE-BIBLE.md`, `MEDIA-MEMORY-LEARNING-SYSTEM.md` | Runtime implementation only |
+| Character/entity library/locks | DEVELOPMENT_READY | `CHARACTER-LOCK-SYSTEM.md`, M04 plan | Provider/runtime implementation only |
+| Image generation/edit/reuse | DEVELOPMENT_READY | `IMAGE-GENERATION-REUSE-SYSTEM.md`, M08 plan | Provider fact revalidation + adapters |
+| Audio/music/dialogue/SFX | DEVELOPMENT_READY | `AUDIO-PRODUCTION-BIBLE.md`, `ai-native/AUDIO-ROUTER.md`, M06 plan | Provider fact revalidation + adapters |
+| Visual/cinematic system | DEVELOPMENT_READY | `VISUAL-CINEMATIC-BIBLE.md` | Runtime implementation only |
+| Storyboard/shot/timeline/OTIO | DEVELOPMENT_READY | `STORYBOARD-SHOT-SPEC.md`, `TIMELINE-SEQUENCE-ENGINE.md`, M07 plan | Runtime implementation only |
+| Long-form 3h | DEVELOPMENT_READY | `LONG-FORM-3H-PRODUCTION.md`, M14 plan | Stress/load/recovery verification |
+| Provider integration/router | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `PROVIDER-CONTRACT-AND-RECOVERY.md`, `PROVIDER-INTEGRATION-ROADMAP.md`, `FREE-TIER-ROUTER.md`, M08 plan | Current APIs/pricing/terms/access must be verified before adapters |
+| Provider account/quota policy | DEVELOPMENT_READY | provider roadmap/router docs | Runtime account connections only |
+| Continuity/generated-media QA | DEVELOPMENT_READY | `CONTINUITY-QA-SPEC.md`, `ai-native/VIDEO-CONTINUITY.md`, M09 plan | Multimodal implementation/eval only |
+| AI agent roles/authority | DEVELOPMENT_READY | `AI-AGENT-ROLES.md`, `AI-COMMAND-CENTER.md` | Runtime implementation only |
+| AI threat model/security | DEVELOPMENT_READY | `docs/security/AI-AGENT-THREAT-MODEL.md` | Adversarial runtime verification |
+| AI evaluations/regression | DEVELOPMENT_READY | `docs/quality/AI-EVALUATION-REGRESSION-FRAMEWORK.md`, master QA | Fixture/runtime execution |
+| AI decision ledger/memory controls | DEVELOPMENT_READY | `AI-DECISION-LEDGER-AND-MEMORY-CONTROLS.md` | Runtime implementation only |
+| Prompt registry/versioning | DEVELOPMENT_READY | `PROMPT-REGISTRY-SYSTEM.md` | Runtime registry/evals only |
+| Asset/media library | DEVELOPMENT_READY | `ASSET-MEDIA-LIBRARY.md`, storage architecture, M03 | Object-storage implementation only |
+| Upload/CDN/archive | DEVELOPMENT_READY | `docs/architecture/MEDIA-STORAGE-UPLOAD-DELIVERY.md` | Cloud/storage runtime selection/config only |
+| Review/approval | DEVELOPMENT_READY | `REVIEW-APPROVAL-WORKFLOW.md`, RBAC docs | Runtime implementation only |
+| Rights/consent/provenance | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `RIGHTS-CONSENT-PROVENANCE.md`, legal docs | Current provider/platform/legal facts at publication |
+| Localization/dubbing | DEVELOPMENT_READY | `LOCALIZATION-DUBBING-SYSTEM.md` | Provider locale/voice facts revalidate |
+| Public landing/marketing | DEVELOPMENT_READY | `PUBLIC-LANDING-AUTH-ONBOARDING.md`, `LANDING-PAGE-VISUAL-CONTENT-MAP.md`, `PUBLIC-WEB-LAUNCH-PLAN.md`, design system | Final brand/copy is configurable |
+| Auth/signup/login/onboarding | DEVELOPMENT_READY | public-auth docs, `AUTH-ONBOARDING-EDGE-CASES.md`, security architecture | Auth implementation/library version revalidate |
+| Web app IA/design system | DEVELOPMENT_READY | `WEB-APP-IA.md`, `WEB-DESIGN-SYSTEM.md`, M11 plan | Visual implementation only |
+| AI Command Center/global search | DEVELOPMENT_READY | `AI-COMMAND-CENTER.md` | Runtime implementation only |
+| Workspace/RBAC/teams/collaboration | DEVELOPMENT_READY | `WORKSPACE-RBAC-COLLABORATION.md` | Runtime implementation only |
+| Notifications/inbox/events | DEVELOPMENT_READY | `NOTIFICATIONS-AND-INBOX-UX.md`, `EVENTS-NOTIFICATIONS-ARCHITECTURE.md` | Runtime implementation only |
+| Transactional email/push | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `TRANSACTIONAL-COMMUNICATIONS.md` | Select/configure provider + deliverability verification |
+| Commercial plans/entitlements/billing | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `COMMERCIAL-PLANS-ENTITLEMENTS-BILLING.md` | Exact launch pricing/tax/vendor facts configurable/revalidated |
+| Developer API/webhooks/SDK | DEVELOPMENT_READY | `DEVELOPER-API-WEBHOOKS.md`, M13 plan | Public launch remains gated until implementation readiness |
+| Multi-platform social publishing | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `MULTI-PLATFORM-SOCIAL-AUTOMATION.md`, M12 plan | Current APIs/scopes/app-review rules revalidate |
+| Social community/replies/moderation | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `SOCIAL-COMMUNITY-AUTOMATION.md` | Per-platform current capabilities revalidate |
+| Social/content analytics learning | DEVELOPMENT_READY | `ANALYTICS-LEARNING-SYSTEM.md`, M12 plan | Platform metric adapters later |
+| First-party product analytics/experiments | DEVELOPMENT_READY | `PRODUCT-ANALYTICS-EXPERIMENTATION.md` | Analytics vendor selection optional/configurable |
+| Mobile app | DEVELOPMENT_READY | `MOBILE-APP-SPEC.md`, M13 plan | App-store/SDK facts revalidate |
+| Security/auth hardening | DEVELOPMENT_READY | `docs/security/SECURITY-ARCHITECTURE.md` | Runtime threat/security testing |
+| Data privacy lifecycle | DEVELOPMENT_READY | `docs/security/DATA-PRIVACY-LIFECYCLE.md` | Jurisdiction/subprocessor facts revalidate |
+| Public launch legal requirements | DEVELOPMENT_READY as engineering dependency | `docs/legal/PUBLIC-LAUNCH-LEGAL-REQUIREMENTS.md` | Actual legal review/approvals remain launch evidence |
+| Observability/SLO/incidents | DEVELOPMENT_READY | `docs/operations/OBSERVABILITY-SLO-INCIDENTS.md` | Runtime dashboards/alerts/load evidence |
+| Deployment/environments/IaC | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `DEPLOYMENT-ENVIRONMENTS-IAC.md` | Region/sizing/vendor facts revalidate |
+| Backups/DR | DEVELOPMENT_READY | `BACKUP-DR-RECOVERY.md` | Restore/DR drills are implementation evidence |
+| Release/canary/rollback | DEVELOPMENT_READY | `RELEASE-MANAGEMENT.md` | Runtime pipeline implementation only |
+| Support/admin/moderation operations | DEVELOPMENT_READY | `SUPPORT-ADMIN-MODERATION.md` | Runtime implementation/process staffing later |
+| Master QA/release acceptance | DEVELOPMENT_READY | `docs/quality/MASTER-QUALITY-ACCEPTANCE-MATRIX.md` | Execute gates during milestones |
+| M01–M15 work-package decomposition | DEVELOPMENT_READY | `docs/milestones/M01/PLAN.md`–`M15/PLAN.md` | None architecturally |
+| Daily provider scout planning | DEVELOPMENT_READY + RUNTIME_REVALIDATION | `docs/operations/DAILY-PROVIDER-SCOUT.md` | Live credentials/workflow compatibility must be verified after consent |
+| GitHub↔Linear planning sync | DEVELOPMENT_READY | `docs/operations/GITHUB-LINEAR-SYNC.md` | Continue status reconciliation |
 
 ## Documentation-completion rule
 
-A system is not `DEVELOPMENT_READY` merely because its name appears in the master plan. It reaches `DEVELOPMENT_READY` only when implementation can determine without hidden chat context:
-- purpose and ownership;
+A system is `DEVELOPMENT_READY` only when implementation can proceed without hidden chat context for:
+- purpose/ownership;
 - user/operator inputs;
-- AI-autonomous decisions;
-- defaults and overrides;
-- state transitions;
-- data/asset inputs and outputs;
-- validation and QA gates;
-- failure/retry behavior;
-- rights/cost/security constraints;
-- persistence/history requirements;
-- acceptance criteria;
-- explicit out-of-scope behavior.
+- AI decisions/defaults/overrides;
+- options/states;
+- data/assets and lifecycle;
+- validation/QA;
+- failure/retry/recovery;
+- security/rights/cost/permissions;
+- persistence/history;
+- API/UI behavior where applicable;
+- tests/acceptance;
+- rollout/rollback;
+- explicit non-goals.
 
-## Current conclusion
+That rule is now satisfied across the foreseeable project scope according to the final 2026-08-29 audit.
 
-The **core media-production product, AI systems, public marketing surface and initial single-user account entry flow are now documentation-ready for staged implementation**, subject to the mandatory Development Consent Gate.
+## Remaining facts are not remaining architecture
 
-This includes:
-- public landing/features/use-case architecture;
-- landing feature visuals and synthetic demo asset plan;
-- SEO/discoverability and conversion funnel planning;
-- signup/login/email verification/password reset;
-- resumable onboarding;
-- initial workspace bootstrap;
-- provider connection onboarding;
-- project creation/options;
-- content types;
-- AI roles;
-- prompt system;
-- character locking;
-- audio;
-- visual/cinematic direction;
-- image generation, approval, locking and reuse;
-- image-to-video/first-frame/end-frame/reference handoff;
-- storyboard/timeline;
-- provider routing/recovery;
-- continuity QA;
-- memory;
-- assets;
-- approvals;
-- rights;
-- localization;
-- publishing architecture;
-- analytics learning;
-- long-form 3-hour architecture;
-- authenticated web information architecture;
-- presets/admin defaults.
+The project intentionally does not hard-code mutable external/commercial facts such as provider model IDs/prices/ToS, social scopes, tax rules, retail price points, cloud capacity, exact vendor versions or final brand copy. These must be resolved/revalidated through the already-defined configuration, registry, launch or change-control paths.
 
-Later milestones intentionally still require their own just-in-time detailed specs before executable work begins, particularly:
-- multi-user teams/RBAC/invitations;
-- mobile-specific UX;
-- production deployment/disaster recovery/operations;
-- final commercial pricing/entitlement rules when the business model is approved.
+## Conclusion
 
-These later-phase gaps do **not** block Milestone 1 domain/persistence development, but development still cannot start until the operator explicitly approves the scoped M1 consent brief.
+The project is **fully preplanned at the product/architecture/UX/API/security/AI/operations/QA/milestone level and is ready for a scoped Development Consent Brief**.
+
+No executable work is authorized merely by this matrix or by a generic `continue` command.
