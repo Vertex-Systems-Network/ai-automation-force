@@ -11,6 +11,7 @@
     "generation-attempt.schema.json": "01854318caaa31d2b7f1d8a01abbdf14a0760f859c7d1bcd08e83da05b3e5664",
     "job.schema.json": "26c2297ef20138a24851b6532c300de9d30596f6949b6b99a898f54fbf638567",
     "location.schema.json": "97d5bee4f773b0f6a1af396a1c5be2649ee81d15286cf1d8f76d964d430fcb06",
+    "production-lineage-bundle.schema.json": "82bf8d897f68dc9d36a8398535c483185f65b4cf4e91779dc06ee89cb225fe14",
     "project-bundle.schema.json": "5947d85689dee9d263bbf2680cbc619a138311f952f6622f859787148a955f73",
     "project.schema.json": "79e018e7c5d9a9d6e0b5fff4794cb0e6a219fc95607efa09d4b702c996a0756f",
     "prop.schema.json": "a3d059cb1c6e1842c3d0628d3dba2a9599d187586673e61f4d2106777bfd3cc9",

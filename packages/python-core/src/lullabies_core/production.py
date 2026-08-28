@@ -204,9 +204,11 @@ class RightsRecord(StrictModel):
     notes: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def normalize_model_provider(self) -> RightsRecord:
+    def normalize_and_validate_rights(self) -> RightsRecord:
         if self.provider_id is not None and self.model_provider_id is None:
             self.model_provider_id = self.provider_id
+        if not self.publication_blocked and self.commercial_use != CommercialUseStatus.ALLOWED:
+            raise ValueError("publication may be unblocked only when commercial use is allowed")
         return self
 
 

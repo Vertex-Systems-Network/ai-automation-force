@@ -20,6 +20,7 @@ from .common import (
 )
 from .content import Content, ContentObjective, ContentVersion
 from .entities import Location, Prop, StyleProfile, VoiceProfile, World
+from .lineage import ProductionLineageBundle
 from .production import (
     Approval,
     Asset,
@@ -75,6 +76,7 @@ __all__ = [
     "Location",
     "LockScope",
     "OutputProfile",
+    "ProductionLineageBundle",
     "Project",
     "ProjectBundle",
     "ProjectStatus",
