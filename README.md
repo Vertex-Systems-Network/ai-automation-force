@@ -1,4 +1,4 @@
-# Lullabies — AI-Native Media Production Platform
+# AI Automation Force — AI-Native Media Production Platform
 
 This repository is the engineering and AI-memory foundation for a provider-agnostic media production platform. The initial niche remains child-directed content, but the core product is deliberately general enough to support songs, poems, stories, educational media, episodes, cinematic sequences, short films and movies up to a configured three-hour project duration.
 
