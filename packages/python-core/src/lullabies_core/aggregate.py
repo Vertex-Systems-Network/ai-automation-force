@@ -347,23 +347,29 @@ class ProjectBundle(StrictModel):
             raise ValueError(f"project graph uses undeclared props: {sorted(undeclared)}")
 
     def _validate_primary_edit(self) -> None:
-        if not self.shots:
+        primary_tracks = [
+            track
+            for track in self.timeline.tracks
+            if self._normalize_track_kind(track.kind) == "primary-video"
+        ]
+        if len(primary_tracks) > 1:
+            raise ValueError("timeline may contain only one primary-video track")
+        if not primary_tracks:
             return
 
-        acts = {act.act_id: act for act in self.acts}
-        sequences = {sequence.sequence_id: sequence for sequence in self.sequences}
-        scenes = {scene.scene_id: scene for scene in self.scenes}
+        primary_track = primary_tracks[0]
+        self._assert_unique_refs(primary_track.item_ids, "primary-video track item_ids")
+        shots = {shot.shot_id: shot for shot in self.shots}
+        missing = [item_id for item_id in primary_track.item_ids if item_id not in shots]
+        if missing:
+            raise ValueError(f"primary-video track references missing shots: {missing}")
+        if not primary_track.item_ids:
+            return
 
-        def hierarchy_key(shot: Shot) -> tuple[int, int, int, int]:
-            scene = scenes[shot.scene_id]
-            sequence = sequences[scene.sequence_id]
-            act = acts[sequence.act_id]
-            return (act.order, sequence.order, scene.order, shot.order)
-
-        ordered = sorted(self.shots, key=hierarchy_key)
+        ordered = [shots[shot_id] for shot_id in primary_track.item_ids]
         starts = [shot.time_range.start_seconds for shot in ordered]
         if starts != sorted(starts):
-            raise ValueError("primary edit shot timing moves backwards across hierarchy")
+            raise ValueError("primary edit shot timing moves backwards")
 
         previous = ordered[0]
         for current in ordered[1:]:
@@ -372,6 +378,10 @@ class ProjectBundle(StrictModel):
                     f"primary edit shots overlap: {previous.shot_id} and {current.shot_id}"
                 )
             previous = current
+
+    @staticmethod
+    def _normalize_track_kind(kind: str) -> str:
+        return "-".join(kind.strip().lower().replace("_", "-").split())
 
     @staticmethod
     def _unique_by_id(items: Iterable[T], field: str, label: str) -> dict[str, T]:
