@@ -37,6 +37,9 @@ jobs:
       - name: Install scout dependencies
         run: python -m pip install --disable-pip-version-check -r automation/requirements-scout.txt
 
+      - name: Unit tests
+        run: python -m unittest discover -s automation/tests -p "test_*.py" -v
+
       - name: Validate provider scout configuration
         run: python automation/provider_scout.py --validate
 
@@ -45,6 +48,11 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           PROVIDER_SCOUT_MODEL: ${{ vars.PROVIDER_SCOUT_MODEL || 'gemini-2.5-flash-lite' }}
         run: python automation/provider_scout.py
+
+      - name: Independent evidence and auto-merge safety gate
+        run: |
+          rm -f .provider-scout-automerge-safe
+          python automation/validate_provider_update.py
 
       - name: Classify repository changes
         id: changes
@@ -93,7 +101,7 @@ jobs:
             --base main \
             --head '${{ steps.commit.outputs.branch }}' \
             --title 'chore(providers): daily AI provider research update' \
-            --body 'Automated daily provider research. Evidence and change classification are stored under research/provider-updates/. Safe registry changes are limited by config/update-policy.yaml. New provider integrations, architecture changes, schemas, security, publishing, and budget behavior are never auto-enabled by this scout.')"
+            --body 'Automated daily provider research. Evidence and change classification are stored under research/provider-updates/. Safe registry changes are restricted by config/update-policy.yaml and independently validated against registered official-source domains. New provider integrations, architecture changes, schemas, security, publishing, and budget behavior are never auto-enabled by this scout.')"
           echo "url=$pr_url" >> "$GITHUB_OUTPUT"
           echo "$pr_url"
 
