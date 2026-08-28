@@ -1,10 +1,10 @@
 from ._db import (
-    PersistResult,
     PersistenceConflictError,
     PersistenceError,
     PersistenceNotFoundError,
     PersistenceReferenceError,
     PersistenceShapeError,
+    PersistResult,
 )
 from .repository import PostgresProductionRepository
 
