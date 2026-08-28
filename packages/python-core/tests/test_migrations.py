@@ -86,7 +86,8 @@ def test_initial_postgresql_migration_is_reversible_and_deterministic() -> None:
         assert set(db_inspector.get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
         with engine.connect() as connection:
-            revision = connection.execute(text("SELECT version_num FROM alembic_version")).scalar_one()
+            result = connection.execute(text("SELECT version_num FROM alembic_version"))
+            revision = result.scalar_one()
         assert revision == "20260829_0001"
 
         project_id = uuid4()
@@ -108,55 +109,52 @@ def test_initial_postgresql_migration_is_reversible_and_deterministic() -> None:
                 {"id": project_id},
             )
 
-        with pytest.raises(IntegrityError):
-            with engine.begin() as connection:
-                connection.execute(
-                    text(
-                        """
-                        INSERT INTO core.projects (
-                            id, external_id, title, status, audience, "cast", content_format,
-                            language, target_duration_seconds, output, creative, provider_policy,
-                            created_at, updated_at
-                        ) VALUES (
-                            :id, 'PRJ-000901', 'Duplicate external id', 'draft',
-                            '{}'::jsonb, '{}'::jsonb, 'song', 'en', 120,
-                            '{}'::jsonb, '{}'::jsonb, '{}'::jsonb, now(), now()
-                        )
-                        """
-                    ),
-                    {"id": uuid4()},
-                )
+        with pytest.raises(IntegrityError), engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.projects (
+                        id, external_id, title, status, audience, "cast", content_format,
+                        language, target_duration_seconds, output, creative, provider_policy,
+                        created_at, updated_at
+                    ) VALUES (
+                        :id, 'PRJ-000901', 'Duplicate external id', 'draft',
+                        '{}'::jsonb, '{}'::jsonb, 'song', 'en', 120,
+                        '{}'::jsonb, '{}'::jsonb, '{}'::jsonb, now(), now()
+                    )
+                    """
+                ),
+                {"id": uuid4()},
+            )
 
-        with pytest.raises(IntegrityError):
-            with engine.begin() as connection:
-                connection.execute(
-                    text(
-                        """
-                        INSERT INTO core.rights_records (
-                            id, external_id, subject_type, subject_id,
-                            commercial_use, publication_blocked
-                        ) VALUES (
-                            :id, 'RGT-000901', 'asset', 'AST-000901', 'unknown', false
-                        )
-                        """
-                    ),
-                    {"id": uuid4()},
-                )
+        with pytest.raises(IntegrityError), engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.rights_records (
+                        id, external_id, subject_type, subject_id,
+                        commercial_use, publication_blocked
+                    ) VALUES (
+                        :id, 'RGT-000901', 'asset', 'AST-000901', 'unknown', false
+                    )
+                    """
+                ),
+                {"id": uuid4()},
+            )
 
-        with pytest.raises(IntegrityError):
-            with engine.begin() as connection:
-                connection.execute(
-                    text(
-                        """
-                        INSERT INTO core.contents (
-                            id, external_id, status, created_at, updated_at
-                        ) VALUES (
-                            :id, 'CNT-000901', 'draft', now(), now()
-                        )
-                        """
-                    ),
-                    {"id": uuid4()},
-                )
+        with pytest.raises(IntegrityError), engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.contents (
+                        id, external_id, status, created_at, updated_at
+                    ) VALUES (
+                        :id, 'CNT-000901', 'draft', now(), now()
+                    )
+                    """
+                ),
+                {"id": uuid4()},
+            )
 
         # Applying head twice must be a no-op rather than replaying schema DDL.
         command.upgrade(config, "head")
