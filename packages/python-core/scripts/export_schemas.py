@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from ai_automation_force_core import (
+    SCHEMA_VERSION,
     Act,
     Approval,
     Asset,
@@ -22,7 +23,6 @@ from ai_automation_force_core import (
     Prop,
     QARecord,
     RightsRecord,
-    SCHEMA_VERSION,
     Scene,
     Sequence,
     Shot,
@@ -100,7 +100,8 @@ def check_artifacts(output_dir: Path, expected: dict[str, str]) -> int:
         actual_managed = {
             path.name
             for path in output_dir.iterdir()
-            if path.is_file() and (path.name.endswith(".schema.json") or path.name == "manifest.json")
+            if path.is_file()
+            and (path.name.endswith(".schema.json") or path.name == "manifest.json")
         }
         for filename in sorted(actual_managed - expected_names):
             failures.append(f"stale: {output_dir / filename}")
