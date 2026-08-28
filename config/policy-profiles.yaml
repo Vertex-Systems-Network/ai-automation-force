@@ -1,0 +1,29 @@
+schema_version: 1
+profiles:
+  kids:
+    status: active
+    audience_classes: [baby, toddler, preschool, child, preteen, family]
+    content_policy_path: config/content-policy.yaml
+    child_directed: true
+    made_for_kids_review_required: true
+    age_band_required: true
+  general:
+    status: planned
+    audience_classes: [general, adult]
+    child_directed: false
+    made_for_kids_review_required: false
+    age_band_required: false
+    implementation_note: >-
+      General media profile must be implemented as an additive policy layer before
+      production use. It must not disable universal safety, rights, consent,
+      licensing, platform, security or provenance gates.
+  family:
+    status: planned
+    audience_classes: [family]
+    child_directed: context-dependent
+    made_for_kids_review_required: true
+    age_band_required: context-dependent
+selection:
+  project_profile_required: true
+  default_initial_profile: kids
+  core_pipeline_shared_across_profiles: true
