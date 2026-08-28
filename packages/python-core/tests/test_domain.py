@@ -142,3 +142,11 @@ def test_project_rejects_more_than_three_hours() -> None:
 def test_locked_character_requires_version_pin() -> None:
     with pytest.raises(ValidationError):
         CharacterLock(scope=LockScope.PROJECT, project_id="PRJ-000001")
+
+
+def test_look_lock_requires_look_pin() -> None:
+    with pytest.raises(ValidationError):
+        CharacterLock(
+            scope=LockScope.LOOK,
+            pinned_character_version_id="CHV-000001",
+        )
