@@ -10,6 +10,18 @@ Development consent policy: `ai-native/DEVELOPMENT-CONSENT-GATE.md`
 
 Development brief awaiting operator approval: `docs/architecture/M1-DEVELOPMENT-CONSENT-BRIEF.md`
 
-Next executable action: only after explicit operator consent, continue Milestone 1 stabilization with generated schemas, lineage fixtures, legacy content importer boundary, aggregate stabilization and initial PostgreSQL persistence mapping/migrations.
+Detailed execution plan: `docs/architecture/M1-EXECUTION-PLAN.md`
 
-Do not start Temporal, provider integrations, generation pipelines, UI, publishing or later milestones under this consent scope.
+Planning is now refined into ordered work packages:
+1. contract freeze + generated schemas;
+2. full lineage fixtures;
+3. aggregate validation hardening;
+4. legacy content importer boundary;
+5. PostgreSQL persistence architecture;
+6. reversible migration scaffold;
+7. persistence repositories + short/long project round trips;
+8. Milestone 1 verification.
+
+Next executable action: WP1 only after explicit operator consent.
+
+Do not start or modify executable code, schemas, migrations, dependencies, CI behavior, provider integrations, Temporal, generation pipelines, UI, publishing or later milestones without applicable development consent.
