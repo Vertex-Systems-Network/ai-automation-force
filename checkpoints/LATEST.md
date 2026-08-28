@@ -1,139 +1,115 @@
 # Latest Checkpoint
 
-Current planning phase: **P0 — Full Project Preplanning Gate**
+Current checkpoint:
+`checkpoints/2026-08-29-full-project-preplanning-complete.md`
 
-Status: **FULL_PROJECT_PREPLANNING_IN_PROGRESS**
+Current phase: **Post-P0 — Awaiting Development Consent**
 
-## Operator requirement
+Status: **FULL_PROJECT_PLANNING_READY_FOR_CONSENT**
 
-No new executable development in M1–M15 may begin or resume until the entire foreseeable product is preplanned end-to-end.
+## Planning verdict
 
-Canonical global gate:
-`ai-native/FULL-PROJECT-PREPLANNING-GATE.md`
+The Full Project Preplanning Gate is complete.
 
-Canonical master index:
+Final adversarial audit:
+`docs/product/FINAL-PREDEVELOPMENT-GAP-AUDIT-2026-08-29.md`
+
+Verdict:
+`PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND`
+
+Master planning index:
 `docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`
 
-Development consent remains separately governed by:
+Documentation completeness matrix:
+`docs/product/DOCUMENTATION-COMPLETENESS-MATRIX.md`
+
+## What is preplanned
+
+The foreseeable product now has canonical planning for:
+- core AI/media generation systems;
+- project types/options/presets;
+- characters/entities/worlds/locks;
+- image generation/edit/reuse/image-to-video;
+- audio/music/TTS/dialogue/SFX/dubbing;
+- storyboard/timeline/OTIO/long-form up to 3 hours;
+- provider integrations/account/quota/cost/fallback/deprecation;
+- continuity/generated-media QA;
+- assets/storage/provenance/rights/approvals;
+- memory/originality/prompts/AI roles/decision ledger;
+- AI security/threat model/evaluation/regression;
+- public landing/signup/login/onboarding;
+- web IA/design system/AI Command Center/global states/accessibility/localization;
+- workspace/RBAC/collaboration;
+- events/notifications/transactional communications;
+- plans/entitlements/usage/credits/billing;
+- developer API/webhooks/SDK/sandbox stance;
+- multi-platform social publishing/analytics;
+- social community/replies/moderation stance;
+- mobile product;
+- first-party product analytics/experimentation;
+- auth/security/privacy/legal/data lifecycle;
+- observability/SLOs/deployment/IaC/backups/DR/releases;
+- support/admin/moderation operations;
+- master QA/release gates;
+- implementation-ready M01–M15 work-package plans.
+
+Packs A–O: `READY`.
+
+## Provider roadmap
+
+Canonical:
+`docs/architecture/PROVIDER-INTEGRATION-ROADMAP.md`
+
+Multiple different providers may be connected simultaneously with one authorized connection/account per provider by default. Cross-provider fallback preserves canonical state. Same-provider account rotation to evade quota is prohibited.
+
+Provider/model/pricing/ToS/API facts are revalidated at implementation time. Current provider candidate ordering is planning guidance, not a permanent quality ranking or guaranteed future API availability.
+
+## Mutable facts vs missing planning
+
+Current external facts such as API versions, model IDs, prices, quotas, OAuth scopes, app-review rules, ToS, taxes, cloud sizing and vendor versions remain intentionally revalidated at implementation/launch.
+
+That does not reopen P0 unless a factual change invalidates a foundational architecture assumption.
+
+## Executable state is still NOT verified
+
+This checkpoint does not claim:
+- M01 code complete;
+- migrations/repositories complete;
+- FastAPI/Temporal runtime complete;
+- provider adapters working;
+- provider/social credentials configured;
+- provider scout live execution verified;
+- web/mobile/auth/billing/social implementation complete;
+- infrastructure deployed;
+- CI/runners green;
+- DR drills passed;
+- public/legal launch approved.
+
+These are future milestone implementation/verification tasks.
+
+## Development consent boundary
+
+Development consent policy:
 `ai-native/DEVELOPMENT-CONSENT-GATE.md`
 
-The previous M1 state `PLANNING_READY_FOR_CONSENT` is superseded by this stricter global preplanning gate. M1 remains technically well-scoped, but it is not authorized to start until P0 exits.
+Full planning completion is **not** development authorization.
 
-## Meaning of complete preplanning
+The next executable milestone is **M01 — Core Domain and Persistence Boundary**.
 
-Before development, the project must already define the foreseeable:
-- product/media systems;
-- AI roles, authority, memory, evaluation and security;
-- all user-facing options/defaults;
-- complete web UI/UX and design system;
-- auth/account/workspace/RBAC/collaboration;
-- provider/API/social integrations and fallback contracts;
-- billing/entitlements/usage metering;
-- notifications/events/transactional communications;
-- public/developer API stance;
-- mobile product;
-- storage/uploads/CDN/delivery/archival;
-- security/privacy/legal/data lifecycle;
-- observability/SLOs/deployment/backups/DR/releases;
-- support/admin/moderation;
-- product analytics/experimentation;
-- social community automation stance;
-- master QA/evaluation/release acceptance;
-- implementation-ready work-package decomposition for M1–M15.
+Canonical M01 plan:
+`docs/milestones/M01/PLAN.md`
 
-Mutable external facts such as provider API versions, current pricing, OAuth scopes, app-review rules, ToS and SDK versions may be revalidated at implementation time, but no major product architecture or business rule should need first-time invention during coding.
+Existing detailed execution plan:
+`docs/architecture/M1-EXECUTION-PLAN.md`
 
-## Existing mature core
+Before any executable M01 work, present the scoped Development Consent Brief and receive explicit operator approval.
 
-The repository already has strong planning for:
-- project creation/options/presets;
-- content formats/research/originality;
-- characters/entities/locks;
-- image generation/editing/reuse/image-to-video handoff;
-- audio/music/dialogue/SFX;
-- visual/cinematic direction;
-- storyboard/timeline/shot/take hierarchy;
-- long-form production up to three hours;
-- provider-neutral routing/failover/cost policy;
-- continuity/generated-media QA;
-- assets/provenance/rights;
-- review/approval;
-- localization/dubbing;
-- memory/learning/prompt registry/AI agent roles;
-- public landing/features/visual inventory;
-- signup/login/verification/reset/onboarding;
-- authenticated web IA;
-- multi-platform social publishing and analytics architecture;
-- daily provider scouting;
-- GitHub↔Linear planning sync.
-
-## P0 planning backlog
-
-Linear P0 gate issue:
-- `ABD-149` — Complete full-project preplanning before any development
-
-Existing deep-audit gaps moved under P0:
-- `ABD-142` — commercial plans/entitlements/usage metering/billing
-- `ABD-143` — AI-agent security/threat model/evaluation framework
-- `ABD-144` — design system/AI command center/notifications/account UX
-- `ABD-145` — workspace/RBAC/invitations/collaboration
-- `ABD-146` — security/privacy/secrets/uploads/webhooks/data lifecycle
-- `ABD-147` — observability/SLOs/incidents/backups/DR/releases
-- `ABD-148` — notifications/events/public API/uploads/support-admin
-
-Additional explicit P0 packs:
-- `ABD-150` — mobile product specification
-- `ABD-151` — product analytics/experimentation
-- `ABD-152` — social community automation/moderation stance
-- `ABD-153` — developer API/webhooks/SDK decision
-- `ABD-154` — media storage/resumable uploads/delivery/archival
-- `ABD-155` — master QA/evaluation/release acceptance matrix
-- `ABD-156` — decompose M1–M15 into implementation-ready work packages
-
-M1/WP1 (`ABD-128`) is explicitly blocked by `ABD-149`.
-
-## Preplanning packs A–O
-
-Tracked in `docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`:
-
-A. Commercial SaaS/entitlements/billing
-B. AI safety/agent security/evaluation
-C. Full design system/product interaction model
-D. Workspace/RBAC/collaboration
-E. Notifications/events/communications
-F. Public/developer API decision
-G. Storage/uploads/delivery/archival
-H. Auth hardening/security/privacy/legal
-I. Observability/environments/deployment/DR/release
-J. Support/admin/moderation
-K. Mobile product
-L. Product analytics/experimentation
-M. Social community automation stance
-N. Full M1–M15 implementation decomposition
-O. Master QA/release acceptance matrix
-
-## Exit condition
-
-P0 may close only when:
-- all Packs A–O are `READY` or explicit `NOT_SUPPORTED` decisions;
-- every major UI route/options/state is documented;
-- all privileged AI actions have authority/approval rules;
-- all persistent data domains have ownership/lifecycle rules;
-- all commercial limits/entitlements have a canonical source of truth;
-- security/privacy/DR/operations are implementation-ready on paper;
-- mobile/public API/community decisions are explicit;
-- M1–M15 each have work packages, dependencies, tests, rollback and exit criteria;
-- master QA matrix exists;
-- final end-to-end audit reports no material first-time planning gap.
-
-Only then set status to:
-
-`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
-
-and present a Development Consent Brief. Full preplanning does not itself authorize development.
+A generic `continue`, `next`, `resume`, audit or planning command is not development consent.
 
 ## GitHub ↔ Linear
 
-GitHub remains canonical for architecture/policy/specs/evidence/checkpoints. Linear mirrors P0 planning tasks, roadmap milestones, dependencies and status.
+GitHub remains canonical for architecture, engineering policy, implementation evidence and checkpoints. Linear mirrors planning/work/status.
 
-Recurring sync remains enabled every six hours for planning/status/documentation only and must preserve this P0 block.
+P0 planning issues may now be closed as planning-complete. M01 work remains Backlog until explicit development consent is received.
+
+The recurring six-hour GitHub↔Linear sync remains planning/status-only and must never infer development authorization from this checkpoint.
