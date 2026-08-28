@@ -10,19 +10,45 @@ Core product/AI documentation status:
 - complete enough for staged implementation;
 - tracked in `docs/product/DOCUMENTATION-COMPLETENESS-MATRIX.md`;
 - includes project options/wizard, content types, AI roles, prompts, characters, audio, visual/cinematic, image generation + approval + reuse, image-to-video reference handoff, storyboard/timeline, provider routing/recovery, continuity QA, memory, assets, approvals, rights, localization, publishing, analytics, 3-hour long-form architecture, web IA, presets/admin;
-- now also includes public landing-page architecture, feature marketing content, feature visual/screenshot inventory, signup/registration, login, email verification, password reset, onboarding and the public -> authenticated app handoff.
+- also includes public landing-page architecture, feature marketing content, feature visual/screenshot inventory, signup/registration, login, email verification, password reset, onboarding and the public -> authenticated app handoff;
+- public-web launch planning now also covers SEO/discoverability, conversion funnels, pricing-ready structure, trust/legal dependencies, performance, accessibility, responsive behavior and launch gates;
+- auth/onboarding edge-case planning covers duplicate identities, OAuth collisions, expired/used verification/reset tokens, resumable onboarding, provider connection failures, workspace bootstrap, rate limits and security-event requirements.
 
 Image generation planning is canonical in `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` and is exposed as an explicit New Project Wizard strategy. Approved still images may become reusable character/world/style/keyframe/reference assets and may drive first-frame/end-frame/image-to-video workflows while retaining provider-independent lineage and continuity state.
 
 Public website/auth planning is canonical in:
 - `docs/product/PUBLIC-LANDING-AUTH-ONBOARDING.md`;
-- `docs/product/LANDING-PAGE-VISUAL-CONTENT-MAP.md`.
+- `docs/product/LANDING-PAGE-VISUAL-CONTENT-MAP.md`;
+- `docs/product/PUBLIC-WEB-LAUNCH-PLAN.md`;
+- `docs/product/AUTH-ONBOARDING-EDGE-CASES.md`.
 
 The public product path is planned as:
 
 `Landing -> Features/Use Cases -> Signup/Login -> Verification -> Onboarding -> Provider/Defaults Setup -> First Project -> App Dashboard`
 
 The landing page must present major product features with purposeful product images/screenshots/mockups. Real product screenshots use safe synthetic demo data once implementation exists; conceptual pre-implementation visuals must not be presented as fabricated live-product/customer evidence.
+
+## Linear planning mirror
+
+Linear project: **AI Automation Force**
+
+Linear mirrors roadmap/planning/status while GitHub remains canonical for engineering policy, architecture, schemas, implementation/test evidence and checkpoints.
+
+Roadmap milestones M0–M15 are mirrored in Linear.
+
+Current M1 work-package chain:
+- `ABD-128` — WP1 Contract freeze + generated schemas
+- `ABD-129` — WP2 Full lineage fixtures/invariants
+- `ABD-130` — WP3 Aggregate validation hardening
+- `ABD-131` — WP4 Legacy CNT importer
+- `ABD-132` — WP5 PostgreSQL persistence architecture
+- `ABD-133` — WP6 Reversible migrations
+- `ABD-134` — WP7 Persistence repositories + round trips
+- `ABD-135` — WP8 Milestone verification/checkpoint
+
+GitHub↔Linear synchronization policy is canonical in `docs/operations/GITHUB-LINEAR-SYNC.md`.
+
+A recurring sync scheduler is enabled at a six-hour cadence. It may synchronize planning/status/documentation only, must be idempotent, must avoid duplicate noise, and must never treat synchronization as development consent.
 
 Development consent policy: `ai-native/DEVELOPMENT-CONSENT-GATE.md`
 
