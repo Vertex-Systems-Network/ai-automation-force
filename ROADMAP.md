@@ -1,235 +1,240 @@
 # Lullabies AI-Native Studio Roadmap
 
-## Phase 1A — Content OS Foundation
+Canonical architecture: `ai-native/MASTER-PLAN.md`
 
-Status: implemented as repository architecture.
+Default execution policy: `HYBRID_SMART` from `config/execution-policy.yaml`.
+
+The project uses one provider-agnostic production workflow with interchangeable free/manual-free/paid provider adapters. Do not build separate duplicated free and paid pipelines.
+
+## Milestone 0 — Architecture Lock
+
+Status: substantially implemented.
 
 Includes:
-- persistent AI operating contract
-- one-word `next` workflow
-- autonomous age/type selection
-- current/evergreen research stage
-- memory bank
-- duplicate and derivative detection design
-- content-generation prompt contract
-- child-safety and quality gates
-- speech/music audio router
-- detailed Gemini TTS handoff
-- detailed Lyria music handoff
-- canonical content metadata schema
-- repository classification rules
+- repository-as-memory principle;
+- mandatory AI operating contract;
+- master architecture;
+- one-command `next` concept;
+- age segmentation;
+- content policy;
+- persistent content/duplicate memory;
+- generation history;
+- audio router;
+- free-tier/provider router;
+- video continuity design;
+- hybrid free/paid execution policy;
+- provider capability registry;
+- canonical content schema.
 
-## Phase 1B — Executable Orchestrator
+Remaining architecture-lock items to add during implementation:
+- job schema;
+- asset/provenance schema;
+- character/world schemas;
+- cost/quota ledger schemas;
+- prompt registry schema;
+- publication/analytics schemas.
 
-Goal: make `next` executable without relying on a human to manually copy each step between tools.
+## Milestone 1 — Executable Core OS
 
-Recommended implementation:
-- Python 3.12+ package under `studio/`
-- CLI entry point: `lullabies next`
-- provider adapters:
-  - research/search adapter
-  - LLM planning/writing adapter
-  - Gemini TTS adapter
-  - Lyria adapter
-  - Git/repository persistence adapter
-- local `.env` / GitHub Actions secrets for credentials; never commit secrets
-- JSON Schema validation before save
-- deterministic content ID allocator
-- memory reconciliation on startup
-- lexical duplicate detector
-- semantic/vector duplicate detector
-- retry/idempotency layer
-- dry-run mode
-- audit/status commands
-- unit tests and fixture catalogue
+Goal: make repository state executable rather than relying only on agent interpretation.
 
-Execution modes:
-1. AI-agent mode — a capable agent reads `AGENTS.md` and runs the repository workflow.
-2. CLI mode — `lullabies next` runs the same state machine programmatically.
-3. Future scheduled mode — GitHub Actions/manual workflow dispatch, only after cost and publishing controls are configured.
+Build Python 3.12+ package under `studio/` with:
+- CLI entry point;
+- `lullabies next`;
+- `status`;
+- `audit`;
+- job queue/state machine;
+- deterministic IDs;
+- job locks;
+- idempotency keys;
+- atomic repository state writes;
+- interrupted-run recovery;
+- schema validation;
+- retry budgets;
+- circuit-breaker framework;
+- provider adapter interface;
+- provider router interface;
+- cost/quota reservation interface;
+- tests/fixtures.
 
-No paid model call should occur without credentials and explicit spend policy.
+Exit criterion:
+`next` can safely inspect state, choose one eligible job, execute a dry-run, record the job and resume without duplication.
 
-## Phase 2 — Audio Rendering OS
+## Milestone 2 — Content Intelligence OS
 
-Goal: turn every `audio-ready` package into a rendered and QA-checked audio artifact.
+Implement:
+- current/evergreen research adapters;
+- portfolio planner;
+- candidate generator;
+- lexical duplicate checks;
+- semantic duplicate checks;
+- rejected-concept memory;
+- structured content writer;
+- safety/factual/originality QA;
+- canonical package persistence;
+- first real `next content` run.
 
-### Speech route
-- Gemini TTS
-- exact script checksum before render
-- female voice selection stored in metadata
-- WAV/PCM or provider output capture
-- normalize to delivery master format
-- transcript comparison against canonical script
-- pronunciation QA
-- silence/pause QA
-- clipping/loudness checks
-- store render manifest and provider/model version
+Exit criterion:
+one content package is autonomously researched, selected, uniqueness-cleared, written, QA-passed and saved with complete provenance.
 
-### Music route
-- Lyria full-song generation for songs/sung lullabies
-- exact approved lyrics in prompt
-- female singer profile
-- track structure/BPM/key/instrumentation contract
-- lyric fidelity check
-- audio quality check
-- originality-risk review of generated melody/style
-- render versioning; never overwrite the only approved render
+## Milestone 3 — Hybrid Audio OS
 
-Recommended states:
-`audio-ready -> audio-generated -> audio-qa-passed`
+Implement:
+- autonomous audio director;
+- Gemini TTS adapter for speech;
+- music-provider adapter interface;
+- Lyria paid adapter;
+- future free/manual-free music adapters through same interface;
+- speech-with-background two-stem workflow;
+- prompt versioning;
+- transcript/lyric fidelity QA;
+- pronunciation QA;
+- loudness/clipping QA;
+- deterministic stem mixing;
+- cost/quota ledger;
+- generation history.
 
-## Phase 3 — Visual IP and Video Planning
+Exit criterion:
+one approved content item reaches `audio-qa-passed` with traceable provider, prompt, cost/quota and output hashes.
 
-Do this before mass video generation.
+## Milestone 4 — Visual IP Memory
 
-### 3A. Visual/Character Bible
-Create:
-- brand art direction
-- canonical color system
-- character sheets
-- front/side/back views
-- expressions
-- clothing/accessory rules
-- environment/world rules
-- prohibited mutations
-- age-appropriate visual safety rules
+Before scaling video generation, create provider-independent visual memory:
+- brand art direction;
+- character IDs;
+- character sheets;
+- front/side/back references;
+- expressions/poses;
+- body/face proportions;
+- wardrobe variants;
+- props;
+- world/environment IDs;
+- palette/style rules;
+- camera/lighting rules;
+- forbidden mutations;
+- visual asset hashes/provenance.
 
-Store canonical references in `visual-bible/`.
+Exit criterion:
+a new provider can receive canonical references without relying on prior-provider hidden state.
 
-### 3B. Storyboard compiler
-Convert approved content + audio into:
-- scene list
-- timestamps
-- shot type
-- subject/action
-- background
-- continuity state
-- reference images
-- camera motion
-- text/caption need
-- negative constraints
-- expected transition
+## Milestone 5 — Storyboard & Keyframe Compiler
 
-Recommended package artifact:
-`video-plan.json`
+Master audio becomes timeline source.
 
-### 3C. Video generation router
-At foundation-research time, Google's Gemini API documentation recommends Gemini Omni Flash as the default video-generation/editing path for coherence, multimodal reasoning, and character consistency, while Veo 3.1 is useful for specific controls such as video extension, first/last-frame control, reference-image direction, and legacy Veo workflows.
+Implement:
+- audio timing/transcription;
+- story/lyric beat segmentation;
+- shot IDs/timecodes;
+- shot action/camera/motion;
+- character/environment state;
+- canonical first frames;
+- planned end frames where useful;
+- transition state;
+- negative constraints;
+- provider-neutral shot package;
+- video-plan schema.
 
-Provider/model names must be re-verified before implementation.
+Exit criterion:
+one 1–2 minute audio master can be converted into a fully deterministic shot plan before video spending begins.
 
-Use:
-- short deterministic scenes rather than one giant prompt;
-- canonical character references;
-- audio timeline as the timing source;
-- continuity checks after every scene;
-- regenerate only failed scenes;
-- assemble only QA-passed clips.
+## Milestone 6 — Hybrid Video Provider Router
 
-### 3D. Video assembly
-Recommended deterministic post-production layer:
-- FFmpeg-based assembly
-- master audio sync
-- clip trim/extension rules
-- captions/subtitles
-- safe-zone handling
-- intro/outro only when brand policy allows
-- loudness normalization
-- 16:9 master and optional 9:16 derivative
-- checksum and render manifest
+Implement one workflow for both free and paid capacity.
 
-Recommended states:
-`audio-qa-passed -> video-planned -> scenes-generated -> video-assembled -> video-qa-passed`
+Capabilities:
+- refresh official provider facts when stale;
+- classify `api_free`, `api_paid`, `web_free_manual`, etc.;
+- per-shot provider selection;
+- budget/credit awareness;
+- expected retry-adjusted accepted-output cost;
+- manual-free handoff queue;
+- paid API adapter support;
+- provider fallback chain;
+- quota exhaustion checkpointing;
+- no restart of already-approved shots;
+- provider health/failure tracking.
 
-## Phase 4 — YouTube Publishing OS
+Initial adapters should be intentionally limited. Build the router first, then add providers incrementally.
 
-Publishing remains human-gated until explicitly enabled.
+Exit criterion:
+a multi-shot sequence can switch providers without losing canonical continuity/history.
 
-### Metadata compiler
-Generate:
-- title
-- description
-- tags where useful
-- category
-- language
-- playlist target
-- thumbnail brief
-- child-directed audience review
-- synthetic-media disclosure review where applicable
+## Milestone 7 — Continuity QA & Video Assembly
 
-### Upload implementation
-Use the YouTube Data API with OAuth and resumable upload.
+Implement:
+- multimodal continuity judge;
+- deterministic visual checks where practical;
+- identity/wardrobe/environment/style/camera/action scoring;
+- critical-failure rejection;
+- failed-shot-only regeneration;
+- overlap/cut strategy;
+- FFmpeg assembly;
+- exact master-audio sync;
+- captions;
+- aspect-ratio derivatives;
+- final audio/video normalization;
+- render manifest and checksum.
 
-The upload record should explicitly support:
-- `status.privacyStatus`
-- `status.selfDeclaredMadeForKids`
-- `status.containsSyntheticMedia` when applicable
-- scheduled publication only after QA/approval
+Exit criterion:
+one long-form video reaches `video-qa-passed` from multiple short generated shots without manual timeline reconstruction.
 
-Default first upload state should be `private` or `unlisted`, not public.
+## Milestone 8 — Rights, Provenance & Publishing OS
 
-Unverified API projects can face public-upload restrictions, so API-project compliance/audit status must be checked during implementation.
+Implement:
+- asset graph;
+- commercial-use/license registry;
+- watermark status;
+- prompt/provider/output provenance;
+- YouTube OAuth;
+- resumable upload;
+- title/description/tags/language/playlist;
+- thumbnail workflow;
+- captions;
+- Made-for-Kids review;
+- synthetic-media disclosure review;
+- default private upload;
+- post-upload verification;
+- human gate before public publication.
 
-### Publishing gates
-Before public release:
-- final visual/audio QA
-- copyright/IP review
-- Made-for-Kids designation review
-- title/thumbnail truthfulness
-- no keyword stuffing
-- no misleading educational claim
-- no unsafe visual imitation
-- upload metadata verified
-- human approval until autonomous publishing is explicitly enabled
+Current YouTube API supports resumable uploads and child-directed/synthetic-media status fields; verify current official docs during implementation.
 
-## Phase 5 — Analytics Learning Loop
+Exit criterion:
+final master can be uploaded privately, verified, and scheduled/public only after policy gates.
 
-Ingest performance after publication:
-- impressions
-- click-through rate
-- average view duration
-- retention curve
-- repeat viewing where available
-- traffic source
-- search terms where available
-- age/type/topic cohort comparisons
+## Milestone 9 — Analytics Learning Loop
 
-Use analytics to improve portfolio selection, not to blindly clone successful content.
+Ingest available performance signals and connect them back to canonical attributes:
+- impressions/CTR;
+- retention/average view duration;
+- traffic sources;
+- content type;
+- age band;
+- topic;
+- character;
+- duration;
+- audio style;
+- opening hook;
+- visual style;
+- series/language.
 
-Memory should record:
-- what worked
-- what underperformed
-- hypotheses
-- experiments
-- saturation/fatigue signals
+Store hypotheses and experiments, not just raw metrics.
 
-## Phase 6 — Localization
+Do not blindly clone successful content; feed learning back through originality and fatigue controls.
 
-For each approved canonical item:
-- preserve original content ID lineage
-- create language variant ID/version
-- adapt meaning, rhyme, meter, examples, and cultural references
-- rerun safety/factual/originality checks
-- rerender speech/music using the language-appropriate female voice profile
-- create localized metadata and captions
+## Milestone 10 — Localization & Multi-Platform Expansion
 
-Do not use literal translation for lyrics when it breaks meter, rhyme, naturalness, or cultural fit.
-
-## Phase 7 — Multi-platform/IP Expansion
-
-Possible future outputs:
-- YouTube Shorts
-- music streaming
-- podcast/audio feeds
-- ebooks/storybooks
-- printables
-- learning app
-- games
-- character licensing
-
-All future formats should reference the same canonical content/IP records rather than creating disconnected copies.
+Implement lineage-preserving variants for:
+- additional languages;
+- dubbed/localized video;
+- music streaming;
+- YouTube Shorts;
+- podcast/audio feeds;
+- storybooks/ebooks;
+- printables;
+- future app/game/licensing adapters.
 
 ## Immediate next milestone
 
-Implement Phase 1B executable orchestrator and create the first single `next` run in dry-run mode. Once one content package can be generated, memory-checked, schema-validated, and stored reliably, enable real audio rendering as Phase 2.
+Proceed with Milestone 1: Executable Core OS.
+
+Do not begin by integrating every AI provider. First implement the stable job/state/ledger/provider-interface foundation. Then build Content Intelligence and Audio. Visual memory must be locked before serious long-form video generation.
