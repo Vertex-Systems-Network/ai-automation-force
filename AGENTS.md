@@ -4,183 +4,173 @@ This file is the first instruction source for any AI agent working in this repos
 
 ## Mission
 
-Operate this repository as an AI-native children's content studio with persistent memory, originality control, age-aware writing, child-safety QA, autonomous audio direction, free-tier-aware provider routing, long-form video continuity, and resumable execution.
+Operate this repository as a persistent, provider-agnostic AI-native children's media studio with research intelligence, memory, originality control, age-aware content, child-safety QA, autonomous audio direction, visual continuity, hybrid free/paid provider routing, cost control, production history, publishing, and analytics learning.
+
+The repository is the canonical source of truth. Chat history and any individual provider history are secondary.
 
 The normal operator command is `next`.
 
-When the operator says `next`, do not ask what type of content to make unless repository state is genuinely corrupt or a required secret/credential is unavailable. The agent must inspect repository state, research, decide, produce, validate, classify, save, and update memory.
+`next` does not always mean "write new content". It means inspect canonical project state and autonomously execute the highest-value safe next unit of work in the lifecycle.
 
 ## Mandatory startup sequence
 
-Before generating any content:
+Before doing project work:
 
 1. Read `README.md`.
 2. Read `AGENTS.md`.
-3. Read `config/content-policy.yaml`.
-4. Read `ai-native/SYSTEM.md`.
-5. Read `ai-native/WORKFLOW.md`.
-6. Read `ai-native/QUALITY-GATES.md`.
-7. Read `ai-native/MEMORY-BANK.md`.
-8. Read `ai-native/AUDIO-ROUTER.md`.
-9. Read `ai-native/FREE-TIER-ROUTER.md` when any external generation provider may be used.
-10. Read `ai-native/VIDEO-CONTINUITY.md` before any video planning/generation task.
-11. Read all machine-readable files in `memory/`.
-12. Inspect recent approved content and recent research records.
-13. Determine the current pipeline state and next available content ID.
+3. Read `ai-native/MASTER-PLAN.md`.
+4. Read `config/execution-policy.yaml`.
+5. Read `config/content-policy.yaml`.
+6. Read `config/provider-registry.yaml`.
+7. Read `ai-native/SYSTEM.md`.
+8. Read `ai-native/WORKFLOW.md`.
+9. Read `ai-native/QUALITY-GATES.md`.
+10. Read `ai-native/MEMORY-BANK.md`.
+11. Read `ai-native/AUDIO-ROUTER.md` when audio is relevant.
+12. Read `ai-native/VIDEO-CONTINUITY.md` when visual/video work is relevant.
+13. Read `ai-native/FREE-TIER-ROUTER.md` when provider routing/cost is relevant.
+14. Read all machine-readable state/ledger files required for the current job.
+15. Inspect current canonical content/assets and determine the first incomplete or highest-value eligible job.
 
-Never rely only on chat memory when repository state exists. The repository is the source of truth.
+Never rely only on chat memory when repository state exists.
 
 ## `next` contract
 
-A `next` run must perform the following autonomously:
+A normal `next` run must:
 
-- research current content opportunities and evergreen gaps;
-- select a target age band using configured strategy and portfolio balance;
-- select the best content type (song, lullaby, poem, rhyme, story, educational narration, guided imagination, bedtime story, or a future registered type);
-- generate at least three candidate concepts before choosing one;
-- run duplicate detection against memory and repository content before full writing;
-- reject concepts that are too similar to previous work;
-- write the complete original content;
-- choose the correct audio route;
-- autonomously decide narration/music direction;
-- generate production-grade provider handoff prompts for all required audio stems;
-- run all quality gates;
-- classify and save the package;
-- update memory/index files only after the content passes all gates;
-- summarize the run and recommend the next downstream action.
+- load canonical repository state;
+- detect incomplete, blocked, failed and ready jobs;
+- choose the highest-value eligible next job;
+- refresh research/provider facts if stale and material;
+- preserve idempotency and job history;
+- execute only within current safety, licensing and cost policy;
+- route across free or paid providers using `config/execution-policy.yaml`;
+- run mandatory QA;
+- save canonical artifacts/manifests only after QA passes;
+- record rejected attempts as history;
+- update memory/state atomically;
+- summarize what completed, what remains and any genuine block.
+
+If no production item is in progress, `next` may begin a new content-intelligence cycle:
+- research current and evergreen opportunities;
+- select an age band and content type using portfolio balance;
+- generate multiple candidate concepts;
+- run duplicate detection before full writing;
+- select one original candidate;
+- write and QA it;
+- create downstream audio/visual specifications;
+- classify and save it.
 
 ## Non-negotiable rules
 
 ### Age appropriateness
 
-Do not treat 0–12 years as one audience. Use the configured age band and its language, duration, pacing, emotional complexity, educational scope, and safety constraints.
+Do not treat 0–12 years as one audience. Use the configured age band and its language, duration, pacing, emotional complexity, educational scope and safety constraints.
 
-For `baby-audio`, design for parent-controlled listening rather than encouraging infant screen engagement.
+For baby audio, design for parent-controlled listening rather than encouraging infant screen engagement.
 
 ### Originality
 
-Do not copy, closely imitate, or intentionally evoke copyrighted children's songs, modern nursery arrangements, branded characters, celebrity voices, distinctive fictional universes, lyrics, melodies, plots, or catchphrases.
+Do not copy, closely imitate or intentionally evoke protected children's songs, modern nursery arrangements, branded characters, celebrity voices, distinctive fictional universes, lyrics, melodies, plots or catchphrases.
 
 A public-domain concept is not permission to copy a modern recording or arrangement.
 
-### No mass-generation behavior
-
-Do not optimize for volume at the cost of coherence. Every approved item must have a clear purpose, beginning/middle/end where applicable, age-appropriate language, identifiable creative value, and an originality rationale.
-
-### Research
-
-When current data can improve topic selection, use current web research and record material sources in the research record. Prefer primary/official sources for platform rules, safety, health, education, provider capabilities, pricing, quotas and licensing.
-
 ### Memory before creation
 
-Never create final content before checking the memory bank. If memory cannot be read, stop the approval step and repair memory first rather than silently creating untracked content.
+Never create final canonical content before checking memory. If memory is corrupt or unavailable, repair/reconcile it before approval.
+
+### Provider independence
+
+No provider is the system of record. Switching provider must not reset content, audio, shot, continuity, cost or QA history.
+
+### Free + paid hybrid policy
+
+Both free and paid providers may be used.
+
+Default mode is `HYBRID_SMART` unless configuration changes it.
+
+- legitimate free capacity should be used when capability, quality, continuity and license are sufficient;
+- free consumer web credits are not automatically free API capacity;
+- manual-free provider handoffs are supported as explicit jobs;
+- paid API calls may occur only inside configured authorization/budget policy;
+- never create/rotate accounts to evade quotas;
+- never automate a provider in a way that violates its terms;
+- do not accept lower-quality output merely because it was free;
+- routing should minimize expected cost of an accepted asset, including retry/manual-labor risk, not just nominal per-call price.
 
 ### Female voice default
 
-The default single-speaker audio direction is a warm, natural female voice appropriate to the target age band. This is a production preference, not permission to imitate any real person. Never request a celebrity or identifiable person's voice.
+Default narration/singing direction is an appropriate adult female-presenting voice unless a content package explicitly defines otherwise. Never imitate a known real person.
 
-### Autonomous audio direction
+### Audio architecture
 
-The operator should not need to manually specify background music, instruments, BPM, key, genre, pace or singer profile for every item. The AI must infer these from the approved content and persist the decisions.
+Speech, music and narration-with-background are distinct production routes.
 
-Do not force TTS to create a full music arrangement.
+- speech -> TTS/speech provider;
+- full song/sung lullaby -> capable music model;
+- narration + background -> voice stem + instrumental music stem + deterministic mix.
 
-- Spoken content: TTS narration.
-- Full songs/sung lullabies: music model capable of vocals + arrangement.
-- Narration with background music: separate voice stem + instrumental music-bed stem + deterministic mix.
+The AI should autonomously infer music direction from content; the operator should not need to choose BPM/instruments/genre per item unless desired.
 
-### Free-first generation
+### Visual continuity
 
-Default external-generation policy is `FREE_FIRST`.
+Never assume different video providers share hidden generation state.
 
-- Prefer legitimate free API capacity when it satisfies requirements.
-- A free consumer website is not automatically an automatable API.
-- Consumer free tiers without verified API automation are manual handoffs only.
-- Never create or rotate accounts to evade provider limits.
-- Never spend money without human approval.
-- Never use an asset commercially when the generation tier's license is unresolved or forbids commercial use.
+Long-form video is built from master audio -> storyboard -> canonical keyframes/references -> short shots -> continuity QA -> deterministic assembly.
 
-### Video continuity
+When switching providers, preserve canonical character references, scene state, first/end frames, prompt/version and generation history.
 
-Do not attempt to build a long video as a blind endless chain of short generations.
+### No mass-generation behavior
 
-Use:
+Do not optimize for output count at the expense of originality, coherence, child suitability, continuity or platform-quality risk.
 
-`master audio -> timed storyboard -> canonical keyframes -> short shots -> continuity QA -> deterministic assembly`
+## Canonical lifecycle
 
-When switching providers, continue from provider-independent state: final approved frame, character/style references, scene-state JSON, exact timecode and planned next keyframe. Never claim that two different providers share hidden/latent generation state.
+Content lifecycle may progress through:
 
-## Content package requirement
-
-Each approved content item must include:
-
-- stable content ID
-- title
-- slug
-- content type
-- target age band
-- target duration
-- language
-- objective
-- entertainment goal
-- learning/emotional goal where relevant
-- concept summary
-- full text/lyrics/script
-- structure map
-- pronunciation notes
-- audio performance notes
-- audio mode/provider routing decision
-- voice prompt
-- music prompt and mix plan when applicable
-- safety review
-- originality/duplicate review
-- research provenance
-- tags and classifications
-- downstream video notes placeholder
-- publishing status
-- memory fingerprints
-
-## State transitions
-
-Allowed high-level states:
-
-`idea -> researched -> uniqueness-cleared -> drafted -> qa-passed -> audio-ready -> approved`
-
-Future states may append:
-
-`audio-generated -> video-planned -> video-generated -> publish-ready -> published -> analyzed`
+`idea -> researched -> uniqueness-cleared -> drafted -> content-qa-passed -> audio-ready -> audio-generated -> audio-qa-passed -> video-planned -> keyframes-approved -> scenes-generated -> video-assembled -> video-qa-passed -> publish-ready -> uploaded-private -> approved-publication -> published -> analyzed`
 
 Do not mark a state complete unless its gate has actually passed.
 
-## Failure behavior
+## Canonical history
 
-If a gate fails:
+Record successful and rejected attempts.
 
-1. record the failure reason;
-2. revise once or generate a replacement candidate;
-3. re-run affected gates;
-4. do not update the approved memory catalogue until all mandatory gates pass.
+History should include where relevant:
+- run/job/content/asset/shot IDs;
+- provider/model;
+- access tier;
+- prompt version/hash;
+- input hashes;
+- generation ID;
+- output hash/location;
+- QA scores;
+- rejection reason;
+- free credits/quota;
+- paid cost;
+- license/provenance;
+- timestamp.
 
-If external research or a required provider is unavailable, use evergreen repository knowledge only when safe to do so and mark the limitation in the research record.
-
-If a provider quota is exhausted, persist the exact generation checkpoint rather than restarting the work.
+Failed history must not be deleted just because output was rejected.
 
 ## Change discipline
 
-- Prefer additive, backwards-compatible changes to the Content OS.
-- Do not silently alter schemas after approved records exist.
-- Version schemas and migrations when machine-readable structures change.
-- Keep prompts, policies, memory, generated content, provider history and automation code separated.
-- Never place API keys or secrets in the repository.
+- Prefer additive, backwards-compatible changes.
+- Version schemas and production prompts.
+- Keep prompts, policies, memory, generated content and automation code separated.
+- Never commit API keys/payment secrets.
+- Use deterministic IDs and checksums.
+- Do not overwrite the only canonical approved media/version.
+- Do not silently weaken safety, licensing or cost controls.
 
 ## Human escalation
 
-Human approval is required before:
+Human approval remains required before:
+- public publishing until policy explicitly enables autonomous publishing;
+- paid use when budget authorization/caps have not been configured;
+- destructive deletion of canonical history/assets;
+- weakening child-safety controls;
+- changing locked canonical character/brand identity;
+- publishing an asset with unresolved commercial-use/license status.
 
-- publishing to a public platform until the publishing policy explicitly enables autonomous publishing;
-- spending money through an API/service;
-- deleting approved content or memory history;
-- changing a child-safety rule to be less strict;
-- changing brand identity, canonical characters, or voice identity after those are locked.
-
-Routine `next` content creation does not require per-item approval once the system is configured and the output remains inside these rules.
+Routine research, planning, content creation, QA, free-provider routing and paid calls already authorized inside policy may proceed without per-step questions.
