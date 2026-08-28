@@ -223,7 +223,7 @@ class AuditFields(StrictModel):
     revision: Annotated[int, Field(ge=1)] = 1
 
     @model_validator(mode="after")
-    def validate_timestamp_order(self) -> "AuditFields":
+    def validate_timestamp_order(self) -> AuditFields:
         if self.updated_at < self.created_at:
             raise ValueError("updated_at cannot precede created_at")
         return self

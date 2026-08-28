@@ -131,9 +131,7 @@ class ProjectBundle(StrictModel):
 
         for character in self.characters:
             if character.active_version_id not in character_versions:
-                raise ValueError(
-                    f"character {character.character_id} active version is not loaded"
-                )
+                raise ValueError(f"character {character.character_id} active version is not loaded")
             version = character_versions[character.active_version_id]
             if version.character_id != character.character_id:
                 raise ValueError(

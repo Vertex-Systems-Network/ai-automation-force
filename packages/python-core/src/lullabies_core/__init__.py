@@ -1,6 +1,7 @@
 from .aggregate import ProjectBundle
 from .character import Character, CharacterLock, CharacterLook, CharacterVersion
 from .common import (
+    SCHEMA_VERSION,
     ApprovalDecision,
     AssetKind,
     AttemptStatus,
@@ -15,7 +16,6 @@ from .common import (
     JobStatus,
     LockScope,
     ProjectStatus,
-    SCHEMA_VERSION,
     TimeRange,
 )
 from .content import Content, ContentObjective, ContentVersion

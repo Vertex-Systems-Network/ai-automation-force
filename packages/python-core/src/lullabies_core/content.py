@@ -5,13 +5,13 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
+    SCHEMA_VERSION,
     AuditFields,
     CharacterId,
     ContentId,
     ContentVersionId,
     ProjectId,
     PropId,
-    SCHEMA_VERSION,
     SchemaVersion,
     StrictModel,
     TaxonomyValue,
@@ -50,7 +50,7 @@ class ContentVersion(StrictModel):
     audit: AuditFields
 
     @model_validator(mode="after")
-    def validate_custom_format(self) -> "ContentVersion":
+    def validate_custom_format(self) -> ContentVersion:
         if self.content_format == "custom" and not self.custom_content_format:
             raise ValueError("custom_content_format is required for custom content")
         if self.content_format != "custom" and self.custom_content_format:

@@ -3,12 +3,12 @@ from __future__ import annotations
 from pydantic import Field
 
 from .common import (
+    SCHEMA_VERSION,
     AssetId,
     AuditFields,
     LocationId,
     PropId,
     RightsRecordId,
-    SCHEMA_VERSION,
     SchemaVersion,
     StrictModel,
     StyleProfileId,

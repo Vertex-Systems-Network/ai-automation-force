@@ -6,6 +6,7 @@ from typing import Annotated, Any
 from pydantic import AwareDatetime, Field, model_validator
 
 from .common import (
+    SCHEMA_VERSION,
     ApprovalDecision,
     ApprovalId,
     AssetId,
@@ -23,7 +24,6 @@ from .common import (
     ProjectId,
     QARecordId,
     RightsRecordId,
-    SCHEMA_VERSION,
     SchemaVersion,
     ShotId,
     StrictModel,
@@ -53,7 +53,7 @@ class Asset(StrictModel):
     audit: AuditFields
 
     @model_validator(mode="after")
-    def normalize_model_provider(self) -> "Asset":
+    def normalize_model_provider(self) -> Asset:
         if self.provider_id is not None and self.model_provider_id is None:
             self.model_provider_id = self.provider_id
         return self
@@ -75,7 +75,7 @@ class ProviderModelRef(StrictModel):
     registry_verified_at: AwareDatetime | None = None
 
     @model_validator(mode="after")
-    def normalize_direct_provider(self) -> "ProviderModelRef":
+    def normalize_direct_provider(self) -> ProviderModelRef:
         if self.model_provider_id is None:
             self.model_provider_id = self.provider_id
         return self
@@ -116,7 +116,7 @@ class GenerationAttempt(StrictModel):
     qa_record_ids: list[QARecordId] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def validate_attempt_timestamps(self) -> "GenerationAttempt":
+    def validate_attempt_timestamps(self) -> GenerationAttempt:
         if self.finished_at is not None and self.finished_at < self.started_at:
             raise ValueError("finished_at cannot precede started_at")
         return self
@@ -143,7 +143,7 @@ class Job(StrictModel):
     audit: AuditFields
 
     @model_validator(mode="after")
-    def validate_selected_attempt(self) -> "Job":
+    def validate_selected_attempt(self) -> Job:
         if self.selected_attempt_id and self.selected_attempt_id not in self.attempt_ids:
             raise ValueError("selected_attempt_id must be present in attempt_ids")
         return self
@@ -179,7 +179,7 @@ class CostRecord(StrictModel):
     recorded_at: AwareDatetime
 
     @model_validator(mode="after")
-    def normalize_model_provider(self) -> "CostRecord":
+    def normalize_model_provider(self) -> CostRecord:
         if self.model_provider_id is None:
             self.model_provider_id = self.provider_id
         return self
@@ -204,7 +204,7 @@ class RightsRecord(StrictModel):
     notes: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
-    def normalize_model_provider(self) -> "RightsRecord":
+    def normalize_model_provider(self) -> RightsRecord:
         if self.provider_id is not None and self.model_provider_id is None:
             self.model_provider_id = self.provider_id
         return self

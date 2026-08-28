@@ -5,6 +5,7 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
+    SCHEMA_VERSION,
     AuditFields,
     CharacterId,
     ContentId,
@@ -12,7 +13,6 @@ from .common import (
     ProjectId,
     ProjectStatus,
     PropId,
-    SCHEMA_VERSION,
     SchemaVersion,
     StrictModel,
     TaxonomyValue,
@@ -30,7 +30,7 @@ class AudienceProfile(StrictModel):
     policy_profile: str = "general"
 
     @model_validator(mode="after")
-    def validate_age_range(self) -> "AudienceProfile":
+    def validate_age_range(self) -> AudienceProfile:
         if (
             self.age_min_years is not None
             and self.age_max_years is not None
@@ -98,7 +98,7 @@ class Project(StrictModel):
     audit: AuditFields
 
     @model_validator(mode="after")
-    def validate_custom_format(self) -> "Project":
+    def validate_custom_format(self) -> Project:
         if self.content_format == "custom" and not self.custom_content_format:
             raise ValueError("custom_content_format is required when content_format=custom")
         if self.content_format != "custom" and self.custom_content_format:

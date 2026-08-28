@@ -5,6 +5,7 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
+    SCHEMA_VERSION,
     AssetId,
     AuditFields,
     CanonicalStatus,
@@ -14,7 +15,6 @@ from .common import (
     LookId,
     ProjectId,
     RightsRecordId,
-    SCHEMA_VERSION,
     SceneId,
     SchemaVersion,
     StrictModel,
@@ -64,7 +64,7 @@ class CharacterLock(StrictModel):
     scene_id: SceneId | None = None
 
     @model_validator(mode="after")
-    def validate_scope_requirements(self) -> "CharacterLock":
+    def validate_scope_requirements(self) -> CharacterLock:
         if self.scope != LockScope.UNLOCKED and self.pinned_character_version_id is None:
             raise ValueError("locked scopes require pinned_character_version_id")
         if self.scope == LockScope.PROJECT and self.project_id is None:

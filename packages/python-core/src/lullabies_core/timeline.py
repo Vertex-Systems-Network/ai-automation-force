@@ -5,6 +5,7 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
+    SCHEMA_VERSION,
     ActId,
     AssetId,
     AttemptId,
@@ -15,15 +16,14 @@ from .common import (
     ProjectId,
     PropId,
     QARecordId,
-    SCHEMA_VERSION,
     SceneId,
     SchemaVersion,
     SequenceId,
     ShotId,
     StrictModel,
     TakeId,
-    TimeRange,
     TimelineId,
+    TimeRange,
     TrackId,
 )
 
@@ -76,7 +76,7 @@ class Shot(StrictModel):
     audit: AuditFields
 
     @model_validator(mode="after")
-    def validate_selected_take(self) -> "Shot":
+    def validate_selected_take(self) -> Shot:
         if self.selected_take_id and self.selected_take_id not in self.take_ids:
             raise ValueError("selected_take_id must be present in take_ids")
         return self
