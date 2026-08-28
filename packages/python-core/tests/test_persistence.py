@@ -9,18 +9,24 @@ import pytest
 from alembic import command
 from alembic.config import Config
 from pydantic import ValidationError
-from sqlalchemy import create_engine, func, select
+from sqlalchemy import MetaData, create_engine, func, select
 from sqlalchemy.engine import Engine
 
 from lineage_fixtures import full_lineage_bundle
-from lullabies_core import Act, ProductionLineageBundle, Scene, Sequence, Shot, TimeRange, World
-from lullabies_core.persistence import (
+from lullabies_core import (
+    Act,
     PersistenceConflictError,
     PersistenceError,
     PersistenceNotFoundError,
     PostgresProductionRepository,
+    ProductionLineageBundle,
+    Scene,
+    Sequence,
+    Shot,
+    TimeRange,
+    World,
+    import_legacy_content_package,
 )
-from lullabies_core.legacy_import import import_legacy_content_package
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 ALEMBIC_INI = Path(__file__).parents[1] / "alembic.ini"
@@ -186,8 +192,6 @@ def test_failed_reference_rolls_back_whole_aggregate(migrated_engine: Engine) ->
             audit=bundle.project_bundle.project.audit.model_copy(deep=True),
         )
     ]
-    # Re-validate the domain aggregate first: the missing shared style is a persistence
-    # reference problem, not an invalid ProjectBundle graph.
     bundle = ProductionLineageBundle.model_validate(bundle.model_dump())
 
     with pytest.raises(PersistenceError):
@@ -198,9 +202,12 @@ def test_failed_reference_rolls_back_whole_aggregate(migrated_engine: Engine) ->
 
 
 @pytest.mark.postgres
-def test_legacy_import_create_then_noop_without_duplicate_rows(migrated_engine: Engine) -> None:
+def test_legacy_import_create_then_noop_without_duplicate_rows(
+    migrated_engine: Engine,
+) -> None:
     repository = PostgresProductionRepository(migrated_engine)
-    payload = json.loads((FIXTURES / "legacy-content-package-v1.json").read_text(encoding="utf-8"))
+    payload_path = FIXTURES / "legacy-content-package-v1.json"
+    payload = json.loads(payload_path.read_text(encoding="utf-8"))
     content_text = (FIXTURES / "legacy-content-v1.md").read_text(encoding="utf-8")
     imported = import_legacy_content_package(payload, content_text)
     imported_at = imported.content.audit.updated_at
@@ -211,16 +218,17 @@ def test_legacy_import_create_then_noop_without_duplicate_rows(migrated_engine: 
     assert first.action == "create"
     assert second.action == "noop"
 
-    metadata = repository._tables  # noqa: SLF001 - white-box integration proof
+    metadata = MetaData()
+    metadata.reflect(bind=migrated_engine, schema="core")
     with migrated_engine.connect() as connection:
         content_count = connection.execute(
-            select(func.count()).select_from(metadata["contents"])
+            select(func.count()).select_from(metadata.tables["core.contents"])
         ).scalar_one()
         version_count = connection.execute(
-            select(func.count()).select_from(metadata["content_versions"])
+            select(func.count()).select_from(metadata.tables["core.content_versions"])
         ).scalar_one()
         ledger_count = connection.execute(
-            select(func.count()).select_from(metadata["legacy_content_imports"])
+            select(func.count()).select_from(metadata.tables["core.legacy_content_imports"])
         ).scalar_one()
 
     assert content_count == 1
