@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/lullabies/content-package.schema.json",
+  "title": "Lullabies AI-Native Content Package Metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "content_id",
+    "run_id",
+    "title",
+    "slug",
+    "content_type",
+    "age_band",
+    "language",
+    "status",
+    "objective",
+    "creative",
+    "audio",
+    "originality",
+    "qa",
+    "paths",
+    "created_at"
+  ],
+  "properties": {
+    "schema_version": {"type": "integer", "const": 1},
+    "content_id": {"type": "string", "pattern": "^CNT-[0-9]{6}$"},
+    "run_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "normalized_title": {"type": "string"},
+    "slug": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "content_type": {
+      "enum": ["song", "lullaby", "poem", "rhyme", "story", "bedtime-story", "educational-narration", "guided-imagination"]
+    },
+    "age_band": {
+      "enum": ["baby-audio", "toddler", "preschool", "early-primary", "junior", "preteen"]
+    },
+    "language": {"type": "string", "minLength": 2},
+    "status": {
+      "enum": ["idea", "researched", "uniqueness-cleared", "drafted", "qa-passed", "audio-ready", "approved", "audio-generated", "video-planned", "video-generated", "publish-ready", "published", "analyzed"]
+    },
+    "target_duration_seconds": {"type": "integer", "minimum": 1},
+    "objective": {
+      "type": "object",
+      "required": ["primary", "entertainment"],
+      "properties": {
+        "primary": {"type": "string"},
+        "entertainment": {"type": "string"},
+        "learning": {"type": ["string", "null"]},
+        "emotional": {"type": ["string", "null"]}
+      }
+    },
+    "creative": {
+      "type": "object",
+      "required": ["premise", "hook", "creative_device"],
+      "properties": {
+        "premise": {"type": "string"},
+        "hook": {"type": "string"},
+        "creative_device": {"type": "string"},
+        "characters": {"type": "array", "items": {"type": "string"}},
+        "setting": {"type": ["string", "null"]},
+        "topics": {"type": "array", "items": {"type": "string"}},
+        "tags": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "audio": {
+      "type": "object",
+      "required": ["audio_mode", "provider_family", "preferred_model", "female_voice_required", "prompt_version"],
+      "properties": {
+        "audio_mode": {"enum": ["speech", "music", "chant"]},
+        "provider_family": {"enum": ["gemini-tts", "lyria"]},
+        "preferred_model": {"type": "string"},
+        "female_voice_required": {"type": "boolean"},
+        "selected_voice": {"type": ["string", "null"]},
+        "prompt_version": {"type": "string"},
+        "render_status": {"enum": ["not-rendered", "queued", "rendered", "qa-passed", "rejected"]}
+      }
+    },
+    "originality": {
+      "type": "object",
+      "required": ["decision", "closest_prior_ids"],
+      "properties": {
+        "decision": {"enum": ["CLEAR", "CLEAR_WITH_DIFFERENTIATION", "REJECT_DUPLICATE", "REJECT_DERIVATIVE", "DEFER_PORTFOLIO_FATIGUE"]},
+        "closest_prior_ids": {"type": "array", "items": {"type": "string"}},
+        "notes": {"type": "string"}
+      }
+    },
+    "qa": {
+      "type": "object",
+      "required": ["all_mandatory_gates_passed"],
+      "properties": {
+        "all_mandatory_gates_passed": {"type": "boolean"},
+        "qa_file": {"type": "string"}
+      }
+    },
+    "research": {
+      "type": "object",
+      "properties": {
+        "research_file": {"type": "string"},
+        "source_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "fingerprints": {
+      "type": "object",
+      "properties": {
+        "title": {"type": ["string", "null"]},
+        "premise": {"type": ["string", "null"]},
+        "hook": {"type": ["string", "null"]},
+        "exact_text": {"type": ["string", "null"]}
+      }
+    },
+    "paths": {
+      "type": "object",
+      "required": ["package", "content", "metadata", "audio_prompt", "qa", "research"],
+      "properties": {
+        "package": {"type": "string"},
+        "content": {"type": "string"},
+        "metadata": {"type": "string"},
+        "audio_prompt": {"type": "string"},
+        "qa": {"type": "string"},
+        "research": {"type": "string"}
+      }
+    },
+    "created_at": {"type": "string", "format": "date-time"},
+    "approved_at": {"type": ["string", "null"], "format": "date-time"}
+  }
+}
