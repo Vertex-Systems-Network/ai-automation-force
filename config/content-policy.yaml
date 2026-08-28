@@ -52,34 +52,44 @@ content_types:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: music
   lullaby:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: music
+    allowed_audio_modes: [music, speech]
   poem:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: speech
   rhyme:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: chant
+    allowed_audio_modes: [chant, music, speech]
   story:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: speech
   bedtime-story:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: speech
   educational-narration:
     enabled: true
     requires_factual_verification: true
     requires_audio_handoff: true
+    default_audio_mode: speech
   guided-imagination:
     enabled: true
     requires_structure_map: true
     requires_audio_handoff: true
+    default_audio_mode: speech
 
 selection:
   candidate_count_minimum: 3
@@ -103,17 +113,49 @@ originality:
   prohibit_protected_lyric_copying: true
   prohibit_real_person_voice_imitation: true
 
+audio:
+  router_required: true
+  default_female_voice_required: true
+  impersonation: prohibited
+  speech:
+    provider_family: gemini-tts
+    preferred_model: gemini-3.1-flash-tts-preview
+    fallbacks:
+      - gemini-2.5-pro-preview-tts
+      - gemini-2.5-flash-preview-tts
+    prompt_sections:
+      - audio-profile
+      - scene
+      - directors-notes
+      - exact-script
+      - pronunciation
+      - prohibitions
+  chant:
+    provider_family: gemini-tts
+    preferred_model: gemini-3.1-flash-tts-preview
+    rhythmic_delivery: true
+  music:
+    provider_family: lyria
+    preferred_model: lyria-3-pro-preview
+    preview_model: lyria-3-clip-preview
+    require_exact_lyrics: true
+    require_singer_profile: true
+    require_structure: true
+    require_instrumentation: true
+    require_tempo_guidance: true
+  provider_models_must_be_verified_before_api_integration: true
+
 voice:
   default_speaker_count: 1
   default_gender_presentation: female
   default_character: warm-natural-nurturing
   default_impersonation: prohibited
-  provider: gemini-tts
-  provider_model_preference: gemini-3.1-flash-tts-preview
-  provider_model_fallbacks:
-    - gemini-2.5-pro-preview-tts
-    - gemini-2.5-flash-preview-tts
-  provider_model_must_be_verified_before_api_integration: true
+  singer_default:
+    presentation: adult-female
+    timbre: warm-clean-friendly
+    diction: clear
+    range: comfortable-non-strained
+    prohibited_styles: [seductive, aggressive, celebrity-imitation]
 
 qa:
   mandatory_gates:
