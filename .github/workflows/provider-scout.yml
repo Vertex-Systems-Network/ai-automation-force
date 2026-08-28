@@ -1,0 +1,121 @@
+name: Daily AI Provider Scout
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+      timezone: "Asia/Karachi"
+  workflow_dispatch:
+
+concurrency:
+  group: provider-scout
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  scout:
+    name: Research provider changes
+    runs-on: ${{ vars.PROVIDER_SCOUT_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: automation/requirements-scout.txt
+
+      - name: Install scout dependencies
+        run: python -m pip install --disable-pip-version-check -r automation/requirements-scout.txt
+
+      - name: Validate provider scout configuration
+        run: python automation/provider_scout.py --validate
+
+      - name: Run provider scout
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PROVIDER_SCOUT_MODEL: ${{ vars.PROVIDER_SCOUT_MODEL || 'gemini-2.5-flash-lite' }}
+        run: python automation/provider_scout.py
+
+      - name: Classify repository changes
+        id: changes
+        shell: bash
+        run: |
+          if [[ -f .provider-scout-automerge-safe ]]; then
+            echo "automerge_safe=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "automerge_safe=false" >> "$GITHUB_OUTPUT"
+          fi
+          rm -f .provider-scout-automerge-safe
+
+          git status --short
+          if [[ -z "$(git status --porcelain -- config/provider-registry.yaml memory/provider-source-state.json research/provider-updates/)" ]]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Revalidate changed registry
+        if: steps.changes.outputs.changed == 'true'
+        run: python automation/provider_scout.py --validate
+
+      - name: Create update branch and commit
+        if: steps.changes.outputs.changed == 'true'
+        id: commit
+        shell: bash
+        run: |
+          branch="automation/provider-scout-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          git config user.name "lullabies-provider-scout[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add config/provider-registry.yaml memory/provider-source-state.json research/provider-updates/
+          git commit -m "chore(providers): refresh AI provider research"
+          git push origin "$branch"
+
+      - name: Open pull request
+        if: steps.changes.outputs.changed == 'true'
+        id: pr
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+        run: |
+          pr_url="$(gh pr create \
+            --base main \
+            --head '${{ steps.commit.outputs.branch }}' \
+            --title 'chore(providers): daily AI provider research update' \
+            --body 'Automated daily provider research. Evidence and change classification are stored under research/provider-updates/. Safe registry changes are limited by config/update-policy.yaml. New provider integrations, architecture changes, schemas, security, publishing, and budget behavior are never auto-enabled by this scout.')"
+          echo "url=$pr_url" >> "$GITHUB_OUTPUT"
+          echo "$pr_url"
+
+      - name: Merge safe Class A/B update when repository rules allow
+        if: steps.changes.outputs.changed == 'true' && steps.changes.outputs.automerge_safe == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+        run: |
+          set +e
+          gh pr merge '${{ steps.pr.outputs.url }}' --squash --delete-branch
+          status=$?
+          if [[ $status -ne 0 ]]; then
+            echo "Safe update PR was created but repository checks/reviews/permissions blocked immediate merge. Leaving it open."
+          fi
+          exit 0
+
+      - name: Report review-required update
+        if: steps.changes.outputs.changed == 'true' && steps.changes.outputs.automerge_safe != 'true'
+        run: |
+          echo "Provider scout found a Class C/D or otherwise review-required change. PR remains open by design."
+
+      - name: No material change
+        if: steps.changes.outputs.changed != 'true'
+        run: echo "No material provider/API change detected; no PR created."
