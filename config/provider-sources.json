@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "provider": "google-gemini",
+      "kind": "pricing",
+      "url": "https://ai.google.dev/gemini-api/docs/pricing"
+    },
+    {
+      "provider": "google-gemini",
+      "kind": "speech",
+      "url": "https://ai.google.dev/gemini-api/docs/speech-generation"
+    },
+    {
+      "provider": "google-gemini",
+      "kind": "music",
+      "url": "https://ai.google.dev/gemini-api/docs/music-generation"
+    },
+    {
+      "provider": "google-gemini",
+      "kind": "video",
+      "url": "https://ai.google.dev/gemini-api/docs/video"
+    },
+    {
+      "provider": "runway",
+      "kind": "free-plan",
+      "url": "https://help.runwayml.com/hc/en-us/articles/50404627334547-Free-plan-details"
+    },
+    {
+      "provider": "runway",
+      "kind": "references",
+      "url": "https://help.runwayml.com/hc/en-us/articles/40042718905875-Creating-with-Gen-4-Image-References"
+    },
+    {
+      "provider": "pika",
+      "kind": "pricing",
+      "url": "https://pika.art/pricing"
+    },
+    {
+      "provider": "kling",
+      "kind": "api-pricing",
+      "url": "https://kling.ai/explore/klingai_api_pricing"
+    },
+    {
+      "provider": "hailuo",
+      "kind": "payment-policy",
+      "url": "https://hailuoai.video/doc/payment-policy.html"
+    },
+    {
+      "provider": "luma",
+      "kind": "plans-licensing",
+      "url": "https://lumalabs.ai/learning-hub/payments-subscriptions"
+    },
+    {
+      "provider": "ltx-studio",
+      "kind": "product-capabilities",
+      "url": "https://website.ltx.studio/"
+    },
+    {
+      "provider": "adobe-firefly",
+      "kind": "boards-capabilities",
+      "url": "https://helpx.adobe.com/firefly/web/create-mood-boards/firefly-boards/about-firefly-boards.html"
+    },
+    {
+      "provider": "heygen",
+      "kind": "studio-capabilities",
+      "url": "https://help.heygen.com/en/articles/11049655-overview-our-new-ai-studio"
+    }
+  ],
+  "discovery_queries": [
+    "official AI video generation API new model pricing reference image character consistency",
+    "official AI music generation API new model pricing vocals commercial use",
+    "official AI text to speech API new model pricing expressive narration",
+    "official AI image generation API reference character consistency pricing",
+    "official AI video editing extension keyframe first last frame API"
+  ]
+}
