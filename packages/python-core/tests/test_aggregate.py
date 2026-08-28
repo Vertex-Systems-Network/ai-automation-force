@@ -18,6 +18,7 @@ from lullabies_core import (
     Sequence,
     Shot,
     Timeline,
+    TimelineTrack,
     TimeRange,
 )
 from lullabies_core.common import AuditFields
@@ -44,6 +45,14 @@ def valid_bundle() -> ProjectBundle:
         project_id=project.project_id,
         duration_seconds=600,
         act_ids=["ACT-000100"],
+        tracks=[
+            TimelineTrack(
+                track_id="TRK-000100",
+                kind="primary-video",
+                name="Primary Video",
+                item_ids=["SHT-000100", "SHT-000101"],
+            )
+        ],
         audit=audit(),
     )
     act = Act(
@@ -150,6 +159,7 @@ def test_project_bundle_rejects_missing_shot_reference() -> None:
 def test_project_bundle_rejects_orphan_shot_parent() -> None:
     data = valid_bundle().model_dump()
     data["scenes"][0]["shot_ids"] = ["SHT-000100"]
+    data["timeline"]["tracks"][0]["item_ids"] = ["SHT-000100"]
     data["shots"][1]["scene_id"] = "SCN-999999"
 
     with pytest.raises(ValidationError, match="missing parent scene"):
@@ -175,11 +185,19 @@ def test_project_bundle_rejects_duplicate_membership_reference() -> None:
 def test_project_bundle_rejects_duplicate_track_id() -> None:
     data = valid_bundle().model_dump()
     data["timeline"]["tracks"] = [
-        {"track_id": "TRK-000100", "kind": "video", "name": "Primary"},
+        {"track_id": "TRK-000100", "kind": "primary-video", "name": "Primary"},
         {"track_id": "TRK-000100", "kind": "audio", "name": "Music"},
     ]
 
     with pytest.raises(ValidationError, match="duplicate TimelineTrack IDs"):
+        ProjectBundle.model_validate(data)
+
+
+def test_project_bundle_rejects_primary_track_missing_shot() -> None:
+    data = valid_bundle().model_dump()
+    data["timeline"]["tracks"][0]["item_ids"] = ["SHT-000100", "SHT-999999"]
+
+    with pytest.raises(ValidationError, match="primary-video track references missing shots"):
         ProjectBundle.model_validate(data)
 
 
@@ -191,7 +209,16 @@ def test_project_bundle_rejects_primary_edit_overlap() -> None:
         ProjectBundle.model_validate(data)
 
 
-def test_project_bundle_rejects_cross_scene_time_reversal() -> None:
+def test_project_bundle_allows_parallel_broll_overlap() -> None:
+    data = valid_bundle().model_dump()
+    data["timeline"]["tracks"][0]["kind"] = "b-roll"
+    data["shots"][1]["time_range"]["start_seconds"] = 5
+
+    bundle = ProjectBundle.model_validate(data)
+    assert bundle.shots[1].time_range.start_seconds == 5
+
+
+def test_project_bundle_rejects_cross_scene_primary_time_reversal() -> None:
     data = valid_bundle().model_dump()
     scene_two = dict(data["scenes"][0])
     scene_two["scene_id"] = "SCN-000101"
@@ -205,7 +232,7 @@ def test_project_bundle_rejects_cross_scene_time_reversal() -> None:
     data["shots"][0]["time_range"]["start_seconds"] = 6
     data["shots"][1]["time_range"]["start_seconds"] = 0
 
-    with pytest.raises(ValidationError, match="moves backwards across hierarchy"):
+    with pytest.raises(ValidationError, match="primary edit shot timing moves backwards"):
         ProjectBundle.model_validate(data)
 
 
