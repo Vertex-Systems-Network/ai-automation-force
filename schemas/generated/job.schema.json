@@ -1,0 +1,232 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "JobStatus": {
+      "enum": [
+        "queued",
+        "eligible",
+        "claimed",
+        "running",
+        "waiting-provider",
+        "waiting-quota",
+        "waiting-human",
+        "qa",
+        "completed",
+        "retryable-failed",
+        "blocked-budget",
+        "blocked-license",
+        "blocked-capability",
+        "manual-handoff",
+        "permanent-failed",
+        "cancelled"
+      ],
+      "title": "JobStatus",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:job",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attempt_ids": {
+      "items": {
+        "pattern": "^ATT-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Attempt Ids",
+      "type": "array"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "blocked_reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Blocked Reason"
+    },
+    "claimed_by": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Claimed By"
+    },
+    "content_id": {
+      "anyOf": [
+        {
+          "pattern": "^CNT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Id"
+    },
+    "dependency_job_ids": {
+      "items": {
+        "pattern": "^JOB-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Dependency Job Ids",
+      "type": "array"
+    },
+    "idempotency_key": {
+      "maxLength": 200,
+      "minLength": 8,
+      "title": "Idempotency Key",
+      "type": "string"
+    },
+    "job_id": {
+      "pattern": "^JOB-[0-9]{6,20}$",
+      "title": "Job Id",
+      "type": "string"
+    },
+    "job_type": {
+      "maxLength": 120,
+      "minLength": 1,
+      "title": "Job Type",
+      "type": "string"
+    },
+    "lease_expires_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Lease Expires At"
+    },
+    "parent_job_id": {
+      "anyOf": [
+        {
+          "pattern": "^JOB-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Parent Job Id"
+    },
+    "priority": {
+      "default": 50,
+      "maximum": 100,
+      "minimum": 0,
+      "title": "Priority",
+      "type": "integer"
+    },
+    "project_id": {
+      "pattern": "^PRJ-[0-9]{6,20}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "retry_budget_remaining": {
+      "default": 3,
+      "minimum": 0,
+      "title": "Retry Budget Remaining",
+      "type": "integer"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "selected_attempt_id": {
+      "anyOf": [
+        {
+          "pattern": "^ATT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Selected Attempt Id"
+    },
+    "shot_id": {
+      "anyOf": [
+        {
+          "pattern": "^SHT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Shot Id"
+    },
+    "status": {
+      "$ref": "#/$defs/JobStatus",
+      "default": "queued"
+    }
+  },
+  "required": [
+    "job_id",
+    "project_id",
+    "job_type",
+    "idempotency_key",
+    "audit"
+  ],
+  "title": "Job",
+  "type": "object"
+}

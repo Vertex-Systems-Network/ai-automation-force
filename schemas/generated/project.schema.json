@@ -1,0 +1,487 @@
+{
+  "$defs": {
+    "AudienceProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "age_max_years": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age Max Years"
+        },
+        "age_min_years": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Age Min Years"
+        },
+        "child_directed": {
+          "default": false,
+          "title": "Child Directed",
+          "type": "boolean"
+        },
+        "family_co_viewing": {
+          "default": false,
+          "title": "Family Co Viewing",
+          "type": "boolean"
+        },
+        "kind": {
+          "maxLength": 160,
+          "minLength": 1,
+          "title": "Kind",
+          "type": "string"
+        },
+        "policy_profile": {
+          "default": "general",
+          "title": "Policy Profile",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "title": "AudienceProfile",
+      "type": "object"
+    },
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "CastProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "ages": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Ages",
+          "type": "array"
+        },
+        "ai_may_decide": {
+          "default": true,
+          "title": "Ai May Decide",
+          "type": "boolean"
+        },
+        "genders": {
+          "items": {
+            "maxLength": 160,
+            "minLength": 1,
+            "type": "string"
+          },
+          "title": "Genders",
+          "type": "array"
+        },
+        "human_count_target": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Human Count Target"
+        },
+        "non_human_count_target": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Non Human Count Target"
+        }
+      },
+      "title": "CastProfile",
+      "type": "object"
+    },
+    "CreativeProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "camera_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Camera Profile"
+        },
+        "genres": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Genres",
+          "type": "array"
+        },
+        "pacing_profile": {
+          "default": "balanced",
+          "title": "Pacing Profile",
+          "type": "string"
+        },
+        "transition_profile": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Transition Profile"
+        },
+        "treatment": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Treatment",
+          "type": "array"
+        },
+        "visual_style_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Visual Style Id"
+        }
+      },
+      "title": "CreativeProfile",
+      "type": "object"
+    },
+    "ExecutionMode": {
+      "enum": [
+        "FREE_ONLY",
+        "FREE_FIRST",
+        "HYBRID_SMART",
+        "BUDGET_CAPPED",
+        "QUALITY_FIRST"
+      ],
+      "title": "ExecutionMode",
+      "type": "string"
+    },
+    "OutputProfile": {
+      "additionalProperties": false,
+      "properties": {
+        "aspect_ratio": {
+          "default": "16:9",
+          "title": "Aspect Ratio",
+          "type": "string"
+        },
+        "fps": {
+          "default": 24,
+          "exclusiveMinimum": 0,
+          "maximum": 120,
+          "title": "Fps",
+          "type": "number"
+        },
+        "generate_vertical_derivative": {
+          "default": false,
+          "title": "Generate Vertical Derivative",
+          "type": "boolean"
+        },
+        "height": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Height"
+        },
+        "master_container": {
+          "default": "mp4",
+          "title": "Master Container",
+          "type": "string"
+        },
+        "target_resolution_label": {
+          "default": "1080p",
+          "title": "Target Resolution Label",
+          "type": "string"
+        },
+        "width": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Width"
+        }
+      },
+      "title": "OutputProfile",
+      "type": "object"
+    },
+    "ProjectStatus": {
+      "enum": [
+        "draft",
+        "planning",
+        "production",
+        "qa",
+        "publish-ready",
+        "published",
+        "archived"
+      ],
+      "title": "ProjectStatus",
+      "type": "string"
+    },
+    "ProviderPolicyRef": {
+      "additionalProperties": false,
+      "properties": {
+        "allow_manual_free_handoff": {
+          "default": true,
+          "title": "Allow Manual Free Handoff",
+          "type": "boolean"
+        },
+        "blocked_provider_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Blocked Provider Ids",
+          "type": "array"
+        },
+        "budget_policy_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Budget Policy Id"
+        },
+        "execution_mode": {
+          "$ref": "#/$defs/ExecutionMode",
+          "default": "HYBRID_SMART"
+        },
+        "preferred_provider_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Preferred Provider Ids",
+          "type": "array"
+        }
+      },
+      "title": "ProviderPolicyRef",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:project",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "active_timeline_id": {
+      "anyOf": [
+        {
+          "pattern": "^TML-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Active Timeline Id"
+    },
+    "audience": {
+      "$ref": "#/$defs/AudienceProfile"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "cast": {
+      "$ref": "#/$defs/CastProfile"
+    },
+    "character_ids": {
+      "items": {
+        "pattern": "^CHR-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Character Ids",
+      "type": "array"
+    },
+    "content_format": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Content Format",
+      "type": "string"
+    },
+    "content_id": {
+      "anyOf": [
+        {
+          "pattern": "^CNT-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Content Id"
+    },
+    "creative": {
+      "$ref": "#/$defs/CreativeProfile"
+    },
+    "custom_content_format": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Custom Content Format"
+    },
+    "language": {
+      "maxLength": 32,
+      "minLength": 2,
+      "title": "Language",
+      "type": "string"
+    },
+    "output": {
+      "$ref": "#/$defs/OutputProfile"
+    },
+    "project_id": {
+      "pattern": "^PRJ-[0-9]{6,20}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "prop_ids": {
+      "items": {
+        "pattern": "^PRP-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Prop Ids",
+      "type": "array"
+    },
+    "provider_policy": {
+      "$ref": "#/$defs/ProviderPolicyRef"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/ProjectStatus",
+      "default": "draft"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "target_duration_seconds": {
+      "maximum": 10800,
+      "minimum": 60,
+      "title": "Target Duration Seconds",
+      "type": "integer"
+    },
+    "title": {
+      "maxLength": 240,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "world_ids": {
+      "items": {
+        "pattern": "^WRL-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "World Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "project_id",
+    "title",
+    "audience",
+    "cast",
+    "content_format",
+    "language",
+    "target_duration_seconds",
+    "audit"
+  ],
+  "title": "Project",
+  "type": "object"
+}

@@ -1,0 +1,349 @@
+{
+  "$defs": {
+    "AttemptStatus": {
+      "enum": [
+        "pending",
+        "running",
+        "succeeded",
+        "failed",
+        "cancelled"
+      ],
+      "title": "AttemptStatus",
+      "type": "string"
+    },
+    "GenerationRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "capability": {
+          "minLength": 1,
+          "title": "Capability",
+          "type": "string"
+        },
+        "constraints": {
+          "additionalProperties": true,
+          "title": "Constraints",
+          "type": "object"
+        },
+        "content_id": {
+          "anyOf": [
+            {
+              "pattern": "^CNT-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Content Id"
+        },
+        "idempotency_key": {
+          "maxLength": 200,
+          "minLength": 8,
+          "title": "Idempotency Key",
+          "type": "string"
+        },
+        "input_asset_ids": {
+          "items": {
+            "pattern": "^AST-[0-9]{6,20}$",
+            "type": "string"
+          },
+          "title": "Input Asset Ids",
+          "type": "array"
+        },
+        "project_id": {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "title": "Project Id",
+          "type": "string"
+        },
+        "prompt_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt Id"
+        },
+        "prompt_version": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prompt Version"
+        },
+        "requires_character_continuity": {
+          "default": false,
+          "title": "Requires Character Continuity",
+          "type": "boolean"
+        },
+        "requires_commercial_rights": {
+          "default": true,
+          "title": "Requires Commercial Rights",
+          "type": "boolean"
+        },
+        "shot_id": {
+          "anyOf": [
+            {
+              "pattern": "^SHT-[0-9]{6,20}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Shot Id"
+        },
+        "target_duration_seconds": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target Duration Seconds"
+        }
+      },
+      "required": [
+        "capability",
+        "project_id",
+        "idempotency_key"
+      ],
+      "title": "GenerationRequest",
+      "type": "object"
+    },
+    "ProviderModelRef": {
+      "additionalProperties": false,
+      "description": "One executable model route.\n\n`provider_id` is the transport/billing API provider. `model_provider_id` identifies\nthe underlying model vendor. They are identical for direct APIs and may differ for\ngateways/aggregators such as multi-model API services.",
+      "properties": {
+        "access_class": {
+          "title": "Access Class",
+          "type": "string"
+        },
+        "capability": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Capability",
+          "type": "string"
+        },
+        "model_id": {
+          "maxLength": 180,
+          "minLength": 1,
+          "title": "Model Id",
+          "type": "string"
+        },
+        "model_provider_id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Model Provider Id"
+        },
+        "provider_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Provider Id",
+          "type": "string"
+        },
+        "registry_verified_at": {
+          "anyOf": [
+            {
+              "format": "date-time",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Registry Verified At"
+        }
+      },
+      "required": [
+        "provider_id",
+        "model_id",
+        "capability",
+        "access_class"
+      ],
+      "title": "ProviderModelRef",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:generation-attempt",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "attempt_id": {
+      "pattern": "^ATT-[0-9]{6,20}$",
+      "title": "Attempt Id",
+      "type": "string"
+    },
+    "attempt_number": {
+      "minimum": 1,
+      "title": "Attempt Number",
+      "type": "integer"
+    },
+    "currency": {
+      "default": "USD",
+      "maxLength": 3,
+      "minLength": 3,
+      "title": "Currency",
+      "type": "string"
+    },
+    "error_detail": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Error Detail"
+    },
+    "finished_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Finished At"
+    },
+    "free_credits_used": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Free Credits Used"
+    },
+    "job_id": {
+      "pattern": "^JOB-[0-9]{6,20}$",
+      "title": "Job Id",
+      "type": "string"
+    },
+    "normalized_error_code": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Normalized Error Code"
+    },
+    "output_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Output Asset Ids",
+      "type": "array"
+    },
+    "paid_cost": {
+      "anyOf": [
+        {
+          "minimum": 0.0,
+          "type": "number"
+        },
+        {
+          "pattern": "^(?!^[-+.]*$)[+-]?0*\\d*\\.?\\d*$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Paid Cost"
+    },
+    "provider": {
+      "$ref": "#/$defs/ProviderModelRef"
+    },
+    "provider_generation_id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Provider Generation Id"
+    },
+    "qa_record_ids": {
+      "items": {
+        "pattern": "^QAR-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Qa Record Ids",
+      "type": "array"
+    },
+    "request": {
+      "$ref": "#/$defs/GenerationRequest"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "started_at": {
+      "format": "date-time",
+      "title": "Started At",
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/$defs/AttemptStatus",
+      "default": "running"
+    }
+  },
+  "required": [
+    "attempt_id",
+    "job_id",
+    "attempt_number",
+    "provider",
+    "request",
+    "started_at"
+  ],
+  "title": "GenerationAttempt",
+  "type": "object"
+}

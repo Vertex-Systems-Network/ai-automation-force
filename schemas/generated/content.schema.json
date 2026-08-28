@@ -1,0 +1,104 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:content",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "active_version_id": {
+      "pattern": "^CTV-[0-9]{6,20}$",
+      "title": "Active Version Id",
+      "type": "string"
+    },
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "content_id": {
+      "pattern": "^CNT-[0-9]{6,20}$",
+      "title": "Content Id",
+      "type": "string"
+    },
+    "project_id": {
+      "anyOf": [
+        {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Project Id"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "source_legacy_package_path": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Legacy Package Path"
+    },
+    "status": {
+      "default": "draft",
+      "title": "Status",
+      "type": "string"
+    }
+  },
+  "required": [
+    "content_id",
+    "active_version_id",
+    "audit"
+  ],
+  "title": "Content",
+  "type": "object"
+}

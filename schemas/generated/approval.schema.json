@@ -1,0 +1,78 @@
+{
+  "$defs": {
+    "ApprovalDecision": {
+      "enum": [
+        "approved",
+        "rejected",
+        "request-changes",
+        "waived"
+      ],
+      "title": "ApprovalDecision",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:approval",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "actor": {
+      "title": "Actor",
+      "type": "string"
+    },
+    "approval_id": {
+      "pattern": "^APR-[0-9]{6,20}$",
+      "title": "Approval Id",
+      "type": "string"
+    },
+    "created_at": {
+      "format": "date-time",
+      "title": "Created At",
+      "type": "string"
+    },
+    "decision": {
+      "$ref": "#/$defs/ApprovalDecision"
+    },
+    "project_id": {
+      "pattern": "^PRJ-[0-9]{6,20}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "reason": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Reason"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "subject_id": {
+      "title": "Subject Id",
+      "type": "string"
+    },
+    "subject_type": {
+      "title": "Subject Type",
+      "type": "string"
+    }
+  },
+  "required": [
+    "approval_id",
+    "project_id",
+    "subject_type",
+    "subject_id",
+    "decision",
+    "actor",
+    "created_at"
+  ],
+  "title": "Approval",
+  "type": "object"
+}

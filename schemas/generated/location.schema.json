@@ -1,0 +1,108 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:location",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "canonical_reference_asset_ids": {
+      "items": {
+        "pattern": "^AST-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Canonical Reference Asset Ids",
+      "type": "array"
+    },
+    "description": {
+      "default": "",
+      "title": "Description",
+      "type": "string"
+    },
+    "environment_constraints": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Environment Constraints",
+      "type": "array"
+    },
+    "location_id": {
+      "pattern": "^LOC-[0-9]{6,20}$",
+      "title": "Location Id",
+      "type": "string"
+    },
+    "name": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "world_id": {
+      "anyOf": [
+        {
+          "pattern": "^WRL-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "World Id"
+    }
+  },
+  "required": [
+    "location_id",
+    "name",
+    "audit"
+  ],
+  "title": "Location",
+  "type": "object"
+}

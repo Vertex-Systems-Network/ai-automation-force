@@ -1,0 +1,248 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "ContentObjective": {
+      "additionalProperties": false,
+      "properties": {
+        "emotional": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Emotional"
+        },
+        "entertainment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Entertainment"
+        },
+        "learning": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Learning"
+        },
+        "primary": {
+          "minLength": 1,
+          "title": "Primary",
+          "type": "string"
+        }
+      },
+      "required": [
+        "primary"
+      ],
+      "title": "ContentObjective",
+      "type": "object"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:content-version",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "character_ids": {
+      "items": {
+        "pattern": "^CHR-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Character Ids",
+      "type": "array"
+    },
+    "content_format": {
+      "maxLength": 160,
+      "minLength": 1,
+      "title": "Content Format",
+      "type": "string"
+    },
+    "content_id": {
+      "pattern": "^CNT-[0-9]{6,20}$",
+      "title": "Content Id",
+      "type": "string"
+    },
+    "content_version_id": {
+      "pattern": "^CTV-[0-9]{6,20}$",
+      "title": "Content Version Id",
+      "type": "string"
+    },
+    "custom_content_format": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Custom Content Format"
+    },
+    "hook": {
+      "default": "",
+      "title": "Hook",
+      "type": "string"
+    },
+    "language": {
+      "maxLength": 32,
+      "minLength": 2,
+      "title": "Language",
+      "type": "string"
+    },
+    "objective": {
+      "$ref": "#/$defs/ContentObjective"
+    },
+    "originality_fingerprint": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Originality Fingerprint"
+    },
+    "premise": {
+      "default": "",
+      "title": "Premise",
+      "type": "string"
+    },
+    "pronunciation_notes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Pronunciation Notes",
+      "type": "array"
+    },
+    "prop_ids": {
+      "items": {
+        "pattern": "^PRP-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "Prop Ids",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "script_or_lyrics": {
+      "minLength": 1,
+      "title": "Script Or Lyrics",
+      "type": "string"
+    },
+    "structure_map": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Structure Map",
+      "type": "array"
+    },
+    "tags": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Tags",
+      "type": "array"
+    },
+    "target_duration_seconds": {
+      "maximum": 10800,
+      "minimum": 60,
+      "title": "Target Duration Seconds",
+      "type": "integer"
+    },
+    "title": {
+      "maxLength": 240,
+      "minLength": 1,
+      "title": "Title",
+      "type": "string"
+    },
+    "version": {
+      "minimum": 1,
+      "title": "Version",
+      "type": "integer"
+    },
+    "world_ids": {
+      "items": {
+        "pattern": "^WRL-[0-9]{6,20}$",
+        "type": "string"
+      },
+      "title": "World Ids",
+      "type": "array"
+    }
+  },
+  "required": [
+    "content_version_id",
+    "content_id",
+    "version",
+    "title",
+    "content_format",
+    "language",
+    "target_duration_seconds",
+    "objective",
+    "script_or_lyrics",
+    "audit"
+  ],
+  "title": "ContentVersion",
+  "type": "object"
+}
