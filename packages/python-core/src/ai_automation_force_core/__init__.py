@@ -5,4 +5,4 @@ namespace for pre-M01 repository code. New consumers should import this package.
 """
 
 from lullabies_core import *  # noqa: F403
-from lullabies_core import __all__
+from lullabies_core import __all__ as __all__
