@@ -1,0 +1,68 @@
+schema_version: 1
+verified_at: 2026-08-28
+freshness_days: 7
+default_cost_policy: FREE_FIRST
+rules:
+  refresh_official_sources_when_stale: true
+  web_free_and_api_free_are_separate: true
+  paid_spend_requires_human_approval: true
+  commercial_publish_requires_verified_license: true
+  preserve_generation_history: true
+providers:
+  gemini_tts:
+    capabilities: [tts]
+    access: api_free
+    preferred_model: gemini-3.1-flash-tts-preview
+    female_narration: true
+  lyria:
+    capabilities: [music, vocals, instrumental_music]
+    access: api_paid
+    preferred_model: lyria-3-pro-preview
+    free_api: false
+  veo:
+    capabilities: [video, image_to_video, video_extend, keyframe_video]
+    access: api_paid
+    preferred_model: veo-3.1-generate-preview
+    free_api: false
+    clip_seconds: 8
+    native_extension: true
+    first_frame: true
+    last_frame: true
+    reference_images_max: 3
+  runway_free_web:
+    capabilities: [video, image]
+    access: web_free_manual
+    free_credits: 125
+    quota: one_time
+    watermark: true
+    api_credits_separate: true
+  pika_free_web:
+    capabilities: [video, image_to_video]
+    access: web_free_manual
+    free_video_credits: 80
+    quota: monthly
+    commercial_license: verify_current_terms
+  kling_free_web:
+    capabilities: [video, image_to_video, video_edit]
+    access: web_free_manual
+    quota: dynamic_verify
+  hailuo_free_web:
+    capabilities: [video]
+    access: web_free_manual
+    quota: promotional_dynamic_verify
+    watermark: true
+  luma_free_web:
+    capabilities: [video, image]
+    access: web_free_manual
+    quota: limited
+    watermark: true
+    commercial_use: false
+routing:
+  continuity_priority:
+    - native_extension
+    - first_last_frame
+    - image_to_video_reference
+    - reference_video
+    - text_to_video
+  free_priority: true
+  quality_overrides_free: true
