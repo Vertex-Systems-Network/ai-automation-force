@@ -1,88 +1,145 @@
-# Lullabies — AI-Native Kids Content Studio
+# Lullabies — AI-Native Media Production Platform
 
-This repository is the source of truth for an AI-native children's content production system covering songs, poems, stories, lullabies, educational narration, and future video/publishing workflows.
+This repository is the engineering and AI-memory foundation for a provider-agnostic media production platform. The initial niche remains child-directed content, but the core product is deliberately general enough to support songs, poems, stories, educational media, episodes, cinematic sequences, short films and movies up to a configured three-hour project duration.
+
+Kids-specific age/safety rules remain mandatory whenever a project is child-directed; they are a policy profile, not a limitation of the underlying platform architecture.
 
 ## Core operating model
 
-The repository is not only a content archive. It is the persistent memory and operating system used by an AI agent whenever the operator gives the command `next`.
+The system is not a single model or a `prompt -> video` script.
 
-`next` means:
+It manages:
+- research and creative planning;
+- persistent content/originality memory;
+- project/audience/cast configuration;
+- reusable locked characters and other entities;
+- content/scripts/lyrics;
+- autonomous audio direction;
+- storyboard and editorial timeline;
+- keyframes/references;
+- hybrid free/paid provider routing;
+- per-shot generation history;
+- continuity and media QA;
+- deterministic FFmpeg assembly;
+- rights/provenance;
+- budgets/quotas;
+- publishing;
+- analytics and learning.
 
-1. Load repository instructions, configuration, memory, and prior content.
-2. Research current opportunities and age-appropriate topics.
-3. Select the best content type and target age band.
-4. Check the memory bank and content catalogue for semantic, thematic, title, lyric, plot, hook, and learning-objective duplication.
-5. Reject or substantially differentiate duplicates.
-6. Create the content package.
-7. Run child-safety, quality, originality, continuity, copyright-risk, and platform-policy gates.
-8. Produce a detailed Gemini TTS audio-generation handoff with a female voice direction where appropriate.
-9. Classify and save the approved package in the repository.
-10. Update memory/indexes so the next run knows exactly what has already been created.
-11. Report what was created and the recommended next production step.
-
-## Phase 1 scope
-
-Phase 1 builds the content intelligence and audio handoff layer:
-
-- research and opportunity selection
-- age classification
-- autonomous content-type selection
-- originality and duplicate prevention
-- content writing
-- Gemini TTS production prompts
-- persistent memory bank
-- quality and safety gates
-- repository classification
-- resumable `next` workflow
-
-Video generation, automated publishing, channel analytics, thumbnails, localization, and performance-driven iteration are Phase 2+ and intentionally attach to this foundation rather than being mixed into the first implementation.
-
-## Age bands
-
-The system uses age-specific rules instead of treating all children as one audience:
-
-- `baby-audio`: 0–12 months — parent-controlled lullaby/gentle audio use cases
-- `toddler`: 1–2 years
-- `preschool`: 2–5 years
-- `early-primary`: 5–7 years
-- `junior`: 7–9 years
-- `preteen`: 9–12 years
-
-The first recommended production focus is `preschool` unless research provides a strong reason to choose another configured band.
-
-## Content types
-
-Supported Phase 1 types:
-
-- song
-- lullaby
-- poem
-- rhyme
-- story
-- educational-narration
-- guided-imagination
-- bedtime-story
-
-The AI chooses the type for normal `next` runs.
-
-## Repository map
-
-- `AGENTS.md` — mandatory instructions for any AI agent operating this repository
-- `ai-native/SYSTEM.md` — architecture and state machine
-- `ai-native/WORKFLOW.md` — detailed `next` execution workflow
-- `ai-native/QUALITY-GATES.md` — non-negotiable acceptance gates
-- `ai-native/MEMORY-BANK.md` — persistent memory and duplicate-detection design
-- `ai-native/COMMANDS.md` — operator command contract
-- `ai-native/prompts/` — reusable content and Gemini audio prompts
-- `config/content-policy.yaml` — age bands, content types, voice defaults, and selection rules
-- `memory/` — machine-readable persistent memory
-- `content/` — approved content packages, classified by age/type/status
-- `research/` — research snapshots and opportunity decisions
-
-## Operating command
-
-After this foundation is present, the normal operator command is simply:
+## Primary operator command
 
 `next`
 
-The agent must resume from repository state rather than asking the operator to repeat prior decisions.
+Eventually `next` means: inspect canonical state and perform the highest-value safe eligible production job.
+
+It may research/create content, render audio, plan scenes, generate/retry one shot, prepare a manual free-provider handoff, assemble a master, prepare publishing, or analyze results depending on project state.
+
+## Product configuration
+
+Machine-readable options live in:
+- `config/project-taxonomy.yaml`
+- `config/content-policy.yaml`
+- `config/execution-policy.yaml`
+- `config/provider-registry.yaml`
+
+Human-facing option documentation:
+- `docs/product/PROJECT-OPTIONS.md`
+- `docs/product/CHARACTER-LOCK-SYSTEM.md`
+- `docs/product/TIMELINE-SEQUENCE-ENGINE.md`
+
+Important dimensions are stored separately rather than ambiguously combining them:
+- audience class;
+- cast age composition;
+- cast gender composition;
+- character strategy;
+- content format;
+- creative treatment;
+- duration;
+- language;
+- visual/camera controls;
+- audio controls;
+- pacing/rhythm;
+- provider/cost mode;
+- review/publishing policy.
+
+## Character continuity
+
+Recurring production characters are selected from a canonical Character Library or created and locked before recurring use.
+
+Supported strategies include:
+- select locked existing;
+- create new and lock;
+- mixed existing/new;
+- project-only one-off lock;
+- no character;
+- AI decide.
+
+Provider-specific saved references are derived adapters. Character identity/version/reference packs in this system remain canonical.
+
+## Long-form model
+
+Projects use a hierarchy such as:
+
+`Project -> Act/Chapter -> Sequence -> Scene -> Shot -> Take`
+
+A 1–3 minute piece and a three-hour movie use the same concepts at different scale.
+
+Long duration is achieved through durable orchestration, scoped context, many resumable shot jobs and deterministic assembly—not by assuming an AI provider can generate a three-hour continuous clip.
+
+## Free + paid providers
+
+Default execution policy is `HYBRID_SMART`.
+
+One provider-neutral workflow can use:
+- legitimate free API capacity;
+- manual free web tiers where permitted;
+- paid APIs within authorization/budget;
+- provider fallbacks.
+
+The router optimizes capability, quality, continuity, rights, expected retry cost and budget rather than simply selecting the cheapest nominal call.
+
+## Technical direction
+
+Canonical stack decision: `docs/architecture/TECH-STACK.md`.
+
+Recommended:
+- Python + FastAPI for backend/API/AI/media logic;
+- Temporal for durable workflows;
+- PostgreSQL + pgvector for future application operational state and semantic memory;
+- S3-compatible object storage for large media;
+- FFmpeg for deterministic media processing;
+- OpenTimelineIO for editorial interchange where practical;
+- TypeScript + Next.js/React for web;
+- TypeScript + React Native/Expo for the future mobile app.
+
+## Engineering contract
+
+Every engineering agent must follow:
+- `AGENTS.md`
+- `ai-native/ENGINEERING-CONTRACT.md`
+- `ai-native/MASTER-PLAN.md`
+- relevant product/architecture documentation.
+
+The engineering constitution requires architecture-first development, current official-source research when material, security, tests, durable recovery, provenance, clear Git/checkpoints, and no fake completion.
+
+## Daily provider research
+
+`.github/workflows/provider-scout.yml` runs a daily provider/API scout.
+
+Governance:
+- `config/update-policy.yaml`
+- `config/provider-sources.json`
+- `docs/operations/DAILY-PROVIDER-SCOUT.md`
+
+The scout can auto-merge only low-risk evidence/high-confidence provider fact changes when repository rules allow. New provider integrations, executable code, schemas, security, budget and publishing behavior require review.
+
+## Development plan
+
+Canonical implementation sequence:
+`docs/architecture/DEVELOPMENT-PLAN.md`
+
+The recommended first vertical slice after core foundations is:
+
+**2-minute song + one locked recurring character + one environment + 12–20 shots + hybrid free/paid routing + final FFmpeg master.**
+
+This proves the difficult architecture before scaling to longer productions.
