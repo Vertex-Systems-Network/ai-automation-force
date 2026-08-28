@@ -9,7 +9,9 @@ from pydantic import AwareDatetime, BaseModel, ConfigDict, Field
 from .common import AuditFields, ContentId, ContentVersionId, StrictModel
 from .content import Content, ContentObjective, ContentVersion
 
-LEGACY_CONTENT_MAPPING_VERSION = "legacy-content-v1-to-core-v1"
+LEGACY_CONTENT_MAPPING_VERSION: Literal["legacy-content-v1-to-core-v1"] = (
+    "legacy-content-v1-to-core-v1"
+)
 
 LegacyContentType = Literal[
     "song",
@@ -211,7 +213,8 @@ def import_legacy_content_package(
     """
 
     legacy = LegacyContentPackageV1.model_validate(payload)
-    _validate_mapping_preconditions(legacy, content_text)
+    target_duration_seconds = _validated_target_duration(legacy)
+    _validate_content_text(content_text)
 
     content_version_id = _content_version_id(legacy.content_id)
     canonical_format = _canonical_content_format(legacy)
@@ -243,7 +246,7 @@ def import_legacy_content_package(
         title=legacy.title,
         content_format=canonical_format,
         language=legacy.language,
-        target_duration_seconds=legacy.target_duration_seconds,
+        target_duration_seconds=target_duration_seconds,
         objective=ContentObjective(
             primary=legacy.objective.primary,
             entertainment=legacy.objective.entertainment,
@@ -299,27 +302,27 @@ def reconcile_legacy_content_import(
     """
 
     report = imported.report
-    base = {
-        "canonical_content_id": report.canonical_content_id,
-        "canonical_content_version_id": report.canonical_content_version_id,
-        "source_fingerprint_sha256": report.source_fingerprint_sha256,
-        "import_key": report.import_key,
-    }
 
     if existing_content is None and existing_content_version is None:
         return LegacyContentReconciliation(
             action="create",
+            canonical_content_id=report.canonical_content_id,
+            canonical_content_version_id=report.canonical_content_version_id,
+            source_fingerprint_sha256=report.source_fingerprint_sha256,
+            import_key=report.import_key,
             reason="canonical content identity is not persisted",
-            **base,
         )
 
     if existing_content is None or existing_content_version is None:
         missing = "content" if existing_content is None else "content_version"
         return LegacyContentReconciliation(
             action="conflict",
+            canonical_content_id=report.canonical_content_id,
+            canonical_content_version_id=report.canonical_content_version_id,
+            source_fingerprint_sha256=report.source_fingerprint_sha256,
+            import_key=report.import_key,
             reason="canonical persistence state is partial and requires operator recovery",
             conflict_fields=[missing],
-            **base,
         )
 
     conflicts: list[str] = []
@@ -335,9 +338,12 @@ def reconcile_legacy_content_import(
     if conflicts:
         return LegacyContentReconciliation(
             action="conflict",
+            canonical_content_id=report.canonical_content_id,
+            canonical_content_version_id=report.canonical_content_version_id,
+            source_fingerprint_sha256=report.source_fingerprint_sha256,
+            import_key=report.import_key,
             reason="stable legacy identity resolves to conflicting persisted identity or source",
             conflict_fields=conflicts,
-            **base,
         )
 
     record_conflicts: list[str] = []
@@ -348,20 +354,27 @@ def reconcile_legacy_content_import(
     if record_conflicts:
         return LegacyContentReconciliation(
             action="conflict",
+            canonical_content_id=report.canonical_content_id,
+            canonical_content_version_id=report.canonical_content_version_id,
+            source_fingerprint_sha256=report.source_fingerprint_sha256,
+            import_key=report.import_key,
             reason="stable legacy identity already exists with different canonical data",
             conflict_fields=record_conflicts,
-            **base,
         )
 
     return LegacyContentReconciliation(
         action="noop",
+        canonical_content_id=report.canonical_content_id,
+        canonical_content_version_id=report.canonical_content_version_id,
+        source_fingerprint_sha256=report.source_fingerprint_sha256,
+        import_key=report.import_key,
         reason="same deterministic import is already represented canonically",
-        **base,
     )
 
 
-def _validate_mapping_preconditions(legacy: LegacyContentPackageV1, content_text: str) -> None:
-    if legacy.target_duration_seconds is None:
+def _validated_target_duration(legacy: LegacyContentPackageV1) -> int:
+    target_duration_seconds = legacy.target_duration_seconds
+    if target_duration_seconds is None:
         raise LegacyContentImportError(
             "LEGACY_DURATION_REQUIRED",
             (
@@ -370,12 +383,16 @@ def _validate_mapping_preconditions(legacy: LegacyContentPackageV1, content_text
             ),
             "target_duration_seconds",
         )
-    if not 60 <= legacy.target_duration_seconds <= 10800:
+    if not 60 <= target_duration_seconds <= 10800:
         raise LegacyContentImportError(
             "LEGACY_DURATION_OUT_OF_CANONICAL_RANGE",
             "target duration must be within the canonical 60..10800 second range",
             "target_duration_seconds",
         )
+    return target_duration_seconds
+
+
+def _validate_content_text(content_text: str) -> None:
     if not content_text.strip():
         raise LegacyContentImportError(
             "LEGACY_CONTENT_TEXT_REQUIRED",
