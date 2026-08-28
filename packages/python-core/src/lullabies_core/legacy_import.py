@@ -54,6 +54,7 @@ LegacyOriginalityDecision = Literal[
     "REJECT_DERIVATIVE",
     "DEFER_PORTFOLIO_FATIGUE",
 ]
+LegacyReconciliationAction = Literal["create", "noop", "conflict"]
 
 
 class LegacyNestedModel(BaseModel):
@@ -174,6 +175,18 @@ class LegacyContentImportResult(StrictModel):
     report: LegacyContentImportReport
 
 
+class LegacyContentReconciliation(StrictModel):
+    """Pure persistence decision for an imported legacy content identity."""
+
+    action: LegacyReconciliationAction
+    canonical_content_id: ContentId
+    canonical_content_version_id: ContentVersionId
+    source_fingerprint_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    import_key: str = Field(min_length=1)
+    reason: str = Field(min_length=1)
+    conflict_fields: list[str] = Field(default_factory=list)
+
+
 class LegacyContentImportError(ValueError):
     """Recoverable legacy-to-canonical mapping failure with a stable machine code."""
 
@@ -268,6 +281,82 @@ def import_legacy_content_package(
         content=content,
         content_version=content_version,
         report=report,
+    )
+
+
+def reconcile_legacy_content_import(
+    imported: LegacyContentImportResult,
+    *,
+    existing_content: Content | None = None,
+    existing_content_version: ContentVersion | None = None,
+    existing_import_key: str | None = None,
+) -> LegacyContentReconciliation:
+    """Plan CREATE/NOOP/CONFLICT without performing persistence.
+
+    WP5+ repositories may use this result inside a transaction. A repeated import of the
+    same canonical records is a NOOP. Reusing the same stable CNT/CTV identity for changed
+    source material or partial/mismatched canonical state is a CONFLICT, never an overwrite.
+    """
+
+    report = imported.report
+    base = {
+        "canonical_content_id": report.canonical_content_id,
+        "canonical_content_version_id": report.canonical_content_version_id,
+        "source_fingerprint_sha256": report.source_fingerprint_sha256,
+        "import_key": report.import_key,
+    }
+
+    if existing_content is None and existing_content_version is None:
+        return LegacyContentReconciliation(
+            action="create",
+            reason="canonical content identity is not persisted",
+            **base,
+        )
+
+    if existing_content is None or existing_content_version is None:
+        missing = "content" if existing_content is None else "content_version"
+        return LegacyContentReconciliation(
+            action="conflict",
+            reason="canonical persistence state is partial and requires operator recovery",
+            conflict_fields=[missing],
+            **base,
+        )
+
+    conflicts: list[str] = []
+    if existing_content.content_id != imported.content.content_id:
+        conflicts.append("content.content_id")
+    if existing_content_version.content_version_id != imported.content_version.content_version_id:
+        conflicts.append("content_version.content_version_id")
+    if existing_content_version.content_id != imported.content.content_id:
+        conflicts.append("content_version.content_id")
+    if existing_import_key is not None and existing_import_key != report.import_key:
+        conflicts.append("import_key")
+
+    if conflicts:
+        return LegacyContentReconciliation(
+            action="conflict",
+            reason="stable legacy identity resolves to conflicting persisted identity or source",
+            conflict_fields=conflicts,
+            **base,
+        )
+
+    record_conflicts: list[str] = []
+    if existing_content != imported.content:
+        record_conflicts.append("content")
+    if existing_content_version != imported.content_version:
+        record_conflicts.append("content_version")
+    if record_conflicts:
+        return LegacyContentReconciliation(
+            action="conflict",
+            reason="stable legacy identity already exists with different canonical data",
+            conflict_fields=record_conflicts,
+            **base,
+        )
+
+    return LegacyContentReconciliation(
+        action="noop",
+        reason="same deterministic import is already represented canonically",
+        **base,
     )
 
 
