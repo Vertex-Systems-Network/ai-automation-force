@@ -1,7 +1,7 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m01-wp4-legacy-content-import-complete.md`
+`checkpoints/2026-08-29-m01-wp5-postgresql-architecture-complete.md`
 
 Current phase: **M01 — Core Domain & Persistence Boundary**
 
@@ -47,23 +47,35 @@ Checkpoint:
 
 ### WP4 — Legacy CNT content importer boundary
 
-Implementation and Python 3.12 verification complete on PR #4.
+Merged via PR #4.
+
+Merge commit:
+`3e3e194be035c6aaf0888a6d2259f12a6219d8ec`
 
 Checkpoint:
 `checkpoints/2026-08-29-m01-wp4-legacy-content-import-complete.md`
 
-The legacy v1 compatibility boundary now performs deterministic mapping into canonical Content/ContentVersion records, preserves source identity/provenance, never fabricates canonical entities from free text, and provides fail-closed `create` / `noop` / `conflict` reconciliation for future persistence.
+### WP5 — PostgreSQL persistence architecture
+
+Architecture contract complete on PR #5.
+
+Checkpoint:
+`checkpoints/2026-08-29-m01-wp5-postgresql-architecture-complete.md`
+
+Canonical mapping:
+`docs/architecture/POSTGRESQL-PERSISTENCE-ARCHITECTURE.md`
+
+The persistence boundary now defines internal UUID keys vs stable external IDs, relational/JSONB/array mappings for every current M01 entity/value object, deterministic ordered joins, same-owner deferred selection/pin constraints, indexes, transaction/revision policy, fail-closed Rights checks, legacy import ledger design, and explicit DB-vs-aggregate invariant ownership.
 
 ## Current next step
 
-`WP5 — PostgreSQL persistence architecture`
+`WP6 — Reversible initial database migration scaffold`
 
 ## Remaining M01 sequence
 
-1. WP5 — PostgreSQL persistence architecture;
-2. WP6 — reversible migration scaffold;
-3. WP7 — repositories and short/long project round-trip verification;
-4. WP8 — complete M01 verification and final checkpoint.
+1. WP6 — reversible migration scaffold;
+2. WP7 — repositories and short/long project round-trip verification;
+3. WP8 — complete M01 verification and final checkpoint.
 
 ## Scope boundary
 
