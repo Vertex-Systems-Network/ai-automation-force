@@ -26,7 +26,9 @@ from .legacy_import import (
     LegacyContentImportReport,
     LegacyContentImportResult,
     LegacyContentPackageV1,
+    LegacyContentReconciliation,
     import_legacy_content_package,
+    reconcile_legacy_content_import,
 )
 from .lineage import ProductionLineageBundle
 from .production import (
@@ -87,6 +89,7 @@ __all__ = [
     "LegacyContentImportReport",
     "LegacyContentImportResult",
     "LegacyContentPackageV1",
+    "LegacyContentReconciliation",
     "Location",
     "LockScope",
     "OutputProfile",
@@ -110,4 +113,5 @@ __all__ = [
     "VoiceProfile",
     "World",
     "import_legacy_content_package",
+    "reconcile_legacy_content_import",
 ]
