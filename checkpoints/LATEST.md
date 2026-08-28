@@ -1,7 +1,7 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m01-wp3-aggregate-hardening-complete.md`
+`checkpoints/2026-08-29-m01-wp4-legacy-content-import-complete.md`
 
 Current phase: **M01 — Core Domain & Persistence Boundary**
 
@@ -37,24 +37,33 @@ Checkpoint:
 
 ### WP3 — Aggregate validation hardening
 
-Implementation and Python 3.12 verification complete on the WP3 branch/PR.
+Merged via PR #3.
+
+Merge commit:
+`2e648fd27c44d0186bab76668002114298cc82b8`
 
 Checkpoint:
 `checkpoints/2026-08-29-m01-wp3-aggregate-hardening-complete.md`
 
-The project graph now rejects duplicate/missing hierarchy references, invalid character/version/look/lock ownership, undeclared character/world/prop use, inconsistent scene locations, and invalid explicit primary-video timing while preserving parallel B-roll timing.
+### WP4 — Legacy CNT content importer boundary
+
+Implementation and Python 3.12 verification complete on PR #4.
+
+Checkpoint:
+`checkpoints/2026-08-29-m01-wp4-legacy-content-import-complete.md`
+
+The legacy v1 compatibility boundary now performs deterministic mapping into canonical Content/ContentVersion records, preserves source identity/provenance, never fabricates canonical entities from free text, and provides fail-closed `create` / `noop` / `conflict` reconciliation for future persistence.
 
 ## Current next step
 
-`WP4 — Legacy CNT content importer boundary`
+`WP5 — PostgreSQL persistence architecture`
 
 ## Remaining M01 sequence
 
-1. WP4 — legacy `CNT-*` content importer boundary;
-2. WP5 — PostgreSQL persistence architecture;
-3. WP6 — reversible migration scaffold;
-4. WP7 — repositories and short/long project round-trip verification;
-5. WP8 — complete M01 verification and final checkpoint.
+1. WP5 — PostgreSQL persistence architecture;
+2. WP6 — reversible migration scaffold;
+3. WP7 — repositories and short/long project round-trip verification;
+4. WP8 — complete M01 verification and final checkpoint.
 
 ## Scope boundary
 
