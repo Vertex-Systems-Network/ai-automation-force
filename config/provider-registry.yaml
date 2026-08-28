@@ -1,7 +1,7 @@
 schema_version: 1
 verified_at: 2026-08-28
 freshness_days: 7
-default_cost_policy: FREE_FIRST
+default_cost_policy: HYBRID_SMART
 rules:
   refresh_official_sources_when_stale: true
   web_free_and_api_free_are_separate: true
