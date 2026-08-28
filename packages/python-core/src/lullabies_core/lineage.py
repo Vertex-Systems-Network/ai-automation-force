@@ -80,16 +80,24 @@ class ProductionLineageBundle(StrictModel):
         for character in self.project_bundle.characters:
             lock = character.lock
             if lock.scope == LockScope.PROJECT and lock.project_id != project_id:
-                raise ValueError(f"character {character.character_id} lock belongs to another project")
+                raise ValueError(
+                    f"character {character.character_id} lock belongs to another project"
+                )
             if lock.scope == LockScope.SCENE and lock.scene_id not in scenes:
-                raise ValueError(f"character {character.character_id} lock references missing scene")
+                raise ValueError(
+                    f"character {character.character_id} lock references missing scene"
+                )
             if lock.scope == LockScope.LOOK and lock.pinned_look_id is not None:
                 pinned = lock.pinned_character_version_id
                 if pinned is None or pinned not in versions:
-                    raise ValueError(f"character {character.character_id} look lock version is missing")
+                    raise ValueError(
+                        f"character {character.character_id} look lock version is missing"
+                    )
                 look_ids = {look.look_id for look in versions[pinned].looks}
                 if lock.pinned_look_id not in look_ids:
-                    raise ValueError(f"character {character.character_id} look lock is not in pinned version")
+                    raise ValueError(
+                        f"character {character.character_id} look lock is not in pinned version"
+                    )
 
     def _validate_jobs_and_attempts(self) -> None:
         project = self.project_bundle.project
@@ -159,12 +167,21 @@ class ProductionLineageBundle(StrictModel):
                 )
             if asset.generation_attempt_id is not None:
                 if asset.generation_attempt_id not in attempts:
-                    raise ValueError(f"asset {asset.asset_id} references missing generation attempt")
+                    raise ValueError(
+                        f"asset {asset.asset_id} references missing generation attempt"
+                    )
                 attempt = attempts[asset.generation_attempt_id]
                 if asset.asset_id not in attempt.output_asset_ids:
-                    raise ValueError(f"asset {asset.asset_id} is not an output of its generation attempt")
-                if asset.provider_id is not None and asset.provider_id != attempt.provider.provider_id:
-                    raise ValueError(f"asset {asset.asset_id} provider differs from generation attempt")
+                    raise ValueError(
+                        f"asset {asset.asset_id} is not an output of its generation attempt"
+                    )
+                if (
+                    asset.provider_id is not None
+                    and asset.provider_id != attempt.provider.provider_id
+                ):
+                    raise ValueError(
+                        f"asset {asset.asset_id} provider differs from generation attempt"
+                    )
                 if (
                     asset.model_provider_id is not None
                     and asset.model_provider_id != attempt.provider.model_provider_id
@@ -176,7 +193,9 @@ class ProductionLineageBundle(StrictModel):
                     asset.provider_model_id is not None
                     and asset.provider_model_id != attempt.provider.model_id
                 ):
-                    raise ValueError(f"asset {asset.asset_id} model differs from generation attempt")
+                    raise ValueError(
+                        f"asset {asset.asset_id} model differs from generation attempt"
+                    )
 
         for attempt in self.attempts:
             missing_outputs = set(attempt.output_asset_ids) - set(assets)
