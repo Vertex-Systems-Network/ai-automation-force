@@ -23,7 +23,7 @@ Minimum inputs:
 Wizard presents all major production decisions with recommended defaults.
 
 ### Advanced
-Expose all project, cast, visual, audio, timeline, provider, cost and review settings.
+Expose all project, cast, visual, image/reference, audio, timeline, provider, cost and review settings.
 
 ## Wizard sequence
 
@@ -174,7 +174,44 @@ Select or delegate:
 
 See `VISUAL-CINEMATIC-BIBLE.md`.
 
-### Step 9 — Audio Direction
+### Step 9 — Image Generation & Reference Strategy
+Choose how still images should be generated and reused before/during video production.
+
+Modes:
+- `AUTO` — AI decides where images materially improve continuity, quality or cost;
+- `CHARACTER_FIRST` — create/approve canonical character reference packs before recurring production;
+- `KEYFRAME_FIRST` — create approved keyframes before continuity-sensitive video shots;
+- `SCENE_FIRST` — create canonical scene/location references before shots;
+- `ALL_SHOTS_KEYFRAMED` — generate an approved first/key frame for every continuity-sensitive shot;
+- `DIRECT_VIDEO_ALLOWED` — permit direct text/reference-to-video where image staging adds little value;
+- `MANUAL` — operator chooses which images to generate/use.
+
+Optional controls:
+- candidate count;
+- auto-approve threshold vs human review;
+- character/reference pack strictness;
+- scene keyframe density;
+- first-frame strategy;
+- end-frame strategy;
+- image-to-video preference;
+- use approved adjacent frame as continuity anchor;
+- aspect ratio/resolution target;
+- preferred/blocked image providers;
+- free/paid routing policy inherited from project unless overridden within allowed budget;
+- no-watermark/commercial-use requirement;
+- keep/reject candidate retention policy.
+
+Rules:
+- recurring characters without adequate canonical references should generate/approve a reference pack before strict continuity work;
+- generated images are candidates until QA/approval;
+- approved images are registered in the Asset Library and may be locked/reused;
+- changing a selected canonical image creates version/invalidation behavior rather than silently overwriting history;
+- image provider failure/quota exhaustion may fail over to another eligible provider without losing canonical intent;
+- do not rotate multiple same-provider accounts to evade quota/tier limits.
+
+See `IMAGE-GENERATION-REUSE-SYSTEM.md`.
+
+### Step 10 — Audio Direction
 Select or delegate:
 - narration required;
 - singer required;
@@ -191,7 +228,7 @@ Select or delegate:
 
 See `AUDIO-PRODUCTION-BIBLE.md`.
 
-### Step 10 — Timeline / Editing
+### Step 11 — Timeline / Editing
 Options:
 - pacing profile;
 - average shot length target;
@@ -204,9 +241,10 @@ Options:
 - scene handles/overlap;
 - strict continuity level;
 - desired coverage level;
+- keyframe density relationship to continuity level;
 - AI Director autonomy.
 
-### Step 11 — Output
+### Step 12 — Output
 Options:
 - aspect ratio;
 - resolution target;
@@ -218,7 +256,7 @@ Options:
 - audio-only derivative;
 - clean/with-text variants where needed.
 
-### Step 12 — Provider & Budget Policy
+### Step 13 — Provider & Budget Policy
 Choose:
 - FREE_ONLY;
 - FREE_FIRST;
@@ -236,35 +274,37 @@ Optional:
 - latency preference;
 - privacy/data-use restrictions.
 
-The operator should not be required to choose individual providers per shot unless desired.
+The operator should not be required to choose individual image/video/audio providers per asset unless desired.
 
-### Step 13 — Review / Approval Policy
+### Step 14 — Review / Approval Policy
 Choose review level:
 - AI-first with human final master approval;
-- human approval after script/audio/storyboard;
+- human approval after character/reference lock + script/audio/storyboard;
 - human approval after every scene;
-- human approval after every generated take;
+- human approval after every generated image/video take;
 - custom checkpoints.
 
 Locked identity, unresolved rights, public publishing and unconfigured paid spend retain hard approval gates regardless of convenience settings.
 
-### Step 14 — Summary & Preflight
+### Step 15 — Summary & Preflight
 Before project creation display:
 - audience;
 - cast;
 - format;
 - duration;
 - selected/created characters;
-- visual/audio direction;
+- visual direction;
+- image/reference strategy;
+- audio direction;
 - estimated structural complexity;
-- estimated shot range;
+- estimated shot/keyframe range;
 - estimated provider/cost policy;
 - safety/rights gates;
 - AI-autonomous decisions;
 - operator overrides;
 - likely production stages.
 
-AI should flag contradictions before creation, e.g. a 180-minute project with `single simple rhyme` or strict character continuity with `text-only generation`.
+AI should flag contradictions before creation, e.g. a 180-minute project with `single simple rhyme`, strict character continuity with `text-only generation`, or `DIRECT_VIDEO_ALLOWED` combined with a provider route that has historically poor identity consistency for the selected character.
 
 ## AI Decide behavior
 
@@ -279,6 +319,15 @@ The AI must:
 6. record the reason where materially important;
 7. never override a locked operator selection without approval.
 
+For image strategy, AI should consider:
+- character continuity importance;
+- scene complexity;
+- available reference packs;
+- provider image-conditioning capability;
+- expected video failure/retry cost;
+- budget;
+- long-form reuse value.
+
 ## Validation rules
 
 Project creation must reject or block:
@@ -288,7 +337,9 @@ Project creation must reject or block:
 - child-directed content without applicable policy profile;
 - provider policy that authorizes spend without configured budget authorization;
 - public publishing as an implicit project-creation side effect;
-- unresolved required consent/license for imported real-person/voice assets.
+- unresolved required consent/license for imported real-person/voice assets;
+- strict recurring-character continuity with no usable reference strategy when selected providers require visual references;
+- canonical image/reference promotion before required QA/rights gates.
 
 ## Save states
 
@@ -302,4 +353,4 @@ Creating a project does not automatically spend provider credits.
 
 ## Acceptance criteria
 
-The wizard specification is implementation-ready when a future UI/API can reproduce the same canonical project record regardless of Quick, Guided or Advanced mode, and AI-autonomous choices are explicitly resolved and auditable.
+The wizard specification is implementation-ready when a future UI/API can reproduce the same canonical project record regardless of Quick, Guided or Advanced mode, AI-autonomous choices are explicitly resolved and auditable, and image-generation/reference strategy is captured as part of production intent rather than introduced ad hoc during video generation.
