@@ -12,6 +12,7 @@ from lullabies_core import (
     LegacyContentImportError,
     LegacyContentImportResult,
     import_legacy_content_package,
+    reconcile_legacy_content_import,
 )
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -62,6 +63,77 @@ def test_repeat_import_is_deterministic_and_idempotency_ready() -> None:
     assert first.report.import_key == second.report.import_key
     assert first.report.source_fingerprint_sha256 == second.report.source_fingerprint_sha256
     assert first.content.active_version_id == second.content.active_version_id
+
+
+def test_reconciliation_creates_when_identity_is_not_persisted() -> None:
+    imported = import_legacy_content_package(fixture_payload(), fixture_text())
+
+    decision = reconcile_legacy_content_import(imported)
+
+    assert decision.action == "create"
+    assert decision.conflict_fields == []
+    assert decision.import_key == imported.report.import_key
+
+
+def test_reconciliation_is_noop_for_exact_repeat_import() -> None:
+    imported = import_legacy_content_package(fixture_payload(), fixture_text())
+
+    decision = reconcile_legacy_content_import(
+        imported,
+        existing_content=imported.content.model_copy(deep=True),
+        existing_content_version=imported.content_version.model_copy(deep=True),
+        existing_import_key=imported.report.import_key,
+    )
+
+    assert decision.action == "noop"
+    assert decision.conflict_fields == []
+
+
+def test_reconciliation_detects_partial_persistence_state() -> None:
+    imported = import_legacy_content_package(fixture_payload(), fixture_text())
+
+    decision = reconcile_legacy_content_import(
+        imported,
+        existing_content=imported.content,
+    )
+
+    assert decision.action == "conflict"
+    assert decision.conflict_fields == ["content_version"]
+
+
+def test_reconciliation_rejects_changed_source_for_same_stable_identity() -> None:
+    original = import_legacy_content_package(fixture_payload(), fixture_text())
+    changed = import_legacy_content_package(
+        fixture_payload(),
+        fixture_text() + "\nA deliberately changed line.\n",
+    )
+
+    decision = reconcile_legacy_content_import(
+        changed,
+        existing_content=original.content,
+        existing_content_version=original.content_version,
+        existing_import_key=original.report.import_key,
+    )
+
+    assert decision.action == "conflict"
+    assert "import_key" in decision.conflict_fields
+
+
+def test_reconciliation_detects_canonical_record_drift_even_without_import_key() -> None:
+    imported = import_legacy_content_package(fixture_payload(), fixture_text())
+    drifted_version = imported.content_version.model_copy(
+        update={"title": "Unexpected persisted rewrite"},
+        deep=True,
+    )
+
+    decision = reconcile_legacy_content_import(
+        imported,
+        existing_content=imported.content,
+        existing_content_version=drifted_version,
+    )
+
+    assert decision.action == "conflict"
+    assert decision.conflict_fields == ["content_version"]
 
 
 def test_import_result_round_trips_without_identity_drift() -> None:
