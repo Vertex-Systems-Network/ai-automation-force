@@ -1,0 +1,146 @@
+schema_version: 1
+project:
+  name: Lullabies AI-Native Kids Content Studio
+  default_language: en
+  primary_phase: content-intelligence
+  normal_command: next
+  default_strategy: autonomous_selection
+
+age_bands:
+  baby-audio:
+    range: 0-12-months
+    audience_context: parent-controlled listening
+    preferred_types: [lullaby, guided-imagination]
+    avoid_screen_engagement_prompts: true
+    language_complexity: very-low
+    target_duration_seconds: [120, 600]
+    emotional_intensity: very-low
+  toddler:
+    range: 1-2-years
+    preferred_types: [rhyme, song, lullaby, educational-narration]
+    language_complexity: very-low
+    target_duration_seconds: [45, 180]
+    emotional_intensity: low
+  preschool:
+    range: 2-5-years
+    preferred_types: [song, rhyme, poem, story, bedtime-story, educational-narration]
+    language_complexity: low
+    target_duration_seconds: [60, 360]
+    emotional_intensity: low
+    strategic_priority: high
+  early-primary:
+    range: 5-7-years
+    preferred_types: [story, poem, song, educational-narration, guided-imagination]
+    language_complexity: low-medium
+    target_duration_seconds: [120, 480]
+    emotional_intensity: low-medium
+  junior:
+    range: 7-9-years
+    preferred_types: [story, poem, educational-narration, guided-imagination]
+    language_complexity: medium
+    target_duration_seconds: [180, 600]
+    emotional_intensity: medium
+  preteen:
+    range: 9-12-years
+    preferred_types: [story, poem, educational-narration, guided-imagination]
+    language_complexity: medium
+    target_duration_seconds: [180, 900]
+    emotional_intensity: medium
+
+content_types:
+  song:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+  lullaby:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+  poem:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+  rhyme:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+  story:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+  bedtime-story:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+  educational-narration:
+    enabled: true
+    requires_factual_verification: true
+    requires_audio_handoff: true
+  guided-imagination:
+    enabled: true
+    requires_structure_map: true
+    requires_audio_handoff: true
+
+selection:
+  candidate_count_minimum: 3
+  favor_portfolio_gaps: true
+  penalize_recent_repetition: true
+  penalize_duplicate_risk: true
+  penalize_derivative_risk: true
+  favor_clear_learning_or_emotional_value: true
+  favor_original_creative_device: true
+  allow_seasonal_content: true
+  allow_evergreen_content: true
+
+originality:
+  require_memory_check_before_full_draft: true
+  require_final_text_recheck: true
+  exact_title_collision: reject
+  near_duplicate_concept: reject
+  portfolio_fatigue: defer
+  allow_broad_topic_reuse_with_new_treatment: true
+  prohibit_copyrighted_character_imitation: true
+  prohibit_protected_lyric_copying: true
+  prohibit_real_person_voice_imitation: true
+
+voice:
+  default_speaker_count: 1
+  default_gender_presentation: female
+  default_character: warm-natural-nurturing
+  default_impersonation: prohibited
+  provider: gemini-tts
+  provider_model_preference: gemini-3.1-flash-tts-preview
+  provider_model_fallbacks:
+    - gemini-2.5-pro-preview-tts
+    - gemini-2.5-flash-preview-tts
+  provider_model_must_be_verified_before_api_integration: true
+
+qa:
+  mandatory_gates:
+    - classification
+    - age-fit
+    - child-safety
+    - coherence
+    - originality
+    - copyright-identity
+    - factual-integrity
+    - language-quality
+    - audio-readiness
+    - platform-quality
+    - metadata-traceability
+    - final-recheck
+  approval_requires_all_mandatory_gates: true
+
+publishing:
+  autonomous_publication_enabled: false
+  paid_api_spend_requires_human_approval: true
+  made_for_kids_review_required_before_youtube_publish: true
+
+storage:
+  content_path_pattern: content/{age_band}/{content_type}/{content_id}-{slug}/
+  required_package_files:
+    - content.md
+    - metadata.json
+    - audio-prompt.md
+    - qa.json
+    - research.md
