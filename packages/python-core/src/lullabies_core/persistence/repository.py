@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import Any, cast
 from uuid import UUID, uuid4
 
 from sqlalchemy import select
@@ -262,9 +262,14 @@ class PostgresProductionRepository:
         }
 
     @staticmethod
+    def _sort_records(records: object, id_field: str) -> list[dict[str, Any]]:
+        typed_records = cast(list[dict[str, Any]], records)
+        return sorted(typed_records, key=lambda item: str(item[id_field]))
+
+    @staticmethod
     def _canonical_dump(bundle: ProductionLineageBundle) -> dict[str, Any]:
         data = bundle.model_dump(mode="json")
-        project_bundle = data["project_bundle"]
+        project_bundle = cast(dict[str, Any], data["project_bundle"])
         nested_id_fields = {
             "acts": "act_id",
             "sequences": "sequence_id",
@@ -278,9 +283,9 @@ class PostgresProductionRepository:
             "props": "prop_id",
         }
         for field, id_field in nested_id_fields.items():
-            project_bundle[field] = sorted(
+            project_bundle[field] = PostgresProductionRepository._sort_records(
                 project_bundle[field],
-                key=lambda item, key=id_field: item[key],
+                id_field,
             )
         top_id_fields = {
             "jobs": "job_id",
@@ -291,5 +296,5 @@ class PostgresProductionRepository:
             "rights_records": "rights_record_id",
         }
         for field, id_field in top_id_fields.items():
-            data[field] = sorted(data[field], key=lambda item, key=id_field: item[key])
+            data[field] = PostgresProductionRepository._sort_records(data[field], id_field)
         return data
