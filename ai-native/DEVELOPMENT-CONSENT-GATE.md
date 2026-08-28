@@ -6,11 +6,31 @@ The operator requires explicit consent before executable development begins or r
 
 This rule is mandatory for every AI/engineer working in this repository and overrides any older wording that allowed routine implementation to proceed without asking.
 
+## Full-project preplanning prerequisite
+
+`ai-native/FULL-PROJECT-PREPLANNING-GATE.md` is a mandatory prerequisite to this consent gate.
+
+The operator requires the entire foreseeable project to be preplanned before any new executable development starts or resumes. Therefore milestone-local readiness is not enough.
+
+While the full-project preplanning gate is open, repository status is:
+
+`FULL_PROJECT_PREPLANNING_IN_PROGRESS`
+
+and no Development Consent Brief should be presented as ready to authorize executable work.
+
+Only after the full-project preplanning gate is complete and the final gap audit finds no material first-time planning gap may status become:
+
+`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
+
+At that point explicit development consent is still required under this document.
+
+Mutable external facts such as API versions, pricing, provider terms, OAuth scopes, app-review rules, SDK versions and current security advisories may be revalidated at implementation time without counting as deferred product planning, provided the architecture and fallback policy were already preplanned.
+
 ## Core rule
 
 Research, audit, planning, architecture analysis, documentation, read-only repository inspection, issue/PR analysis, and preparation of a development brief may proceed without a development consent request.
 
-Executable development MUST NOT begin until the operator has explicitly approved the scoped development brief.
+Executable development MUST NOT begin until the operator has explicitly approved the scoped development brief and the full-project preplanning prerequisite above is satisfied.
 
 A generic command such as `continue`, `next`, `resume`, or `audit` is not development consent by itself unless the operator explicitly states that development/code implementation is approved.
 
@@ -98,20 +118,21 @@ Minor reversible implementation details inside an already approved scope do not 
 
 ## Planning-to-development boundary
 
-The AI may continue planning until the next executable action is clearly defined. At that point it must stop and request consent rather than silently crossing into implementation.
+The AI may continue planning until both of these are true:
 
-Repository status should use:
+1. the full-project preplanning gate is complete; and
+2. the next executable action is clearly defined.
 
-`PLANNING_READY_FOR_CONSENT`
+Before the full-project gate is complete, continue planning/auditing rather than asking for development consent.
 
-when documentation/audit is complete and the next action is executable development awaiting operator approval.
+After it is complete, stop at `FULL_PROJECT_PLANNING_READY_FOR_CONSENT` and request explicit operator consent before implementation.
 
 ## Emergency/security exception
 
-Do not silently modify code even when a security issue is discovered. Document the issue, severity, exposure, recommended remediation and immediate containment options, then request consent before applying changes unless the operator has already granted an applicable remediation scope.
+Do not silently modify code even when a security issue is discovered. Document the issue, severity, exposure, recommended remediation and immediate containment options, then request consent before applying changes unless the operator has already granted an applicable remediation scope and the full-project gate permits development.
 
 ## Existing work
 
-Executable work completed before this rule remains part of repository history and must not be rolled back merely because the consent gate was added.
+Executable work completed before these rules remains part of repository history and must not be rolled back merely because the consent/preplanning gates were added.
 
-From this document's introduction onward, all new executable development follows this gate.
+From this document's introduction onward, all new executable development follows both the full-project preplanning gate and this consent gate.
