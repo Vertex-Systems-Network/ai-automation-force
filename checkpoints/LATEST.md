@@ -12,7 +12,8 @@ Core product/AI documentation status:
 - includes project options/wizard, content types, AI roles, prompts, characters, audio, visual/cinematic, image generation + approval + reuse, image-to-video reference handoff, storyboard/timeline, provider routing/recovery, continuity QA, memory, assets, approvals, rights, localization, publishing, analytics, 3-hour long-form architecture, web IA, presets/admin;
 - also includes public landing-page architecture, feature marketing content, feature visual/screenshot inventory, signup/registration, login, email verification, password reset, onboarding and the public -> authenticated app handoff;
 - public-web launch planning now also covers SEO/discoverability, conversion funnels, pricing-ready structure, trust/legal dependencies, performance, accessibility, responsive behavior and launch gates;
-- auth/onboarding edge-case planning covers duplicate identities, OAuth collisions, expired/used verification/reset tokens, resumable onboarding, provider connection failures, workspace bootstrap, rate limits and security-event requirements.
+- auth/onboarding edge-case planning covers duplicate identities, OAuth collisions, expired/used verification/reset tokens, resumable onboarding, provider connection failures, workspace bootstrap, rate limits and security-event requirements;
+- multi-platform social/media publishing planning now covers official API-capable networks, per-platform derivatives/metadata, durable scheduling, direct publish vs draft upload vs manual handoff, idempotent retries, publication verification, analytics ingestion and learning feedback.
 
 Image generation planning is canonical in `docs/product/IMAGE-GENERATION-REUSE-SYSTEM.md` and is exposed as an explicit New Project Wizard strategy. Approved still images may become reusable character/world/style/keyframe/reference assets and may drive first-frame/end-frame/image-to-video workflows while retaining provider-independent lineage and continuity state.
 
@@ -27,6 +28,41 @@ The public product path is planned as:
 `Landing -> Features/Use Cases -> Signup/Login -> Verification -> Onboarding -> Provider/Defaults Setup -> First Project -> App Dashboard`
 
 The landing page must present major product features with purposeful product images/screenshots/mockups. Real product screenshots use safe synthetic demo data once implementation exists; conceptual pre-implementation visuals must not be presented as fabricated live-product/customer evidence.
+
+## Multi-platform social publishing planning
+
+Canonical architecture: `docs/product/MULTI-PLATFORM-SOCIAL-AUTOMATION.md`.
+
+Planned capability model:
+- `DIRECT_PUBLISH`;
+- `DRAFT_UPLOAD`;
+- `SCHEDULE_SUPPORTED`;
+- `SYSTEM_SCHEDULED_DIRECT`;
+- `MANUAL_HANDOFF`;
+- `READ_ANALYTICS_ONLY`;
+- `EVALUATION`;
+- `UNSUPPORTED`;
+- `DISABLED`.
+
+Initial verified/evaluated platform scope includes:
+- YouTube;
+- TikTok;
+- Instagram;
+- Facebook;
+- X;
+- LinkedIn;
+- Pinterest;
+- Threads;
+- Vimeo;
+- Dailymotion;
+- Likee as `EVALUATION/MANUAL_HANDOFF` until an official public publishing API/partner path is verified;
+- additional API-capable social/media platforms through the same registry after official capability review.
+
+The publishing layer is provider/platform neutral:
+
+`Approved Master -> Platform Variant Planner -> Publish Package -> Capability/Permission Gate -> Durable Schedule/Publish Job -> Platform Adapter -> Verification -> PlatformPost -> Analytics -> Learning Memory`
+
+Public publishing remains approval/policy gated. No undocumented private endpoints, browser automation or quota/permission circumvention are planned.
 
 ## Linear planning mirror
 
@@ -45,6 +81,13 @@ Current M1 work-package chain:
 - `ABD-133` — WP6 Reversible migrations
 - `ABD-134` — WP7 Persistence repositories + round trips
 - `ABD-135` — WP8 Milestone verification/checkpoint
+
+M12 is now **Multi-Platform Publishing & Analytics** with future consent-gated social work packages:
+- `ABD-137` — SOC1 Platform capability registry + account connection model
+- `ABD-138` — SOC2 Publish packages + variants + durable scheduler + idempotent recovery
+- `ABD-139` — SOC3 Tier-1 adapters: YouTube, TikTok, Instagram, Facebook, X
+- `ABD-140` — SOC4 Extended adapters: LinkedIn, Pinterest, Threads, Vimeo, Dailymotion + evaluation networks
+- `ABD-141` — SOC5 Cross-platform analytics normalization + learning feedback
 
 GitHub↔Linear synchronization policy is canonical in `docs/operations/GITHUB-LINEAR-SYNC.md`.
 
