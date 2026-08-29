@@ -57,7 +57,7 @@ class PostgresStorageObjectRepository:
                     insert(self.storage_table).values(
                         id=uuid4(),
                         external_id=storage_object.storage_object_id,
-                        schema_version=1,
+                        schema_version=storage_object.schema_version,
                         project_id=project_internal,
                         backend=storage_object.backend.value,
                         bucket=storage_object.bucket,
@@ -69,6 +69,7 @@ class PostgresStorageObjectRepository:
                         etag=storage_object.etag,
                         version_id=storage_object.version_id,
                         original_filename=storage_object.original_filename,
+                        lifecycle_class=storage_object.lifecycle_class,
                         created_at=storage_object.audit.created_at,
                         updated_at=storage_object.audit.updated_at,
                         created_by=storage_object.audit.created_by,
@@ -94,6 +95,7 @@ class PostgresStorageObjectRepository:
 
     def _from_row(self, connection: Connection, row: RowMapping) -> StorageObject:
         return StorageObject(
+            schema_version=int(row["schema_version"]),
             storage_object_id=str(row["external_id"]),
             project_id=self._external_project(connection, row["project_id"]),
             backend=StorageBackend(str(row["backend"])),
@@ -108,6 +110,7 @@ class PostgresStorageObjectRepository:
             original_filename=(
                 str(row["original_filename"]) if row["original_filename"] is not None else None
             ),
+            lifecycle_class=str(row["lifecycle_class"]),
             audit=AuditFields(
                 created_at=row["created_at"],
                 updated_at=row["updated_at"],
