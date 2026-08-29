@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Literal, cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, Table, insert, select
+from sqlalchemy import MetaData, insert, select
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
@@ -44,9 +44,11 @@ class PostgresStorageObjectRepository:
                 if existing is not None:
                     if self._from_row(connection, existing) == storage_object:
                         return StorageObjectPersistResult("noop", storage_object.storage_object_id)
-                    raise PersistenceConflictError(
-                        f"storage object {storage_object.storage_object_id} already has different data"
+                    message = (
+                        f"storage object {storage_object.storage_object_id} "
+                        "already has different data"
                     )
+                    raise PersistenceConflictError(message)
                 project_internal = self._optional_project_internal(
                     connection,
                     storage_object.project_id,
