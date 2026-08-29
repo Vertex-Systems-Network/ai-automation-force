@@ -5,6 +5,7 @@ CREATE TABLE core.quarantine_inspections (
     upload_session_id uuid NOT NULL,
     project_id uuid NOT NULL,
     storage_object_external_id text NOT NULL,
+    policy jsonb NOT NULL,
     claimed_mime_type text NOT NULL,
     detected_mime_type text,
     expected_size_bytes bigint NOT NULL,
@@ -26,6 +27,7 @@ CREATE TABLE core.quarantine_inspections (
     CONSTRAINT ck_quarantine_external CHECK (external_id ~ '^QIN-[0-9]{6,20}$'),
     CONSTRAINT ck_quarantine_storage_external
         CHECK (storage_object_external_id ~ '^STO-[0-9]{6,20}$'),
+    CONSTRAINT ck_quarantine_policy_object CHECK (jsonb_typeof(policy) = 'object'),
     CONSTRAINT ck_quarantine_expected_size CHECK (expected_size_bytes > 0),
     CONSTRAINT ck_quarantine_observed_size CHECK (observed_size_bytes >= 0),
     CONSTRAINT ck_quarantine_status CHECK (
