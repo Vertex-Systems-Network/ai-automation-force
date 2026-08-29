@@ -252,9 +252,13 @@ class PostgresQuarantineInspectionRepository:
             raise PersistenceReferenceError(
                 f"missing upload session:{inspection.upload_session_id}"
             )
-        if str(row["status"]) != "completed":
+        if str(row["status"]) != "completed" or row["completed_at"] is None:
             raise QuarantinePersistenceConflictError(
                 "quarantine inspection requires a completed upload session"
+            )
+        if inspection.audit.created_at < row["completed_at"]:
+            raise QuarantinePersistenceConflictError(
+                "quarantine inspection cannot predate upload completion"
             )
         if row["project_id"] != project_internal_id:
             raise QuarantinePersistenceConflictError(
