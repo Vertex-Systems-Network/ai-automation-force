@@ -42,6 +42,7 @@ class S3UploadSessionAdapter:
         expires_in_seconds: int = 900,
     ) -> DirectUploadGrant:
         self._require_session(session, UploadMode.SINGLE, now)
+        self._assert_destination_absent(session)
         seconds = self._bounded_expiry_seconds(session, now, expires_in_seconds)
         response: dict[str, Any] = self.client.generate_presigned_post(
             Bucket=self.settings.bucket,
@@ -79,15 +80,7 @@ class S3UploadSessionAdapter:
         self._require_session(session, UploadMode.MULTIPART, now)
         if session.backend_upload_id is not None:
             return session.backend_upload_id
-        try:
-            self.client.head_object(Bucket=self.settings.bucket, Key=session.object_key)
-        except ClientError as exc:
-            if not self._is_not_found(exc):
-                raise
-        else:
-            raise UploadSessionConflictError(
-                "multipart destination already exists; refusing destructive overwrite"
-            )
+        self._assert_destination_absent(session)
         response = self.client.create_multipart_upload(
             Bucket=self.settings.bucket,
             Key=session.object_key,
@@ -190,6 +183,17 @@ class S3UploadSessionAdapter:
         except ClientError as exc:
             if self._error_code(exc) != "NoSuchUpload":
                 raise
+
+    def _assert_destination_absent(self, session: UploadSession) -> None:
+        try:
+            self.client.head_object(Bucket=self.settings.bucket, Key=session.object_key)
+        except ClientError as exc:
+            if self._is_not_found(exc):
+                return
+            raise
+        raise UploadSessionConflictError(
+            "upload destination already exists; refusing destructive overwrite"
+        )
 
     def _head_completion(self, session: UploadSession) -> S3UploadCompletionEvidence:
         response = self.client.head_object(Bucket=self.settings.bucket, Key=session.object_key)
