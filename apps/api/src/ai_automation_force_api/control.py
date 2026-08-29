@@ -24,6 +24,7 @@ from ai_automation_force_core import (
     PostgresControlSurfaceRepository,
     PostgresJobControlRepository,
     PostgresWorkflowExecutionRepository,
+    ProjectControlStatus,
     ProjectJobRecord,
     WorkflowExecutionRef,
 )
@@ -230,6 +231,9 @@ class ControlService:
             next_cursor = encode_cursor(last.created_at, last.job_id)
         return ProjectJobsResponse(items=items, next_cursor=next_cursor)
 
+    def project_status(self, project_id: str) -> ProjectControlStatus:
+        return self.control.project_status(project_id)
+
     def events(
         self,
         job_id: str,
@@ -248,18 +252,42 @@ class ControlService:
         next_cursor = event_cursor(items[-1]) if has_more and items else None
         return JobEventsResponse(items=items, next_cursor=next_cursor)
 
+    def _existing_workflow(
+        self,
+        workflow_execution_id: str,
+        *,
+        workflow_type: str,
+        project_id: str,
+        job_id: str,
+    ) -> WorkflowExecutionRef | None:
+        try:
+            existing = self.workflows.load(workflow_execution_id)
+        except PersistenceNotFoundError:
+            return None
+        if (
+            existing.workflow_type != workflow_type
+            or existing.project_id != project_id
+            or existing.job_id != job_id
+            or existing.namespace != self.settings.temporal_namespace
+            or existing.task_queue != self.settings.temporal_task_queue
+        ):
+            raise JobCommandConflictError(
+                f"workflow {workflow_execution_id} is bound to different execution semantics"
+            )
+        return existing
+
     async def start_job(self, job_id: str, request: JobCommandRequest) -> JobCommandResult:
         operation: dict[str, Any] = {
             "expected_revision": request.expected_revision,
             "workflow_kind": "synthetic-job-control",
         }
-        existing = self.control.load_start_command(
+        existing_command = self.control.load_start_command(
             job_id,
             idempotency_key=request.idempotency_key,
             operation=operation,
         )
-        if existing is not None:
-            return existing
+        if existing_command is not None:
+            return existing_command
 
         snapshot = self.control.load_job(job_id)
         if snapshot.revision != request.expected_revision:
@@ -273,39 +301,48 @@ class ControlService:
             if snapshot.job_type == "synthetic-cancellable"
             else "SyntheticControlWorkflow"
         )
-        client = await self.temporal_client()
-        try:
-            handle = await client.start_workflow(
-                workflow_type,
-                job_id,
-                id=workflow_execution_id,
-                task_queue=self.settings.temporal_task_queue,
-                id_reuse_policy=WorkflowIDReusePolicy.REJECT_DUPLICATE,
-                id_conflict_policy=WorkflowIDConflictPolicy.USE_EXISTING,
-            )
-        except Exception as exc:
-            raise ControlDependencyError("Temporal workflow start failed") from exc
-        run_id = handle.result_run_id
-        if not run_id:
-            raise ControlDependencyError("Temporal did not return a workflow run ID")
-        now = datetime.now(UTC)
-        workflow_ref = WorkflowExecutionRef(
-            workflow_execution_id=workflow_execution_id,
+        workflow_ref = self._existing_workflow(
+            workflow_execution_id,
             workflow_type=workflow_type,
-            run_id=run_id,
-            namespace=self.settings.temporal_namespace,
-            task_queue=self.settings.temporal_task_queue,
             project_id=snapshot.project_id,
             job_id=job_id,
-            status="running",
-            started_at=now,
-            updated_at=now,
         )
-        self.workflows.save(workflow_ref)
+        if workflow_ref is None:
+            client = await self.temporal_client()
+            try:
+                handle = await client.start_workflow(
+                    workflow_type,
+                    job_id,
+                    id=workflow_execution_id,
+                    task_queue=self.settings.temporal_task_queue,
+                    id_reuse_policy=WorkflowIDReusePolicy.REJECT_DUPLICATE,
+                    id_conflict_policy=WorkflowIDConflictPolicy.USE_EXISTING,
+                )
+            except Exception as exc:
+                raise ControlDependencyError("Temporal workflow start failed") from exc
+            run_id = handle.result_run_id
+            if not run_id:
+                raise ControlDependencyError("Temporal did not return a workflow run ID")
+            now = datetime.now(UTC)
+            workflow_ref = WorkflowExecutionRef(
+                workflow_execution_id=workflow_execution_id,
+                workflow_type=workflow_type,
+                run_id=run_id,
+                namespace=self.settings.temporal_namespace,
+                task_queue=self.settings.temporal_task_queue,
+                project_id=snapshot.project_id,
+                job_id=job_id,
+                status="running",
+                started_at=now,
+                updated_at=now,
+            )
+            self.workflows.save(workflow_ref)
+        now = datetime.now(UTC)
         return self.control.record_start(
             job_id,
             idempotency_key=request.idempotency_key,
-            workflow_execution_id=workflow_execution_id,
+            expected_revision=request.expected_revision,
+            workflow_execution_id=workflow_ref.workflow_execution_id,
             operation=operation,
             now=now,
         )
@@ -344,6 +381,7 @@ class ControlService:
         job_id: str,
         *,
         last_event_id: str | None,
+        follow: bool,
     ) -> AsyncIterator[str]:
         cursor = last_event_id
         heartbeat_deadline = asyncio.get_running_loop().time() + self.settings.sse_heartbeat_seconds
@@ -359,6 +397,8 @@ class ControlService:
                     asyncio.get_running_loop().time() + self.settings.sse_heartbeat_seconds
                 )
                 continue
+            if not follow:
+                return
             now = asyncio.get_running_loop().time()
             if now >= heartbeat_deadline:
                 yield ": keepalive\n\n"
@@ -428,6 +468,16 @@ def control_router() -> APIRouter:
         except Exception as exc:
             raise _translate_error(exc) from exc
 
+    @router.get("/projects/{project_id}/status", response_model=ProjectControlStatus)
+    async def get_project_status(
+        request: Request,
+        project_id: ProjectIdValue,
+    ) -> ProjectControlStatus:
+        try:
+            return _service(request).project_status(project_id)
+        except Exception as exc:
+            raise _translate_error(exc) from exc
+
     @router.get("/jobs/{job_id}/history", response_model=JobEventsResponse)
     async def job_history(
         request: Request,
@@ -481,9 +531,7 @@ def control_router() -> APIRouter:
         workflow_execution_id: WorkflowIdValue,
     ) -> WorkflowResponse:
         try:
-            return WorkflowResponse(
-                workflow=_service(request).workflow(workflow_execution_id)
-            )
+            return WorkflowResponse(workflow=_service(request).workflow(workflow_execution_id))
         except Exception as exc:
             raise _translate_error(exc) from exc
 
@@ -492,15 +540,22 @@ def control_router() -> APIRouter:
         request: Request,
         job_id: JobIdValue,
         last_event_id: Annotated[str | None, Header(alias="Last-Event-ID")] = None,
+        follow: bool = True,
     ) -> StreamingResponse:
         service = _service(request)
-        if last_event_id:
-            try:
+        try:
+            service.checkpoint(job_id)
+            if last_event_id:
                 decode_cursor(last_event_id, uuid_id=True)
-            except ValueError as exc:
-                raise _translate_error(exc) from exc
+        except Exception as exc:
+            raise _translate_error(exc) from exc
         return StreamingResponse(
-            service.stream_events(request, job_id, last_event_id=last_event_id),
+            service.stream_events(
+                request,
+                job_id,
+                last_event_id=last_event_id,
+                follow=follow,
+            ),
             media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",
