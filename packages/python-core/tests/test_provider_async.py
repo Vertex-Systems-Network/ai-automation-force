@@ -106,3 +106,29 @@ def test_provider_async_submission_and_callback_validate_time_and_hash_boundarie
             received_at=now,
             payload_sha256="not-a-hash",
         )
+
+
+def test_provider_async_chronology_rejects_naive_datetimes() -> None:
+    aware = datetime(2026, 8, 29, 9, 0, tzinfo=UTC)
+    naive = datetime(2026, 8, 29, 9, 0)
+
+    with pytest.raises(ValueError, match="submitted_at must be timezone-aware"):
+        ProviderAsyncSubmission(
+            attempt_id="ATT-000001",
+            provider_id="synthetic",
+            provider_generation_id="fake-gen-1",
+            submitted_at=naive,
+            deadline_at=aware + timedelta(seconds=10),
+        )
+
+    with pytest.raises(ValueError, match="provider_event_at must be timezone-aware"):
+        ProviderCallbackEvent(
+            event_id="evt-1",
+            provider_id="synthetic",
+            provider_generation_id="fake-gen-1",
+            provider_status="complete",
+            normalized_status=ProviderAsyncStatus.SUCCEEDED,
+            provider_event_at=naive,
+            received_at=aware,
+            payload_sha256="a" * 64,
+        )
