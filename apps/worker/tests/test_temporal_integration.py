@@ -6,11 +6,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 import pytest
-from alembic import command
-from alembic.config import Config
-from sqlalchemy import create_engine
-from temporalio.worker import Replayer
-
 from ai_automation_force_core import (
     PostgresWorkflowExecutionRepository,
     WorkflowExecutionRef,
@@ -21,6 +16,10 @@ from ai_automation_force_worker import (
     build_worker,
     connect_temporal,
 )
+from alembic import command
+from alembic.config import Config
+from sqlalchemy import create_engine
+from temporalio.worker import Replayer
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
 TEMPORAL_INTEGRATION = os.environ.get("AAF_TEMPORAL_INTEGRATION") == "1"
