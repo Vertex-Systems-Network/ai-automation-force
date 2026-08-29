@@ -47,6 +47,18 @@ def test_magic_detection_uses_content_not_filename() -> None:
     assert detect_magic_mime(b"<script>alert(1)</script>") is None
 
 
+def test_iso_bmff_brands_do_not_confuse_images_or_audio_with_mp4_video() -> None:
+    assert detect_magic_mime(b"\x00\x00\x00\x18ftypavifrest") == "image/avif"
+    assert detect_magic_mime(b"\x00\x00\x00\x18ftypheicrest") == "image/heif"
+    assert detect_magic_mime(b"\x00\x00\x00\x18ftypM4A rest") == "audio/mp4"
+    assert detect_magic_mime(b"\x00\x00\x00\x18ftypzzzzrest") is None
+
+
+def test_ebml_requires_webm_doctype_marker() -> None:
+    assert detect_magic_mime(b"\x1aE\xdf\xa3....webm....") == "video/webm"
+    assert detect_magic_mime(b"\x1aE\xdf\xa3....matroska....") is None
+
+
 def test_matching_image_accepts_without_media_probe(policy: MediaSecurityPolicy) -> None:
     status, rejection_codes = evaluate_quarantine(
         policy=policy,
