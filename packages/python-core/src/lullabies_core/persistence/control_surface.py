@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Any, Literal, cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, and_, insert, or_, select, update
+from sqlalchemy import MetaData, and_, func, insert, or_, select, update
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
@@ -16,6 +16,7 @@ from ..control_surface import (
     JobCommandVersionConflictError,
     JobControlSnapshot,
     JobEventRecord,
+    ProjectControlStatus,
     ProjectJobRecord,
 )
 from ..job_control import TERMINAL_JOB_STATUSES, assert_job_transition, operation_fingerprint
@@ -92,11 +93,7 @@ class PostgresControlSurfaceRepository:
         if limit < 1 or limit > 500:
             raise ValueError("project job limit must be between 1 and 500")
         with self.engine.connect() as connection:
-            project_internal = connection.execute(
-                select(self.projects.c.id).where(self.projects.c.external_id == project_id)
-            ).scalar_one_or_none()
-            if project_internal is None:
-                raise PersistenceNotFoundError(f"project {project_id} was not found")
+            project_internal = self._require_project_internal(connection, project_id)
             statement = select(self.jobs).where(self.jobs.c.project_id == project_internal)
             if after is not None:
                 after_time, after_job_id = after
@@ -124,6 +121,36 @@ class PostgresControlSurfaceRepository:
                 )
                 for row in rows
             ]
+
+    def project_status(self, project_id: str) -> ProjectControlStatus:
+        with self.engine.connect() as connection:
+            project_internal = self._require_project_internal(connection, project_id)
+            job_counts = connection.execute(
+                select(self.jobs.c.status, func.count())
+                .where(self.jobs.c.project_id == project_internal)
+                .group_by(self.jobs.c.status)
+            ).all()
+            workflow_counts = connection.execute(
+                select(self.workflows.c.status, func.count())
+                .where(self.workflows.c.project_id == project_internal)
+                .group_by(self.workflows.c.status)
+            ).all()
+            latest_job_updated_at = connection.execute(
+                select(func.max(self.jobs.c.updated_at)).where(
+                    self.jobs.c.project_id == project_internal
+                )
+            ).scalar_one()
+            job_status_counts = {str(status): int(count) for status, count in job_counts}
+            workflow_status_counts = {
+                str(status): int(count) for status, count in workflow_counts
+            }
+            return ProjectControlStatus(
+                project_id=project_id,
+                total_jobs=sum(job_status_counts.values()),
+                job_status_counts=job_status_counts,
+                workflow_status_counts=workflow_status_counts,
+                latest_job_updated_at=latest_job_updated_at,
+            )
 
     def list_job_events(
         self,
@@ -208,6 +235,7 @@ class PostgresControlSurfaceRepository:
         job_id: str,
         *,
         idempotency_key: str,
+        expected_revision: int,
         workflow_execution_id: str,
         operation: Mapping[str, Any],
         now: datetime,
@@ -220,17 +248,59 @@ class PostgresControlSurfaceRepository:
                 existing = self._command_by_key(connection, job["id"], idempotency_key)
                 if existing is not None:
                     return self._reuse_command(existing, "start", fingerprint)
+                current_revision = int(job["revision"])
                 current = JobStatus(str(job["status"]))
-                if current in TERMINAL_JOB_STATUSES:
-                    raise JobCommandConflictError(
-                        f"job {job_id} cannot start from terminal state {current.value}"
+                if current_revision != expected_revision:
+                    message = (
+                        f"stale job revision: expected {expected_revision}, "
+                        f"current {current_revision}"
                     )
+                    raise JobCommandVersionConflictError(message)
+                if current is not JobStatus.QUEUED:
+                    raise JobCommandConflictError(
+                        f"job {job_id} cannot start from state {current.value}"
+                    )
+                target = JobStatus.ELIGIBLE
+                assert_job_transition(current, target)
+                new_revision = current_revision + 1
+                update_result = connection.execute(
+                    update(self.jobs)
+                    .where(
+                        self.jobs.c.id == job["id"],
+                        self.jobs.c.revision == current_revision,
+                    )
+                    .values(
+                        status=target.value,
+                        updated_at=now,
+                        revision=new_revision,
+                    )
+                )
+                if update_result.rowcount != 1:
+                    raise JobCommandVersionConflictError(
+                        "job revision changed while recording workflow start"
+                    )
+                self._insert_outbox(
+                    connection,
+                    job["id"],
+                    job_id,
+                    new_revision,
+                    "job.status.changed",
+                    now,
+                    {
+                        "job_id": job_id,
+                        "previous_status": current.value,
+                        "status": target.value,
+                        "revision": new_revision,
+                        "command": "start",
+                        "workflow_execution_id": workflow_execution_id,
+                    },
+                )
                 result = JobCommandResult(
                     action="applied",
                     command_type="start",
                     job_id=job_id,
-                    status=current,
-                    revision=int(job["revision"]),
+                    status=target,
+                    revision=new_revision,
                     operation_fingerprint=fingerprint,
                     workflow_execution_id=workflow_execution_id,
                     occurred_at=now,
@@ -444,6 +514,14 @@ class PostgresControlSurfaceRepository:
         if row is None:
             raise PersistenceNotFoundError(f"job {job_id} was not found")
         return row
+
+    def _require_project_internal(self, connection: Connection, project_id: str) -> UUID:
+        value = connection.execute(
+            select(self.projects.c.id).where(self.projects.c.external_id == project_id)
+        ).scalar_one_or_none()
+        if value is None:
+            raise PersistenceNotFoundError(f"project {project_id} was not found")
+        return cast(UUID, value)
 
     def _command_by_key(
         self,
