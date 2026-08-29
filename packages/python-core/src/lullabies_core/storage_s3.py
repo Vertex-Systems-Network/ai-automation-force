@@ -1,11 +1,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Any, Literal
 from urllib.parse import urlsplit
 
 import boto3
-from botocore.client import BaseClient
 from botocore.config import Config
 from botocore.exceptions import ClientError
 
@@ -48,19 +47,13 @@ class S3StorageSettings:
             if parsed.username is not None or parsed.password is not None:
                 raise ValueError("endpoint_url must not embed credentials")
             if parsed.scheme == "http" and self.verify_ssl:
-                # TLS verification is meaningless for HTTP; explicit local insecure mode is required.
                 raise ValueError("HTTP endpoint_url requires verify_ssl=False explicitly")
 
 
 class S3StorageAdapter:
     backend = StorageBackend.S3
 
-    def __init__(
-        self,
-        settings: S3StorageSettings,
-        *,
-        client: BaseClient | None = None,
-    ) -> None:
+    def __init__(self, settings: S3StorageSettings, *, client: Any | None = None) -> None:
         self.settings = settings
         if client is None:
             session = boto3.session.Session(
@@ -78,7 +71,7 @@ class S3StorageAdapter:
                     s3={"addressing_style": settings.addressing_style},
                 ),
             )
-        self.client = client
+        self.client: Any = client
 
     @staticmethod
     def _etag(value: object) -> str | None:
@@ -90,11 +83,43 @@ class S3StorageAdapter:
         return text or None
 
     @staticmethod
-    def _is_not_found(exc: ClientError) -> bool:
-        error = exc.response.get("Error", {})
-        code = str(error.get("Code", ""))
+    def _error_code(exc: ClientError) -> str:
+        return str(exc.response.get("Error", {}).get("Code", ""))
+
+    @classmethod
+    def _is_not_found(cls, exc: ClientError) -> bool:
         status = exc.response.get("ResponseMetadata", {}).get("HTTPStatusCode")
-        return code in {"404", "NoSuchKey", "NotFound"} or status == 404
+        return cls._error_code(exc) in {"404", "NoSuchKey", "NotFound"} or status == 404
+
+    @classmethod
+    def _is_precondition_conflict(cls, exc: ClientError) -> bool:
+        status = exc.response.get("ResponseMetadata", {}).get("HTTPStatusCode")
+        return cls._error_code(exc) in {
+            "ConditionalRequestConflict",
+            "PreconditionFailed",
+        } or status in {409, 412}
+
+    def _reuse_or_conflict(
+        self,
+        key: str,
+        digest: str,
+        size_bytes: int,
+        mime_type: str,
+    ) -> StorageWriteResult:
+        existing = self.stat(key)
+        if existing.sha256 != digest or existing.size_bytes != size_bytes:
+            raise StorageConflictError(f"object key {key} already stores different bytes")
+        return StorageWriteResult(
+            backend=self.backend,
+            bucket=self.settings.bucket,
+            object_key=key,
+            sha256=digest,
+            mime_type=existing.mime_type or mime_type,
+            size_bytes=existing.size_bytes,
+            region=self.settings.region_name,
+            etag=existing.etag,
+            version_id=existing.version_id,
+        )
 
     def put_bytes(self, object_key: str, data: bytes, *, mime_type: str) -> StorageWriteResult:
         key = validate_object_key(object_key)
@@ -103,31 +128,24 @@ class S3StorageAdapter:
         digest = sha256_bytes(data)
 
         try:
-            existing = self.stat(key)
+            return self._reuse_or_conflict(key, digest, len(data), mime_type)
         except StorageNotFoundError:
-            existing = None
-        if existing is not None:
-            if existing.sha256 != digest or existing.size_bytes != len(data):
-                raise StorageConflictError(f"object key {key} already stores different bytes")
-            return StorageWriteResult(
-                backend=self.backend,
-                bucket=self.settings.bucket,
-                object_key=key,
-                sha256=digest,
-                mime_type=existing.mime_type or mime_type,
-                size_bytes=existing.size_bytes,
-                region=self.settings.region_name,
-                etag=existing.etag,
-                version_id=existing.version_id,
-            )
+            pass
 
-        response = self.client.put_object(
-            Bucket=self.settings.bucket,
-            Key=key,
-            Body=data,
-            ContentType=mime_type,
-            Metadata={"aaf-sha256": digest},
-        )
+        try:
+            response = self.client.put_object(
+                Bucket=self.settings.bucket,
+                Key=key,
+                Body=data,
+                ContentType=mime_type,
+                Metadata={"aaf-sha256": digest},
+                IfNoneMatch="*",
+            )
+        except ClientError as exc:
+            if self._is_precondition_conflict(exc):
+                return self._reuse_or_conflict(key, digest, len(data), mime_type)
+            raise
+
         return StorageWriteResult(
             backend=self.backend,
             bucket=self.settings.bucket,
@@ -166,7 +184,9 @@ class S3StorageAdapter:
             raise
         metadata = response.get("Metadata") or {}
         digest = metadata.get("aaf-sha256")
-        if digest is not None and (len(digest) != 64 or any(ch not in "0123456789abcdef" for ch in digest)):
+        if digest is not None and (
+            len(digest) != 64 or any(character not in "0123456789abcdef" for character in digest)
+        ):
             raise StorageIntegrityError(f"object {key} has malformed canonical SHA-256 metadata")
         return StorageBlobStat(
             backend=self.backend,
