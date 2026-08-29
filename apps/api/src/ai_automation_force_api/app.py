@@ -8,6 +8,7 @@ from typing import Final
 from fastapi import APIRouter, FastAPI, Request, status
 from pydantic import BaseModel, ConfigDict
 
+from .control import ControlService, control_router
 from .errors import APIError, ErrorEnvelope, install_error_handlers
 from .request_context import RequestContextMiddleware
 from .settings import Settings, load_settings
@@ -20,6 +21,8 @@ class RuntimeState(BaseModel):
 
     started_at: datetime
     ready: bool = False
+    control_ready: bool = False
+    control_error: str | None = None
 
 
 class HealthResponse(BaseModel):
@@ -36,9 +39,21 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         runtime = RuntimeState(started_at=datetime.now(UTC), ready=True)
         app.state.runtime = runtime
+        app.state.control_service = None
+        if resolved.control_surface_configured:
+            try:
+                app.state.control_service = ControlService(resolved)
+                runtime.control_ready = True
+            except Exception:
+                runtime.ready = False
+                runtime.control_error = "durable control dependencies are unavailable"
         try:
             yield
         finally:
+            service = getattr(app.state, "control_service", None)
+            if isinstance(service, ControlService):
+                service.close()
+            runtime.control_ready = False
             runtime.ready = False
 
     app = FastAPI(
@@ -85,4 +100,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     app.include_router(router, prefix=resolved.api_prefix)
+    app.include_router(control_router(), prefix=resolved.api_prefix)
     return app

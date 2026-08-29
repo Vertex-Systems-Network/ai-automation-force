@@ -13,6 +13,7 @@ from .approval_wait import (
     PostgresApprovalWaitRepository,
 )
 from .circuit_breaker import CircuitBreakerConflictError, PostgresCircuitBreakerRepository
+from .control_surface import PostgresControlSurfaceRepository
 from .job_control import (
     JobIdempotencyConflictError,
     JobLeaseConflictError,
@@ -46,6 +47,7 @@ __all__ = [
     "PersistenceShapeError",
     "PostgresApprovalWaitRepository",
     "PostgresCircuitBreakerRepository",
+    "PostgresControlSurfaceRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",

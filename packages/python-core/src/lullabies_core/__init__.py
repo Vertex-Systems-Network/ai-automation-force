@@ -30,6 +30,16 @@ from .common import (
     TimeRange,
 )
 from .content import Content, ContentObjective, ContentVersion
+from .control_surface import (
+    JobCommandConflictError,
+    JobCommandResult,
+    JobCommandVersionConflictError,
+    JobControlSnapshot,
+    JobEventRecord,
+    ProjectControlStatus,
+    ProjectJobRecord,
+    control_cursor_key,
+)
 from .entities import Location, Prop, StyleProfile, VoiceProfile, World
 from .job_control import (
     JOB_STATUS_TRANSITIONS,
@@ -69,6 +79,7 @@ from .persistence import (
     PersistResult,
     PostgresApprovalWaitRepository,
     PostgresCircuitBreakerRepository,
+    PostgresControlSurfaceRepository,
     PostgresJobControlRepository,
     PostgresProductionRepository,
     PostgresProviderAsyncRepository,
@@ -189,6 +200,11 @@ __all__ = [
     "GenerationRequest",
     "InvalidJobTransitionError",
     "Job",
+    "JobCommandConflictError",
+    "JobCommandResult",
+    "JobCommandVersionConflictError",
+    "JobControlSnapshot",
+    "JobEventRecord",
     "JobIdempotencyConflictError",
     "JobLeaseConflictError",
     "JobLeaseResult",
@@ -213,6 +229,7 @@ __all__ = [
     "PersistenceShapeError",
     "PostgresApprovalWaitRepository",
     "PostgresCircuitBreakerRepository",
+    "PostgresControlSurfaceRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",
@@ -220,6 +237,8 @@ __all__ = [
     "ProductionLineageBundle",
     "Project",
     "ProjectBundle",
+    "ProjectControlStatus",
+    "ProjectJobRecord",
     "ProjectStatus",
     "Prop",
     "ProviderAsyncConflictError",
@@ -251,6 +270,7 @@ __all__ = [
     "World",
     "assert_job_transition",
     "assert_provider_async_transition",
+    "control_cursor_key",
     "expected_wait_status",
     "expired_job_status",
     "import_legacy_content_package",
