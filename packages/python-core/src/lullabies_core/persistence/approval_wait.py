@@ -43,11 +43,18 @@ class PostgresApprovalWaitRepository:
         self.engine = engine
         metadata = MetaData()
         metadata.reflect(bind=engine, schema="core")
-        required = {"approval_requests", "approvals", "jobs", "projects", "outbox_messages"}
+        required = {
+            "approval_requests",
+            "approvals",
+            "jobs",
+            "projects",
+            "outbox_messages",
+        }
         missing = [name for name in required if f"core.{name}" not in metadata.tables]
         if missing:
             raise PersistenceReferenceError(
-                f"approval-wait persistence tables are not migrated: {', '.join(sorted(missing))}"
+                "approval-wait persistence tables are not migrated: "
+                + ", ".join(sorted(missing))
             )
         self.requests = metadata.tables["core.approval_requests"]
         self.approvals = metadata.tables["core.approvals"]
@@ -200,6 +207,7 @@ class PostgresApprovalWaitRepository:
                     )
                 if status is ApprovalRequestStatus.EXPIRED:
                     raise ApprovalWaitExpiredError(f"approval request {request_id} has expired")
+
                 self._require_request_revision(request, expected_request_revision)
                 if approval.created_at < request["requested_at"]:
                     raise ApprovalWaitConflictError("approval predates the request")
@@ -208,8 +216,13 @@ class PostgresApprovalWaitRepository:
                     raise ApprovalWaitExpiredError(
                         f"approval request {request_id} expired before resolution"
                     )
-                self._require_approval_matches_request(request, approval)
 
+                project = self._require_project_by_id(connection, request["project_id"])
+                self._require_approval_matches_request(
+                    request,
+                    project,
+                    approval,
+                )
                 job = self._require_job_by_id_for_update(connection, request["job_id"])
                 current_status = JobStatus(str(request["requested_job_status"]))
                 self._require_job_snapshot(
@@ -217,16 +230,13 @@ class PostgresApprovalWaitRepository:
                     int(request["requested_job_revision"]),
                     current_status,
                 )
-                target = resolved_job_status(
-                    ApprovalWaitKind(str(request["wait_kind"])),
-                    approval.decision,
-                )
+
+                wait_kind = ApprovalWaitKind(str(request["wait_kind"]))
+                target = resolved_job_status(wait_kind, approval.decision)
                 new_status = target or current_status
                 if target is not None:
-                    try:
-                        assert_job_transition(current_status, target)
-                    except InvalidJobTransitionError as exc:
-                        raise ApprovalWaitConflictError(str(exc)) from exc
+                    self._require_transition(current_status, target)
+
                 new_job_revision = int(job["revision"]) + 1
                 job_values: dict[str, Any] = {
                     "status": new_status.value,
@@ -330,6 +340,7 @@ class PostgresApprovalWaitRepository:
                 )
             if status is ApprovalRequestStatus.RESOLVED:
                 raise ApprovalWaitConflictError(f"approval request {request_id} is resolved")
+
             self._require_request_revision(request, expected_request_revision)
             expires_at = request["expires_at"]
             if expires_at is None or expires_at > now:
@@ -342,13 +353,12 @@ class PostgresApprovalWaitRepository:
                 int(request["requested_job_revision"]),
                 current_status,
             )
-            target = expired_job_status(ApprovalWaitKind(str(request["wait_kind"])))
+            wait_kind = ApprovalWaitKind(str(request["wait_kind"]))
+            target = expired_job_status(wait_kind)
             new_status = target or current_status
             if target is not None:
-                try:
-                    assert_job_transition(current_status, target)
-                except InvalidJobTransitionError as exc:
-                    raise ApprovalWaitConflictError(str(exc)) from exc
+                self._require_transition(current_status, target)
+
             new_job_revision = int(job["revision"]) + 1
             job_values: dict[str, Any] = {
                 "status": new_status.value,
@@ -409,7 +419,11 @@ class PostgresApprovalWaitRepository:
             raise PersistenceNotFoundError(f"approval request {request_id} was not found")
         return row
 
-    def _require_request_for_update(self, connection: Connection, request_id: str) -> RowMapping:
+    def _require_request_for_update(
+        self,
+        connection: Connection,
+        request_id: str,
+    ) -> RowMapping:
         row = connection.execute(
             select(self.requests)
             .where(self.requests.c.external_id == request_id)
@@ -429,12 +443,32 @@ class PostgresApprovalWaitRepository:
             raise PersistenceNotFoundError(f"job {job_id} was not found")
         return row
 
-    def _require_job_by_id_for_update(self, connection: Connection, job_id: UUID) -> RowMapping:
+    def _require_job_by_id_for_update(
+        self,
+        connection: Connection,
+        job_id: UUID,
+    ) -> RowMapping:
         row = connection.execute(
             select(self.jobs).where(self.jobs.c.id == job_id).with_for_update()
         ).mappings().one_or_none()
         if row is None:
-            raise PersistenceReferenceError(f"approval request references missing job {job_id}")
+            raise PersistenceReferenceError(
+                f"approval request references missing job {job_id}"
+            )
+        return row
+
+    def _require_project_by_id(
+        self,
+        connection: Connection,
+        project_id: UUID,
+    ) -> RowMapping:
+        row = connection.execute(
+            select(self.projects).where(self.projects.c.id == project_id)
+        ).mappings().one_or_none()
+        if row is None:
+            raise PersistenceReferenceError(
+                f"approval request references missing project {project_id}"
+            )
         return row
 
     @staticmethod
@@ -458,13 +492,24 @@ class PostgresApprovalWaitRepository:
             )
 
     @staticmethod
-    def _require_approval_matches_request(request: RowMapping, approval: Approval) -> None:
-        if approval.project_id != request["project_external_id"] if "project_external_id" in request else False:
+    def _require_approval_matches_request(
+        request: RowMapping,
+        project: RowMapping,
+        approval: Approval,
+    ) -> None:
+        if approval.project_id != str(project["external_id"]):
             raise ApprovalWaitConflictError("approval belongs to another project")
-        if approval.subject_type != request["subject_type"] or approval.subject_id != request["subject_id"]:
+        if (
+            approval.subject_type != request["subject_type"]
+            or approval.subject_id != request["subject_id"]
+        ):
             raise ApprovalWaitConflictError("approval subject does not match the request")
 
-    def _require_approval_by_id(self, connection: Connection, approval_id: UUID | None) -> RowMapping:
+    def _require_approval_by_id(
+        self,
+        connection: Connection,
+        approval_id: UUID | None,
+    ) -> RowMapping:
         if approval_id is None:
             raise PersistenceReferenceError("resolved request is missing approval identity")
         row = connection.execute(
@@ -488,6 +533,13 @@ class PostgresApprovalWaitRepository:
             raise PersistenceReferenceError(f"missing {label}:{external_id}")
         return row
 
+    @staticmethod
+    def _require_transition(current: JobStatus, target: JobStatus) -> None:
+        try:
+            assert_job_transition(current, target)
+        except InvalidJobTransitionError as exc:
+            raise ApprovalWaitConflictError(str(exc)) from exc
+
     def _update_job(
         self,
         connection: Connection,
@@ -496,7 +548,10 @@ class PostgresApprovalWaitRepository:
     ) -> None:
         result = connection.execute(
             update(self.jobs)
-            .where(self.jobs.c.id == row["id"], self.jobs.c.revision == row["revision"])
+            .where(
+                self.jobs.c.id == row["id"],
+                self.jobs.c.revision == row["revision"],
+            )
             .values(**values)
         )
         if result.rowcount != 1:
