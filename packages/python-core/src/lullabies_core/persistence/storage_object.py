@@ -8,7 +8,7 @@ from sqlalchemy import MetaData, insert, select
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
-from ..common import AuditFields
+from ..common import SCHEMA_VERSION, AuditFields, SchemaVersion
 from ..storage import StorageBackend, StorageObject
 from ._db import PersistenceConflictError, PersistenceNotFoundError, PersistenceReferenceError
 
@@ -94,8 +94,15 @@ class PostgresStorageObjectRepository:
             return self._from_row(connection, row)
 
     def _from_row(self, connection: Connection, row: RowMapping) -> StorageObject:
+        persisted_schema_version = int(row["schema_version"])
+        if persisted_schema_version != SCHEMA_VERSION:
+            raise PersistenceReferenceError(
+                "unsupported storage object schema version "
+                f"{persisted_schema_version}; expected {SCHEMA_VERSION}"
+            )
+        schema_version = cast(SchemaVersion, persisted_schema_version)
         return StorageObject(
-            schema_version=int(row["schema_version"]),
+            schema_version=schema_version,
             storage_object_id=str(row["external_id"]),
             project_id=self._external_project(connection, row["project_id"]),
             backend=StorageBackend(str(row["backend"])),
