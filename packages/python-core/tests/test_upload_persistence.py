@@ -204,7 +204,10 @@ def test_multipart_upload_resumes_across_reload_and_terminal_complete_is_idempot
                 completed_at=completed_at,
             )
 
-        with pytest.raises(UploadPersistenceConflictError, match="completed upload cannot be aborted"):
+        with pytest.raises(
+            UploadPersistenceConflictError,
+            match="completed upload cannot be aborted",
+        ):
             repository.abort(
                 session.upload_session_id,
                 idempotency_key="abort-after-complete",
@@ -305,7 +308,10 @@ def test_upload_conflicts_abort_idempotency_and_expiry_fail_closed() -> None:
             aborted_at=aborted_at,
         )
         assert replayed_abort.action == "reused"
-        with pytest.raises(UploadPersistenceConflictError, match="aborted upload cannot be completed"):
+        with pytest.raises(
+            UploadPersistenceConflictError,
+            match="aborted upload cannot be completed",
+        ):
             repository.complete(
                 session.upload_session_id,
                 idempotency_key="complete-aborted",
@@ -370,7 +376,10 @@ def test_upload_persistence_rejects_unknown_schema_version() -> None:
                     "WHERE external_id = 'UPS-003120'"
                 )
             )
-        with pytest.raises(PersistenceReferenceError, match="unsupported upload session schema version"):
+        with pytest.raises(
+            PersistenceReferenceError,
+            match="unsupported upload session schema version",
+        ):
             repository.load(session.upload_session_id)
     finally:
         engine.dispose()
