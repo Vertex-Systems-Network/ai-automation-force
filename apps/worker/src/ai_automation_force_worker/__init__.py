@@ -2,6 +2,7 @@ from .client import connect_temporal
 from .settings import WorkerSettings, WorkerSettingsError, load_worker_settings
 from .worker import build_worker
 from .workflows import (
+    SyntheticApprovalWorkflow,
     SyntheticCancellationWorkflow,
     SyntheticControlWorkflow,
     SyntheticRetryWorkflow,
@@ -11,6 +12,7 @@ from .workflows import (
 )
 
 __all__ = [
+    "SyntheticApprovalWorkflow",
     "SyntheticCancellationWorkflow",
     "SyntheticControlWorkflow",
     "SyntheticRetryWorkflow",
