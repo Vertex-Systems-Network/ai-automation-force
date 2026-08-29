@@ -56,7 +56,7 @@ def test_completed_multipart_requires_exact_recorded_bytes() -> None:
         etag="etag-1",
         recorded_at=session.audit.created_at + timedelta(minutes=1),
     )
-    with pytest.raises(ValidationError, match="recorded multipart part bytes"):
+    with pytest.raises(ValidationError, match="completed multipart part bytes"):
         UploadSession.model_validate(
             {
                 **session.model_dump(),
