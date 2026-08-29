@@ -17,6 +17,7 @@ CREATE TABLE core.approval_requests (
     approval_id uuid UNIQUE,
     resolution_fingerprint char(64),
     resolved_job_revision integer,
+    resolved_job_status text,
     requested_at timestamptz NOT NULL,
     closed_at timestamptz,
     updated_at timestamptz NOT NULL,
@@ -56,11 +57,14 @@ CREATE TABLE core.approval_requests (
     CONSTRAINT ck_approval_request_revision CHECK (revision >= 1),
     CONSTRAINT ck_approval_request_lifecycle CHECK (
         (status = 'pending' AND approval_id IS NULL AND resolution_fingerprint IS NULL
-            AND resolved_job_revision IS NULL AND closed_at IS NULL)
+            AND resolved_job_revision IS NULL AND resolved_job_status IS NULL
+            AND closed_at IS NULL)
         OR (status = 'resolved' AND approval_id IS NOT NULL AND resolution_fingerprint IS NOT NULL
-            AND resolved_job_revision IS NOT NULL AND closed_at IS NOT NULL)
+            AND resolved_job_revision IS NOT NULL AND resolved_job_status IS NOT NULL
+            AND closed_at IS NOT NULL)
         OR (status = 'expired' AND approval_id IS NULL AND resolution_fingerprint IS NULL
-            AND resolved_job_revision IS NOT NULL AND closed_at IS NOT NULL)
+            AND resolved_job_revision IS NOT NULL AND resolved_job_status IS NOT NULL
+            AND closed_at IS NOT NULL)
     )
 );
 
