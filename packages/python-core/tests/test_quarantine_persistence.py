@@ -219,13 +219,17 @@ def test_open_upload_cannot_enter_quarantine_and_rejected_decision_is_immutable(
         uploads = PostgresUploadSessionRepository(engine)
         uploads.create(session)
         repository = PostgresQuarantineInspectionRepository(engine)
-        pending = pending_inspection("QIN-003410", session, now=started + timedelta(minutes=1))
+        early_pending = pending_inspection(
+            "QIN-003410",
+            session,
+            now=started + timedelta(minutes=1),
+        )
 
         with pytest.raises(
             QuarantinePersistenceConflictError,
             match="requires a completed upload session",
         ):
-            repository.create(pending)
+            repository.create(early_pending)
 
         uploads.complete(
             session.upload_session_id,
@@ -233,13 +237,24 @@ def test_open_upload_cannot_enter_quarantine_and_rejected_decision_is_immutable(
             observed_size_bytes=12,
             completed_at=started + timedelta(minutes=2),
         )
+        with pytest.raises(
+            QuarantinePersistenceConflictError,
+            match="cannot predate upload completion",
+        ):
+            repository.create(early_pending)
+
+        pending = pending_inspection(
+            "QIN-003410",
+            session,
+            now=started + timedelta(minutes=3),
+        )
         repository.create(pending)
         repository.mark_inspecting(
             pending.inspection_id,
-            now=started + timedelta(minutes=3),
+            now=started + timedelta(minutes=4),
         )
 
-        rejected_at = started + timedelta(minutes=4)
+        rejected_at = started + timedelta(minutes=5)
         rejected = QuarantineInspection(
             **{
                 **pending.model_dump(mode="python"),
@@ -262,7 +277,7 @@ def test_open_upload_cannot_enter_quarantine_and_rejected_decision_is_immutable(
 
         accepted = accepted_inspection(
             pending,
-            inspected_at=started + timedelta(minutes=5),
+            inspected_at=started + timedelta(minutes=6),
         )
         with pytest.raises(
             QuarantinePersistenceConflictError,
