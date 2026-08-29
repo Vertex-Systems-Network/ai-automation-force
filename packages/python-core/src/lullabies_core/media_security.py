@@ -18,6 +18,18 @@ from .common import (
 
 QuarantineInspectionId = Annotated[str, Field(pattern=external_id_pattern("QIN"))]
 
+_MP4_VIDEO_BRANDS = {
+    b"avc1",
+    b"dash",
+    b"iso2",
+    b"isom",
+    b"mp41",
+    b"mp42",
+}
+_MP4_AUDIO_BRANDS = {b"M4A ", b"M4B "}
+_AVIF_BRANDS = {b"avif", b"avis"}
+_HEIF_BRANDS = {b"heic", b"heix", b"hevc", b"hevx", b"mif1", b"msf1"}
+
 
 class QuarantineStatus(StrEnum):
     PENDING = "pending"
@@ -121,6 +133,21 @@ class ThreatScanResult(StrictModel):
         return self
 
 
+def _detect_iso_bmff(prefix: bytes) -> str | None:
+    if len(prefix) < 12 or prefix[4:8] != b"ftyp":
+        return None
+    brand = prefix[8:12]
+    if brand in _MP4_VIDEO_BRANDS:
+        return "video/mp4"
+    if brand in _MP4_AUDIO_BRANDS:
+        return "audio/mp4"
+    if brand in _AVIF_BRANDS:
+        return "image/avif"
+    if brand in _HEIF_BRANDS:
+        return "image/heif"
+    return None
+
+
 def detect_magic_mime(prefix: bytes) -> str | None:
     """Detect a deliberately small allowlist of high-value media signatures."""
 
@@ -142,10 +169,15 @@ def detect_magic_mime(prefix: bytes) -> str | None:
         len(prefix) >= 2 and prefix[0] == 0xFF and prefix[1] & 0xE0 == 0xE0
     ):
         return "audio/mpeg"
-    if len(prefix) >= 12 and prefix[4:8] == b"ftyp":
-        return "video/mp4"
+    iso_bmff_mime = _detect_iso_bmff(prefix)
+    if iso_bmff_mime is not None:
+        return iso_bmff_mime
     if prefix.startswith(b"\x1aE\xdf\xa3"):
-        return "video/webm"
+        # WebM and Matroska share the EBML magic. Require the WebM DocType marker
+        # in the bounded sniff prefix rather than treating every EBML file as WebM.
+        if b"webm" in prefix[:4096].lower():
+            return "video/webm"
+        return None
     if prefix.startswith(b"%PDF-"):
         return "application/pdf"
     return None
