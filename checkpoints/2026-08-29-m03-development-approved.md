@@ -10,7 +10,7 @@ The operator explicitly authorized M03 executable development with:
 
 `Milestone 3 development approve — start.`
 
-The authorization is fresh, milestone-specific, and applies to the planned M03 scope only.
+The authorization is fresh, milestone-specific, and applies to planned M03 scope only.
 
 ## Entry criteria
 
@@ -24,13 +24,14 @@ M03 entry criteria are satisfied:
 
 ## Revalidated implementation direction
 
-- canonical SDK boundary: synchronous `boto3 1.43.80` / `botocore 1.43.80`;
+- canonical SDK boundary: synchronous `boto3 1.43.83` / `botocore 1.43.83`;
+- matching boto3 S3 stubs may be used for strict typing;
 - provider-neutral core contracts; boto3 shapes must not leak into canonical models;
 - deterministic filesystem adapter for local/unit development;
 - preferred future network-level S3 compatibility target: Adobe S3Mock 5.1.0;
 - Moto 5.2.3 permitted for focused test fixtures;
-- MinIO Community Server is not a mandatory new CI dependency because its upstream community repository is archived/source-only;
-- aiobotocore is not introduced in WP1 because current `3.9.0` does not support the current botocore line.
+- MinIO Community Server is not a mandatory new CI dependency because current upstream community distribution is archived/source-only;
+- aiobotocore 3.9.0 is not introduced because its botocore range does not support the current AWS SDK line.
 
 ## Current executable target
 
@@ -38,11 +39,11 @@ M03 entry criteria are satisfied:
 
 WP1 acceptance requires:
 
-- stable storage/object IDs and canonical key rules;
+- stable storage-object IDs and canonical key rules;
 - provider-neutral storage adapter contract;
 - safe filesystem implementation;
 - S3-compatible boto3 implementation;
-- SHA-256/size/MIME/region/version/ETag metadata semantics;
+- SHA-256/size/MIME/backend/region/version/ETag metadata semantics;
 - path traversal/root escape protection;
 - no credentials in domain state/logs;
 - tests for deterministic keying, hashing and adapter behavior;
@@ -62,12 +63,6 @@ WP1 acceptance requires:
 
 ## Scope boundary
 
-M03 does not authorize:
-
-- M04 character/entity library implementation;
-- AI generation provider execution or provider spend;
-- public publishing/social execution;
-- full web/mobile/auth/billing features;
-- autonomous destructive lifecycle actions outside the M03 plan.
+M03 does not authorize M04+ implementation, AI generation provider spend, public publishing/social execution, full web/mobile/auth/billing features, or autonomous destructive actions outside the M03 plan.
 
 GitHub remains canonical. Linear mirrors verified execution state.

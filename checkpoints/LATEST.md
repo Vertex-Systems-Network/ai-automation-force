@@ -28,39 +28,40 @@ Current stack revalidation:
 ## Revalidated storage baseline
 
 - Python runtime remains 3.12+.
-- Initial canonical S3 SDK: boto3/botocore `1.43.80`.
-- `aiobotocore 3.9.0` is not introduced because its current botocore compatibility range does not include `1.43.80`.
-- Filesystem adapter is the deterministic local/unit implementation.
-- Preferred future network-level S3 CI target: Adobe S3Mock `5.1.0`.
+- Final pre-WP1 freshness pass: boto3/botocore `1.43.83` (2026-08-28).
+- matching boto3 S3 stubs may be pinned for strict mypy.
+- `aiobotocore 3.9.0` is not introduced because its current botocore range does not include the current AWS SDK line.
+- filesystem adapter is the deterministic local/unit implementation.
+- preferred future network-level S3 CI target: Adobe S3Mock `5.1.0`.
 - Moto `5.2.3` may be used for focused fixtures.
-- MinIO Community Server is not a mandatory new CI dependency because the upstream community repository is archived/source-only; S3/MinIO protocol compatibility remains a target.
+- MinIO Community Server is not a mandatory new CI dependency because current upstream community distribution is archived/source-only; S3/MinIO protocol compatibility remains a target.
 
 ## Current executable target
 
-**M03-WP1 — Storage adapter and object metadata**
+**M03-WP1 — Storage adapter and object metadata** / Linear `ABD-200`
 
 Required WP1 scope:
 
 - provider-neutral storage adapter interface;
-- stable storage object IDs/object keys;
+- stable storage-object IDs/object keys;
 - deterministic filesystem adapter with path containment and atomic writes;
 - S3-compatible boto3 adapter with configurable endpoint/region/addressing;
-- SHA-256, MIME, byte size, region, version ID and ETag metadata semantics;
+- SHA-256, MIME, byte size, backend, region, version ID and ETag metadata semantics;
+- preserve existing canonical Asset rather than duplicating it;
 - credentials/configuration never become canonical domain state;
-- no upload-session API (WP2), quarantine/probe pipeline (WP3), derivatives (WP5), signed delivery (WP6), or retention implementation (WP7) yet;
+- no upload-session API (WP2), quarantine/probe (WP3), provenance linkage (WP4), derivatives (WP5), signed delivery (WP6), or retention orchestration (WP7) yet;
 - exact-head required CI and existing M01/M02 regressions must be green before merge.
 
-## Remaining M03 sequence
+## Linear M03 execution chain
 
-1. WP1 — storage adapter and object metadata;
-2. WP2 — upload sessions;
-3. WP3 — quarantine/probe/security;
-4. WP4 — asset lineage/provenance/rights;
-5. WP5 — derivatives/proxies;
-6. WP6 — signed delivery;
-7. WP7 — retention/archive/delete/export primitives;
-8. WP8 — acceptance;
-9. M03 closure and fresh M04 consent gate.
+- WP1 `ABD-200` — In Progress
+- WP2 `ABD-201` — Backlog, blocked by WP1
+- WP3 `ABD-202` — Backlog, blocked by WP2
+- WP4 `ABD-203` — Backlog, blocked by WP3
+- WP5 `ABD-204` — Backlog, blocked by WP4
+- WP6 `ABD-205` — Backlog, blocked by WP5
+- WP7 `ABD-206` — Backlog, blocked by WP6
+- WP8 `ABD-207` — Backlog, blocked by WP7
 
 ## Consent boundary
 
