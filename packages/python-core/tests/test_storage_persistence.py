@@ -54,6 +54,7 @@ def filesystem_object(
     *,
     object_key: str,
     data: bytes = b"storage fixture",
+    lifecycle_class: str = "active",
 ) -> StorageObject:
     now = datetime.now(UTC)
     return StorageObject(
@@ -65,6 +66,7 @@ def filesystem_object(
         mime_type="application/octet-stream",
         size_bytes=len(data),
         original_filename="fixture.bin",
+        lifecycle_class=lifecycle_class,
         audit=AuditFields(created_at=now, updated_at=now, created_by="wp1-test"),
     )
 
@@ -85,11 +87,15 @@ def test_storage_object_repository_round_trip_is_idempotent_and_reference_safe()
             "STO-002001",
             "PRJ-002001",
             object_key="source/PRJ-002001/STO-002001",
+            lifecycle_class="source",
         )
 
         created = repository.save(storage_object)
         assert created.action == "created"
-        assert repository.load(storage_object.storage_object_id) == storage_object
+        restored = repository.load(storage_object.storage_object_id)
+        assert restored == storage_object
+        assert restored.schema_version == 1
+        assert restored.lifecycle_class == "source"
 
         reused = repository.save(storage_object)
         assert reused.action == "noop"
@@ -108,6 +114,44 @@ def test_storage_object_repository_round_trip_is_idempotent_and_reference_safe()
         )
         with pytest.raises(PersistenceReferenceError, match="missing project"):
             repository.save(missing_project)
+    finally:
+        engine.dispose()
+        command.downgrade(config, "base")
+
+
+@pytest.mark.postgres
+@pytest.mark.skipif(DATABASE_URL is None, reason="DATABASE_URL is not configured")
+def test_storage_object_repository_rejects_unsupported_persisted_schema_version() -> None:
+    assert DATABASE_URL is not None
+    config = alembic_config()
+    command.downgrade(config, "base")
+    command.upgrade(config, "head")
+    engine = create_engine(DATABASE_URL)
+
+    try:
+        insert_project(engine, "PRJ-002020")
+        repository = PostgresStorageObjectRepository(engine)
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.storage_objects (
+                        id, external_id, schema_version, project_id, backend, object_key,
+                        sha256, mime_type, size_bytes, lifecycle_class,
+                        created_at, updated_at
+                    ) VALUES (
+                        gen_random_uuid(), 'STO-002020', 2,
+                        (SELECT id FROM core.projects WHERE external_id = 'PRJ-002020'),
+                        'filesystem', 'source/PRJ-002020/STO-002020',
+                        :sha256, 'application/octet-stream', 7, 'source', now(), now()
+                    )
+                    """
+                ),
+                {"sha256": sha256_bytes(b"fixture")},
+            )
+
+        with pytest.raises(PersistenceReferenceError, match="unsupported storage object schema"):
+            repository.load("STO-002020")
     finally:
         engine.dispose()
         command.downgrade(config, "base")
