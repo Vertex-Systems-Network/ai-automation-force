@@ -39,6 +39,8 @@ from .persistence import (
     PersistenceShapeError,
     PersistResult,
     PostgresProductionRepository,
+    PostgresWorkflowExecutionRepository,
+    WorkflowPersistResult,
 )
 from .production import (
     Approval,
@@ -69,6 +71,7 @@ from .timeline import (
     Timeline,
     TimelineTrack,
 )
+from .workflow_runtime import WorkflowExecutionRef
 
 __all__ = [
     "LEGACY_CONTENT_MAPPING_VERSION",
@@ -118,6 +121,7 @@ __all__ = [
     "PersistenceReferenceError",
     "PersistenceShapeError",
     "PostgresProductionRepository",
+    "PostgresWorkflowExecutionRepository",
     "ProductionLineageBundle",
     "Project",
     "ProjectBundle",
@@ -136,6 +140,8 @@ __all__ = [
     "Timeline",
     "TimelineTrack",
     "VoiceProfile",
+    "WorkflowExecutionRef",
+    "WorkflowPersistResult",
     "World",
     "import_legacy_content_package",
     "reconcile_legacy_content_import",
