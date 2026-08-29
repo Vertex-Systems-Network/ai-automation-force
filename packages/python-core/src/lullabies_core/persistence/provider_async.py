@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from datetime import datetime
 from uuid import UUID, uuid4
 
@@ -402,7 +403,7 @@ class PostgresProviderAsyncRepository:
         connection: Connection,
         state: RowMapping,
         expected_revision: int,
-        values: dict[str, object],
+        values: Mapping[str, object],
     ) -> None:
         result = connection.execute(
             update(self.states)
