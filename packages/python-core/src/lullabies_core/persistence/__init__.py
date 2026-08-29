@@ -27,6 +27,11 @@ from .provider_async import (
     ProviderAsyncVersionConflictError,
     ProviderCallbackConflictError,
 )
+from .quarantine_inspection import (
+    PostgresQuarantineInspectionRepository,
+    QuarantinePersistenceConflictError,
+    QuarantinePersistResult,
+)
 from .repository import PostgresProductionRepository
 from .storage_object import PostgresStorageObjectRepository, StorageObjectPersistResult
 from .upload_session import PostgresUploadSessionRepository, UploadPersistenceConflictError
@@ -53,12 +58,15 @@ __all__ = [
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",
+    "PostgresQuarantineInspectionRepository",
     "PostgresStorageObjectRepository",
     "PostgresUploadSessionRepository",
     "PostgresWorkflowExecutionRepository",
     "ProviderAsyncConflictError",
     "ProviderAsyncVersionConflictError",
     "ProviderCallbackConflictError",
+    "QuarantinePersistResult",
+    "QuarantinePersistenceConflictError",
     "StorageObjectPersistResult",
     "UploadPersistenceConflictError",
     "WorkflowPersistResult",

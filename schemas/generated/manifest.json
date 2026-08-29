@@ -16,6 +16,7 @@
     "project.schema.json": "79e018e7c5d9a9d6e0b5fff4794cb0e6a219fc95607efa09d4b702c996a0756f",
     "prop.schema.json": "a3d059cb1c6e1842c3d0628d3dba2a9599d187586673e61f4d2106777bfd3cc9",
     "qa-record.schema.json": "1146722bbe19e2ee399f599dcd8773e3a76c3b8f9a0923a3eb14c65a87febb02",
+    "quarantine-inspection.schema.json": "3575e87b40a46f3630c9c29f051391f3ce486f2ed95cb639a87a6066676ff831",
     "rights-record.schema.json": "b77b6148ce87accef0cfabb8625bd0d5f27fc3a46e60789b6f49c16a318225d3",
     "scene.schema.json": "141b9641114f393cd083df84a235cd07f71546a5aed36138933dd7d3825ef62c",
     "sequence.schema.json": "6c7412e1d4e87db6783c6641429364fbcd3b959359b1b58d005ac917cfc19c08",

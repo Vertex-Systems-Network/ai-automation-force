@@ -1,0 +1,386 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "MediaProbeResult": {
+      "additionalProperties": false,
+      "properties": {
+        "duration_seconds": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Duration Seconds"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Code"
+        },
+        "format_name": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Format Name"
+        },
+        "status": {
+          "$ref": "#/$defs/MediaProbeStatus"
+        },
+        "stream_count": {
+          "anyOf": [
+            {
+              "maximum": 10000,
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stream Count"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "MediaProbeResult",
+      "type": "object"
+    },
+    "MediaProbeStatus": {
+      "enum": [
+        "succeeded",
+        "failed",
+        "timed-out",
+        "unavailable"
+      ],
+      "title": "MediaProbeStatus",
+      "type": "string"
+    },
+    "MediaSecurityPolicy": {
+      "additionalProperties": false,
+      "properties": {
+        "allowed_mime_types": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Allowed Mime Types",
+          "type": "array"
+        },
+        "max_size_bytes": {
+          "exclusiveMinimum": 0,
+          "title": "Max Size Bytes",
+          "type": "integer"
+        },
+        "probe_mime_prefixes": {
+          "default": [
+            "audio/",
+            "video/"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "title": "Probe Mime Prefixes",
+          "type": "array"
+        },
+        "require_magic_match": {
+          "default": true,
+          "title": "Require Magic Match",
+          "type": "boolean"
+        },
+        "require_threat_scan": {
+          "default": true,
+          "title": "Require Threat Scan",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "allowed_mime_types",
+        "max_size_bytes"
+      ],
+      "title": "MediaSecurityPolicy",
+      "type": "object"
+    },
+    "QuarantineRejectionCode": {
+      "enum": [
+        "size-mismatch",
+        "size-limit-exceeded",
+        "unsupported-mime",
+        "magic-unknown",
+        "mime-mismatch",
+        "probe-required",
+        "probe-failed",
+        "probe-timed-out",
+        "probe-unavailable",
+        "threat-detected",
+        "threat-scan-error",
+        "threat-scan-unavailable"
+      ],
+      "title": "QuarantineRejectionCode",
+      "type": "string"
+    },
+    "QuarantineStatus": {
+      "enum": [
+        "pending",
+        "inspecting",
+        "accepted",
+        "rejected"
+      ],
+      "title": "QuarantineStatus",
+      "type": "string"
+    },
+    "ThreatScanResult": {
+      "additionalProperties": false,
+      "properties": {
+        "engine": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Engine"
+        },
+        "error_code": {
+          "anyOf": [
+            {
+              "maxLength": 160,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error Code"
+        },
+        "signature": {
+          "anyOf": [
+            {
+              "maxLength": 512,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Signature"
+        },
+        "status": {
+          "$ref": "#/$defs/ThreatScanStatus"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "ThreatScanResult",
+      "type": "object"
+    },
+    "ThreatScanStatus": {
+      "enum": [
+        "clean",
+        "detected",
+        "error",
+        "unavailable"
+      ],
+      "title": "ThreatScanStatus",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:quarantine-inspection",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Security decision for uploaded bytes before any canonical Asset promotion.",
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "claimed_mime_type": {
+      "maxLength": 255,
+      "minLength": 3,
+      "title": "Claimed Mime Type",
+      "type": "string"
+    },
+    "detected_mime_type": {
+      "anyOf": [
+        {
+          "maxLength": 255,
+          "minLength": 3,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Detected Mime Type"
+    },
+    "expected_size_bytes": {
+      "exclusiveMinimum": 0,
+      "title": "Expected Size Bytes",
+      "type": "integer"
+    },
+    "inspected_at": {
+      "anyOf": [
+        {
+          "format": "date-time",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Inspected At"
+    },
+    "inspection_id": {
+      "pattern": "^QIN-[0-9]{6,20}$",
+      "title": "Inspection Id",
+      "type": "string"
+    },
+    "observed_size_bytes": {
+      "minimum": 0,
+      "title": "Observed Size Bytes",
+      "type": "integer"
+    },
+    "policy": {
+      "$ref": "#/$defs/MediaSecurityPolicy"
+    },
+    "probe": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MediaProbeResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "project_id": {
+      "pattern": "^PRJ-[0-9]{6,20}$",
+      "title": "Project Id",
+      "type": "string"
+    },
+    "rejection_codes": {
+      "default": [],
+      "items": {
+        "$ref": "#/$defs/QuarantineRejectionCode"
+      },
+      "title": "Rejection Codes",
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "status": {
+      "$ref": "#/$defs/QuarantineStatus"
+    },
+    "storage_object_id": {
+      "pattern": "^STO-[0-9]{6,20}$",
+      "title": "Storage Object Id",
+      "type": "string"
+    },
+    "threat_scan": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ThreatScanResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "upload_session_id": {
+      "pattern": "^UPS-[0-9]{6,20}$",
+      "title": "Upload Session Id",
+      "type": "string"
+    }
+  },
+  "required": [
+    "inspection_id",
+    "upload_session_id",
+    "project_id",
+    "storage_object_id",
+    "policy",
+    "claimed_mime_type",
+    "expected_size_bytes",
+    "observed_size_bytes",
+    "status",
+    "audit"
+  ],
+  "title": "QuarantineInspection",
+  "type": "object"
+}
