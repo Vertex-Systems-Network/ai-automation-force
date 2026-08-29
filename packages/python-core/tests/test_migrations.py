@@ -64,6 +64,7 @@ EXPECTED_CORE_TABLES = {
     "style_reference_assets",
     "asset_parents",
     "timeline_marker_assets",
+    "workflow_executions",
 }
 
 
@@ -73,7 +74,7 @@ def alembic_config() -> Config:
 
 @pytest.mark.postgres
 @pytest.mark.skipif(DATABASE_URL is None, reason="DATABASE_URL is not configured")
-def test_initial_postgresql_migration_is_reversible_and_deterministic() -> None:
+def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
     assert DATABASE_URL is not None
     config = alembic_config()
     engine = create_engine(DATABASE_URL)
@@ -88,7 +89,7 @@ def test_initial_postgresql_migration_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0001"
+        assert revision == "20260829_0002"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -156,14 +157,52 @@ def test_initial_postgresql_migration_is_reversible_and_deterministic() -> None:
                 {"id": uuid4()},
             )
 
-        # Applying head twice must be a no-op rather than replaying schema DDL.
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.workflow_executions (
+                        id, external_id, workflow_type, run_id, namespace, task_queue,
+                        status, started_at, updated_at
+                    ) VALUES (
+                        :id, 'WFX-000901', 'SyntheticControlWorkflow', 'run-000901',
+                        'default', 'aaf-control-v1', 'running', now(), now()
+                    )
+                    """
+                ),
+                {"id": uuid4()},
+            )
+
+        with pytest.raises(IntegrityError), engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.workflow_executions (
+                        id, external_id, workflow_type, run_id, namespace, task_queue,
+                        status, started_at, updated_at
+                    ) VALUES (
+                        :id, 'WFX-invalid', 'SyntheticControlWorkflow', 'run-000902',
+                        'default', 'aaf-control-v1', 'running', now(), now()
+                    )
+                    """
+                ),
+                {"id": uuid4()},
+            )
+
+        command.upgrade(config, "head")
+        assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
+
+        command.downgrade(config, "20260829_0001")
+        m01_tables = set(inspect(engine).get_table_names(schema="core"))
+        assert "workflow_executions" not in m01_tables
+        assert m01_tables == EXPECTED_CORE_TABLES - {"workflow_executions"}
+
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
         command.downgrade(config, "base")
         assert "core" not in inspect(engine).get_schema_names()
 
-        # A clean re-upgrade after rollback proves the initial migration is repeatable.
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
     finally:

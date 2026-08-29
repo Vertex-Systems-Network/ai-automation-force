@@ -7,6 +7,7 @@ from ._db import (
     PersistResult,
 )
 from .repository import PostgresProductionRepository
+from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
 
 __all__ = [
     "PersistResult",
@@ -16,4 +17,6 @@ __all__ = [
     "PersistenceReferenceError",
     "PersistenceShapeError",
     "PostgresProductionRepository",
+    "PostgresWorkflowExecutionRepository",
+    "WorkflowPersistResult",
 ]
