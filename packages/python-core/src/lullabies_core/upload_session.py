@@ -131,26 +131,37 @@ class UploadSession(StrictModel):
 
 
 class UploadMutationResult(StrictModel):
-    action: Literal["created", "reused", "recorded", "completed", "aborted", "expired"]
+    action: Literal[
+        "created",
+        "reused",
+        "bound",
+        "recorded",
+        "completed",
+        "aborted",
+        "expired",
+    ]
     upload_session_id: UploadSessionId
     status: UploadSessionStatus
     revision: int = Field(ge=1)
 
 
 class DirectUploadGrant(StrictModel):
-    """Ephemeral transfer authorization. It is intentionally not persisted canonically."""
+    """Ephemeral exact-object transfer authorization; never canonical persistence."""
 
-    method: Literal["PUT"] = "PUT"
+    method: Literal["PUT", "POST"]
     url: str = Field(min_length=1)
     object_key: str = Field(min_length=1, max_length=1024)
     content_type: str = Field(min_length=3, max_length=255)
     max_size_bytes: int = Field(gt=0)
     expires_at: AwareDatetime
     required_headers: dict[str, str] = Field(default_factory=dict)
+    form_fields: dict[str, str] = Field(default_factory=dict)
 
     @model_validator(mode="after")
     def validate_key(self) -> DirectUploadGrant:
         validate_object_key(self.object_key)
+        if self.method == "PUT" and self.form_fields:
+            raise ValueError("PUT upload grants must not carry form fields")
         return self
 
 
