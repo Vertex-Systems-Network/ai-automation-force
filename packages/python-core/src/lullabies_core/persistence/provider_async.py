@@ -3,17 +3,17 @@ from __future__ import annotations
 from datetime import datetime
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, Table, insert, select, update
+from sqlalchemy import MetaData, insert, select, update
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
 from ..provider_async import (
+    TERMINAL_PROVIDER_ASYNC_STATUSES,
     ProviderAsyncResult,
     ProviderAsyncStatus,
     ProviderAsyncSubmission,
     ProviderAsyncTransitionError,
     ProviderCallbackEvent,
-    TERMINAL_PROVIDER_ASYNC_STATUSES,
     assert_provider_async_transition,
 )
 from ._db import PersistenceConflictError, PersistenceNotFoundError, PersistenceReferenceError
