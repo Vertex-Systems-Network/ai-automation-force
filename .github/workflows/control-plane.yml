@@ -1,0 +1,91 @@
+name: Durable Control Plane
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "packages/python-core/**"
+      - "packages/contracts/**"
+      - ".github/workflows/control-plane.yml"
+  pull_request:
+    paths:
+      - "apps/api/**"
+      - "packages/python-core/**"
+      - "packages/contracts/**"
+      - ".github/workflows/control-plane.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ai_automation_force_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d ai_automation_force_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@localhost:5432/ai_automation_force_test
+      AAF_ENVIRONMENT: test
+      AAF_BUILD_REVISION: ci
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: |
+            packages/python-core/pyproject.toml
+            apps/api/pyproject.toml
+
+      - name: Install core and control plane
+        run: >-
+          python -m pip install
+          -e "packages/python-core[dev]"
+          -e "apps/api[dev]"
+
+      - name: Ruff
+        run: ruff check packages/python-core apps/api
+
+      - name: Mypy
+        run: >-
+          mypy
+          packages/python-core/src
+          packages/python-core/scripts
+          packages/python-core/migrations
+          apps/api/src
+          apps/api/scripts
+
+      - name: Unit and PostgreSQL integration tests
+        run: pytest packages/python-core/tests apps/api/tests
+
+      - name: Verify generated core schemas are synchronized
+        run: python packages/python-core/scripts/export_schemas.py --check
+
+      - name: Verify deterministic OpenAPI generation
+        run: |
+          python apps/api/scripts/export_openapi.py --output /tmp/control-plane-v1.json
+          cp /tmp/control-plane-v1.json /tmp/control-plane-v1.first.json
+          python apps/api/scripts/export_openapi.py --output /tmp/control-plane-v1.json
+          cmp /tmp/control-plane-v1.first.json /tmp/control-plane-v1.json
+
+      - name: Compile core, API and migrations
+        run: >-
+          python -m compileall -q
+          packages/python-core/src
+          packages/python-core/migrations
+          apps/api/src
