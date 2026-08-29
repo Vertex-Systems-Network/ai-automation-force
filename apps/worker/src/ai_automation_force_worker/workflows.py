@@ -5,7 +5,7 @@ from datetime import timedelta
 
 from temporalio import activity, workflow
 from temporalio.common import RetryPolicy
-from temporalio.exceptions import ApplicationError
+from temporalio.exceptions import ActivityError, ApplicationError
 
 SYNTHETIC_ACTIVITY_START_TO_CLOSE = timedelta(seconds=10)
 SYNTHETIC_RETRY_SCHEDULE_TO_CLOSE = timedelta(seconds=10)
@@ -14,6 +14,10 @@ SYNTHETIC_CANCEL_START_TO_CLOSE = timedelta(seconds=30)
 SYNTHETIC_CANCEL_HEARTBEAT = timedelta(seconds=1)
 SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT = timedelta(seconds=5)
 SYNTHETIC_PROVIDER_TERMINAL = frozenset({"succeeded", "failed", "cancelled"})
+SYNTHETIC_PROVIDER_OBSERVATIONS = SYNTHETIC_PROVIDER_TERMINAL | {"running"}
+SYNTHETIC_PROVIDER_INPUT_KEYS = frozenset(
+    {"job_key", "mode", "timeout_ms", "poll_interval_ms", "succeed_after"}
+)
 
 
 @activity.defn
@@ -190,13 +194,15 @@ class SyntheticProviderAsyncWorkflow:
         if self._generation_id is None or self._terminal_status is not None:
             return
         for event_id, generation_id, event_order, status in self._pending_callbacks:
-            if event_id in self._seen_event_ids:
-                continue
-            self._seen_event_ids.add(event_id)
             if generation_id != self._generation_id:
+                continue
+            if status not in SYNTHETIC_PROVIDER_OBSERVATIONS:
                 continue
             if event_order <= self._last_callback_order:
                 continue
+            if event_id in self._seen_event_ids:
+                continue
+            self._seen_event_ids.add(event_id)
             self._last_callback_order = event_order
             if status in SYNTHETIC_PROVIDER_TERMINAL:
                 self._terminal_status = status
@@ -208,13 +214,31 @@ class SyntheticProviderAsyncWorkflow:
         generation_id = str(payload["generation_id"]).strip()
         status = str(payload["status"]).strip()
         event_order = int(payload["event_order"])
-        if not event_id or not generation_id or not status:
+        if not event_id or not generation_id or not status or event_order < 0:
             return
         self._pending_callbacks.append((event_id, generation_id, event_order, status))
         self._apply_callbacks()
 
+    @staticmethod
+    def _remaining(deadline: object) -> timedelta:
+        remaining = deadline - workflow.now()  # type: ignore[operator]
+        assert isinstance(remaining, timedelta)
+        return remaining
+
     @workflow.run
     async def run(self, input: dict[str, str | int]) -> str:
+        unknown_keys = set(input) - SYNTHETIC_PROVIDER_INPUT_KEYS
+        if unknown_keys:
+            raise ValueError(
+                "unsupported synthetic provider input keys: " + ", ".join(sorted(unknown_keys))
+            )
+        required_keys = {"job_key", "mode", "timeout_ms"}
+        missing_keys = required_keys - set(input)
+        if missing_keys:
+            raise ValueError(
+                "missing synthetic provider input keys: " + ", ".join(sorted(missing_keys))
+            )
+
         job_key = str(input["job_key"]).strip()
         mode = str(input["mode"]).strip()
         timeout_ms = int(input["timeout_ms"])
@@ -233,18 +257,31 @@ class SyntheticProviderAsyncWorkflow:
 
         timeout = timedelta(milliseconds=timeout_ms)
         poll_interval_seconds = poll_interval_ms / 1000
-        self._generation_id = await workflow.execute_activity(
-            synthetic_provider_submit,
-            job_key,
-            start_to_close_timeout=SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT,
-        )
+        deadline = workflow.now() + timeout
+        remaining = self._remaining(deadline)
+        if remaining <= timedelta(0):
+            return "timed-out"
+        try:
+            self._generation_id = await workflow.execute_activity(
+                synthetic_provider_submit,
+                job_key,
+                start_to_close_timeout=min(SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT, remaining),
+            )
+        except ActivityError:
+            if self._remaining(deadline) <= timedelta(0):
+                return "timed-out"
+            raise
         self._apply_callbacks()
 
         if mode == "callback":
+            remaining = self._remaining(deadline)
+            if remaining <= timedelta(0):
+                await workflow.wait_condition(workflow.all_handlers_finished)
+                return "timed-out"
             try:
                 await workflow.wait_condition(
                     lambda: self._terminal_status is not None,
-                    timeout=timeout,
+                    timeout=remaining,
                 )
             except TimeoutError:
                 await workflow.wait_condition(workflow.all_handlers_finished)
@@ -253,26 +290,33 @@ class SyntheticProviderAsyncWorkflow:
             assert self._terminal_status is not None
             return self._terminal_status
 
-        deadline = workflow.now() + timeout
         poll_index = 0
-        while workflow.now() < deadline:
+        while True:
+            remaining = self._remaining(deadline)
+            if remaining <= timedelta(0):
+                break
             poll_index += 1
             poll_payload: dict[str, str | int] = {
                 "mode": mode,
                 "poll_index": poll_index,
                 "succeed_after": succeed_after,
             }
-            status = await workflow.execute_activity(
-                synthetic_provider_poll,
-                poll_payload,
-                start_to_close_timeout=SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT,
-            )
+            try:
+                status = await workflow.execute_activity(
+                    synthetic_provider_poll,
+                    poll_payload,
+                    start_to_close_timeout=min(SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT, remaining),
+                )
+            except ActivityError:
+                if self._remaining(deadline) <= timedelta(0):
+                    return "timed-out"
+                raise
             if status == "succeeded":
                 return status
             if status == "unavailable":
                 return status
-            remaining = (deadline - workflow.now()).total_seconds()
-            if remaining <= 0:
+            remaining_seconds = self._remaining(deadline).total_seconds()
+            if remaining_seconds <= 0:
                 break
-            await workflow.sleep(min(poll_interval_seconds, remaining))
+            await workflow.sleep(min(poll_interval_seconds, remaining_seconds))
         return "timed-out"
