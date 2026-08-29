@@ -51,6 +51,14 @@ class ProjectJobRecord(StrictModel):
     updated_at: AwareDatetime
 
 
+class ProjectControlStatus(StrictModel):
+    project_id: str = Field(pattern=r"^PRJ-[0-9]{6,20}$")
+    total_jobs: int = Field(ge=0)
+    job_status_counts: dict[str, int] = Field(default_factory=dict)
+    workflow_status_counts: dict[str, int] = Field(default_factory=dict)
+    latest_job_updated_at: AwareDatetime | None = None
+
+
 class JobCommandResult(StrictModel):
     action: Literal["applied", "reused", "noop"]
     command_type: Literal["start", "cancel", "retry"]
