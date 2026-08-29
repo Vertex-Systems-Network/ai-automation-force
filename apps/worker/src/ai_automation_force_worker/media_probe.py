@@ -7,12 +7,11 @@ import subprocess
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TypeAlias
 
 from temporalio import activity
 
-ProbeScalar: TypeAlias = str | int | float | None
-ProbePayload: TypeAlias = dict[str, ProbeScalar]
+type ProbeScalar = str | int | float | None
+type ProbePayload = dict[str, ProbeScalar]
 
 
 @dataclass(frozen=True)
@@ -62,7 +61,8 @@ def resolve_quarantine_path(relative_path: str, settings: MediaProbeSettings) ->
     if "\\" in relative_path or any(ord(char) < 32 or ord(char) == 127 for char in relative_path):
         raise ValueError("quarantine relative path contains unsafe characters")
     candidate_input = Path(relative_path)
-    if candidate_input.is_absolute() or any(part in {"", ".", ".."} for part in candidate_input.parts):
+    invalid_component = any(part in {"", ".", ".."} for part in candidate_input.parts)
+    if candidate_input.is_absolute() or invalid_component:
         raise ValueError("quarantine probe path must be a safe relative path")
     candidate = (settings.quarantine_root / candidate_input).resolve(strict=False)
     if not candidate.is_relative_to(settings.quarantine_root):
@@ -106,8 +106,7 @@ def run_ffprobe(relative_path: str, settings: MediaProbeSettings) -> ProbePayloa
         completed = subprocess.run(
             command,
             stdin=subprocess.DEVNULL,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
+            capture_output=True,
             timeout=settings.timeout_seconds,
             check=False,
             shell=False,
