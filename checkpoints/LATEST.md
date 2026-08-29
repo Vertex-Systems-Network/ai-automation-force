@@ -1,86 +1,74 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m02-development-approved-governance-reconciled.md`
+`checkpoints/2026-08-29-m02-wp6-complete.md`
 
 Current phase: **M02 — Durable Workflow Control Plane**
 
-Status: **M02_DEVELOPMENT_APPROVED_CONTINUATION**
+Status: **M02_WP6_COMPLETE_WP7_ACTIVE**
 
-## Fresh development consent
+## Development consent
 
 Explicit operator authorization received on 2026-08-29:
 
 `Milestone 2 development approve — start.`
 
-This authorization governs M02 executable continuation from this checkpoint forward. It does not fabricate retroactive approval for historical WP1-WP5 merges.
-
-## Historical governance reconciliation
-
-The previous `M02_READY_FOR_CONSENT` checkpoint remained stale while M02 WP1-WP5 executable PRs merged. The contradiction is recorded truthfully in:
-
+Canonical consent/governance reconciliation:
 `checkpoints/2026-08-29-m02-development-approved-governance-reconciled.md`
 
-WP1-WP5 are accepted as the current technical baseline based on their exact-head green CI evidence; historical consent is not retroactively asserted.
+## Completed baseline
 
-Current accepted `main` executable baseline before WP6 continuation:
+- M01 complete: `424b76214ab8eb94d3205a2eba2d75cf4ffa0cc7`
+- M02 WP1 — FastAPI scaffold: `c8591278ed0fc5624e1bff6169d7684ad36e01dd`
+- M02 WP2 — Temporal foundation: `29a3432480027f63f9c572782297e8707c501730`
+- M02 WP3 — job/idempotency/outbox: `0de15a90cff5f44eeccdaf1d667aba69b890bbcc`
+- M02 WP4 — retry/circuit/cancel: `54c613a5adfa95c6ebc5d6699cf7dbafa140d68e`
+- M02 WP5 — durable approval waits: `f1169d6a68b1a45248d343df58b882d8d15db7b6`
+- M02 governance reconciliation: `12a4e33678beb6e6c5fce41f9c8b5c312083aa3a`
+- M02 WP6 — fake async provider callback/reconciliation: `2b93c023249852d29862abbe36f6b2f46f9f02d4`
 
-`f1169d6a68b1a45248d343df58b882d8d15db7b6`
+## WP6 verified acceptance
 
-## Previous completed milestone
+Exact executable PR head:
+`5ec50ba6c462b8f951361255a0a4baa8164eb051`
 
-M01 — Core Domain & Persistence Boundary is complete.
+Required CI:
+- Core Domain Contracts `33256173831` / job `99110169429` — GREEN
+- Durable Control Plane `33256173826` / job `99110169301` — GREEN
 
-Final M01 checkpoint:
-`checkpoints/2026-08-29-m01-complete.md`
+WP6 completion checkpoint:
+`checkpoints/2026-08-29-m02-wp6-complete.md`
 
-M01 closure merge commit:
-`424b76214ab8eb94d3205a2eba2d75cf4ffa0cc7`
+## Current executable target
 
-Verified M01 executable evidence:
-`33221966779 / 99017705054`
+**M02-WP7 — Job/control API + durable SSE progress**
 
-## Full-project planning prerequisite
+Required contract:
+- provider-neutral versioned REST/OpenAPI control surface;
+- stable idempotency keys bound to canonical operation fingerprints;
+- inspect/create/cancel/retry semantics over persisted canonical state;
+- deterministic cursor pagination/history;
+- SSE progress from durable/recoverable event state;
+- stable event IDs and `Last-Event-ID` reconnect semantics;
+- snapshot/stream handoff without durable event loss;
+- idempotent redelivery semantics, not false exactly-once claims;
+- API restart independence from Temporal workflow durability;
+- deterministic non-leaky errors;
+- no WebSocket unless a concrete bidirectional need is proven.
 
-P0 Full Project Preplanning is complete.
+## Remaining M02 sequence
 
-Checkpoint:
-`checkpoints/2026-08-29-full-project-preplanning-complete.md`
-
-Status:
-`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
-
-## Canonical M02 plan
-
-`docs/milestones/M02/PLAN.md`
-
-M02 work-package sequence:
-1. WP1 — FastAPI application/control scaffold — merged/technical baseline accepted;
-2. WP2 — Temporal foundation — merged/technical baseline accepted;
-3. WP3 — job/idempotency/DB↔Temporal durability boundary — merged/technical baseline accepted;
-4. WP4 — retry/backoff/circuit/cancellation — merged/technical baseline accepted;
-5. WP5 — durable human/approval waits — merged/technical baseline accepted;
-6. WP6 — fake external async callback/reconciliation pattern — **current executable target**;
-7. WP7 — job/control API + durable SSE progress;
-8. WP8 — replay/restart/100-shot recovery acceptance.
-
-## Current WP6 state
-
-PR `#15` / head `39a1429002b64b68a96550b95ec1b4d5e6ed2876` is open.
-
-Current evidence before remediation:
-- Core Domain Contracts: GREEN;
-- Durable Control Plane: RED;
-- four Temporal integration scenarios fail because workflow input expects `timeout_ms` while tests send `timeout_seconds`.
-
-WP6 must not merge until the exact candidate head has both required workflows green and retained-history replay acceptance passes.
-
-## M02 scope boundary
-
-M02 excludes real provider execution/credentials/spend, object storage/media generation, content intelligence, full web/mobile/auth/billing/social implementation, production Temporal HA/DR rollout, public publishing, autonomous spend and M03+ development.
+1. WP7 — job/control API + durable SSE progress;
+2. WP8 — replay/restart/synthetic 100-shot recovery acceptance;
+3. M02 closure checkpoint;
+4. fresh M03 consent gate.
 
 ## Merge governance
 
-GitHub `main` was previously observed as unprotected. Until repository protection is hardened, exact-head Core Domain Contracts + Durable Control Plane verification is a mandatory manual merge gate for executable M02 PRs.
+Until repository protection automatically enforces the same policy, executable M02 PRs require exact-candidate-head Core Domain Contracts + Durable Control Plane verification before merge.
+
+## Scope boundary
+
+M02 excludes real provider execution/credentials/spend, object storage/media generation, content intelligence, full web/mobile/auth/billing/social implementation, production Temporal HA/DR rollout, public publishing, autonomous spend and M03+ development.
 
 GitHub remains canonical for engineering contracts, implementation evidence and checkpoints. Linear mirrors verified execution state.
