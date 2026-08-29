@@ -46,6 +46,7 @@ jobs:
       AAF_TEMPORAL_TARGET: 127.0.0.1:7233
       AAF_TEMPORAL_NAMESPACE: default
       AAF_TEMPORAL_TASK_QUEUE: aaf-control-v1
+      AAF_TEMPORAL_INTEGRATION: "1"
     steps:
       - uses: actions/checkout@v7
 
