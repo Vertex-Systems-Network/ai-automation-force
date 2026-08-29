@@ -37,6 +37,9 @@ EXPECTED_CORE_TABLES = {
     "takes",
     "assets",
     "storage_objects",
+    "upload_sessions",
+    "upload_parts",
+    "upload_session_commands",
     "jobs",
     "job_dependencies",
     "job_commands",
@@ -77,6 +80,7 @@ EXPECTED_CORE_TABLES = {
 PROVIDER_ASYNC_TABLES = {"provider_async_states", "provider_callback_events"}
 WP7_TABLES = {"job_commands"}
 M03_WP1_TABLES = {"storage_objects"}
+M03_WP2_TABLES = {"upload_sessions", "upload_parts", "upload_session_commands"}
 
 
 def alembic_config() -> Config:
@@ -123,6 +127,48 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "version_id",
             "original_filename",
         }.issubset(storage_columns)
+        upload_session_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("upload_sessions", schema="core")
+        }
+        assert {
+            "external_id",
+            "storage_object_external_id",
+            "object_key",
+            "expected_size_bytes",
+            "expected_mime_type",
+            "mode",
+            "part_size_bytes",
+            "backend_upload_id",
+            "quota_reservation_id",
+            "creation_idempotency_key",
+            "expires_at",
+            "status",
+            "revision",
+        }.issubset(upload_session_columns)
+        upload_part_columns = {
+            column["name"] for column in db_inspector.get_columns("upload_parts", schema="core")
+        }
+        assert {
+            "upload_session_id",
+            "part_number",
+            "size_bytes",
+            "etag",
+            "checksum_sha256",
+            "recorded_at",
+        }.issubset(upload_part_columns)
+        upload_command_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("upload_session_commands", schema="core")
+        }
+        assert {
+            "command_type",
+            "idempotency_key",
+            "request_fingerprint",
+            "result_status",
+            "result_revision",
+            "occurred_at",
+        }.issubset(upload_command_columns)
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -156,7 +202,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0008"
+        assert revision == "20260829_0009"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -277,9 +323,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260829_0008")
+        m08_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_wp2_tables = EXPECTED_CORE_TABLES - M03_WP2_TABLES
+        assert m08_tables == pre_wp2_tables
+
         command.downgrade(config, "20260829_0007")
         m07_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_m03_tables = EXPECTED_CORE_TABLES - M03_WP1_TABLES
+        pre_m03_tables = pre_wp2_tables - M03_WP1_TABLES
         assert m07_tables == pre_m03_tables
 
         command.downgrade(config, "20260829_0005")

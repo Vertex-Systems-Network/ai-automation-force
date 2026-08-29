@@ -6,7 +6,12 @@ namespace for pre-M01 repository code. New consumers should import this package.
 
 from lullabies_core import *  # noqa: F403
 from lullabies_core import __all__ as _legacy_all
-from lullabies_core.persistence import PostgresStorageObjectRepository, StorageObjectPersistResult
+from lullabies_core.persistence import (
+    PostgresStorageObjectRepository,
+    PostgresUploadSessionRepository,
+    StorageObjectPersistResult,
+    UploadPersistenceConflictError,
+)
 from lullabies_core.storage import (
     FilesystemStorageAdapter,
     StorageAdapter,
@@ -24,11 +29,30 @@ from lullabies_core.storage import (
     storage_object_from_write,
     validate_object_key,
 )
+from lullabies_core.upload_s3 import S3UploadCompletionEvidence, S3UploadSessionAdapter
+from lullabies_core.upload_session import (
+    DirectUploadGrant,
+    MultipartPartGrant,
+    UploadMode,
+    UploadMutationResult,
+    UploadPart,
+    UploadSession,
+    UploadSessionConflictError,
+    UploadSessionError,
+    UploadSessionExpiredError,
+    UploadSessionStatus,
+    build_upload_object_key,
+)
 
 __all__ = [
     *_legacy_all,
+    "DirectUploadGrant",
     "FilesystemStorageAdapter",
+    "MultipartPartGrant",
     "PostgresStorageObjectRepository",
+    "PostgresUploadSessionRepository",
+    "S3UploadCompletionEvidence",
+    "S3UploadSessionAdapter",
     "StorageAdapter",
     "StorageBackend",
     "StorageBlobStat",
@@ -40,7 +64,17 @@ __all__ = [
     "StorageObjectId",
     "StorageObjectPersistResult",
     "StorageWriteResult",
+    "UploadMode",
+    "UploadMutationResult",
+    "UploadPart",
+    "UploadPersistenceConflictError",
+    "UploadSession",
+    "UploadSessionConflictError",
+    "UploadSessionError",
+    "UploadSessionExpiredError",
+    "UploadSessionStatus",
     "build_object_key",
+    "build_upload_object_key",
     "sha256_bytes",
     "storage_object_from_write",
     "validate_object_key",

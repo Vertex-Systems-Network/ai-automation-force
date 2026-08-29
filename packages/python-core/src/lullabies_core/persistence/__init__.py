@@ -29,6 +29,7 @@ from .provider_async import (
 )
 from .repository import PostgresProductionRepository
 from .storage_object import PostgresStorageObjectRepository, StorageObjectPersistResult
+from .upload_session import PostgresUploadSessionRepository, UploadPersistenceConflictError
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
 
 __all__ = [
@@ -53,10 +54,12 @@ __all__ = [
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",
     "PostgresStorageObjectRepository",
+    "PostgresUploadSessionRepository",
     "PostgresWorkflowExecutionRepository",
     "ProviderAsyncConflictError",
     "ProviderAsyncVersionConflictError",
     "ProviderCallbackConflictError",
     "StorageObjectPersistResult",
+    "UploadPersistenceConflictError",
     "WorkflowPersistResult",
 ]

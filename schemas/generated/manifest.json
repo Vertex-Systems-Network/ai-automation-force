@@ -24,6 +24,7 @@
     "style-profile.schema.json": "e54fb4f5e5edcab9e94ef9ef3654a2b7172b5ed34adeef9e37b3ea44f88cac0c",
     "take.schema.json": "08315a28810ffc7756c76d42bc7d5f7c4cb4c9aa175a7ac4209ff41b3bd358ee",
     "timeline.schema.json": "325778c108bd17dfb7c0b5637cb6c9436ba8dc1260f879929e7d87f40f5cb95b",
+    "upload-session.schema.json": "effa304a22386be9842631f48a44b8e1cd425c913f8b237a76f31015636140c6",
     "voice-profile.schema.json": "b84a563bde34eb3d468d87dc977c5b0f3bcefecf7a7c4bac273a89f6177ad6fa",
     "world.schema.json": "0a2133cb57902b4640cf4fb710f6d06d5180be71a295ce0a974a766d047837db"
   },
