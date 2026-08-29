@@ -12,6 +12,8 @@ SYNTHETIC_RETRY_SCHEDULE_TO_CLOSE = timedelta(seconds=10)
 SYNTHETIC_RETRY_START_TO_CLOSE = timedelta(seconds=2)
 SYNTHETIC_CANCEL_START_TO_CLOSE = timedelta(seconds=30)
 SYNTHETIC_CANCEL_HEARTBEAT = timedelta(seconds=1)
+SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT = timedelta(seconds=5)
+SYNTHETIC_PROVIDER_TERMINAL = frozenset({"succeeded", "failed", "cancelled"})
 
 
 @activity.defn
@@ -41,6 +43,30 @@ async def synthetic_cancellable(label: str) -> None:
     while True:
         activity.heartbeat(label)
         await asyncio.sleep(0.05)
+
+
+@activity.defn
+async def synthetic_provider_submit(job_key: str) -> str:
+    """Return a fake external generation token without network access or spend."""
+
+    normalized = job_key.strip()
+    if not normalized:
+        raise ApplicationError("job key is blank", type="SyntheticProviderInput", non_retryable=True)
+    return f"fake-gen-{normalized}"
+
+
+@activity.defn
+async def synthetic_provider_poll(payload: dict[str, str | int]) -> str:
+    """Return a fake provider observation for deterministic poll-path acceptance."""
+
+    mode = str(payload["mode"])
+    poll_index = int(payload["poll_index"])
+    succeed_after = int(payload["succeed_after"])
+    if mode == "unavailable":
+        return "unavailable"
+    if poll_index >= succeed_after:
+        return "succeeded"
+    return "running"
 
 
 @workflow.defn
@@ -143,3 +169,103 @@ class SyntheticApprovalWorkflow:
         await workflow.wait_condition(workflow.all_handlers_finished)
         assert self._decision is not None
         return self._decision
+
+
+@workflow.defn
+class SyntheticProviderAsyncWorkflow:
+    """Fake external async submit/poll/callback pattern with no provider network calls."""
+
+    def __init__(self) -> None:
+        self._generation_id: str | None = None
+        self._terminal_status: str | None = None
+        self._last_callback_order = -1
+        self._seen_event_ids: set[str] = set()
+        self._pending_callbacks: list[tuple[str, str, int, str]] = []
+
+    def _apply_callbacks(self) -> None:
+        if self._generation_id is None or self._terminal_status is not None:
+            return
+        for event_id, generation_id, event_order, status in self._pending_callbacks:
+            if event_id in self._seen_event_ids:
+                continue
+            self._seen_event_ids.add(event_id)
+            if generation_id != self._generation_id:
+                continue
+            if event_order <= self._last_callback_order:
+                continue
+            self._last_callback_order = event_order
+            if status in SYNTHETIC_PROVIDER_TERMINAL:
+                self._terminal_status = status
+                return
+
+    @workflow.signal
+    def provider_callback(self, payload: dict[str, str | int]) -> None:
+        event_id = str(payload["event_id"]).strip()
+        generation_id = str(payload["generation_id"]).strip()
+        status = str(payload["status"]).strip()
+        event_order = int(payload["event_order"])
+        if not event_id or not generation_id or not status:
+            return
+        self._pending_callbacks.append((event_id, generation_id, event_order, status))
+        self._apply_callbacks()
+
+    @workflow.run
+    async def run(self, input: dict[str, str | int | float]) -> str:
+        job_key = str(input["job_key"]).strip()
+        mode = str(input["mode"]).strip()
+        timeout_seconds = float(input["timeout_seconds"])
+        poll_interval_seconds = float(input.get("poll_interval_seconds", 0.1))
+        succeed_after = int(input.get("succeed_after", 2))
+        if not job_key:
+            raise ValueError("job_key must not be blank")
+        if mode not in {"poll", "callback", "timeout", "unavailable"}:
+            raise ValueError("unsupported synthetic provider mode")
+        if timeout_seconds <= 0:
+            raise ValueError("timeout_seconds must be positive")
+        if poll_interval_seconds <= 0:
+            raise ValueError("poll_interval_seconds must be positive")
+        if succeed_after < 1:
+            raise ValueError("succeed_after must be at least 1")
+
+        self._generation_id = await workflow.execute_activity(
+            synthetic_provider_submit,
+            job_key,
+            start_to_close_timeout=SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT,
+        )
+        self._apply_callbacks()
+
+        if mode == "callback":
+            try:
+                await workflow.wait_condition(
+                    lambda: self._terminal_status is not None,
+                    timeout=timedelta(seconds=timeout_seconds),
+                )
+            except TimeoutError:
+                await workflow.wait_condition(workflow.all_handlers_finished)
+                return "timed-out"
+            await workflow.wait_condition(workflow.all_handlers_finished)
+            assert self._terminal_status is not None
+            return self._terminal_status
+
+        deadline = workflow.now() + timedelta(seconds=timeout_seconds)
+        poll_index = 0
+        while workflow.now() < deadline:
+            poll_index += 1
+            status = await workflow.execute_activity(
+                synthetic_provider_poll,
+                {
+                    "mode": mode,
+                    "poll_index": poll_index,
+                    "succeed_after": succeed_after,
+                },
+                start_to_close_timeout=SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT,
+            )
+            if status == "succeeded":
+                return status
+            if status == "unavailable":
+                return status
+            remaining = (deadline - workflow.now()).total_seconds()
+            if remaining <= 0:
+                break
+            await workflow.sleep(min(poll_interval_seconds, remaining))
+        return "timed-out"
