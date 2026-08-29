@@ -6,6 +6,7 @@ from ._db import (
     PersistenceShapeError,
     PersistResult,
 )
+from .circuit_breaker import CircuitBreakerConflictError, PostgresCircuitBreakerRepository
 from .job_control import (
     JobIdempotencyConflictError,
     JobLeaseConflictError,
@@ -17,6 +18,7 @@ from .repository import PostgresProductionRepository
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
 
 __all__ = [
+    "CircuitBreakerConflictError",
     "JobIdempotencyConflictError",
     "JobLeaseConflictError",
     "JobStateConflictError",
@@ -27,6 +29,7 @@ __all__ = [
     "PersistenceNotFoundError",
     "PersistenceReferenceError",
     "PersistenceShapeError",
+    "PostgresCircuitBreakerRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresWorkflowExecutionRepository",
