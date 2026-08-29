@@ -20,6 +20,7 @@
     "scene.schema.json": "141b9641114f393cd083df84a235cd07f71546a5aed36138933dd7d3825ef62c",
     "sequence.schema.json": "6c7412e1d4e87db6783c6641429364fbcd3b959359b1b58d005ac917cfc19c08",
     "shot.schema.json": "c09db5f37404578987587dc8025dadb52412609a244b594b36ed0ea36f974f82",
+    "storage-object.schema.json": "2d9a19ac99de43b2d34994ff88d6b5b98745a28d621bc02e7fd0472e10d2fbdd",
     "style-profile.schema.json": "e54fb4f5e5edcab9e94ef9ef3654a2b7172b5ed34adeef9e37b3ea44f88cac0c",
     "take.schema.json": "08315a28810ffc7756c76d42bc7d5f7c4cb4c9aa175a7ac4209ff41b3bd358ee",
     "timeline.schema.json": "325778c108bd17dfb7c0b5637cb6c9436ba8dc1260f879929e7d87f40f5cb95b",
