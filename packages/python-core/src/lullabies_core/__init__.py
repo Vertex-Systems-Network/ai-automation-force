@@ -227,6 +227,7 @@ __all__ = [
     "ProviderAsyncStatus",
     "ProviderAsyncSubmission",
     "ProviderAsyncTransitionError",
+    "ProviderAsyncVersionConflictError",
     "ProviderCallbackConflictError",
     "ProviderCallbackEvent",
     "ProviderModelRef",
