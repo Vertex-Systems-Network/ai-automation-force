@@ -9,10 +9,13 @@ from .workflows import (
     SyntheticApprovalWorkflow,
     SyntheticCancellationWorkflow,
     SyntheticControlWorkflow,
+    SyntheticProviderAsyncWorkflow,
     SyntheticRetryWorkflow,
     synthetic_cancellable,
     synthetic_echo,
     synthetic_flaky,
+    synthetic_provider_poll,
+    synthetic_provider_submit,
 )
 
 
@@ -25,7 +28,14 @@ def build_worker(client: Client, settings: WorkerSettings) -> Worker:
             SyntheticRetryWorkflow,
             SyntheticCancellationWorkflow,
             SyntheticApprovalWorkflow,
+            SyntheticProviderAsyncWorkflow,
         ],
-        activities=[synthetic_echo, synthetic_flaky, synthetic_cancellable],
+        activities=[
+            synthetic_echo,
+            synthetic_flaky,
+            synthetic_cancellable,
+            synthetic_provider_submit,
+            synthetic_provider_poll,
+        ],
         workflow_runner=SandboxedWorkflowRunner(),
     )
