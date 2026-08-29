@@ -32,6 +32,7 @@ class FakeS3Client:
         self.object_exists = False
         self.complete_raises_no_such_upload = False
         self.final_size = 10
+        self.multipart_uploads: list[dict[str, str]] = []
 
     def generate_presigned_post(self, **kwargs: Any) -> dict[str, Any]:
         self.calls.append(("generate_presigned_post", kwargs))
@@ -54,9 +55,17 @@ class FakeS3Client:
             "VersionId": "version-1",
         }
 
+    def list_multipart_uploads(self, **kwargs: Any) -> dict[str, Any]:
+        self.calls.append(("list_multipart_uploads", kwargs))
+        prefix = str(kwargs.get("Prefix", ""))
+        uploads = [item for item in self.multipart_uploads if item["Key"].startswith(prefix)]
+        return {"Uploads": uploads, "IsTruncated": False}
+
     def create_multipart_upload(self, **kwargs: Any) -> dict[str, Any]:
         self.calls.append(("create_multipart_upload", kwargs))
-        return {"UploadId": "backend-upload-1"}
+        upload_id = "backend-upload-1"
+        self.multipart_uploads.append({"Key": str(kwargs["Key"]), "UploadId": upload_id})
+        return {"UploadId": upload_id}
 
     def generate_presigned_url(self, **kwargs: Any) -> str:
         self.calls.append(("generate_presigned_url", kwargs))
@@ -127,6 +136,17 @@ def test_direct_grant_binds_exact_key_type_size_and_expiry_without_network() -> 
     assert kwargs["ExpiresIn"] == 600
 
 
+def test_direct_grant_refuses_existing_destination() -> None:
+    client = FakeS3Client()
+    client.object_exists = True
+    upload = adapter(client)
+    session = make_session(mode=UploadMode.SINGLE)
+
+    with pytest.raises(UploadSessionConflictError, match="refusing destructive overwrite"):
+        upload.create_direct_grant(session, now=session.audit.created_at)
+    assert all(name != "generate_presigned_post" for name, _ in client.calls)
+
+
 def test_multipart_begin_and_part_grant_bind_backend_identity_exactly() -> None:
     client = FakeS3Client()
     upload = adapter(client)
@@ -158,6 +178,36 @@ def test_multipart_begin_and_part_grant_bind_backend_identity_exactly() -> None:
 
     with pytest.raises(UploadSessionConflictError, match="part_number must be between"):
         upload.create_part_grant(bound, 3, now=now)
+
+
+def test_multipart_begin_recovers_exact_key_upload_after_bind_crash() -> None:
+    client = FakeS3Client()
+    upload = adapter(client)
+    session = make_session(mode=UploadMode.MULTIPART)
+    client.multipart_uploads = [
+        {"Key": session.object_key, "UploadId": "recovered-upload-1"},
+        {"Key": f"{session.object_key}-other", "UploadId": "other-upload"},
+    ]
+
+    upload_id = upload.begin_multipart(session, now=session.audit.created_at)
+
+    assert upload_id == "recovered-upload-1"
+    assert any(name == "list_multipart_uploads" for name, _ in client.calls)
+    assert all(name != "create_multipart_upload" for name, _ in client.calls)
+
+
+def test_multipart_begin_fails_closed_when_multiple_exact_key_uploads_exist() -> None:
+    client = FakeS3Client()
+    upload = adapter(client)
+    session = make_session(mode=UploadMode.MULTIPART)
+    client.multipart_uploads = [
+        {"Key": session.object_key, "UploadId": "orphan-1"},
+        {"Key": session.object_key, "UploadId": "orphan-2"},
+    ]
+
+    with pytest.raises(UploadSessionConflictError, match="multiple multipart uploads"):
+        upload.begin_multipart(session, now=session.audit.created_at)
+    assert all(name != "create_multipart_upload" for name, _ in client.calls)
 
 
 def test_multipart_begin_refuses_destructive_overwrite() -> None:
