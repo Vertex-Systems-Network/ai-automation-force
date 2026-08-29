@@ -1,8 +1,11 @@
 # Milestone 1 — Execution Plan
 
-Status: `PLANNING_READY_FOR_CONSENT`
+Status: `M01_COMPLETE`
 
-This document refines Milestone 1 into buildable work packages. It does not authorize executable development. `ai-native/DEVELOPMENT-CONSENT-GATE.md` remains mandatory.
+Completion checkpoint:
+`checkpoints/2026-08-29-m01-complete.md`
+
+This document is the historical execution plan that governed M01. All WP1–WP8 packages are complete. Historical pre-development consent language below is preserved as planning record; the completion checkpoint and `checkpoints/LATEST.md` are authoritative for current state.
 
 ## Goal
 
@@ -213,6 +216,8 @@ Mitigation: target Python 3.12 in CI plus current local compatibility checks.
 
 ## Development boundary
 
-The next action after this planning document is executable development beginning with WP1.
+M01 executable development is complete.
 
-That action is BLOCKED until explicit operator consent is received for `docs/architecture/M1-DEVELOPMENT-CONSENT-BRIEF.md`.
+The next executable development phase is M02 and remains blocked until a new scoped development brief receives explicit operator consent under `ai-native/DEVELOPMENT-CONSENT-GATE.md`.
+
+Generic `continue`, `next`, `resume`, or `audit` instructions do not authorize M02 development.
