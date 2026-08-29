@@ -29,8 +29,8 @@ from .provider_async import (
 )
 from .quarantine_inspection import (
     PostgresQuarantineInspectionRepository,
-    QuarantinePersistResult,
     QuarantinePersistenceConflictError,
+    QuarantinePersistResult,
 )
 from .repository import PostgresProductionRepository
 from .storage_object import PostgresStorageObjectRepository, StorageObjectPersistResult
