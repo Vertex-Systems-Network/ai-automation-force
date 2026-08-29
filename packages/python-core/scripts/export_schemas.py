@@ -33,6 +33,7 @@ from ai_automation_force_core import (
     StyleProfile,
     Take,
     Timeline,
+    UploadSession,
     VoiceProfile,
     World,
 )
@@ -60,6 +61,7 @@ MODELS: dict[str, type[BaseModel]] = {
     "timeline": Timeline,
     "asset": Asset,
     "storage-object": StorageObject,
+    "upload-session": UploadSession,
     "generation-attempt": GenerationAttempt,
     "job": Job,
     "qa-record": QARecord,
