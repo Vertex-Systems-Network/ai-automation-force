@@ -81,6 +81,9 @@ class S3UploadSessionAdapter:
         if session.backend_upload_id is not None:
             return session.backend_upload_id
         self._assert_destination_absent(session)
+        recovered_upload_id = self._find_existing_multipart_upload_id(session)
+        if recovered_upload_id is not None:
+            return recovered_upload_id
         response = self.client.create_multipart_upload(
             Bucket=self.settings.bucket,
             Key=session.object_key,
@@ -194,6 +197,47 @@ class S3UploadSessionAdapter:
         raise UploadSessionConflictError(
             "upload destination already exists; refusing destructive overwrite"
         )
+
+    def _find_existing_multipart_upload_id(self, session: UploadSession) -> str | None:
+        request: dict[str, Any] = {
+            "Bucket": self.settings.bucket,
+            "Prefix": session.object_key,
+        }
+        matches: set[str] = set()
+        while True:
+            response: dict[str, Any] = self.client.list_multipart_uploads(**request)
+            uploads = response.get("Uploads") or []
+            if not isinstance(uploads, list):
+                raise UploadSessionConflictError("S3 returned invalid multipart upload listing")
+            for upload in uploads:
+                if not isinstance(upload, dict) or upload.get("Key") != session.object_key:
+                    continue
+                upload_id = upload.get("UploadId")
+                if not isinstance(upload_id, str) or not upload_id:
+                    raise UploadSessionConflictError(
+                        "S3 returned an exact-key multipart upload without an UploadId"
+                    )
+                matches.add(upload_id)
+                if len(matches) > 1:
+                    raise UploadSessionConflictError(
+                        "multiple multipart uploads exist for the canonical upload key"
+                    )
+            if not response.get("IsTruncated"):
+                break
+            next_key_marker = response.get("NextKeyMarker")
+            if not isinstance(next_key_marker, str) or not next_key_marker:
+                raise UploadSessionConflictError(
+                    "S3 truncated multipart listing without a continuation key"
+                )
+            request["KeyMarker"] = next_key_marker
+            next_upload_marker = response.get("NextUploadIdMarker")
+            if isinstance(next_upload_marker, str) and next_upload_marker:
+                request["UploadIdMarker"] = next_upload_marker
+            else:
+                request.pop("UploadIdMarker", None)
+        if not matches:
+            return None
+        return next(iter(matches))
 
     def _head_completion(self, session: UploadSession) -> S3UploadCompletionEvidence:
         response = self.client.head_object(Bucket=self.settings.bucket, Key=session.object_key)
