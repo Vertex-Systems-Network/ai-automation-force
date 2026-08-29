@@ -45,8 +45,14 @@ class PostgresUploadSessionRepository:
         self.projects = metadata.tables["core.projects"]
 
     def create(self, session: UploadSession) -> UploadMutationResult:
-        if session.status is not UploadSessionStatus.OPEN or session.parts:
-            raise UploadPersistenceConflictError("new upload session must be open with no parts")
+        if (
+            session.status is not UploadSessionStatus.OPEN
+            or session.parts
+            or session.backend_upload_id is not None
+        ):
+            raise UploadPersistenceConflictError(
+                "new upload session must be open, unbound, and have no parts"
+            )
         immutable_fingerprint = self._creation_fingerprint(session)
         try:
             with self.engine.begin() as connection:
@@ -94,7 +100,7 @@ class PostgresUploadSessionRepository:
                         original_filename=session.original_filename,
                         mode=session.mode.value,
                         part_size_bytes=session.part_size_bytes,
-                        backend_upload_id=session.backend_upload_id,
+                        backend_upload_id=None,
                         quota_reservation_id=session.quota_reservation_id,
                         creation_idempotency_key=session.creation_idempotency_key,
                         expires_at=session.expires_at,
@@ -139,8 +145,8 @@ class PostgresUploadSessionRepository:
         *,
         now: datetime,
     ) -> UploadMutationResult:
-        if not backend_upload_id:
-            raise ValueError("backend_upload_id must be non-empty")
+        if not backend_upload_id or len(backend_upload_id) > 2048:
+            raise ValueError("backend_upload_id must contain between 1 and 2048 characters")
         with self.engine.begin() as connection:
             row = self._require_session_for_update(connection, upload_session_id)
             expiry = self._expire_if_due(connection, row, now)
@@ -177,7 +183,7 @@ class PostgresUploadSessionRepository:
                 )
             )
             return UploadMutationResult(
-                action="recorded",
+                action="bound",
                 upload_session_id=upload_session_id,
                 status=session.status,
                 revision=revision,
@@ -218,7 +224,7 @@ class PostgresUploadSessionRepository:
             ).mappings().one_or_none()
             if existing is not None:
                 restored = self._part_from_row(existing)
-                if restored != part:
+                if not self._same_part_semantics(restored, part):
                     raise UploadPersistenceConflictError(
                         f"part {part.part_number} is already bound to different metadata"
                     )
@@ -591,6 +597,15 @@ class PostgresUploadSessionRepository:
         )
 
     @staticmethod
+    def _same_part_semantics(left: UploadPart, right: UploadPart) -> bool:
+        return (
+            left.part_number == right.part_number
+            and left.size_bytes == right.size_bytes
+            and left.etag == right.etag
+            and left.checksum_sha256 == right.checksum_sha256
+        )
+
+    @staticmethod
     def _creation_fingerprint(session: UploadSession) -> str:
         return operation_fingerprint(
             {
@@ -604,7 +619,6 @@ class PostgresUploadSessionRepository:
                 "original_filename": session.original_filename,
                 "mode": session.mode.value,
                 "part_size_bytes": session.part_size_bytes,
-                "backend_upload_id": session.backend_upload_id,
                 "quota_reservation_id": session.quota_reservation_id,
                 "expires_at": session.expires_at.isoformat(),
             }
