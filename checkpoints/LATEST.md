@@ -1,20 +1,11 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m02-wp7-complete.md`
+`checkpoints/2026-08-29-m02-complete.md`
 
-Current phase: **M02 — Durable Workflow Control Plane**
+Current phase: **M03 — Asset Storage and Provenance (consent gate)**
 
-Status: **M02_WP7_COMPLETE_WP8_ACTIVE**
-
-## Development consent
-
-Explicit operator authorization received on 2026-08-29:
-
-`Milestone 2 development approve — start.`
-
-Canonical consent/governance reconciliation:
-`checkpoints/2026-08-29-m02-development-approved-governance-reconciled.md`
+Status: **M02_COMPLETE_M03_READY_FOR_CONSENT**
 
 ## Completed baseline
 
@@ -27,50 +18,51 @@ Canonical consent/governance reconciliation:
 - M02 governance reconciliation: `12a4e33678beb6e6c5fce41f9c8b5c312083aa3a`
 - M02 WP6 — fake async provider callback/reconciliation: `2b93c023249852d29862abbe36f6b2f46f9f02d4`
 - M02 WP7 — job control API + durable SSE progress: `b1e99d0da6b38ae3c826c15bb594c40b8c34d607`
+- M02 WP7 completion checkpoint: `80e75b55e9d77803f55b47d80485d45317b55c58`
+- M02 WP8 — replay/restart/100-shot recovery acceptance: `bb82c3bd115723504cf233e0cab93ca9513d10a8`
 
-## WP7 verified acceptance
+## M02 final verified acceptance
 
-Exact executable candidate head:
-`81489ce89290dc05e1b14784d174247ac31701ba`
+WP8 accepted executable head:
+`ba2d5ff6cb2833c0dd854992fa1d65a8eb119c3e`
 
-Fresh required CI on replacement PR #19:
-- Core Domain Contracts `33258197047` / job `99115470093` — GREEN
-- Durable Control Plane `33258197044` / job `99115470409` — GREEN
+Fresh required CI on replacement PR #22:
+- Core Domain Contracts #119: run `33258831160` / job `99117141725` — GREEN
+- Durable Control Plane #57: run `33258831136` / job `99117141664` — GREEN
 
-WP7 completion checkpoint:
-`checkpoints/2026-08-29-m02-wp7-complete.md`
+M02 closure evidence:
+`checkpoints/2026-08-29-m02-complete.md`
 
-## Current executable target
+The final M02 acceptance proves synthetic 100-shot fan-out/join, deterministic retries, worker restart/resume, API restart independence, approval wait/resume, retained Temporal history replay, canonical idempotency and exactly one terminal completion event per accepted 100-job persistence fixture. Continue-As-New is governed by Temporal's native suggestion at safe batch boundaries; the 100-shot acceptance did not falsely claim a rollover when the server did not suggest one.
 
-**M02-WP8 — Replay, restart and synthetic 100-shot recovery acceptance**
+## Linear mirror
 
-Required acceptance package:
-- synthetic 100-shot fan-out/join;
-- controlled worker/process kill and restart recovery;
-- API restart independence from workflow durability;
-- Activity retry/recovery;
-- duplicate event and callback injection;
-- cancellation recovery;
-- manual approval wait/resume;
-- retained Temporal histories and deterministic replay verification;
-- no duplicate terminal side effects/actions;
-- correct canonical completion state across 100 shots;
-- Continue-As-New/history-growth policy proof where threshold applies;
-- all M01/M02 required CI gates remain green;
-- unverified claims explicitly recorded rather than inferred.
+M2 WP1-WP8 and governance reconciliation are all Done after canonical evidence reconciliation.
 
-## Remaining M02 sequence
+## Next planned milestone
 
-1. WP8 — replay/restart/synthetic 100-shot recovery acceptance;
-2. M02 closure checkpoint;
-3. fresh M03 consent gate.
+**M03 — Asset Storage and Provenance**
 
-## Merge governance
+Plan:
+`docs/milestones/M03/PLAN.md`
 
-Until repository protection automatically enforces the same policy, executable M02 PRs require exact-candidate-head Core Domain Contracts + Durable Control Plane verification before merge.
+Consent brief:
+`docs/architecture/M03-DEVELOPMENT-CONSENT-BRIEF.md`
 
-## Scope boundary
+Planned scope includes S3-compatible storage abstraction, upload sessions, quarantine/media probing, asset lineage/provenance/rights, derivatives/proxies, signed delivery, retention/archive/delete/export primitives and milestone acceptance.
 
-M02 excludes real provider execution/credentials/spend, object storage/media generation, content intelligence, full web/mobile/auth/billing/social implementation, production Temporal HA/DR rollout, public publishing, autonomous spend and M03+ development.
+## M03 consent gate
+
+M03 executable development is **not authorized** yet. M02 authorization is consumed and is not reusable.
+
+Generic `continue`, `next`, `resume`, `audit`, planning or research instructions are non-authorizing for M03 executable work.
+
+A valid explicit authorization phrase is:
+
+`Milestone 3 development approve — start.`
+
+Before the first executable M03 work package, current object-storage/provider SDK versions and the local test-storage stack must be revalidated and recorded canonically.
+
+Until explicit M03 consent is received, only planning, research/revalidation, documentation and issue/milestone reconciliation may continue.
 
 GitHub remains canonical for engineering contracts, implementation evidence and checkpoints. Linear mirrors verified execution state.
