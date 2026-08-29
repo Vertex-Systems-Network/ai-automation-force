@@ -14,6 +14,7 @@ from ai_automation_force_worker import (
 )
 
 TEMPORAL_INTEGRATION = os.environ.get("AAF_TEMPORAL_INTEGRATION") == "1"
+RESULT_TIMEOUT_SECONDS = 5.0
 
 
 async def run_provider_workflow(
@@ -31,7 +32,7 @@ async def run_provider_workflow(
             id=workflow_id,
             task_queue=settings.task_queue,
         )
-        result = await handle.result()
+        result = await asyncio.wait_for(handle.result(), timeout=RESULT_TIMEOUT_SECONDS)
         history = await handle.fetch_history()
         return result, history
 
@@ -165,7 +166,7 @@ def test_temporal_fake_provider_callback_suppresses_wrong_stale_and_duplicate_ev
                     "status": "succeeded",
                 },
             )
-            result = await handle.result()
+            result = await asyncio.wait_for(handle.result(), timeout=RESULT_TIMEOUT_SECONDS)
             history = await handle.fetch_history()
             return result, history
 
