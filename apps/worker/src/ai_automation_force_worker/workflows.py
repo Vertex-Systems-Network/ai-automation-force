@@ -255,13 +255,14 @@ class SyntheticProviderAsyncWorkflow:
         poll_index = 0
         while workflow.now() < deadline:
             poll_index += 1
+            poll_payload: dict[str, str | int] = {
+                "mode": mode,
+                "poll_index": poll_index,
+                "succeed_after": succeed_after,
+            }
             status = await workflow.execute_activity(
                 synthetic_provider_poll,
-                {
-                    "mode": mode,
-                    "poll_index": poll_index,
-                    "succeed_after": succeed_after,
-                },
+                poll_payload,
                 start_to_close_timeout=SYNTHETIC_PROVIDER_ACTIVITY_TIMEOUT,
             )
             if status == "succeeded":
