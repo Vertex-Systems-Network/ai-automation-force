@@ -121,43 +121,6 @@ class ThreatScanResult(StrictModel):
         return self
 
 
-class QuarantineInspection(StrictModel):
-    """Security decision for uploaded bytes before any canonical Asset promotion."""
-
-    schema_version: SchemaVersion = SCHEMA_VERSION
-    inspection_id: QuarantineInspectionId
-    upload_session_id: UploadSessionId
-    project_id: ProjectId
-    storage_object_id: StorageObjectId
-    claimed_mime_type: str = Field(min_length=3, max_length=255)
-    detected_mime_type: str | None = Field(default=None, min_length=3, max_length=255)
-    expected_size_bytes: int = Field(gt=0)
-    observed_size_bytes: int = Field(ge=0)
-    status: QuarantineStatus
-    rejection_codes: tuple[QuarantineRejectionCode, ...] = ()
-    probe: MediaProbeResult | None = None
-    threat_scan: ThreatScanResult | None = None
-    inspected_at: AwareDatetime | None = None
-    audit: AuditFields
-
-    @model_validator(mode="after")
-    def validate_terminal_contract(self) -> QuarantineInspection:
-        if len(self.rejection_codes) != len(set(self.rejection_codes)):
-            raise ValueError("quarantine rejection codes must be unique")
-        if self.status in {QuarantineStatus.PENDING, QuarantineStatus.INSPECTING}:
-            if self.rejection_codes or self.inspected_at is not None:
-                raise ValueError("non-terminal quarantine state cannot carry terminal evidence")
-        elif self.inspected_at is None:
-            raise ValueError("terminal quarantine state requires inspected_at")
-        if self.status is QuarantineStatus.ACCEPTED and self.rejection_codes:
-            raise ValueError("accepted quarantine inspection cannot carry rejection codes")
-        if self.status is QuarantineStatus.REJECTED and not self.rejection_codes:
-            raise ValueError("rejected quarantine inspection requires rejection codes")
-        if self.inspected_at is not None and self.inspected_at > self.audit.updated_at:
-            raise ValueError("inspected_at cannot exceed audit.updated_at")
-        return self
-
-
 def detect_magic_mime(prefix: bytes) -> str | None:
     """Detect a deliberately small allowlist of high-value media signatures."""
 
@@ -239,3 +202,57 @@ def evaluate_quarantine(
     if ordered:
         return QuarantineStatus.REJECTED, ordered
     return QuarantineStatus.ACCEPTED, ()
+
+
+class QuarantineInspection(StrictModel):
+    """Security decision for uploaded bytes before any canonical Asset promotion."""
+
+    schema_version: SchemaVersion = SCHEMA_VERSION
+    inspection_id: QuarantineInspectionId
+    upload_session_id: UploadSessionId
+    project_id: ProjectId
+    storage_object_id: StorageObjectId
+    policy: MediaSecurityPolicy
+    claimed_mime_type: str = Field(min_length=3, max_length=255)
+    detected_mime_type: str | None = Field(default=None, min_length=3, max_length=255)
+    expected_size_bytes: int = Field(gt=0)
+    observed_size_bytes: int = Field(ge=0)
+    status: QuarantineStatus
+    rejection_codes: tuple[QuarantineRejectionCode, ...] = ()
+    probe: MediaProbeResult | None = None
+    threat_scan: ThreatScanResult | None = None
+    inspected_at: AwareDatetime | None = None
+    audit: AuditFields
+
+    @model_validator(mode="after")
+    def validate_terminal_contract(self) -> QuarantineInspection:
+        if self.claimed_mime_type != self.claimed_mime_type.strip().lower():
+            raise ValueError("claimed MIME type must be normalized lower-case")
+        if self.detected_mime_type is not None and (
+            self.detected_mime_type != self.detected_mime_type.strip().lower()
+        ):
+            raise ValueError("detected MIME type must be normalized lower-case")
+        if len(self.rejection_codes) != len(set(self.rejection_codes)):
+            raise ValueError("quarantine rejection codes must be unique")
+
+        if self.status in {QuarantineStatus.PENDING, QuarantineStatus.INSPECTING}:
+            if self.rejection_codes or self.inspected_at is not None:
+                raise ValueError("non-terminal quarantine state cannot carry terminal evidence")
+        else:
+            if self.inspected_at is None:
+                raise ValueError("terminal quarantine state requires inspected_at")
+            expected_status, expected_rejections = evaluate_quarantine(
+                policy=self.policy,
+                claimed_mime_type=self.claimed_mime_type,
+                expected_size_bytes=self.expected_size_bytes,
+                observed_size_bytes=self.observed_size_bytes,
+                detected_mime_type=self.detected_mime_type,
+                probe=self.probe,
+                threat_scan=self.threat_scan,
+            )
+            if self.status is not expected_status or self.rejection_codes != expected_rejections:
+                raise ValueError("terminal quarantine decision does not match policy evidence")
+
+        if self.inspected_at is not None and self.inspected_at > self.audit.updated_at:
+            raise ValueError("inspected_at cannot exceed audit.updated_at")
+        return self
