@@ -36,6 +36,7 @@ from .control_surface import (
     JobCommandVersionConflictError,
     JobControlSnapshot,
     JobEventRecord,
+    ProjectControlStatus,
     ProjectJobRecord,
     control_cursor_key,
 )
@@ -236,6 +237,7 @@ __all__ = [
     "ProductionLineageBundle",
     "Project",
     "ProjectBundle",
+    "ProjectControlStatus",
     "ProjectJobRecord",
     "ProjectStatus",
     "Prop",
