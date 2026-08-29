@@ -13,7 +13,15 @@ from typing import Protocol
 
 from pydantic import AwareDatetime, Field, model_validator
 
-from .common import AuditFields, ProjectId, StorageObjectId, StrictModel, external_id_pattern
+from .common import (
+    SCHEMA_VERSION,
+    AuditFields,
+    ProjectId,
+    SchemaVersion,
+    StorageObjectId,
+    StrictModel,
+    external_id_pattern,
+)
 
 _NAMESPACE_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}(?:/[a-z0-9][a-z0-9-]{0,63})*$")
 _MAX_KEY_UTF8_BYTES = 1024
@@ -43,6 +51,7 @@ class StorageIntegrityError(StorageError):
 class StorageObject(StrictModel):
     """Canonical physical-object metadata, separate from business Asset identity."""
 
+    schema_version: SchemaVersion = SCHEMA_VERSION
     storage_object_id: StorageObjectId
     project_id: ProjectId | None = None
     backend: StorageBackend
@@ -55,6 +64,7 @@ class StorageObject(StrictModel):
     etag: str | None = Field(default=None, min_length=1, max_length=512)
     version_id: str | None = Field(default=None, min_length=1, max_length=1024)
     original_filename: str | None = Field(default=None, min_length=1, max_length=512)
+    lifecycle_class: str = Field(default="active", min_length=1, max_length=80)
     audit: AuditFields
 
     @model_validator(mode="after")
@@ -155,6 +165,7 @@ def storage_object_from_write(
     audit: AuditFields,
     project_id: str | None = None,
     original_filename: str | None = None,
+    lifecycle_class: str = "active",
 ) -> StorageObject:
     return StorageObject(
         storage_object_id=storage_object_id,
@@ -169,6 +180,7 @@ def storage_object_from_write(
         etag=result.etag,
         version_id=result.version_id,
         original_filename=original_filename,
+        lifecycle_class=lifecycle_class,
         audit=audit,
     )
 
