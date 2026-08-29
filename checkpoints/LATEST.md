@@ -1,11 +1,11 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m02-wp6-complete.md`
+`checkpoints/2026-08-29-m02-wp7-complete.md`
 
 Current phase: **M02 — Durable Workflow Control Plane**
 
-Status: **M02_WP6_COMPLETE_WP7_ACTIVE**
+Status: **M02_WP7_COMPLETE_WP8_ACTIVE**
 
 ## Development consent
 
@@ -26,42 +26,44 @@ Canonical consent/governance reconciliation:
 - M02 WP5 — durable approval waits: `f1169d6a68b1a45248d343df58b882d8d15db7b6`
 - M02 governance reconciliation: `12a4e33678beb6e6c5fce41f9c8b5c312083aa3a`
 - M02 WP6 — fake async provider callback/reconciliation: `2b93c023249852d29862abbe36f6b2f46f9f02d4`
+- M02 WP7 — job control API + durable SSE progress: `b1e99d0da6b38ae3c826c15bb594c40b8c34d607`
 
-## WP6 verified acceptance
+## WP7 verified acceptance
 
-Exact executable PR head:
-`5ec50ba6c462b8f951361255a0a4baa8164eb051`
+Exact executable candidate head:
+`81489ce89290dc05e1b14784d174247ac31701ba`
 
-Required CI:
-- Core Domain Contracts `33256173831` / job `99110169429` — GREEN
-- Durable Control Plane `33256173826` / job `99110169301` — GREEN
+Fresh required CI on replacement PR #19:
+- Core Domain Contracts `33258197047` / job `99115470093` — GREEN
+- Durable Control Plane `33258197044` / job `99115470409` — GREEN
 
-WP6 completion checkpoint:
-`checkpoints/2026-08-29-m02-wp6-complete.md`
+WP7 completion checkpoint:
+`checkpoints/2026-08-29-m02-wp7-complete.md`
 
 ## Current executable target
 
-**M02-WP7 — Job/control API + durable SSE progress**
+**M02-WP8 — Replay, restart and synthetic 100-shot recovery acceptance**
 
-Required contract:
-- provider-neutral versioned REST/OpenAPI control surface;
-- stable idempotency keys bound to canonical operation fingerprints;
-- inspect/create/cancel/retry semantics over persisted canonical state;
-- deterministic cursor pagination/history;
-- SSE progress from durable/recoverable event state;
-- stable event IDs and `Last-Event-ID` reconnect semantics;
-- snapshot/stream handoff without durable event loss;
-- idempotent redelivery semantics, not false exactly-once claims;
-- API restart independence from Temporal workflow durability;
-- deterministic non-leaky errors;
-- no WebSocket unless a concrete bidirectional need is proven.
+Required acceptance package:
+- synthetic 100-shot fan-out/join;
+- controlled worker/process kill and restart recovery;
+- API restart independence from workflow durability;
+- Activity retry/recovery;
+- duplicate event and callback injection;
+- cancellation recovery;
+- manual approval wait/resume;
+- retained Temporal histories and deterministic replay verification;
+- no duplicate terminal side effects/actions;
+- correct canonical completion state across 100 shots;
+- Continue-As-New/history-growth policy proof where threshold applies;
+- all M01/M02 required CI gates remain green;
+- unverified claims explicitly recorded rather than inferred.
 
 ## Remaining M02 sequence
 
-1. WP7 — job/control API + durable SSE progress;
-2. WP8 — replay/restart/synthetic 100-shot recovery acceptance;
-3. M02 closure checkpoint;
-4. fresh M03 consent gate.
+1. WP8 — replay/restart/synthetic 100-shot recovery acceptance;
+2. M02 closure checkpoint;
+3. fresh M03 consent gate.
 
 ## Merge governance
 
