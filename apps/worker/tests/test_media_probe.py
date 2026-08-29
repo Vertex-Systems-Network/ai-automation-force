@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import subprocess
 from pathlib import Path
-from typing import Any
+from typing import Any, BinaryIO
 
 import pytest
 
@@ -21,6 +21,9 @@ def settings(root: Path) -> MediaProbeSettings:
         timeout_seconds=3,
         max_input_bytes=1024,
         max_output_bytes=4096,
+        probe_size_bytes=2048,
+        analyze_duration_us=1_000_000,
+        max_alloc_bytes=8_388_608,
     )
 
 
@@ -36,19 +39,21 @@ def test_probe_invocation_is_argument_list_non_shell_and_bounded(
     def fake_run(command: list[str], **kwargs: Any) -> subprocess.CompletedProcess[bytes]:
         assert command[0] == "ffprobe-test"
         assert command[-2:] == ["-i", str(media.resolve())]
+        assert command[command.index("-max_alloc") + 1] == "8388608"
+        assert command[command.index("-probesize") + 1] == "2048"
+        assert command[command.index("-analyzeduration") + 1] == "1000000"
         assert kwargs["shell"] is False
         assert kwargs["timeout"] == 3
         assert kwargs["stdin"] == subprocess.DEVNULL
+        assert "capture_output" not in kwargs
+        stdout = kwargs["stdout"]
+        assert hasattr(stdout, "write")
         payload = {
             "format": {"format_name": "mov,mp4,m4a,3gp,3g2,mj2", "duration": "4.25"},
             "streams": [{"index": 0}, {"index": 1}],
         }
-        return subprocess.CompletedProcess(
-            command,
-            0,
-            stdout=json.dumps(payload).encode("utf-8"),
-            stderr=b"",
-        )
+        stdout.write(json.dumps(payload).encode("utf-8"))
+        return subprocess.CompletedProcess(command, 0)
 
     monkeypatch.setattr(subprocess, "run", fake_run)
     result = run_ffprobe("QIN-003501/payload.mp4", settings(root))
@@ -118,7 +123,9 @@ def test_probe_input_and_output_limits_fail_closed(
         command: list[str],
         **kwargs: Any,
     ) -> subprocess.CompletedProcess[bytes]:
-        return subprocess.CompletedProcess(command, 0, stdout=b"x" * 10, stderr=b"")
+        stdout: BinaryIO = kwargs["stdout"]
+        stdout.write(b"x" * 10)
+        return subprocess.CompletedProcess(command, 0)
 
     monkeypatch.setattr(subprocess, "run", large_output_run)
     tiny_output = MediaProbeSettings(
