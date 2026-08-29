@@ -34,11 +34,11 @@ def test_operation_fingerprint_rejects_non_json_numbers() -> None:
 
 def test_job_transition_matrix_covers_every_status_and_keeps_terminals_closed() -> None:
     assert set(JOB_STATUS_TRANSITIONS) == set(JobStatus)
-    assert TERMINAL_JOB_STATUSES == {
+    assert {
         JobStatus.COMPLETED,
         JobStatus.PERMANENT_FAILED,
         JobStatus.CANCELLED,
-    }
+    } == TERMINAL_JOB_STATUSES
     for status in TERMINAL_JOB_STATUSES:
         assert JOB_STATUS_TRANSITIONS[status] == frozenset()
 
