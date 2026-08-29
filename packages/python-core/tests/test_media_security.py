@@ -5,6 +5,7 @@ from datetime import UTC, datetime
 import pytest
 from pydantic import ValidationError
 
+from lullabies_core.common import AuditFields
 from lullabies_core.media_security import (
     MediaProbeResult,
     MediaProbeStatus,
@@ -17,7 +18,6 @@ from lullabies_core.media_security import (
     detect_magic_mime,
     evaluate_quarantine,
 )
-from lullabies_core.common import AuditFields
 
 
 @pytest.fixture
@@ -130,22 +130,50 @@ def test_probe_timeout_and_scanner_error_fail_closed(policy: MediaSecurityPolicy
     )
 
 
-def test_terminal_inspection_contract_cannot_accept_with_rejections() -> None:
+def test_terminal_inspection_decision_is_recomputed_from_policy_evidence(
+    policy: MediaSecurityPolicy,
+) -> None:
     now = datetime(2026, 8, 29, 18, 30, tzinfo=UTC)
     audit = AuditFields(created_at=now, updated_at=now)
 
-    with pytest.raises(ValidationError, match="accepted quarantine inspection"):
+    with pytest.raises(ValidationError, match="terminal quarantine decision"):
         QuarantineInspection(
             inspection_id="QIN-003301",
             upload_session_id="UPS-003301",
             project_id="PRJ-003301",
             storage_object_id="STO-003301",
+            policy=policy,
             claimed_mime_type="image/png",
             detected_mime_type="image/png",
             expected_size_bytes=12,
             observed_size_bytes=12,
             status=QuarantineStatus.ACCEPTED,
             rejection_codes=(QuarantineRejectionCode.MIME_MISMATCH,),
+            threat_scan=clean_scan(),
             inspected_at=now,
             audit=audit,
         )
+
+
+def test_terminal_accepted_inspection_requires_clean_evidence(
+    policy: MediaSecurityPolicy,
+) -> None:
+    now = datetime(2026, 8, 29, 18, 31, tzinfo=UTC)
+    inspection = QuarantineInspection(
+        inspection_id="QIN-003302",
+        upload_session_id="UPS-003302",
+        project_id="PRJ-003302",
+        storage_object_id="STO-003302",
+        policy=policy,
+        claimed_mime_type="image/png",
+        detected_mime_type="image/png",
+        expected_size_bytes=12,
+        observed_size_bytes=12,
+        status=QuarantineStatus.ACCEPTED,
+        threat_scan=clean_scan(),
+        inspected_at=now,
+        audit=AuditFields(created_at=now, updated_at=now),
+    )
+
+    assert inspection.status is QuarantineStatus.ACCEPTED
+    assert inspection.rejection_codes == ()
