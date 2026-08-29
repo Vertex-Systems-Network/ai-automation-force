@@ -20,6 +20,12 @@ from .job_control import (
     JobVersionConflictError,
     PostgresJobControlRepository,
 )
+from .provider_async import (
+    PostgresProviderAsyncRepository,
+    ProviderAsyncConflictError,
+    ProviderAsyncVersionConflictError,
+    ProviderCallbackConflictError,
+)
 from .repository import PostgresProductionRepository
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
 
@@ -42,6 +48,10 @@ __all__ = [
     "PostgresCircuitBreakerRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
+    "PostgresProviderAsyncRepository",
     "PostgresWorkflowExecutionRepository",
+    "ProviderAsyncConflictError",
+    "ProviderAsyncVersionConflictError",
+    "ProviderCallbackConflictError",
     "WorkflowPersistResult",
 ]
