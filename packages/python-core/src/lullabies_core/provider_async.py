@@ -58,6 +58,11 @@ class SyntheticCallbackVerificationError(ValueError):
     pass
 
 
+def _require_aware_datetime(value: datetime, field_name: str) -> None:
+    if value.tzinfo is None or value.utcoffset() is None:
+        raise ValueError(f"{field_name} must be timezone-aware")
+
+
 def assert_provider_async_transition(
     current: ProviderAsyncStatus,
     target: ProviderAsyncStatus,
@@ -131,6 +136,8 @@ class ProviderCallbackEvent:
             character not in "0123456789abcdef" for character in self.payload_sha256
         ):
             raise ValueError("payload_sha256 must be lowercase SHA-256 hex")
+        _require_aware_datetime(self.provider_event_at, "provider_event_at")
+        _require_aware_datetime(self.received_at, "received_at")
         if self.received_at < self.provider_event_at:
             raise ValueError("received_at cannot precede provider_event_at")
 
@@ -149,6 +156,10 @@ class ProviderAsyncSubmission:
             raise ValueError("attempt_id must use the ATT namespace")
         if not self.provider_id.strip() or not self.provider_generation_id.strip():
             raise ValueError("provider identity must not be blank")
+        _require_aware_datetime(self.submitted_at, "submitted_at")
+        _require_aware_datetime(self.deadline_at, "deadline_at")
+        if self.next_poll_at is not None:
+            _require_aware_datetime(self.next_poll_at, "next_poll_at")
         if self.deadline_at <= self.submitted_at:
             raise ValueError("deadline_at must be later than submitted_at")
         if self.next_poll_at is not None and not (
