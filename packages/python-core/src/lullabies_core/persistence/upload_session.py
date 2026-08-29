@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, cast
+from typing import cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, Table, insert, select, update
+from sqlalchemy import MetaData, insert, select, update
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
@@ -132,6 +132,57 @@ class PostgresUploadSessionRepository:
                 )
             return self._from_row(connection, row)
 
+    def bind_backend_upload_id(
+        self,
+        upload_session_id: str,
+        backend_upload_id: str,
+        *,
+        now: datetime,
+    ) -> UploadMutationResult:
+        if not backend_upload_id:
+            raise ValueError("backend_upload_id must be non-empty")
+        with self.engine.begin() as connection:
+            row = self._require_session_for_update(connection, upload_session_id)
+            expiry = self._expire_if_due(connection, row, now)
+            if expiry is not None:
+                return expiry
+            session = self._from_row(connection, row)
+            if session.mode is not UploadMode.MULTIPART:
+                raise UploadPersistenceConflictError(
+                    "single upload cannot bind a multipart backend upload id"
+                )
+            if session.status not in {UploadSessionStatus.OPEN, UploadSessionStatus.UPLOADING}:
+                raise UploadPersistenceConflictError(
+                    f"cannot bind multipart UploadId while upload is {session.status.value}"
+                )
+            if session.backend_upload_id is not None:
+                if session.backend_upload_id != backend_upload_id:
+                    raise UploadPersistenceConflictError(
+                        "multipart session is already bound to a different backend UploadId"
+                    )
+                return UploadMutationResult(
+                    action="reused",
+                    upload_session_id=upload_session_id,
+                    status=session.status,
+                    revision=session.audit.revision,
+                )
+            revision = int(row["revision"]) + 1
+            connection.execute(
+                update(self.sessions)
+                .where(self.sessions.c.id == row["id"])
+                .values(
+                    backend_upload_id=backend_upload_id,
+                    updated_at=now,
+                    revision=revision,
+                )
+            )
+            return UploadMutationResult(
+                action="recorded",
+                upload_session_id=upload_session_id,
+                status=session.status,
+                revision=revision,
+            )
+
     def record_part(
         self,
         upload_session_id: str,
@@ -147,6 +198,10 @@ class PostgresUploadSessionRepository:
             session = self._from_row(connection, row)
             if session.mode is not UploadMode.MULTIPART:
                 raise UploadPersistenceConflictError("single upload cannot record multipart parts")
+            if session.backend_upload_id is None:
+                raise UploadPersistenceConflictError(
+                    "multipart UploadId must be durably bound before recording parts"
+                )
             if session.status not in {UploadSessionStatus.OPEN, UploadSessionStatus.UPLOADING}:
                 raise UploadPersistenceConflictError(
                     f"cannot record part while upload is {session.status.value}"
@@ -175,9 +230,12 @@ class PostgresUploadSessionRepository:
                 )
 
             recorded_bytes = connection.execute(
-                select(self.parts.c.size_bytes).where(self.parts.c.upload_session_id == row["id"])
+                select(self.parts.c.size_bytes).where(
+                    self.parts.c.upload_session_id == row["id"]
+                )
             ).scalars().all()
-            if sum(int(value) for value in recorded_bytes) + part.size_bytes > session.expected_size_bytes:
+            total_recorded = sum(int(value) for value in recorded_bytes) + part.size_bytes
+            if total_recorded > session.expected_size_bytes:
                 raise UploadPersistenceConflictError(
                     "recorded multipart bytes would exceed expected upload size"
                 )
@@ -260,6 +318,10 @@ class PostgresUploadSessionRepository:
                     "observed upload size does not match the expected size"
                 )
             if session.mode is UploadMode.MULTIPART:
+                if session.backend_upload_id is None:
+                    raise UploadPersistenceConflictError(
+                        "multipart UploadId must be durably bound before completion"
+                    )
                 if not session.parts:
                     raise UploadPersistenceConflictError(
                         "multipart upload cannot complete without recorded parts"
