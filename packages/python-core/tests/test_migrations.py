@@ -40,6 +40,7 @@ EXPECTED_CORE_TABLES = {
     "upload_sessions",
     "upload_parts",
     "upload_session_commands",
+    "quarantine_inspections",
     "jobs",
     "job_dependencies",
     "job_commands",
@@ -81,6 +82,7 @@ PROVIDER_ASYNC_TABLES = {"provider_async_states", "provider_callback_events"}
 WP7_TABLES = {"job_commands"}
 M03_WP1_TABLES = {"storage_objects"}
 M03_WP2_TABLES = {"upload_sessions", "upload_parts", "upload_session_commands"}
+M03_WP3_TABLES = {"quarantine_inspections"}
 
 
 def alembic_config() -> Config:
@@ -169,6 +171,27 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "result_revision",
             "occurred_at",
         }.issubset(upload_command_columns)
+        quarantine_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("quarantine_inspections", schema="core")
+        }
+        assert {
+            "external_id",
+            "upload_session_id",
+            "project_id",
+            "storage_object_external_id",
+            "policy",
+            "claimed_mime_type",
+            "detected_mime_type",
+            "expected_size_bytes",
+            "observed_size_bytes",
+            "status",
+            "rejection_codes",
+            "probe",
+            "threat_scan",
+            "inspected_at",
+            "revision",
+        }.issubset(quarantine_columns)
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -202,7 +225,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0009"
+        assert revision == "20260829_0010"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -323,9 +346,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260829_0009")
+        m09_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_wp3_tables = EXPECTED_CORE_TABLES - M03_WP3_TABLES
+        assert m09_tables == pre_wp3_tables
+
         command.downgrade(config, "20260829_0008")
         m08_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_wp2_tables = EXPECTED_CORE_TABLES - M03_WP2_TABLES
+        pre_wp2_tables = pre_wp3_tables - M03_WP2_TABLES
         assert m08_tables == pre_wp2_tables
 
         command.downgrade(config, "20260829_0007")
