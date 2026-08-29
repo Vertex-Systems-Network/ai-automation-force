@@ -53,14 +53,24 @@ def _response(
     return JSONResponse(status_code=status_code, content=payload.model_dump(mode="json"))
 
 
+def _normalized_api_error(exc: APIError) -> APIError:
+    """Preserve an already-normalized API error wrapped by a route translation boundary."""
+
+    cause = exc.__cause__
+    if isinstance(cause, APIError):
+        return cause
+    return exc
+
+
 def install_error_handlers(app: FastAPI) -> None:
     @app.exception_handler(APIError)
     async def api_error_handler(request: Request, exc: APIError) -> JSONResponse:
+        normalized = _normalized_api_error(exc)
         return _response(
             request,
-            code=exc.code,
-            message=exc.message,
-            status_code=exc.status_code,
+            code=normalized.code,
+            message=normalized.message,
+            status_code=normalized.status_code,
         )
 
     @app.exception_handler(RequestValidationError)
