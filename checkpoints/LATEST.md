@@ -1,11 +1,11 @@
 # Latest Checkpoint
 
 Current checkpoint:
-`checkpoints/2026-08-29-m03-wp1-complete.md`
+`checkpoints/2026-08-29-m03-wp2-complete.md`
 
 Current phase: **M03 — Asset Storage and Provenance**
 
-Status: **M03_WP1_COMPLETE_WP2_ACTIVE**
+Status: **M03_WP2_COMPLETE_WP3_ACTIVE**
 
 ## Completed baseline
 
@@ -13,6 +13,7 @@ Status: **M03_WP1_COMPLETE_WP2_ACTIVE**
 - M02 complete/closure checkpoint merge: `acf8d30f04124290cab97eab702c2cca6b9e3dcb`
 - M02 final executable WP8 merge: `bb82c3bd115723504cf233e0cab93ca9513d10a8`
 - M03 WP1 accepted merge: `b2cdad89f514ca905c66c71f44835ca8fbac9a51`
+- M03 WP2 accepted merge: `ff7005b127f0c83df481ae04b85fd763d207a67f`
 
 ## M03 development consent
 
@@ -29,49 +30,54 @@ Current stack revalidation:
 WP1 completion checkpoint:
 `checkpoints/2026-08-29-m03-wp1-complete.md`
 
-## M03 WP1 verified acceptance
+WP2 completion checkpoint:
+`checkpoints/2026-08-29-m03-wp2-complete.md`
+
+## M03 WP2 verified acceptance
 
 Accepted executable head:
-`9486b6108728264c878f467c63ac56f1f7414ecd`
+`6c63ca083ac48b0b1127610f66fb0bce60223f22`
 
 Accepted replacement PR:
-`#27`
+`#30`
+
+Canonical merge:
+`ff7005b127f0c83df481ae04b85fd763d207a67f`
 
 Fresh exact-head CI:
-- Core Domain Contracts #135 — run `33263036122` / job `99128136646` — GREEN
-- Durable Control Plane #73 — run `33263036135` / job `99128136832` — GREEN
+- Core Domain Contracts #166 — run `33266539978` / job `99137479531` — GREEN
+- Durable Control Plane #104 — run `33266539983` / job `99137479679` — GREEN
 
-WP1 now provides the provider-neutral StorageObject boundary, stable opaque object keys, deterministic filesystem storage, S3-compatible boto3/botocore `1.43.83` storage, actual-byte SHA-256 semantics, lifecycle metadata, fail-closed persisted schema-version validation, reversible migration `20260829_0008`, PostgreSQL idempotency/location uniqueness and synchronized generated schema.
+WP2 now provides stable `UPS-*` upload sessions, canonical quarantine upload keys, exact size/MIME/object binding, direct S3 upload grants, resumable multipart state, durable backend `UploadId` binding/recovery, semantic part replay, complete/abort/expiry idempotency, destructive-overwrite protection, lost-completion acknowledgement reconciliation, reversible migration `20260829_0009`, PostgreSQL acceptance coverage and synchronized generated schema.
 
-Lifecycle remains metadata only; retention/archive/delete/export orchestration remains WP7.
+Upload completion remains transfer completion only; quarantine/media-security acceptance and canonical Asset promotion are not part of WP2.
 
 ## Current executable target
 
-**M03-WP2 — Upload sessions and resumable multipart control** / Linear `ABD-201`
+**M03-WP3 — Quarantine, media probe and upload security** / Linear `ABD-202`
 
-Required WP2 scope:
+Required WP3 scope:
 
-- provider-neutral upload-session state and stable identity;
-- signed/direct single-object upload grant contracts where appropriate;
-- multipart/resumable lifecycle for large media;
-- exact project-derived object-key binding;
-- expected size and allowed MIME/type binding;
-- quota-reservation hook/reference without implementing commercial billing;
-- short expiry and explicit session status;
-- complete/abort operations with idempotency/conflict semantics;
-- interrupted multipart sessions can resume from persisted part state;
-- expired/aborted sessions cannot become canonical assets/storage completions;
-- no caller-selected arbitrary bucket/object paths;
-- no real cloud spend required for acceptance;
+- quarantine lifecycle after upload transfer completion;
+- claimed MIME versus actual file magic/type verification;
+- exact size/type policy and fail-closed rejection;
+- resource-limited media probe hook for media metadata/structural validation;
+- malware/threat scanning hook and provider-neutral scan outcome contract;
+- explicit accepted/rejected security lifecycle;
+- malformed/malicious fixtures fail closed;
+- rejected objects never become routable canonical assets;
+- parser/FFmpeg/probe execution occurs outside deterministic workflow code;
+- external process invocation is bounded and non-shell-injectable;
+- deterministic fixtures/no real provider spend for acceptance;
 - exact-head Core + Durable regression gates before merge.
 
-WP2 does not implement quarantine/media probing/security acceptance (WP3), Asset provenance/rights linkage (WP4), derivatives (WP5), signed media delivery (WP6), lifecycle orchestration (WP7), or M04+.
+WP3 does not implement Asset↔StorageObject provenance/rights linkage (WP4), derivatives (WP5), signed media delivery (WP6), lifecycle orchestration (WP7), or M04+.
 
 ## Linear M03 execution chain
 
 - WP1 `ABD-200` — Done
-- WP2 `ABD-201` — next active target
-- WP3 `ABD-202` — blocked by WP2
+- WP2 `ABD-201` — Done
+- WP3 `ABD-202` — next active target
 - WP4 `ABD-203` — blocked by WP3
 - WP5 `ABD-204` — blocked by WP4
 - WP6 `ABD-205` — blocked by WP5
