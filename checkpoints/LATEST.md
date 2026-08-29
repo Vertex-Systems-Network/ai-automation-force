@@ -1,142 +1,89 @@
 # Latest Checkpoint
 
 Current checkpoint:
+`checkpoints/2026-08-29-m02-ready-for-consent.md`
+
+Current phase: **M02 — Durable Workflow Control Plane**
+
+Status: **M02_READY_FOR_CONSENT**
+
+## Previous completed milestone
+
+M01 — Core Domain & Persistence Boundary is complete.
+
+Final M01 checkpoint:
 `checkpoints/2026-08-29-m01-complete.md`
 
-Current phase: **M01 — Core Domain & Persistence Boundary**
+M01 closure merge commit:
+`424b76214ab8eb94d3205a2eba2d75cf4ffa0cc7`
 
-Status: **M01_COMPLETE**
+Verified M01 executable evidence:
+`33221966779 / 99017705054`
+
+## Full-project planning prerequisite
+
+P0 Full Project Preplanning is complete.
+
+Checkpoint:
+`checkpoints/2026-08-29-full-project-preplanning-complete.md`
+
+Status:
+`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
+
+## M02 readiness
+
+Canonical milestone plan:
+`docs/milestones/M02/PLAN.md`
+
+Development Consent Brief:
+`docs/architecture/M02-DEVELOPMENT-CONSENT-BRIEF.md`
+
+Current stack revalidation:
+`docs/architecture/M02-CURRENT-STACK-REVALIDATION-2026-08-29.md`
+
+Readiness checkpoint:
+`checkpoints/2026-08-29-m02-ready-for-consent.md`
+
+M02 work-package sequence:
+1. WP1 — FastAPI application/control scaffold;
+2. WP2 — Temporal foundation;
+3. WP3 — job/idempotency/DB↔Temporal durability boundary;
+4. WP4 — retry/backoff/circuit/cancellation;
+5. WP5 — durable human/approval waits;
+6. WP6 — fake external async callback/reconciliation pattern;
+7. WP7 — job/control API + SSE progress;
+8. WP8 — replay/restart/100-shot recovery acceptance.
+
+## Current mutable-stack evidence
+
+Planning-time current stable versions observed on 2026-08-29:
+- FastAPI `0.141.1`;
+- Temporal Python SDK `1.30.0`;
+- Temporal CLI `1.8.1`;
+- Temporal Server `1.31.2`.
+
+These are not runtime pins yet. They must be revalidated immediately before dependency/runtime changes.
 
 ## Consent state
 
-Explicit operator consent for scoped M01 development was received on 2026-08-29 and has now been fully consumed by completed M01 work.
+**M02 executable development is blocked pending fresh explicit operator approval.**
 
-That consent does **not** authorize M02+, provider execution, public publishing, paid provider behavior, or any materially expanded scope.
+The prior M01 approval has been consumed and does not authorize M02.
 
-Development consent policy:
-`ai-native/DEVELOPMENT-CONSENT-GATE.md`
+A valid explicit authorization may be:
 
-## Completed work packages
+`Milestone 2 development approve — start.`
 
-### WP1 — Contract freeze and generated schemas
+Generic `continue`, `next`, `resume`, `audit`, or planning instructions remain non-authorizing.
 
-Merged via PR #1.
+## M02 scope boundary
 
-Merge commit:
-`89e2c69f939a2d2c2350d3f0715da0b310ebeff7`
-
-### WP2 — Full production lineage
-
-Merged via PR #2.
-
-Merge commit:
-`d3aa6ba6c36482628a5540473bac0386b40b808c`
-
-Checkpoint:
-`checkpoints/2026-08-29-m01-wp2-lineage-complete.md`
-
-### WP3 — Aggregate validation hardening
-
-Merged via PR #3.
-
-Merge commit:
-`2e648fd27c44d0186bab76668002114298cc82b8`
-
-Checkpoint:
-`checkpoints/2026-08-29-m01-wp3-aggregate-hardening-complete.md`
-
-### WP4 — Legacy CNT content importer boundary
-
-Merged via PR #4.
-
-Merge commit:
-`3e3e194be035c6aaf0888a6d2259f12a6219d8ec`
-
-Checkpoint:
-`checkpoints/2026-08-29-m01-wp4-legacy-content-import-complete.md`
-
-### WP5 — PostgreSQL persistence architecture
-
-Merged via PR #5.
-
-Merge commit:
-`b456c1732dcd01e0505f501b3560387613ce54be`
-
-Checkpoint:
-`checkpoints/2026-08-29-m01-wp5-postgresql-architecture-complete.md`
-
-Canonical mapping:
-`docs/architecture/POSTGRESQL-PERSISTENCE-ARCHITECTURE.md`
-
-### WP6 — Reversible PostgreSQL migration scaffold
-
-Merged via PR #6.
-
-Merge commit:
-`6f7d5fcd7dd152f5bc5db9c93658e8fc152ed3b3`
-
-Checkpoint:
-`checkpoints/2026-08-29-m01-wp6-migrations-complete.md`
-
-Verified GitHub Actions run/job:
-`33219768541 / 99011168309`
-
-### WP7 — Persistence repositories and round trips
-
-Merged via PR #7.
-
-Merge commit:
-`8fcc33ae900e2781db34d52622577b2993cf45b8`
-
-Verified PR executable head:
-`c4cb38a385a5412987f160c75c9db190c21df4f7`
-
-Verified GitHub Actions run/job:
-`33221966779 / 99017705054`
-
-The verified PR head and merged squash commit resolve to the same executable tree:
-`89e649726bf071bfb143e4a3a0021eb2317502d9`
-
-Permanent Python 3.12 + PostgreSQL 18 CI passed Ruff, strict mypy, unit/integration tests, schema synchronization and compile checks.
-
-### WP8 — Final M01 verification
-
-Complete.
-
-Final checkpoint:
-`checkpoints/2026-08-29-m01-complete.md`
-
-M01 acceptance includes:
-- domain/full-lineage/aggregate tests;
-- legacy importer and non-mutation protection;
-- PostgreSQL constraints and reversible migration lifecycle;
-- 2-minute and 90-minute persistence round trips;
-- >3-hour rejection protection;
-- pinned CharacterVersion/selected Take retention;
-- fail-closed Rights behavior;
-- transaction rollback/integrity behavior;
-- generated-schema reproducibility;
-- permanent Python 3.12 + PostgreSQL 18 CI evidence.
-
-## Current next step
-
-**Planning/review only for M02 unless new explicit development consent is received.**
-
-Next development milestone:
-`M02 — Durable Workflow Control Plane`
-
-M02 executable development requires a new scoped development brief and fresh explicit operator consent.
-
-Generic `continue`, `next`, `resume`, or `audit` instructions do not authorize M02 development.
-
-## Scope boundary
-
-M01 completion does not include Temporal runtime orchestration, provider adapters/generation calls, object storage/media execution, web/mobile product implementation, auth/RBAC, publishing/analytics, autonomous spend, production DB rollout, or M02+ development.
+M02 excludes real provider execution/credentials/spend, object storage/media generation, content intelligence, full web/mobile/auth/billing/social implementation, production Temporal HA/DR rollout, public publishing, autonomous spend and M03+ development.
 
 ## Known governance risk
 
-GitHub currently reports `main` as unprotected with no required-status-check enforcement. This should be hardened before or during M02 governance work without bypassing the consent gate.
+GitHub currently reports `main` as unprotected with no required-status-check enforcement. No branch-protection setting was changed during planning. Early approved M02 execution should either harden this through a reviewed repository-governance change or explicitly record temporary acceptance.
 
 ## GitHub ↔ Linear
 
-GitHub remains canonical for engineering contracts, implementation evidence, and checkpoints. Linear mirrors work-package status and acceptance evidence.
+GitHub remains canonical for engineering contracts, implementation evidence and checkpoints. Linear mirrors milestone/work-package readiness and execution status.
