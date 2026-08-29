@@ -42,6 +42,7 @@ from .legacy_import import (
 )
 from .lineage import ProductionLineageBundle
 from .persistence import (
+    CircuitBreakerConflictError,
     JobIdempotencyConflictError,
     JobLeaseConflictError,
     JobStateConflictError,
@@ -52,6 +53,7 @@ from .persistence import (
     PersistenceReferenceError,
     PersistenceShapeError,
     PersistResult,
+    PostgresCircuitBreakerRepository,
     PostgresJobControlRepository,
     PostgresProductionRepository,
     PostgresWorkflowExecutionRepository,
@@ -76,6 +78,18 @@ from .project import (
     Project,
     ProviderPolicyRef,
 )
+from .retry_control import (
+    RETRY_DECISIONS,
+    BackoffPolicy,
+    CircuitBreakerPolicy,
+    CircuitPermission,
+    CircuitRecordResult,
+    CircuitState,
+    DeadlinePolicy,
+    FailureClass,
+    RetryDecision,
+    retry_decision,
+)
 from .timeline import (
     Act,
     ContinuityState,
@@ -91,6 +105,7 @@ from .workflow_runtime import WorkflowExecutionRef
 __all__ = [
     "JOB_STATUS_TRANSITIONS",
     "LEGACY_CONTENT_MAPPING_VERSION",
+    "RETRY_DECISIONS",
     "SCHEMA_VERSION",
     "TERMINAL_JOB_STATUSES",
     "Act",
@@ -102,6 +117,7 @@ __all__ = [
     "AudienceKind",
     "AudienceProfile",
     "AuditFields",
+    "BackoffPolicy",
     "CanonicalStatus",
     "CastAge",
     "CastGender",
@@ -110,6 +126,11 @@ __all__ = [
     "CharacterLock",
     "CharacterLook",
     "CharacterVersion",
+    "CircuitBreakerConflictError",
+    "CircuitBreakerPolicy",
+    "CircuitPermission",
+    "CircuitRecordResult",
+    "CircuitState",
     "CommercialUseStatus",
     "Content",
     "ContentFormat",
@@ -118,7 +139,9 @@ __all__ = [
     "ContinuityState",
     "CostRecord",
     "CreativeProfile",
+    "DeadlinePolicy",
     "ExecutionMode",
+    "FailureClass",
     "GenerationAttempt",
     "GenerationRequest",
     "InvalidJobTransitionError",
@@ -145,6 +168,7 @@ __all__ = [
     "PersistenceNotFoundError",
     "PersistenceReferenceError",
     "PersistenceShapeError",
+    "PostgresCircuitBreakerRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresWorkflowExecutionRepository",
@@ -156,6 +180,7 @@ __all__ = [
     "ProviderModelRef",
     "ProviderPolicyRef",
     "QARecord",
+    "RetryDecision",
     "RightsRecord",
     "Scene",
     "Sequence",
@@ -173,4 +198,5 @@ __all__ = [
     "import_legacy_content_package",
     "operation_fingerprint",
     "reconcile_legacy_content_import",
+    "retry_decision",
 ]
