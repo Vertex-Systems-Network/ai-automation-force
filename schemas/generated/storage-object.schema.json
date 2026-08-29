@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "AuditFields": {
+      "additionalProperties": false,
+      "properties": {
+        "created_at": {
+          "format": "date-time",
+          "title": "Created At",
+          "type": "string"
+        },
+        "created_by": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Created By"
+        },
+        "revision": {
+          "default": 1,
+          "minimum": 1,
+          "title": "Revision",
+          "type": "integer"
+        },
+        "updated_at": {
+          "format": "date-time",
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at"
+      ],
+      "title": "AuditFields",
+      "type": "object"
+    },
+    "StorageBackend": {
+      "enum": [
+        "filesystem",
+        "s3"
+      ],
+      "title": "StorageBackend",
+      "type": "string"
+    }
+  },
+  "$id": "urn:ai-automation-force:schema:v1:storage-object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Canonical physical-object metadata, separate from business Asset identity.",
+  "properties": {
+    "audit": {
+      "$ref": "#/$defs/AuditFields"
+    },
+    "backend": {
+      "$ref": "#/$defs/StorageBackend"
+    },
+    "bucket": {
+      "anyOf": [
+        {
+          "maxLength": 255,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Bucket"
+    },
+    "etag": {
+      "anyOf": [
+        {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Etag"
+    },
+    "lifecycle_class": {
+      "default": "active",
+      "maxLength": 80,
+      "minLength": 1,
+      "title": "Lifecycle Class",
+      "type": "string"
+    },
+    "mime_type": {
+      "maxLength": 255,
+      "minLength": 3,
+      "title": "Mime Type",
+      "type": "string"
+    },
+    "object_key": {
+      "maxLength": 1024,
+      "minLength": 1,
+      "title": "Object Key",
+      "type": "string"
+    },
+    "original_filename": {
+      "anyOf": [
+        {
+          "maxLength": 512,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Original Filename"
+    },
+    "project_id": {
+      "anyOf": [
+        {
+          "pattern": "^PRJ-[0-9]{6,20}$",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Project Id"
+    },
+    "region": {
+      "anyOf": [
+        {
+          "maxLength": 160,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Region"
+    },
+    "schema_version": {
+      "const": 1,
+      "default": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "sha256": {
+      "pattern": "^[a-f0-9]{64}$",
+      "title": "Sha256",
+      "type": "string"
+    },
+    "size_bytes": {
+      "minimum": 0,
+      "title": "Size Bytes",
+      "type": "integer"
+    },
+    "storage_object_id": {
+      "pattern": "^STO-[0-9]{6,20}$",
+      "title": "Storage Object Id",
+      "type": "string"
+    },
+    "version_id": {
+      "anyOf": [
+        {
+          "maxLength": 1024,
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Version Id"
+    }
+  },
+  "required": [
+    "storage_object_id",
+    "backend",
+    "object_key",
+    "sha256",
+    "mime_type",
+    "size_bytes",
+    "audit"
+  ],
+  "title": "StorageObject",
+  "type": "object"
+}
