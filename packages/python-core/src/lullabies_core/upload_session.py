@@ -14,7 +14,19 @@ from .common import (
     StrictModel,
     UploadSessionId,
 )
-from .storage import StorageBackend, validate_object_key
+from .storage import StorageBackend, build_object_key, validate_object_key
+
+UPLOAD_QUARANTINE_NAMESPACE = "uploads/quarantine"
+
+
+def build_upload_object_key(project_id: str, storage_object_id: str) -> str:
+    """Derive the only physical object-key namespace accepted for raw uploads."""
+
+    return build_object_key(
+        UPLOAD_QUARANTINE_NAMESPACE,
+        storage_object_id,
+        project_id=project_id,
+    )
 
 
 class UploadMode(StrEnum):
@@ -81,6 +93,9 @@ class UploadSession(StrictModel):
     @model_validator(mode="after")
     def validate_upload_contract(self) -> UploadSession:
         validate_object_key(self.object_key)
+        expected_key = build_upload_object_key(self.project_id, self.storage_object_id)
+        if self.object_key != expected_key:
+            raise ValueError("upload object_key must equal the canonical quarantine key")
         if self.backend is StorageBackend.S3 and self.bucket is None:
             raise ValueError("S3 upload sessions require a bucket")
         if self.backend is StorageBackend.FILESYSTEM and self.bucket is not None:
