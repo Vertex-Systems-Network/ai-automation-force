@@ -214,23 +214,25 @@ class SyntheticProviderAsyncWorkflow:
         self._apply_callbacks()
 
     @workflow.run
-    async def run(self, input: dict[str, str | int | float]) -> str:
+    async def run(self, input: dict[str, str | int]) -> str:
         job_key = str(input["job_key"]).strip()
         mode = str(input["mode"]).strip()
-        timeout_seconds = float(input["timeout_seconds"])
-        poll_interval_seconds = float(input.get("poll_interval_seconds", 0.1))
+        timeout_ms = int(input["timeout_ms"])
+        poll_interval_ms = int(input.get("poll_interval_ms", 100))
         succeed_after = int(input.get("succeed_after", 2))
         if not job_key:
             raise ValueError("job_key must not be blank")
         if mode not in {"poll", "callback", "timeout", "unavailable"}:
             raise ValueError("unsupported synthetic provider mode")
-        if timeout_seconds <= 0:
-            raise ValueError("timeout_seconds must be positive")
-        if poll_interval_seconds <= 0:
-            raise ValueError("poll_interval_seconds must be positive")
+        if timeout_ms < 1:
+            raise ValueError("timeout_ms must be at least 1")
+        if poll_interval_ms < 1:
+            raise ValueError("poll_interval_ms must be at least 1")
         if succeed_after < 1:
             raise ValueError("succeed_after must be at least 1")
 
+        timeout = timedelta(milliseconds=timeout_ms)
+        poll_interval_seconds = poll_interval_ms / 1000
         self._generation_id = await workflow.execute_activity(
             synthetic_provider_submit,
             job_key,
@@ -242,7 +244,7 @@ class SyntheticProviderAsyncWorkflow:
             try:
                 await workflow.wait_condition(
                     lambda: self._terminal_status is not None,
-                    timeout=timedelta(seconds=timeout_seconds),
+                    timeout=timeout,
                 )
             except TimeoutError:
                 await workflow.wait_condition(workflow.all_handlers_finished)
@@ -251,7 +253,7 @@ class SyntheticProviderAsyncWorkflow:
             assert self._terminal_status is not None
             return self._terminal_status
 
-        deadline = workflow.now() + timedelta(seconds=timeout_seconds)
+        deadline = workflow.now() + timeout
         poll_index = 0
         while workflow.now() < deadline:
             poll_index += 1
