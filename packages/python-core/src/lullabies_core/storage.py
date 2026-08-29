@@ -9,13 +9,12 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
-from typing import Annotated, Protocol
+from typing import Protocol
 
 from pydantic import AwareDatetime, Field, model_validator
 
-from .common import AuditFields, ProjectId, StrictModel, external_id_pattern
+from .common import AuditFields, ProjectId, StorageObjectId, StrictModel, external_id_pattern
 
-StorageObjectId = Annotated[str, Field(pattern=external_id_pattern("STO"))]
 _NAMESPACE_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}(?:/[a-z0-9][a-z0-9-]{0,63})*$")
 _MAX_KEY_UTF8_BYTES = 1024
 
@@ -201,7 +200,9 @@ class FilesystemStorageAdapter:
         if path.exists():
             existing = path.read_bytes()
             if existing != data:
-                raise StorageConflictError(f"object key {object_key} already stores different bytes")
+                raise StorageConflictError(
+                    f"object key {object_key} already stores different bytes"
+                )
         else:
             descriptor, temporary_name = tempfile.mkstemp(prefix=".aaf-write-", dir=path.parent)
             temporary_path = Path(temporary_name)
@@ -212,12 +213,12 @@ class FilesystemStorageAdapter:
                     os.fsync(handle.fileno())
                 try:
                     os.link(temporary_path, path)
-                except FileExistsError:
+                except FileExistsError as exc:
                     existing = path.read_bytes()
                     if existing != data:
                         raise StorageConflictError(
                             f"object key {object_key} raced with different bytes"
-                        )
+                        ) from exc
             finally:
                 temporary_path.unlink(missing_ok=True)
 
