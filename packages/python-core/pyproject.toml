@@ -29,6 +29,7 @@ dev = [
   "psycopg[binary]>=3.3.4,<4",
   "boto3==1.43.83",
   "botocore==1.43.83",
+  "types-boto3[s3]==1.43.83",
 ]
 
 [tool.hatch.build.targets.wheel]
