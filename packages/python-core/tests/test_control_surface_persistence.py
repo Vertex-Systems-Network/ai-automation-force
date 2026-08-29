@@ -131,6 +131,84 @@ def test_control_surface_reads_events_and_idempotently_cancels() -> None:
         assert len(page) == 1
         assert page[0].job_id == job.job_id
         assert page[0].status is JobStatus.CANCELLED
+        project_status = control.project_status(job.project_id)
+        assert project_status.total_jobs == 1
+        assert project_status.job_status_counts == {"cancelled": 1}
+        assert project_status.workflow_status_counts == {}
+    finally:
+        engine.dispose()
+        command.downgrade(config, "base")
+
+
+@pytest.mark.postgres
+@pytest.mark.skipif(DATABASE_URL is None, reason="DATABASE_URL is not configured")
+def test_start_command_is_atomic_versioned_idempotent_and_outboxed() -> None:
+    assert DATABASE_URL is not None
+    config = alembic_config()
+    command.downgrade(config, "base")
+    command.upgrade(config, "head")
+    engine = create_engine(DATABASE_URL)
+    now = datetime.now(UTC)
+
+    try:
+        insert_project(engine, "PRJ-001102")
+        jobs = PostgresJobControlRepository(engine)
+        control = PostgresControlSurfaceRepository(engine)
+        job = queued_job("JOB-001102", "PRJ-001102", "create-001102", now)
+        jobs.submit(job, {"kind": "synthetic-control", "value": "start"})
+        operation = {"expected_revision": 1, "workflow_kind": "synthetic-job-control"}
+
+        assert (
+            control.load_start_command(
+                job.job_id,
+                idempotency_key="start-001102",
+                operation=operation,
+            )
+            is None
+        )
+        applied = control.record_start(
+            job.job_id,
+            idempotency_key="start-001102",
+            expected_revision=1,
+            workflow_execution_id="WFX-001102",
+            operation=operation,
+            now=now + timedelta(seconds=1),
+        )
+        assert applied.action == "applied"
+        assert applied.status is JobStatus.ELIGIBLE
+        assert applied.revision == 2
+        assert applied.workflow_execution_id == "WFX-001102"
+
+        reused = control.load_start_command(
+            job.job_id,
+            idempotency_key="start-001102",
+            operation=operation,
+        )
+        assert reused is not None
+        assert reused.action == "reused"
+        assert reused.revision == 2
+        assert control.load_job(job.job_id).status is JobStatus.ELIGIBLE
+
+        events = control.list_job_events(job.job_id)
+        assert [event.job_revision for event in events] == [1, 2]
+        assert events[-1].payload["command"] == "start"
+        assert events[-1].payload["workflow_execution_id"] == "WFX-001102"
+
+        with pytest.raises(JobCommandConflictError, match="different control-command"):
+            control.load_start_command(
+                job.job_id,
+                idempotency_key="start-001102",
+                operation={"expected_revision": 2, "workflow_kind": "synthetic-job-control"},
+            )
+        with pytest.raises(JobCommandVersionConflictError, match="stale"):
+            control.record_start(
+                job.job_id,
+                idempotency_key="start-stale-001102",
+                expected_revision=1,
+                workflow_execution_id="WFX-001103",
+                operation=operation,
+                now=now + timedelta(seconds=2),
+            )
     finally:
         engine.dispose()
         command.downgrade(config, "base")
