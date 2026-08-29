@@ -8,24 +8,22 @@ Fresh explicit operator authorization received on 2026-08-29:
 
 `Milestone 3 development approve — start.`
 
-This authorizes executable M03 work within `docs/milestones/M03/PLAN.md`. It does not authorize M04+ or expand the M03 scope.
+This authorizes executable M03 work within `docs/milestones/M03/PLAN.md`. It does not authorize M04+ or expand M03 scope.
 
 ## Revalidation requirement
 
-`checkpoints/LATEST.md` required current object-storage/provider SDK versions and the local test-storage stack to be revalidated before the first executable M03 work package.
-
-Revalidation was performed against current upstream/PyPI information on 2026-08-29.
+Current object-storage/provider SDK versions and the local test-storage stack were revalidated before the first executable M03 work package. A second freshness pass was performed before implementation after the initial evidence showed the fast-moving AWS SDK line had advanced again.
 
 ## Python S3 SDK decision
 
 ### boto3 / botocore
 
-Observed current stable line:
+Observed current stable line on the final freshness pass:
 
-- `boto3 1.43.80`
-- `botocore 1.43.80`
-- release date: 2026-08-25
-- Python support includes Python 3.12 used by this repository
+- `boto3 1.43.83`
+- `botocore 1.43.83`
+- release date: 2026-08-28
+- Python support includes repository Python 3.12
 - Apache-2.0
 
 Decision: **use synchronous boto3 as the initial S3-compatible adapter SDK**.
@@ -33,12 +31,16 @@ Decision: **use synchronous boto3 as the initial S3-compatible adapter SDK**.
 Reasons:
 
 - AWS-maintained reference S3 client;
-- works with custom S3-compatible endpoints;
-- stable production status;
-- avoids introducing an async compatibility matrix into the canonical storage boundary;
-- blocking SDK calls belong in worker Activities or bounded thread/off-event-loop execution, not inside deterministic Temporal workflow code.
+- custom S3-compatible endpoints supported;
+- stable production SDK line;
+- avoids an unnecessary async dependency-compatibility matrix in the canonical boundary;
+- blocking SDK calls belong in worker Activities or bounded off-event-loop execution, never deterministic Temporal workflow code.
 
-The canonical domain API remains provider-neutral and must not expose boto3 request/response shapes.
+Canonical domain models must not expose boto3 request/response shapes.
+
+### boto3 typing
+
+Current generated `boto3-stubs` tracks the AWS SDK line and provides S3 typing. WP1 may pin the matching `1.43.83` typing line for strict mypy validation.
 
 ### aiobotocore
 
@@ -46,12 +48,12 @@ Observed current release:
 
 - `aiobotocore 3.9.0`
 - release date: 2026-08-01
-- supports Python 3.12
-- its declared botocore range is `>=1.43.3,<1.43.57`
+- Python 3.12 supported
+- declared botocore range `>=1.43.3,<1.43.57`
 
-This does not cover current botocore `1.43.80`.
+This does not cover current botocore `1.43.83`.
 
-Decision: **do not add aiobotocore in M03-WP1**. Revisit only if an async transport is materially required and its botocore compatibility is revalidated at that time.
+Decision: **do not add aiobotocore in M03-WP1**. Revisit only if an async transport is materially required and compatibility is revalidated then.
 
 ## Local S3-compatible integration target
 
@@ -59,73 +61,69 @@ Decision: **do not add aiobotocore in M03-WP1**. Revisit only if an async transp
 
 The historical M03 plan mentioned a local MinIO/filesystem test adapter. Current upstream state changed materially:
 
-- the `minio/minio` community repository was archived on 2026-04-25;
-- the community edition is described as source-only distribution;
+- `minio/minio` community repository archived on 2026-04-25;
+- community edition described as source-only distribution;
 - historical precompiled releases are no longer maintained.
 
-Decision: **do not make MinIO Community Server a new mandatory CI dependency**. Preserve MinIO/S3 compatibility as a protocol target, but do not anchor M03 acceptance to an archived server distribution.
-
-The MinIO Python client remains available, but M03-WP1 does not use it as the canonical SDK because boto3 provides the reference S3-compatible boundary required by the plan.
+Decision: **do not make MinIO Community Server a mandatory new CI dependency**. Preserve S3/MinIO protocol compatibility as a target without anchoring merge acceptance to an archived server distribution.
 
 ## Test stack decision
 
-Two active test options were revalidated:
-
 ### Adobe S3Mock
 
-- current 5.x line is actively developed;
-- current immutable Docker release observed: `5.1.0`;
-- supports Docker integration and S3 multipart/checksum behavior;
-- suitable for network-level S3-compatible integration tests.
+- active current 5.x line;
+- immutable Docker release observed: `5.1.0`;
+- Docker integration and multipart/checksum behavior;
+- preferred network-level S3-compatible CI target when introduced.
 
 ### Moto
 
 - current release observed: `5.2.3` (2026-08-22);
 - Python 3.12 supported;
 - Apache-2.0;
-- suitable for fast Python-level S3 behavior tests/mocks.
+- suitable for focused Python fixtures where a network store is unnecessary.
 
 Decision for M03:
 
-1. **filesystem adapter** for deterministic local/unit tests and development without network/object-store dependency;
-2. **boto3 S3 adapter** as the production-facing S3-compatible implementation boundary;
-3. **Adobe S3Mock 5.1.0** as the preferred network-level CI compatibility target when container integration is introduced;
-4. **Moto 5.2.3** may be used for focused unit/integration fixtures where a full network store is unnecessary;
-5. MinIO remains an optional compatibility target and is not required for merge acceptance.
+1. filesystem adapter for deterministic local/unit use;
+2. boto3 S3 adapter as production-facing S3-compatible boundary;
+3. Adobe S3Mock 5.1.0 preferred future network-level CI compatibility target;
+4. Moto 5.2.3 permitted for focused fixtures;
+5. MinIO remains optional compatibility target, not required merge infrastructure.
 
 ## M03-WP1 implementation boundary
 
-WP1 may now implement:
+WP1 may implement:
 
-- provider-neutral object metadata/value contracts;
-- storage adapter protocol/interface;
+- provider-neutral storage-object metadata/value contracts;
+- storage adapter protocol;
 - filesystem adapter with root containment and atomic writes;
 - S3-compatible boto3 adapter with custom endpoint/region/path-style configuration;
 - stable storage-object identity and object-key rules;
 - SHA-256, MIME, byte-size, ETag/version/checksum metadata where trustworthy;
-- no upload-session API yet (WP2);
-- no quarantine/probe pipeline yet (WP3);
-- no derivatives/signed delivery/retention implementation yet (WP5-WP7).
+- storage-object persistence needed for WP1 only;
+- no upload sessions (WP2), quarantine/probe (WP3), lineage/rights linkage (WP4), derivatives (WP5), signed delivery (WP6), or lifecycle orchestration (WP7).
 
 ## Security constraints
 
-- no arbitrary filesystem paths from callers;
-- object keys are normalized canonical identities, never trusted host paths;
-- credentials remain configuration/secrets, never canonical domain state or logs;
+- callers never provide arbitrary filesystem paths;
+- object keys are normalized canonical identities, not trusted host paths;
+- credentials remain configuration/secrets and never canonical state/log data;
 - endpoint URLs must not embed credentials;
-- TLS verification defaults on; insecure local test mode must be explicit;
-- do not treat ETag as a universal content hash;
-- SHA-256 content digest is canonical when content bytes are available;
+- TLS verification defaults on; insecure local-test mode must be explicit;
+- ETag is not a universal content hash;
+- SHA-256 over actual bytes is canonical when bytes are available;
 - no large binary fixture is committed to Git.
 
 ## Source evidence
 
-Revalidation sources:
+Revalidation sources used on 2026-08-29:
 
-- PyPI `boto3` / `botocore` current release metadata;
-- PyPI `aiobotocore 3.9.0` dependency metadata;
-- `minio/minio` GitHub repository status/distribution notice;
-- `adobe/S3Mock` GitHub releases/current 5.x changelog;
-- PyPI `moto 5.2.3` metadata.
+- PyPI boto3/botocore current-release metadata (final observed latest `1.43.83`);
+- PyPI boto3-stubs current generated typing line;
+- PyPI aiobotocore 3.9.0 dependency metadata;
+- `minio/minio` upstream repository/distribution notice;
+- `adobe/S3Mock` releases/current 5.x changelog;
+- PyPI Moto 5.2.3 metadata.
 
-Mutable versions must be revalidated again if M03 execution crosses a meaningful dependency-update boundary.
+Mutable versions must be revalidated again if execution crosses a meaningful dependency-update boundary.
