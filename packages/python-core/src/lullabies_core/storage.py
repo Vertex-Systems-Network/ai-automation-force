@@ -6,7 +6,7 @@ import os
 import re
 import tempfile
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import StrEnum
 from pathlib import Path
 from typing import Annotated, Protocol
@@ -16,7 +16,6 @@ from pydantic import AwareDatetime, Field, model_validator
 from .common import AuditFields, ProjectId, StrictModel, external_id_pattern
 
 StorageObjectId = Annotated[str, Field(pattern=external_id_pattern("STO"))]
-_SHA256_RE = re.compile(r"^[a-f0-9]{64}$")
 _NAMESPACE_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,63}(?:/[a-z0-9][a-z0-9-]{0,63})*$")
 _MAX_KEY_UTF8_BYTES = 1024
 
@@ -43,7 +42,7 @@ class StorageIntegrityError(StorageError):
 
 
 class StorageObject(StrictModel):
-    """Canonical physical-object metadata, intentionally separate from business Asset identity."""
+    """Canonical physical-object metadata, separate from business Asset identity."""
 
     storage_object_id: StorageObjectId
     project_id: ProjectId | None = None
@@ -139,7 +138,6 @@ def build_object_key(
 
     if not _NAMESPACE_RE.fullmatch(namespace):
         raise ValueError("namespace must be lower-case slash-separated opaque segments")
-    # Pydantic validates these identities at domain boundaries; this helper remains usable alone.
     if re.fullmatch(external_id_pattern("STO"), storage_object_id) is None:
         raise ValueError("storage_object_id is invalid")
     parts = [namespace]
@@ -252,7 +250,7 @@ class FilesystemStorageAdapter:
             size_bytes=len(data),
             sha256=sha256_bytes(data),
             mime_type=guessed_type,
-            last_modified=datetime.fromtimestamp(details.st_mtime, tz=datetime.now().astimezone().tzinfo),
+            last_modified=datetime.fromtimestamp(details.st_mtime, tz=UTC),
         )
 
     def delete(self, object_key: str) -> None:
