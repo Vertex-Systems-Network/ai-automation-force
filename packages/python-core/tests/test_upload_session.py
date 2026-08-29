@@ -5,7 +5,7 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from pydantic import ValidationError
 
-from ai_automation_force_core import AuditFields, StorageBackend
+from ai_automation_force_core import AuditFields, StorageBackend, build_upload_object_key
 from ai_automation_force_core.upload_session import (
     DirectUploadGrant,
     UploadMode,
@@ -23,7 +23,7 @@ def make_session(*, mode: UploadMode = UploadMode.MULTIPART) -> UploadSession:
         storage_object_id="STO-003001",
         backend=StorageBackend.S3,
         bucket="aaf-private",
-        object_key="uploads/quarantine/PRJ-003001/STO-003001",
+        object_key=build_upload_object_key("PRJ-003001", "STO-003001"),
         expected_size_bytes=10,
         expected_mime_type="video/mp4",
         original_filename="clip.mp4",
@@ -46,6 +46,27 @@ def test_single_and_multipart_contracts_fail_closed() -> None:
     multipart = make_session()
     with pytest.raises(ValidationError, match="multipart uploads require part_size_bytes"):
         UploadSession.model_validate({**multipart.model_dump(), "part_size_bytes": None})
+
+
+def test_upload_object_key_is_derived_and_cannot_be_caller_selected() -> None:
+    session = make_session()
+    assert session.object_key == "uploads/quarantine/PRJ-003001/STO-003001"
+
+    with pytest.raises(ValidationError, match="canonical quarantine key"):
+        UploadSession.model_validate(
+            {
+                **session.model_dump(),
+                "object_key": "uploads/quarantine/PRJ-003001/caller-selected",
+            }
+        )
+
+    with pytest.raises(ValidationError, match="canonical quarantine key"):
+        UploadSession.model_validate(
+            {
+                **session.model_dump(),
+                "object_key": "source/PRJ-003001/STO-003001",
+            }
+        )
 
 
 def test_completed_multipart_requires_exact_recorded_bytes() -> None:
