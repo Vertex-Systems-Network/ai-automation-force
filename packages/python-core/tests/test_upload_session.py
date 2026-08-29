@@ -5,6 +5,7 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from pydantic import ValidationError
 
+from ai_automation_force_core import AuditFields, StorageBackend
 from ai_automation_force_core.upload_session import (
     DirectUploadGrant,
     UploadMode,
@@ -12,7 +13,6 @@ from ai_automation_force_core.upload_session import (
     UploadSession,
     UploadSessionStatus,
 )
-from ai_automation_force_core import AuditFields, StorageBackend
 
 
 def make_session(*, mode: UploadMode = UploadMode.MULTIPART) -> UploadSession:
@@ -41,15 +41,11 @@ def test_single_and_multipart_contracts_fail_closed() -> None:
     assert single.part_size_bytes is None
 
     with pytest.raises(ValidationError, match="single uploads must not define part_size_bytes"):
-        UploadSession.model_validate(
-            {**single.model_dump(), "part_size_bytes": 5}
-        )
+        UploadSession.model_validate({**single.model_dump(), "part_size_bytes": 5})
 
     multipart = make_session()
     with pytest.raises(ValidationError, match="multipart uploads require part_size_bytes"):
-        UploadSession.model_validate(
-            {**multipart.model_dump(), "part_size_bytes": None}
-        )
+        UploadSession.model_validate({**multipart.model_dump(), "part_size_bytes": None})
 
 
 def test_completed_multipart_requires_exact_recorded_bytes() -> None:
