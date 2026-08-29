@@ -23,8 +23,8 @@ from lullabies_core.persistence import (
     PostgresQuarantineInspectionRepository,
     PostgresStorageObjectRepository,
     PostgresUploadSessionRepository,
-    QuarantinePersistResult,
     QuarantinePersistenceConflictError,
+    QuarantinePersistResult,
     StorageObjectPersistResult,
     UploadPersistenceConflictError,
 )
