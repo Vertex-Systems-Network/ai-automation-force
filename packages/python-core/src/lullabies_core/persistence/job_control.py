@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Mapping
 from datetime import datetime, timedelta
-from typing import Any, Mapping
+from typing import Any
 from uuid import UUID, uuid4
 
 from sqlalchemy import MetaData, Table, insert, select, update
@@ -10,10 +11,10 @@ from sqlalchemy.exc import IntegrityError
 
 from ..common import JobStatus
 from ..job_control import (
+    InvalidJobTransitionError,
     JobLeaseResult,
     JobSubmitResult,
     JobTransitionResult,
-    InvalidJobTransitionError,
     assert_job_transition,
     operation_fingerprint,
 )
@@ -81,7 +82,12 @@ class PostgresJobControlRepository:
         fingerprint = operation_fingerprint(operation)
         try:
             with self.engine.begin() as connection:
-                project = self._require_external(connection, self.projects, job.project_id, "project")
+                project = self._require_external(
+                    connection,
+                    self.projects,
+                    job.project_id,
+                    "project",
+                )
                 existing = self._row_by_idempotency(
                     connection,
                     project["id"],
@@ -116,7 +122,12 @@ class PostgresJobControlRepository:
                     project["id"],
                 )
                 dependency_internal = [
-                    self._require_job_in_project(connection, value, project["id"], "dependency job")
+                    self._require_job_in_project(
+                        connection,
+                        value,
+                        project["id"],
+                        "dependency job",
+                    )
                     for value in job.dependency_job_ids
                 ]
 
