@@ -23,6 +23,7 @@ from ai_automation_force_worker import (
 )
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
+TEMPORAL_INTEGRATION = os.environ.get("AAF_TEMPORAL_INTEGRATION") == "1"
 ROOT = Path(__file__).resolve().parents[3]
 ALEMBIC_INI = ROOT / "packages" / "python-core" / "alembic.ini"
 
@@ -34,6 +35,7 @@ def alembic_config() -> Config:
 @pytest.mark.temporal
 @pytest.mark.postgres
 @pytest.mark.skipif(DATABASE_URL is None, reason="DATABASE_URL is not configured")
+@pytest.mark.skipif(not TEMPORAL_INTEGRATION, reason="AAF_TEMPORAL_INTEGRATION=1 is required")
 def test_real_temporal_workflow_replays_and_persists_run_reference() -> None:
     assert DATABASE_URL is not None
     config = alembic_config()
