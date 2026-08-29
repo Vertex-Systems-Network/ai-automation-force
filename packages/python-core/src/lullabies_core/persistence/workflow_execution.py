@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Literal
+from typing import Any, Literal, cast
 from uuid import UUID, uuid4
 
 from sqlalchemy import MetaData, Table, insert, select, update
@@ -47,7 +47,8 @@ class PostgresWorkflowExecutionRepository:
                     if restored == execution:
                         return WorkflowPersistResult("noop", execution.workflow_execution_id)
                     raise PersistenceConflictError(
-                        f"workflow {execution.workflow_execution_id} already exists with different data"
+                        "workflow "
+                        f"{execution.workflow_execution_id} already exists with different data"
                     )
 
                 project_internal = self._optional_internal(
@@ -91,7 +92,8 @@ class PostgresWorkflowExecutionRepository:
             raise
         except IntegrityError as exc:
             raise PersistenceConflictError(
-                f"database integrity rejected workflow {execution.workflow_execution_id}: {exc.orig}"
+                "database integrity rejected workflow "
+                f"{execution.workflow_execution_id}: {exc.orig}"
             ) from exc
         return WorkflowPersistResult("created", execution.workflow_execution_id)
 
@@ -154,8 +156,16 @@ class PostgresWorkflowExecutionRepository:
         ).mappings().one_or_none()
 
     @staticmethod
-    def _row_by_id(connection: Connection, table: Table, internal_id: UUID) -> RowMapping | None:
-        return connection.execute(select(table).where(table.c.id == internal_id)).mappings().one_or_none()
+    def _row_by_id(
+        connection: Connection,
+        table: Table,
+        internal_id: UUID,
+    ) -> RowMapping | None:
+        return (
+            connection.execute(select(table).where(table.c.id == internal_id))
+            .mappings()
+            .one_or_none()
+        )
 
     @staticmethod
     def _optional_internal(
@@ -171,7 +181,7 @@ class PostgresWorkflowExecutionRepository:
         ).scalar_one_or_none()
         if value is None:
             raise PersistenceReferenceError(f"missing {label}:{external_id}")
-        return value
+        return cast(UUID, value)
 
     @staticmethod
     def _external_for_internal(
@@ -185,5 +195,7 @@ class PostgresWorkflowExecutionRepository:
             select(table.c.external_id).where(table.c.id == internal_id)
         ).scalar_one_or_none()
         if value is None:
-            raise PersistenceReferenceError(f"missing external identity for internal row {internal_id}")
+            raise PersistenceReferenceError(
+                f"missing external identity for internal row {internal_id}"
+            )
         return str(value)
