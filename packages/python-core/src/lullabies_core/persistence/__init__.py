@@ -28,6 +28,7 @@ from .provider_async import (
     ProviderCallbackConflictError,
 )
 from .repository import PostgresProductionRepository
+from .storage_object import PostgresStorageObjectRepository, StorageObjectPersistResult
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
 
 __all__ = [
@@ -51,9 +52,11 @@ __all__ = [
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",
+    "PostgresStorageObjectRepository",
     "PostgresWorkflowExecutionRepository",
     "ProviderAsyncConflictError",
     "ProviderAsyncVersionConflictError",
     "ProviderCallbackConflictError",
+    "StorageObjectPersistResult",
     "WorkflowPersistResult",
 ]
