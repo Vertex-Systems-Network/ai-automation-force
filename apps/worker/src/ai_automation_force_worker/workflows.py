@@ -90,3 +90,56 @@ class SyntheticCancellationWorkflow:
             heartbeat_timeout=SYNTHETIC_CANCEL_HEARTBEAT,
             cancellation_type=workflow.ActivityCancellationType.WAIT_CANCELLATION_COMPLETED,
         )
+
+
+@workflow.defn
+class SyntheticApprovalWorkflow:
+    """Spend-free signal wait proving stale, duplicate and expiry-safe resume behavior."""
+
+    def __init__(self) -> None:
+        self._expected_revision: int | None = None
+        self._decision: str | None = None
+        self._pending_signals: list[tuple[int, str]] = []
+        self._seen_signal_keys: set[str] = set()
+
+    def _apply_pending(self) -> None:
+        if self._expected_revision is None or self._decision is not None:
+            return
+        for request_revision, decision in self._pending_signals:
+            if request_revision == self._expected_revision:
+                self._decision = decision
+                return
+
+    @workflow.signal
+    def resolve(self, payload: dict[str, str | int]) -> None:
+        signal_key = str(payload["signal_key"]).strip()
+        if not signal_key or signal_key in self._seen_signal_keys:
+            return
+        self._seen_signal_keys.add(signal_key)
+        request_revision = int(payload["request_revision"])
+        decision = str(payload["decision"]).strip()
+        if not decision:
+            return
+        self._pending_signals.append((request_revision, decision))
+        self._apply_pending()
+
+    @workflow.run
+    async def run(self, input: dict[str, int | float]) -> str:
+        self._expected_revision = int(input["expected_revision"])
+        timeout_seconds = float(input["timeout_seconds"])
+        if self._expected_revision < 1:
+            raise ValueError("expected_revision must be at least 1")
+        if timeout_seconds <= 0:
+            raise ValueError("timeout_seconds must be positive")
+        self._apply_pending()
+        try:
+            await workflow.wait_condition(
+                lambda: self._decision is not None,
+                timeout=timedelta(seconds=timeout_seconds),
+            )
+        except asyncio.TimeoutError:
+            await workflow.wait_condition(workflow.all_handlers_finished)
+            return "expired"
+        await workflow.wait_condition(workflow.all_handlers_finished)
+        assert self._decision is not None
+        return self._decision
