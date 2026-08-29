@@ -65,11 +65,43 @@ def test_structured_api_error_contains_request_id() -> None:
     }
 
 
+def test_control_surface_fails_closed_when_database_is_not_configured() -> None:
+    app = create_app(Settings(environment="test"))
+    with TestClient(app) as client:
+        response = client.get(
+            "/api/v1/jobs/JOB-000001",
+            headers={"X-Request-ID": "req-control-001"},
+        )
+
+    assert response.status_code == 503
+    assert response.json() == {
+        "error": {
+            "code": "CONTROL_SURFACE_UNAVAILABLE",
+            "message": "job control surface is not configured",
+            "request_id": "req-control-001",
+            "details": [],
+        }
+    }
+
+
 def test_openapi_schema_is_deterministic_and_versioned() -> None:
     first = create_app(Settings(environment="test", build_revision="schema-export")).openapi()
     second = create_app(Settings(environment="test", build_revision="schema-export")).openapi()
 
     assert first == second
     assert first["openapi"] == "3.1.0"
-    assert "/api/v1/health/live" in first["paths"]
-    assert "/api/v1/health/ready" in first["paths"]
+    expected_paths = {
+        "/api/v1/health/live",
+        "/api/v1/health/ready",
+        "/api/v1/jobs",
+        "/api/v1/jobs/{job_id}",
+        "/api/v1/jobs/{job_id}/start",
+        "/api/v1/jobs/{job_id}/cancel",
+        "/api/v1/jobs/{job_id}/retry",
+        "/api/v1/jobs/{job_id}/history",
+        "/api/v1/jobs/{job_id}/events",
+        "/api/v1/projects/{project_id}/jobs",
+        "/api/v1/projects/{project_id}/status",
+        "/api/v1/workflows/{workflow_execution_id}",
+    }
+    assert expected_paths.issubset(first["paths"])
