@@ -54,6 +54,10 @@ def test_deadline_and_circuit_policies_reject_unsafe_values() -> None:
     CircuitBreakerPolicy(failure_threshold=3, open_seconds=60, probe_lease_seconds=10)
 
     with pytest.raises(ValueError, match="shorter"):
-        DeadlinePolicy(schedule_to_close_seconds=30, start_to_close_seconds=10, heartbeat_seconds=10)
+        DeadlinePolicy(
+            schedule_to_close_seconds=30,
+            start_to_close_seconds=10,
+            heartbeat_seconds=10,
+        )
     with pytest.raises(ValueError, match="failure_threshold"):
         CircuitBreakerPolicy(failure_threshold=0)
