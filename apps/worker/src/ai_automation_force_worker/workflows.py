@@ -51,7 +51,11 @@ async def synthetic_provider_submit(job_key: str) -> str:
 
     normalized = job_key.strip()
     if not normalized:
-        raise ApplicationError("job key is blank", type="SyntheticProviderInput", non_retryable=True)
+        raise ApplicationError(
+            "job key is blank",
+            type="SyntheticProviderInput",
+            non_retryable=True,
+        )
     return f"fake-gen-{normalized}"
 
 
