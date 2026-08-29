@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import datetime
 from enum import StrEnum
 
 from .common import JobStatus
@@ -19,6 +20,12 @@ class FailureClass(StrEnum):
     MANUAL = "manual"
     CANCELLED = "cancelled"
     PERMANENT = "permanent"
+
+
+class CircuitState(StrEnum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half-open"
 
 
 @dataclass(frozen=True)
@@ -158,6 +165,38 @@ class DeadlinePolicy:
             raise ValueError("start_to_close_seconds cannot exceed schedule_to_close_seconds")
         if self.heartbeat_seconds >= self.start_to_close_seconds:
             raise ValueError("heartbeat_seconds must be shorter than start_to_close_seconds")
+
+
+@dataclass(frozen=True)
+class CircuitBreakerPolicy:
+    failure_threshold: int = 3
+    open_seconds: int = 60
+    probe_lease_seconds: int = 30
+
+    def __post_init__(self) -> None:
+        if self.failure_threshold < 1:
+            raise ValueError("failure_threshold must be at least 1")
+        if self.open_seconds < 1:
+            raise ValueError("open_seconds must be positive")
+        if self.probe_lease_seconds < 1:
+            raise ValueError("probe_lease_seconds must be positive")
+
+
+@dataclass(frozen=True)
+class CircuitPermission:
+    allowed: bool
+    state: CircuitState
+    revision: int
+    retry_at: datetime | None = None
+    probe_owner: str | None = None
+
+
+@dataclass(frozen=True)
+class CircuitRecordResult:
+    state: CircuitState
+    consecutive_failures: int
+    revision: int
+    next_probe_at: datetime | None = None
 
 
 def retry_decision(failure_class: FailureClass) -> RetryDecision:
