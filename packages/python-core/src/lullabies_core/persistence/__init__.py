@@ -6,6 +6,12 @@ from ._db import (
     PersistenceShapeError,
     PersistResult,
 )
+from .approval_wait import (
+    ApprovalWaitConflictError,
+    ApprovalWaitExpiredError,
+    ApprovalWaitVersionConflictError,
+    PostgresApprovalWaitRepository,
+)
 from .circuit_breaker import CircuitBreakerConflictError, PostgresCircuitBreakerRepository
 from .job_control import (
     JobIdempotencyConflictError,
@@ -18,6 +24,9 @@ from .repository import PostgresProductionRepository
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
 
 __all__ = [
+    "ApprovalWaitConflictError",
+    "ApprovalWaitExpiredError",
+    "ApprovalWaitVersionConflictError",
     "CircuitBreakerConflictError",
     "JobIdempotencyConflictError",
     "JobLeaseConflictError",
@@ -29,6 +38,7 @@ __all__ = [
     "PersistenceNotFoundError",
     "PersistenceReferenceError",
     "PersistenceShapeError",
+    "PostgresApprovalWaitRepository",
     "PostgresCircuitBreakerRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",

@@ -45,6 +45,7 @@ EXPECTED_CORE_TABLES = {
     "take_qa_records",
     "cost_records",
     "approvals",
+    "approval_requests",
     "legacy_content_imports",
     "project_characters",
     "project_worlds",
@@ -89,11 +90,21 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         assert set(db_inspector.get_table_names(schema="core")) == EXPECTED_CORE_TABLES
         job_columns = {column["name"] for column in db_inspector.get_columns("jobs", schema="core")}
         assert "operation_fingerprint" in job_columns
+        approval_request_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("approval_requests", schema="core")
+        }
+        assert {
+            "request_fingerprint",
+            "resolution_fingerprint",
+            "resolved_job_revision",
+            "resolved_job_status",
+        }.issubset(approval_request_columns)
 
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0004"
+        assert revision == "20260829_0005"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -196,11 +207,20 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260829_0004")
+        m04_tables = set(inspect(engine).get_table_names(schema="core"))
+        assert "approval_requests" not in m04_tables
+        assert "circuit_breakers" in m04_tables
+        assert m04_tables == EXPECTED_CORE_TABLES - {"approval_requests"}
+
         command.downgrade(config, "20260829_0003")
         m03_inspector = inspect(engine)
         m03_tables = set(m03_inspector.get_table_names(schema="core"))
         assert "circuit_breakers" not in m03_tables
-        assert m03_tables == EXPECTED_CORE_TABLES - {"circuit_breakers"}
+        assert m03_tables == EXPECTED_CORE_TABLES - {
+            "approval_requests",
+            "circuit_breakers",
+        }
         m03_job_columns = {
             column["name"] for column in m03_inspector.get_columns("jobs", schema="core")
         }
@@ -212,7 +232,11 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         m02_inspector = inspect(engine)
         m02_tables = set(m02_inspector.get_table_names(schema="core"))
         assert "outbox_messages" not in m02_tables
-        assert m02_tables == EXPECTED_CORE_TABLES - {"circuit_breakers", "outbox_messages"}
+        assert m02_tables == EXPECTED_CORE_TABLES - {
+            "approval_requests",
+            "circuit_breakers",
+            "outbox_messages",
+        }
         m02_job_columns = {
             column["name"] for column in m02_inspector.get_columns("jobs", schema="core")
         }
@@ -223,6 +247,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         m01_tables = set(inspect(engine).get_table_names(schema="core"))
         assert "workflow_executions" not in m01_tables
         assert m01_tables == EXPECTED_CORE_TABLES - {
+            "approval_requests",
             "circuit_breakers",
             "workflow_executions",
             "outbox_messages",

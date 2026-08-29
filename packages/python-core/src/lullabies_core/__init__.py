@@ -1,4 +1,15 @@
 from .aggregate import ProjectBundle
+from .approval_wait import (
+    WAIT_JOB_STATUS,
+    ApprovalRequestResult,
+    ApprovalRequestStatus,
+    ApprovalResolutionResult,
+    ApprovalWaitKind,
+    ApprovalWaitRequest,
+    expected_wait_status,
+    expired_job_status,
+    resolved_job_status,
+)
 from .character import Character, CharacterLock, CharacterLook, CharacterVersion
 from .common import (
     SCHEMA_VERSION,
@@ -42,6 +53,9 @@ from .legacy_import import (
 )
 from .lineage import ProductionLineageBundle
 from .persistence import (
+    ApprovalWaitConflictError,
+    ApprovalWaitExpiredError,
+    ApprovalWaitVersionConflictError,
     CircuitBreakerConflictError,
     JobIdempotencyConflictError,
     JobLeaseConflictError,
@@ -53,6 +67,7 @@ from .persistence import (
     PersistenceReferenceError,
     PersistenceShapeError,
     PersistResult,
+    PostgresApprovalWaitRepository,
     PostgresCircuitBreakerRepository,
     PostgresJobControlRepository,
     PostgresProductionRepository,
@@ -108,9 +123,18 @@ __all__ = [
     "RETRY_DECISIONS",
     "SCHEMA_VERSION",
     "TERMINAL_JOB_STATUSES",
+    "WAIT_JOB_STATUS",
     "Act",
     "Approval",
     "ApprovalDecision",
+    "ApprovalRequestResult",
+    "ApprovalRequestStatus",
+    "ApprovalResolutionResult",
+    "ApprovalWaitConflictError",
+    "ApprovalWaitExpiredError",
+    "ApprovalWaitKind",
+    "ApprovalWaitRequest",
+    "ApprovalWaitVersionConflictError",
     "Asset",
     "AssetKind",
     "AttemptStatus",
@@ -168,6 +192,7 @@ __all__ = [
     "PersistenceNotFoundError",
     "PersistenceReferenceError",
     "PersistenceShapeError",
+    "PostgresApprovalWaitRepository",
     "PostgresCircuitBreakerRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
@@ -195,8 +220,11 @@ __all__ = [
     "WorkflowPersistResult",
     "World",
     "assert_job_transition",
+    "expected_wait_status",
+    "expired_job_status",
     "import_legacy_content_package",
     "operation_fingerprint",
     "reconcile_legacy_content_import",
+    "resolved_job_status",
     "retry_decision",
 ]

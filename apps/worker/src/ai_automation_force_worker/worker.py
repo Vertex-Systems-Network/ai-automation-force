@@ -6,6 +6,7 @@ from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner
 
 from .settings import WorkerSettings
 from .workflows import (
+    SyntheticApprovalWorkflow,
     SyntheticCancellationWorkflow,
     SyntheticControlWorkflow,
     SyntheticRetryWorkflow,
@@ -23,6 +24,7 @@ def build_worker(client: Client, settings: WorkerSettings) -> Worker:
             SyntheticControlWorkflow,
             SyntheticRetryWorkflow,
             SyntheticCancellationWorkflow,
+            SyntheticApprovalWorkflow,
         ],
         activities=[synthetic_echo, synthetic_flaky, synthetic_cancellable],
         workflow_runner=SandboxedWorkflowRunner(),
