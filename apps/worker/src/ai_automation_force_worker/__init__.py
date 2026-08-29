@@ -1,4 +1,5 @@
 from .client import connect_temporal
+from .recovery import SyntheticRecoveryWorkflow, synthetic_recovery_shot
 from .settings import WorkerSettings, WorkerSettingsError, load_worker_settings
 from .worker import build_worker
 from .workflows import (
@@ -19,6 +20,7 @@ __all__ = [
     "SyntheticCancellationWorkflow",
     "SyntheticControlWorkflow",
     "SyntheticProviderAsyncWorkflow",
+    "SyntheticRecoveryWorkflow",
     "SyntheticRetryWorkflow",
     "WorkerSettings",
     "WorkerSettingsError",
@@ -30,4 +32,5 @@ __all__ = [
     "synthetic_flaky",
     "synthetic_provider_poll",
     "synthetic_provider_submit",
+    "synthetic_recovery_shot",
 ]
