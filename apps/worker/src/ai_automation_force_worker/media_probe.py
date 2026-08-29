@@ -21,6 +21,9 @@ class MediaProbeSettings:
     timeout_seconds: int = 5
     max_input_bytes: int = 2_000_000_000
     max_output_bytes: int = 262_144
+    probe_size_bytes: int = 5_000_000
+    analyze_duration_us: int = 5_000_000
+    max_alloc_bytes: int = 64_000_000
 
     def __post_init__(self) -> None:
         root = self.quarantine_root.expanduser().resolve()
@@ -30,6 +33,12 @@ class MediaProbeSettings:
             raise ValueError("media probe input limit must be positive")
         if self.max_output_bytes < 1 or self.max_output_bytes > 4_194_304:
             raise ValueError("media probe output limit must be between 1 byte and 4 MiB")
+        if self.probe_size_bytes < 32 or self.probe_size_bytes > 100_000_000:
+            raise ValueError("ffprobe probe-size limit must be between 32 bytes and 100 MB")
+        if self.analyze_duration_us < 0 or self.analyze_duration_us > 60_000_000:
+            raise ValueError("ffprobe analyze duration must be between 0 and 60 seconds")
+        if self.max_alloc_bytes < 1_048_576 or self.max_alloc_bytes > 1_073_741_824:
+            raise ValueError("ffprobe allocation cap must be between 1 MiB and 1 GiB")
         if not self.executable or self.executable != self.executable.strip():
             raise ValueError("media probe executable must be non-empty without edge whitespace")
         object.__setattr__(self, "quarantine_root", root)
@@ -46,12 +55,18 @@ def load_media_probe_settings() -> MediaProbeSettings:
     timeout_seconds = int(os.environ.get("AAF_MEDIA_PROBE_TIMEOUT_SECONDS", "5"))
     max_input_bytes = int(os.environ.get("AAF_MEDIA_PROBE_MAX_INPUT_BYTES", "2000000000"))
     max_output_bytes = int(os.environ.get("AAF_MEDIA_PROBE_MAX_OUTPUT_BYTES", "262144"))
+    probe_size_bytes = int(os.environ.get("AAF_MEDIA_PROBE_SIZE_BYTES", "5000000"))
+    analyze_duration_us = int(os.environ.get("AAF_MEDIA_ANALYZE_DURATION_US", "5000000"))
+    max_alloc_bytes = int(os.environ.get("AAF_MEDIA_PROBE_MAX_ALLOC_BYTES", "64000000"))
     return MediaProbeSettings(
         quarantine_root=root,
         executable=executable,
         timeout_seconds=timeout_seconds,
         max_input_bytes=max_input_bytes,
         max_output_bytes=max_output_bytes,
+        probe_size_bytes=probe_size_bytes,
+        analyze_duration_us=analyze_duration_us,
+        max_alloc_bytes=max_alloc_bytes,
     )
 
 
@@ -95,6 +110,12 @@ def run_ffprobe(relative_path: str, settings: MediaProbeSettings) -> ProbePayloa
         settings.executable,
         "-v",
         "error",
+        "-max_alloc",
+        str(settings.max_alloc_bytes),
+        "-probesize",
+        str(settings.probe_size_bytes),
+        "-analyzeduration",
+        str(settings.analyze_duration_us),
         "-show_entries",
         "format=format_name,duration:stream=index,codec_type",
         "-of",
@@ -103,28 +124,35 @@ def run_ffprobe(relative_path: str, settings: MediaProbeSettings) -> ProbePayloa
         str(path),
     ]
     try:
-        completed = subprocess.run(
-            command,
-            stdin=subprocess.DEVNULL,
-            capture_output=True,
-            timeout=settings.timeout_seconds,
-            check=False,
-            shell=False,
-        )
+        with tempfile.TemporaryFile() as stdout_file, tempfile.TemporaryFile() as stderr_file:
+            completed = subprocess.run(
+                command,
+                stdin=subprocess.DEVNULL,
+                stdout=stdout_file,
+                stderr=stderr_file,
+                timeout=settings.timeout_seconds,
+                check=False,
+                shell=False,
+            )
+            stdout_size = stdout_file.tell()
+            stderr_size = stderr_file.tell()
+            if stdout_size > settings.max_output_bytes:
+                return _failure("failed", "probe-output-too-large")
+            if stderr_size > settings.max_output_bytes:
+                return _failure("failed", "probe-error-output-too-large")
+            if completed.returncode != 0:
+                return _failure("failed", f"ffprobe-exit-{completed.returncode}")
+            stdout_file.seek(0)
+            raw_output = stdout_file.read(settings.max_output_bytes + 1)
     except FileNotFoundError:
         return _failure("unavailable", "ffprobe-not-found")
     except subprocess.TimeoutExpired:
         return _failure("timed-out", "probe-timeout")
 
-    if len(completed.stdout) > settings.max_output_bytes:
+    if len(raw_output) > settings.max_output_bytes:
         return _failure("failed", "probe-output-too-large")
-    if len(completed.stderr) > settings.max_output_bytes:
-        return _failure("failed", "probe-error-output-too-large")
-    if completed.returncode != 0:
-        return _failure("failed", f"ffprobe-exit-{completed.returncode}")
-
     try:
-        payload = json.loads(completed.stdout.decode("utf-8"))
+        payload = json.loads(raw_output.decode("utf-8"))
     except (UnicodeDecodeError, json.JSONDecodeError):
         return _failure("failed", "probe-invalid-json")
     if not isinstance(payload, dict):
