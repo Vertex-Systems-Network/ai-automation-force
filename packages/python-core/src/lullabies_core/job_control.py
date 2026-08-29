@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import datetime
 from decimal import Decimal
 from enum import Enum
-from typing import Any, Literal, Mapping
+from typing import Any, Literal
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -129,7 +130,9 @@ class InvalidJobTransitionError(ValueError):
 
 def assert_job_transition(current: JobStatus, target: JobStatus) -> None:
     if target not in JOB_STATUS_TRANSITIONS[current]:
-        raise InvalidJobTransitionError(f"invalid job transition: {current.value} -> {target.value}")
+        raise InvalidJobTransitionError(
+            f"invalid job transition: {current.value} -> {target.value}"
+        )
 
 
 def _json_default(value: Any) -> Any:
