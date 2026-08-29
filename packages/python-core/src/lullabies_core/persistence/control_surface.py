@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from datetime import datetime
-from typing import Any, cast
+from typing import Any, Literal, cast
 from uuid import UUID, uuid4
 
 from sqlalchemy import MetaData, and_, insert, or_, select, update
@@ -20,6 +20,8 @@ from ..control_surface import (
 )
 from ..job_control import TERMINAL_JOB_STATUSES, assert_job_transition, operation_fingerprint
 from ._db import PersistenceNotFoundError, PersistenceReferenceError
+
+MutatingCommand = Literal["cancel", "retry"]
 
 
 class PostgresControlSurfaceRepository:
@@ -59,11 +61,32 @@ class PostgresControlSurfaceRepository:
             row = self._require_job(connection, job_id)
             return self._snapshot(connection, row)
 
+    def load_job_checkpoint(
+        self,
+        job_id: str,
+    ) -> tuple[JobControlSnapshot, JobEventRecord | None]:
+        """Read a job plus an event high-water that cannot skip a newer job revision."""
+
+        with self.engine.connect() as connection:
+            row = self._require_job(connection, job_id)
+            snapshot = self._snapshot(connection, row)
+            event_row = connection.execute(
+                select(self.outbox)
+                .where(
+                    self.outbox.c.job_id == row["id"],
+                    self.outbox.c.job_revision <= int(row["revision"]),
+                )
+                .order_by(self.outbox.c.occurred_at.desc(), self.outbox.c.id.desc())
+                .limit(1)
+            ).mappings().one_or_none()
+            event = self._event(job_id, event_row) if event_row is not None else None
+            return snapshot, event
+
     def list_project_jobs(
         self,
         project_id: str,
         *,
-        after: tuple[datetime, UUID] | None = None,
+        after: tuple[datetime, str] | None = None,
         limit: int = 50,
     ) -> list[ProjectJobRecord]:
         if limit < 1 or limit > 500:
@@ -76,18 +99,18 @@ class PostgresControlSurfaceRepository:
                 raise PersistenceNotFoundError(f"project {project_id} was not found")
             statement = select(self.jobs).where(self.jobs.c.project_id == project_internal)
             if after is not None:
-                after_time, after_id = after
+                after_time, after_job_id = after
                 statement = statement.where(
                     or_(
                         self.jobs.c.created_at > after_time,
                         and_(
                             self.jobs.c.created_at == after_time,
-                            self.jobs.c.id > after_id,
+                            self.jobs.c.external_id > after_job_id,
                         ),
                     )
                 )
             rows = connection.execute(
-                statement.order_by(self.jobs.c.created_at, self.jobs.c.id).limit(limit)
+                statement.order_by(self.jobs.c.created_at, self.jobs.c.external_id).limit(limit)
             ).mappings()
             return [
                 ProjectJobRecord(
@@ -162,22 +185,35 @@ class PostgresControlSurfaceRepository:
             now=now,
         )
 
+    def load_start_command(
+        self,
+        job_id: str,
+        *,
+        idempotency_key: str,
+        operation: Mapping[str, Any],
+    ) -> JobCommandResult | None:
+        """Return an existing semantically identical start before touching Temporal."""
+
+        self._validate_idempotency_key(idempotency_key)
+        fingerprint = self._command_fingerprint("start", job_id, operation)
+        with self.engine.connect() as connection:
+            job = self._require_job(connection, job_id)
+            existing = self._command_by_key(connection, job["id"], idempotency_key)
+            if existing is None:
+                return None
+            return self._reuse_command(existing, "start", fingerprint)
+
     def record_start(
         self,
         job_id: str,
         *,
         idempotency_key: str,
         workflow_execution_id: str,
+        operation: Mapping[str, Any],
         now: datetime,
     ) -> JobCommandResult:
         self._validate_idempotency_key(idempotency_key)
-        fingerprint = operation_fingerprint(
-            {
-                "command": "start",
-                "job_id": job_id,
-                "workflow_execution_id": workflow_execution_id,
-            }
-        )
+        fingerprint = self._command_fingerprint("start", job_id, operation)
         try:
             with self.engine.begin() as connection:
                 job = self._require_job_for_update(connection, job_id)
@@ -208,13 +244,11 @@ class PostgresControlSurfaceRepository:
         self,
         job_id: str,
         *,
-        command_type: str,
+        command_type: MutatingCommand,
         idempotency_key: str,
         expected_revision: int,
         now: datetime,
     ) -> JobCommandResult:
-        if command_type not in {"cancel", "retry"}:
-            raise ValueError("unsupported control command")
         self._validate_idempotency_key(idempotency_key)
         if expected_revision < 1:
             raise ValueError("expected_revision must be at least 1")
@@ -248,9 +282,11 @@ class PostgresControlSurfaceRepository:
                     return result
 
                 if current_revision != expected_revision:
-                    raise JobCommandVersionConflictError(
-                        f"stale job revision: expected {expected_revision}, current {current_revision}"
+                    message = (
+                        f"stale job revision: expected {expected_revision}, "
+                        f"current {current_revision}"
                     )
+                    raise JobCommandVersionConflictError(message)
 
                 if command_type == "cancel":
                     if current in TERMINAL_JOB_STATUSES:
@@ -312,7 +348,7 @@ class PostgresControlSurfaceRepository:
                 )
                 result = JobCommandResult(
                     action="applied",
-                    command_type=cast(Any, command_type),
+                    command_type=command_type,
                     job_id=job_id,
                     status=target,
                     revision=new_revision,
@@ -425,7 +461,7 @@ class PostgresControlSurfaceRepository:
     @staticmethod
     def _reuse_command(
         row: RowMapping,
-        command_type: str,
+        command_type: Literal["start", "cancel", "retry"],
         fingerprint: str,
     ) -> JobCommandResult:
         if row["command_type"] != command_type or row["operation_fingerprint"] != fingerprint:
@@ -483,6 +519,20 @@ class PostgresControlSurfaceRepository:
                 occurred_at=occurred_at,
                 published_at=None,
             )
+        )
+
+    @staticmethod
+    def _command_fingerprint(
+        command_type: Literal["start"],
+        job_id: str,
+        operation: Mapping[str, Any],
+    ) -> str:
+        return operation_fingerprint(
+            {
+                "command": command_type,
+                "job_id": job_id,
+                "operation": dict(operation),
+            }
         )
 
     @staticmethod
