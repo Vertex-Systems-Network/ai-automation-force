@@ -65,6 +65,7 @@ EXPECTED_CORE_TABLES = {
     "asset_parents",
     "timeline_marker_assets",
     "workflow_executions",
+    "outbox_messages",
 }
 
 
@@ -85,11 +86,13 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         db_inspector = inspect(engine)
         assert "core" in db_inspector.get_schema_names()
         assert set(db_inspector.get_table_names(schema="core")) == EXPECTED_CORE_TABLES
+        job_columns = {column["name"] for column in db_inspector.get_columns("jobs", schema="core")}
+        assert "operation_fingerprint" in job_columns
 
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0002"
+        assert revision == "20260829_0003"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -192,10 +195,21 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260829_0002")
+        m02_inspector = inspect(engine)
+        m02_tables = set(m02_inspector.get_table_names(schema="core"))
+        assert "outbox_messages" not in m02_tables
+        assert m02_tables == EXPECTED_CORE_TABLES - {"outbox_messages"}
+        m02_job_columns = {
+            column["name"] for column in m02_inspector.get_columns("jobs", schema="core")
+        }
+        assert "operation_fingerprint" not in m02_job_columns
+        assert "workflow_executions" in m02_tables
+
         command.downgrade(config, "20260829_0001")
         m01_tables = set(inspect(engine).get_table_names(schema="core"))
         assert "workflow_executions" not in m01_tables
-        assert m01_tables == EXPECTED_CORE_TABLES - {"workflow_executions"}
+        assert m01_tables == EXPECTED_CORE_TABLES - {"workflow_executions", "outbox_messages"}
 
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES

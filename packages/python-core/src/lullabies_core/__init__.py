@@ -20,6 +20,16 @@ from .common import (
 )
 from .content import Content, ContentObjective, ContentVersion
 from .entities import Location, Prop, StyleProfile, VoiceProfile, World
+from .job_control import (
+    JOB_STATUS_TRANSITIONS,
+    TERMINAL_JOB_STATUSES,
+    InvalidJobTransitionError,
+    JobLeaseResult,
+    JobSubmitResult,
+    JobTransitionResult,
+    assert_job_transition,
+    operation_fingerprint,
+)
 from .legacy_import import (
     LEGACY_CONTENT_MAPPING_VERSION,
     LegacyContentImportError,
@@ -32,12 +42,17 @@ from .legacy_import import (
 )
 from .lineage import ProductionLineageBundle
 from .persistence import (
+    JobIdempotencyConflictError,
+    JobLeaseConflictError,
+    JobStateConflictError,
+    JobVersionConflictError,
     PersistenceConflictError,
     PersistenceError,
     PersistenceNotFoundError,
     PersistenceReferenceError,
     PersistenceShapeError,
     PersistResult,
+    PostgresJobControlRepository,
     PostgresProductionRepository,
     PostgresWorkflowExecutionRepository,
     WorkflowPersistResult,
@@ -74,8 +89,10 @@ from .timeline import (
 from .workflow_runtime import WorkflowExecutionRef
 
 __all__ = [
+    "JOB_STATUS_TRANSITIONS",
     "LEGACY_CONTENT_MAPPING_VERSION",
     "SCHEMA_VERSION",
+    "TERMINAL_JOB_STATUSES",
     "Act",
     "Approval",
     "ApprovalDecision",
@@ -104,8 +121,16 @@ __all__ = [
     "ExecutionMode",
     "GenerationAttempt",
     "GenerationRequest",
+    "InvalidJobTransitionError",
     "Job",
+    "JobIdempotencyConflictError",
+    "JobLeaseConflictError",
+    "JobLeaseResult",
+    "JobStateConflictError",
     "JobStatus",
+    "JobSubmitResult",
+    "JobTransitionResult",
+    "JobVersionConflictError",
     "LegacyContentImportError",
     "LegacyContentImportReport",
     "LegacyContentImportResult",
@@ -120,6 +145,7 @@ __all__ = [
     "PersistenceNotFoundError",
     "PersistenceReferenceError",
     "PersistenceShapeError",
+    "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresWorkflowExecutionRepository",
     "ProductionLineageBundle",
@@ -143,6 +169,8 @@ __all__ = [
     "WorkflowExecutionRef",
     "WorkflowPersistResult",
     "World",
+    "assert_job_transition",
     "import_legacy_content_package",
+    "operation_fingerprint",
     "reconcile_legacy_content_import",
 ]
