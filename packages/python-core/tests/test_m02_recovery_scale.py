@@ -139,7 +139,15 @@ def test_100_jobs_enqueue_reuse_and_complete_without_duplicate_terminal_events()
 
         with engine.connect() as connection:
             job_count = connection.execute(
-                text("SELECT count(*) FROM core.jobs WHERE project_id = (SELECT id FROM core.projects WHERE external_id = 'PRJ-009801')")
+                text(
+                    """
+                    SELECT count(*)
+                    FROM core.jobs
+                    WHERE project_id = (
+                        SELECT id FROM core.projects WHERE external_id = 'PRJ-009801'
+                    )
+                    """
+                )
             ).scalar_one()
             completed_count = connection.execute(
                 text(
