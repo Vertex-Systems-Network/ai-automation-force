@@ -142,7 +142,12 @@ class S3UploadSessionAdapter:
             expires_at=now + timedelta(seconds=seconds),
         )
 
-    def complete_multipart(self, session: UploadSession, *, now: datetime) -> S3UploadCompletionEvidence:
+    def complete_multipart(
+        self,
+        session: UploadSession,
+        *,
+        now: datetime,
+    ) -> S3UploadCompletionEvidence:
         self._require_session(session, UploadMode.MULTIPART, now)
         if session.backend_upload_id is None:
             raise UploadSessionConflictError("multipart UploadId has not been durably bound")
