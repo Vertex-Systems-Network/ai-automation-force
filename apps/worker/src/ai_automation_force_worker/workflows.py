@@ -137,7 +137,7 @@ class SyntheticApprovalWorkflow:
                 lambda: self._decision is not None,
                 timeout=timedelta(seconds=timeout_seconds),
             )
-        except asyncio.TimeoutError:
+        except TimeoutError:
             await workflow.wait_condition(workflow.all_handlers_finished)
             return "expired"
         await workflow.wait_condition(workflow.all_handlers_finished)
