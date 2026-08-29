@@ -258,6 +258,7 @@
   "$id": "urn:ai-automation-force:schema:v1:quarantine-inspection",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
+  "description": "Security decision for uploaded bytes before any canonical Asset promotion.",
   "properties": {
     "audit": {
       "$ref": "#/$defs/AuditFields"
