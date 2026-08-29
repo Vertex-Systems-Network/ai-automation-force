@@ -36,6 +36,7 @@ EXPECTED_CORE_TABLES = {
     "shots",
     "takes",
     "assets",
+    "storage_objects",
     "jobs",
     "job_dependencies",
     "job_commands",
@@ -75,6 +76,7 @@ EXPECTED_CORE_TABLES = {
 
 PROVIDER_ASYNC_TABLES = {"provider_async_states", "provider_callback_events"}
 WP7_TABLES = {"job_commands"}
+M03_WP1_TABLES = {"storage_objects"}
 
 
 def alembic_config() -> Config:
@@ -106,6 +108,21 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "result",
             "occurred_at",
         }.issubset(command_columns)
+        storage_columns = {
+            column["name"] for column in db_inspector.get_columns("storage_objects", schema="core")
+        }
+        assert {
+            "backend",
+            "bucket",
+            "object_key",
+            "sha256",
+            "mime_type",
+            "size_bytes",
+            "region",
+            "etag",
+            "version_id",
+            "original_filename",
+        }.issubset(storage_columns)
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -139,7 +156,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0007"
+        assert revision == "20260829_0008"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -176,6 +193,24 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
                     """
                 ),
                 {"id": uuid4()},
+            )
+
+        with pytest.raises(IntegrityError), engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.storage_objects (
+                        id, external_id, project_id, backend, bucket, object_key,
+                        sha256, mime_type, size_bytes, created_at, updated_at
+                    ) VALUES (
+                        :id, 'STO-000901', :project_id, 'filesystem', 'forbidden',
+                        'source/PRJ-000901/STO-000901',
+                        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+                        'image/png', 1, now(), now()
+                    )
+                    """
+                ),
+                {"id": uuid4(), "project_id": project_id},
             )
 
         with pytest.raises(IntegrityError), engine.begin() as connection:
@@ -242,9 +277,13 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260829_0007")
+        m07_tables = set(inspect(engine).get_table_names(schema="core"))
+        assert m07_tables == EXPECTED_CORE_TABLES - M03_WP1_TABLES
+
         command.downgrade(config, "20260829_0005")
         m05_tables = set(inspect(engine).get_table_names(schema="core"))
-        assert m05_tables == EXPECTED_CORE_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES
+        assert m05_tables == EXPECTED_CORE_TABLES - M03_WP1_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES
         assert "approval_requests" in m05_tables
         assert "circuit_breakers" in m05_tables
 
@@ -252,7 +291,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         m04_tables = set(inspect(engine).get_table_names(schema="core"))
         assert "approval_requests" not in m04_tables
         assert "circuit_breakers" in m04_tables
-        assert m04_tables == EXPECTED_CORE_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
+        assert m04_tables == EXPECTED_CORE_TABLES - M03_WP1_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
             "approval_requests"
         }
 
@@ -260,7 +299,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         m03_inspector = inspect(engine)
         m03_tables = set(m03_inspector.get_table_names(schema="core"))
         assert "circuit_breakers" not in m03_tables
-        assert m03_tables == EXPECTED_CORE_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
+        assert m03_tables == EXPECTED_CORE_TABLES - M03_WP1_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
             "approval_requests",
             "circuit_breakers",
         }
@@ -275,7 +314,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         m02_inspector = inspect(engine)
         m02_tables = set(m02_inspector.get_table_names(schema="core"))
         assert "outbox_messages" not in m02_tables
-        assert m02_tables == EXPECTED_CORE_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
+        assert m02_tables == EXPECTED_CORE_TABLES - M03_WP1_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
             "approval_requests",
             "circuit_breakers",
             "outbox_messages",
@@ -289,7 +328,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.downgrade(config, "20260829_0001")
         m01_tables = set(inspect(engine).get_table_names(schema="core"))
         assert "workflow_executions" not in m01_tables
-        assert m01_tables == EXPECTED_CORE_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
+        assert m01_tables == EXPECTED_CORE_TABLES - M03_WP1_TABLES - PROVIDER_ASYNC_TABLES - WP7_TABLES - {
             "approval_requests",
             "circuit_breakers",
             "workflow_executions",
