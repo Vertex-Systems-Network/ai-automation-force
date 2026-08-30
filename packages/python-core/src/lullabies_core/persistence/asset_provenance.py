@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Literal, cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, insert, select
+from sqlalchemy import MetaData, Table, insert, select
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
@@ -273,13 +273,12 @@ class PostgresAssetProvenanceRepository:
     @staticmethod
     def _require_external(
         connection: Connection,
-        table: object,
+        table: Table,
         external_id: str,
         label: str,
     ) -> RowMapping:
-        typed_table = cast(object, table)
         row = connection.execute(
-            select(typed_table).where(typed_table.c.external_id == external_id)  # type: ignore[attr-defined]
+            select(table).where(table.c.external_id == external_id)
         ).mappings().one_or_none()
         if row is None:
             raise PersistenceReferenceError(f"missing {label}:{external_id}")
@@ -288,13 +287,12 @@ class PostgresAssetProvenanceRepository:
     @staticmethod
     def _external_for_internal(
         connection: Connection,
-        table: object,
+        table: Table,
         internal_id: UUID,
         label: str,
     ) -> str:
-        typed_table = cast(object, table)
         value = connection.execute(
-            select(typed_table.c.external_id).where(typed_table.c.id == internal_id)  # type: ignore[attr-defined]
+            select(table.c.external_id).where(table.c.id == internal_id)
         ).scalar_one_or_none()
         if value is None:
             raise PersistenceReferenceError(f"missing {label} external identity for {internal_id}")
@@ -304,7 +302,7 @@ class PostgresAssetProvenanceRepository:
     def _optional_external_for_internal(
         cls,
         connection: Connection,
-        table: object,
+        table: Table,
         internal_id: UUID | None,
         label: str,
     ) -> str | None:
