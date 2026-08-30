@@ -8,6 +8,8 @@ from pydantic import AwareDatetime, Field, model_validator
 from .common import (
     SCHEMA_VERSION,
     AssetId,
+    CanonicalStatus,
+    CommercialUseStatus,
     ProjectId,
     RightsRecordId,
     SchemaVersion,
@@ -15,6 +17,7 @@ from .common import (
     StrictModel,
     external_id_pattern,
 )
+from .production import Asset, RightsRecord
 
 AssetProvenanceRecordId = Annotated[
     str,
@@ -70,3 +73,100 @@ class AssetProvenanceRecord(StrictModel):
         ):
             raise ValueError("provider provenance requires provider_reference")
         return self
+
+
+class AssetUsabilityPolicy(StrictModel):
+    """Explicit evidence requirements for treating an approved Asset as usable.
+
+    The policy composes existing authorities instead of creating a second approval or
+    rights state machine. ``Asset.canonical_status`` remains approval authority and
+    ``RightsRecord`` remains publication/legal-rights authority.
+    """
+
+    require_storage_binding: bool = True
+    require_rights_record: bool = True
+    require_commercial_use: bool = True
+    require_verified_rights: bool = True
+    require_publication_unblocked: bool = True
+
+
+class AssetUsabilityRejection(StrEnum):
+    NOT_CANONICALLY_APPROVED = "not-canonically-approved"
+    PROVENANCE_ASSET_MISMATCH = "provenance-asset-mismatch"
+    PROVENANCE_PROJECT_MISMATCH = "provenance-project-mismatch"
+    PROVENANCE_HASH_MISMATCH = "provenance-hash-mismatch"
+    STORAGE_EVIDENCE_REQUIRED = "storage-evidence-required"
+    RIGHTS_RECORD_REQUIRED = "rights-record-required"
+    RIGHTS_REFERENCE_MISMATCH = "rights-reference-mismatch"
+    RIGHTS_SUBJECT_MISMATCH = "rights-subject-mismatch"
+    COMMERCIAL_USE_NOT_ALLOWED = "commercial-use-not-allowed"
+    RIGHTS_NOT_VERIFIED = "rights-not-verified"
+    PUBLICATION_BLOCKED = "publication-blocked"
+
+
+class AssetUsabilityDecision(StrictModel):
+    usable: bool
+    rejections: list[AssetUsabilityRejection] = Field(default_factory=list)
+
+
+def evaluate_asset_usability(
+    asset: Asset,
+    provenance: AssetProvenanceRecord,
+    rights_record: RightsRecord | None,
+    policy: AssetUsabilityPolicy | None = None,
+) -> AssetUsabilityDecision:
+    """Fail closed unless the selected evidence satisfies the explicit usage policy.
+
+    Persistence is responsible for proving referenced database rows and storage hashes
+    at write time. This pure decision contract composes the canonical asset state,
+    selected provenance assertion and legal-rights state for downstream use gates.
+    """
+
+    active_policy = policy or AssetUsabilityPolicy()
+    rejections: list[AssetUsabilityRejection] = []
+
+    if asset.canonical_status is not CanonicalStatus.APPROVED:
+        rejections.append(AssetUsabilityRejection.NOT_CANONICALLY_APPROVED)
+    if provenance.asset_id != asset.asset_id:
+        rejections.append(AssetUsabilityRejection.PROVENANCE_ASSET_MISMATCH)
+    if provenance.project_id != asset.project_id:
+        rejections.append(AssetUsabilityRejection.PROVENANCE_PROJECT_MISMATCH)
+    if provenance.content_sha256 != asset.sha256:
+        rejections.append(AssetUsabilityRejection.PROVENANCE_HASH_MISMATCH)
+    if active_policy.require_storage_binding and provenance.storage_object_id is None:
+        rejections.append(AssetUsabilityRejection.STORAGE_EVIDENCE_REQUIRED)
+
+    expected_rights_id = asset.rights_record_id
+    if active_policy.require_rights_record and expected_rights_id is None:
+        rejections.append(AssetUsabilityRejection.RIGHTS_RECORD_REQUIRED)
+
+    if provenance.rights_record_id != expected_rights_id:
+        rejections.append(AssetUsabilityRejection.RIGHTS_REFERENCE_MISMATCH)
+
+    if expected_rights_id is not None:
+        if rights_record is None:
+            rejections.append(AssetUsabilityRejection.RIGHTS_RECORD_REQUIRED)
+        else:
+            if rights_record.rights_record_id != expected_rights_id:
+                rejections.append(AssetUsabilityRejection.RIGHTS_REFERENCE_MISMATCH)
+            if (
+                rights_record.subject_type != "asset"
+                or rights_record.subject_id != asset.asset_id
+            ):
+                rejections.append(AssetUsabilityRejection.RIGHTS_SUBJECT_MISMATCH)
+            if (
+                active_policy.require_commercial_use
+                and rights_record.commercial_use is not CommercialUseStatus.ALLOWED
+            ):
+                rejections.append(AssetUsabilityRejection.COMMERCIAL_USE_NOT_ALLOWED)
+            if active_policy.require_verified_rights and rights_record.verified_at is None:
+                rejections.append(AssetUsabilityRejection.RIGHTS_NOT_VERIFIED)
+            if active_policy.require_publication_unblocked and rights_record.publication_blocked:
+                rejections.append(AssetUsabilityRejection.PUBLICATION_BLOCKED)
+
+    # Keep reasons deterministic and unique if multiple reference checks converge.
+    unique_rejections = list(dict.fromkeys(rejections))
+    return AssetUsabilityDecision(
+        usable=not unique_rejections,
+        rejections=unique_rejections,
+    )
