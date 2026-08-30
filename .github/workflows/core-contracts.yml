@@ -8,10 +8,6 @@ on:
       - "schemas/**"
       - ".github/workflows/core-contracts.yml"
   pull_request:
-    paths:
-      - "packages/python-core/**"
-      - "schemas/**"
-      - ".github/workflows/core-contracts.yml"
   workflow_dispatch:
 
 permissions:
