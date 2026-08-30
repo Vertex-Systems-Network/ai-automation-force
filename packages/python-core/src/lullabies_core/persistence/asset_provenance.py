@@ -42,8 +42,9 @@ class PostgresAssetProvenanceRepository:
         }
         missing = [name for name in required if f"core.{name}" not in metadata.tables]
         if missing:
+            missing_tables = ", ".join(sorted(missing))
             raise PersistenceReferenceError(
-                f"asset provenance persistence tables are not migrated: {', '.join(sorted(missing))}"
+                f"asset provenance persistence tables are not migrated: {missing_tables}"
             )
         self.provenance_table = metadata.tables["core.asset_provenance_records"]
         self.asset_parents_table = metadata.tables["core.asset_parents"]
@@ -64,7 +65,8 @@ class PostgresAssetProvenanceRepository:
                             canonical.provenance_record_id,
                         )
                     raise PersistenceConflictError(
-                        f"asset provenance {canonical.provenance_record_id} already has different data"
+                        "asset provenance "
+                        f"{canonical.provenance_record_id} already has different data"
                     )
 
                 asset = self._require_external(
@@ -158,7 +160,8 @@ class PostgresAssetProvenanceRepository:
             )
         if str(storage["sha256"]) != str(asset["sha256"]):
             raise PersistenceConflictError(
-                f"storage object {record.storage_object_id} hash does not match asset {record.asset_id}"
+                f"storage object {record.storage_object_id} hash does not match "
+                f"asset {record.asset_id}"
             )
         return cast(UUID, storage["id"])
 
