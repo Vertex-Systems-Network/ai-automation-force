@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import os
 from collections.abc import Iterator
+from datetime import timedelta
 from pathlib import Path
 
 import pytest
@@ -116,6 +117,15 @@ def test_asset_provenance_round_trip_is_append_only_and_integrity_safe(
     )
     with pytest.raises(PersistenceConflictError, match="provenance hash"):
         repository.save(bad_hash)
+
+    predating_evidence = record.model_copy(
+        update={
+            "provenance_record_id": "PRV-003003",
+            "created_at": asset.audit.created_at - timedelta(seconds=1),
+        }
+    )
+    with pytest.raises(PersistenceConflictError, match="cannot predate canonical asset"):
+        repository.save(predating_evidence)
 
 
 @pytest.mark.postgres
