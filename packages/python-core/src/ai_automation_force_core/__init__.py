@@ -34,6 +34,10 @@ from lullabies_core.provenance import (
     AssetProvenanceRecord,
     AssetProvenanceRecordId,
     AssetProvenanceSource,
+    AssetUsabilityDecision,
+    AssetUsabilityPolicy,
+    AssetUsabilityRejection,
+    evaluate_asset_usability,
 )
 from lullabies_core.storage import (
     FilesystemStorageAdapter,
@@ -73,6 +77,9 @@ __all__ = [
     "AssetProvenanceRecord",
     "AssetProvenanceRecordId",
     "AssetProvenanceSource",
+    "AssetUsabilityDecision",
+    "AssetUsabilityPolicy",
+    "AssetUsabilityRejection",
     "DirectUploadGrant",
     "FilesystemStorageAdapter",
     "MediaProbeResult",
@@ -116,6 +123,7 @@ __all__ = [
     "build_object_key",
     "build_upload_object_key",
     "detect_magic_mime",
+    "evaluate_asset_usability",
     "evaluate_quarantine",
     "sha256_bytes",
     "storage_object_from_write",
