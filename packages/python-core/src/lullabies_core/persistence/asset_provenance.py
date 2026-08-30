@@ -79,6 +79,7 @@ class PostgresAssetProvenanceRepository:
                 storage_id = self._validate_storage(connection, canonical, asset)
                 rights_id = self._validate_rights(connection, canonical, asset)
                 self._validate_content_hash(canonical, asset)
+                self._validate_chronology(canonical, asset)
                 self._validate_derived_parent(connection, canonical, asset)
 
                 connection.execute(
@@ -199,6 +200,14 @@ class PostgresAssetProvenanceRepository:
         if record.content_sha256 != str(asset["sha256"]):
             raise PersistenceConflictError(
                 f"provenance hash does not match canonical asset {record.asset_id}"
+            )
+
+    @staticmethod
+    def _validate_chronology(record: AssetProvenanceRecord, asset: RowMapping) -> None:
+        if record.created_at < asset["created_at"]:
+            raise PersistenceConflictError(
+                f"asset provenance {record.provenance_record_id} cannot predate "
+                f"canonical asset {record.asset_id}"
             )
 
     def _validate_derived_parent(
