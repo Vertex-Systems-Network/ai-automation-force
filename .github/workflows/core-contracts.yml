@@ -19,6 +19,7 @@ permissions:
 
 jobs:
   validate:
+    name: core-domain-contracts
     runs-on: ubuntu-latest
     timeout-minutes: 15
     services:
