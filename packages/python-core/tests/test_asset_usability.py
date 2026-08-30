@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from lineage_fixtures import NOW, full_lineage_bundle
+
 from ai_automation_force_core import (
     AssetProvenanceRecord,
     AssetProvenanceSource,
@@ -8,7 +10,6 @@ from ai_automation_force_core import (
     CommercialUseStatus,
     evaluate_asset_usability,
 )
-from lineage_fixtures import NOW, full_lineage_bundle
 
 
 def _provider_provenance():
