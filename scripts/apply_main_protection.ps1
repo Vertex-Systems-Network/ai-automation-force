@@ -8,6 +8,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$GitHubActionsAppId = 15368
+$ApiVersion = "2026-03-10"
 
 function Require-Command([string]$Name) {
     if (-not (Get-Command $Name -ErrorAction SilentlyContinue)) {
@@ -28,9 +30,10 @@ $requireLastPushApproval = $ReviewMode -eq "independent"
 $payload = [ordered]@{
     required_status_checks = [ordered]@{
         strict = $true
-        contexts = @(
-            "core-domain-contracts",
-            "durable-control-plane"
+        contexts = @()
+        checks = @(
+            [ordered]@{ context = "core-domain-contracts"; app_id = $GitHubActionsAppId },
+            [ordered]@{ context = "durable-control-plane"; app_id = $GitHubActionsAppId }
         )
     }
     enforce_admins = $true
@@ -58,7 +61,7 @@ try {
     gh api `
         --method PUT `
         -H "Accept: application/vnd.github+json" `
-        -H "X-GitHub-Api-Version: 2022-11-28" `
+        -H "X-GitHub-Api-Version: $ApiVersion" `
         "repos/$Repository/branches/$Branch/protection" `
         --input $temp
     if ($LASTEXITCODE -ne 0) {
@@ -70,11 +73,11 @@ finally {
 }
 
 Write-Host "Applied protected-$Branch policy to $Repository."
-Write-Host "Required checks: core-domain-contracts, durable-control-plane"
+Write-Host "Required GitHub Actions checks: core-domain-contracts, durable-control-plane (app_id=$GitHubActionsAppId)"
 if ($ReviewMode -eq "independent") {
     Write-Host "Review mode: at least one independent approving review; stale approvals dismissed; last-push approval enforced."
 }
 else {
     Write-Warning "Review mode: explicit solo SELF REVIEW exception. Independent approval is not claimed; review provenance must remain explicit in PR/checkpoint evidence."
 }
-Write-Host "Run scripts/verify_main_protection.ps1 to certify live read-back before closing the governance gate."
+Write-Host "Run scripts/verify_main_protection.ps1 with the same ReviewMode to certify live read-back before closing the governance gate."
