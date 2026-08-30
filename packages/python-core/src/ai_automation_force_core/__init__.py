@@ -20,6 +20,8 @@ from lullabies_core.media_security import (
     evaluate_quarantine,
 )
 from lullabies_core.persistence import (
+    AssetProvenancePersistResult,
+    PostgresAssetProvenanceRepository,
     PostgresQuarantineInspectionRepository,
     PostgresStorageObjectRepository,
     PostgresUploadSessionRepository,
@@ -27,6 +29,11 @@ from lullabies_core.persistence import (
     QuarantinePersistResult,
     StorageObjectPersistResult,
     UploadPersistenceConflictError,
+)
+from lullabies_core.provenance import (
+    AssetProvenanceRecord,
+    AssetProvenanceRecordId,
+    AssetProvenanceSource,
 )
 from lullabies_core.storage import (
     FilesystemStorageAdapter,
@@ -62,12 +69,17 @@ from lullabies_core.upload_session import (
 
 __all__ = [
     *_legacy_all,
+    "AssetProvenancePersistResult",
+    "AssetProvenanceRecord",
+    "AssetProvenanceRecordId",
+    "AssetProvenanceSource",
     "DirectUploadGrant",
     "FilesystemStorageAdapter",
     "MediaProbeResult",
     "MediaProbeStatus",
     "MediaSecurityPolicy",
     "MultipartPartGrant",
+    "PostgresAssetProvenanceRepository",
     "PostgresQuarantineInspectionRepository",
     "PostgresStorageObjectRepository",
     "PostgresUploadSessionRepository",
