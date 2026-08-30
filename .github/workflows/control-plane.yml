@@ -10,12 +10,6 @@ on:
       - "packages/contracts/**"
       - ".github/workflows/control-plane.yml"
   pull_request:
-    paths:
-      - "apps/api/**"
-      - "apps/worker/**"
-      - "packages/python-core/**"
-      - "packages/contracts/**"
-      - ".github/workflows/control-plane.yml"
   workflow_dispatch:
 
 permissions:
