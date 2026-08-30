@@ -19,6 +19,7 @@ from ai_automation_force_core import (
     PostgresAssetProvenanceRepository,
     PostgresProductionRepository,
     PostgresStorageObjectRepository,
+    ProductionLineageBundle,
     StorageBackend,
     StorageObject,
 )
@@ -46,9 +47,8 @@ def migrated_engine() -> Iterator[Engine]:
         command.downgrade(config, "base")
 
 
-def generated_storage(bundle: object) -> StorageObject:
-    typed_bundle = full_lineage_bundle() if bundle is None else bundle
-    asset = typed_bundle.assets[1]  # type: ignore[attr-defined]
+def generated_storage(bundle: ProductionLineageBundle) -> StorageObject:
+    asset = bundle.assets[1]
     assert asset.project_id is not None
     return StorageObject(
         storage_object_id="STO-003001",
@@ -102,7 +102,9 @@ def test_asset_provenance_round_trip_is_append_only_and_integrity_safe(
     assert second.action == "noop"
     assert restored == record
 
-    conflicting_identity = record.model_copy(update={"provider_reference": "provider-generation:other"})
+    conflicting_identity = record.model_copy(
+        update={"provider_reference": "provider-generation:other"}
+    )
     with pytest.raises(PersistenceConflictError, match="already has different data"):
         repository.save(conflicting_identity)
 
