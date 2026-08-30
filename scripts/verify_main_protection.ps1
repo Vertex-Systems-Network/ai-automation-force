@@ -8,6 +8,8 @@ param(
 )
 
 $ErrorActionPreference = "Stop"
+$GitHubActionsAppId = 15368
+$ApiVersion = "2026-03-10"
 
 function Fail([string]$Message) {
     throw "Main protection verification failed: $Message"
@@ -24,7 +26,7 @@ if ($LASTEXITCODE -ne 0) {
 
 $json = gh api `
     -H "Accept: application/vnd.github+json" `
-    -H "X-GitHub-Api-Version: 2022-11-28" `
+    -H "X-GitHub-Api-Version: $ApiVersion" `
     "repos/$Repository/branches/$Branch/protection"
 if ($LASTEXITCODE -ne 0 -or -not $json) {
     Fail "live branch protection could not be read."
@@ -37,13 +39,17 @@ if ($protection.required_status_checks.strict -ne $true) {
 }
 
 $contexts = @($protection.required_status_checks.contexts)
+$checks = @($protection.required_status_checks.checks)
 foreach ($required in @("core-domain-contracts", "durable-control-plane")) {
-    if ($contexts -notcontains $required) {
-        Fail "required check '$required' is not enforced."
+    $bound = @($checks | Where-Object {
+        $_.context -eq $required -and [int]$_.app_id -eq $GitHubActionsAppId
+    })
+    if ($bound.Count -ne 1) {
+        Fail "required check '$required' is not uniquely bound to GitHub Actions app_id=$GitHubActionsAppId."
     }
 }
 
-if ($contexts -contains "validate") {
+if ($contexts -contains "validate" -or @($checks | Where-Object { $_.context -eq "validate" }).Count -gt 0) {
     Fail "ambiguous legacy check context 'validate' is still configured as a required context."
 }
 
@@ -84,7 +90,7 @@ else {
 }
 
 Write-Host "PASS: live main protection is effective for $Repository/$Branch."
-Write-Host "Strict required checks: core-domain-contracts, durable-control-plane"
+Write-Host "Strict required GitHub Actions checks: core-domain-contracts, durable-control-plane (app_id=$GitHubActionsAppId)"
 Write-Host "PR-only integration: enforced"
 Write-Host "Admin enforcement: enabled"
 Write-Host "Conversation resolution: required"
