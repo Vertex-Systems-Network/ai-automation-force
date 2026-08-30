@@ -54,10 +54,19 @@ class AssetProvenanceRecord(StrictModel):
 
     @model_validator(mode="after")
     def validate_source_evidence(self) -> AssetProvenanceRecord:
-        if self.source_kind is AssetProvenanceSource.UPLOAD and self.storage_object_id is None:
+        if (
+            self.source_kind is AssetProvenanceSource.UPLOAD
+            and self.storage_object_id is None
+        ):
             raise ValueError("upload provenance requires storage_object_id")
-        if self.source_kind is AssetProvenanceSource.IMPORT and self.import_reference is None:
+        if (
+            self.source_kind is AssetProvenanceSource.IMPORT
+            and self.import_reference is None
+        ):
             raise ValueError("import provenance requires import_reference")
-        if self.source_kind is AssetProvenanceSource.PROVIDER and self.provider_reference is None:
+        if (
+            self.source_kind is AssetProvenanceSource.PROVIDER
+            and self.provider_reference is None
+        ):
             raise ValueError("provider provenance requires provider_reference")
         return self
