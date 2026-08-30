@@ -36,6 +36,7 @@ EXPECTED_CORE_TABLES = {
     "shots",
     "takes",
     "assets",
+    "asset_provenance_records",
     "storage_objects",
     "upload_sessions",
     "upload_parts",
@@ -83,6 +84,7 @@ WP7_TABLES = {"job_commands"}
 M03_WP1_TABLES = {"storage_objects"}
 M03_WP2_TABLES = {"upload_sessions", "upload_parts", "upload_session_commands"}
 M03_WP3_TABLES = {"quarantine_inspections"}
+M03_WP4_TABLES = {"asset_provenance_records"}
 
 
 def alembic_config() -> Config:
@@ -225,7 +227,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260829_0010"
+        assert revision == "20260830_0011"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -346,9 +348,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260829_0010")
+        m10_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_wp4_tables = EXPECTED_CORE_TABLES - M03_WP4_TABLES
+        assert m10_tables == pre_wp4_tables
+
         command.downgrade(config, "20260829_0009")
         m09_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_wp3_tables = EXPECTED_CORE_TABLES - M03_WP3_TABLES
+        pre_wp3_tables = pre_wp4_tables - M03_WP3_TABLES
         assert m09_tables == pre_wp3_tables
 
         command.downgrade(config, "20260829_0008")
