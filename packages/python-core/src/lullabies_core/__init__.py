@@ -40,6 +40,14 @@ from .control_surface import (
     ProjectJobRecord,
     control_cursor_key,
 )
+from .derivatives import (
+    DerivativeKind,
+    DerivativeRecord,
+    DerivativeRecordId,
+    DerivativeSpec,
+    DerivativeStatus,
+    derivative_operation_fingerprint,
+)
 from .entities import Location, Prop, StyleProfile, VoiceProfile, World
 from .job_control import (
     JOB_STATUS_TRANSITIONS,
@@ -194,6 +202,11 @@ __all__ = [
     "CostRecord",
     "CreativeProfile",
     "DeadlinePolicy",
+    "DerivativeKind",
+    "DerivativeRecord",
+    "DerivativeRecordId",
+    "DerivativeSpec",
+    "DerivativeStatus",
     "ExecutionMode",
     "FailureClass",
     "GenerationAttempt",
@@ -271,6 +284,7 @@ __all__ = [
     "assert_job_transition",
     "assert_provider_async_transition",
     "control_cursor_key",
+    "derivative_operation_fingerprint",
     "expected_wait_status",
     "expired_job_status",
     "import_legacy_content_package",
