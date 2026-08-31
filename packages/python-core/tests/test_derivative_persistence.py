@@ -96,7 +96,11 @@ def derivative_bundle() -> tuple[ProductionLineageBundle, Asset, Asset, Job]:
     return validated, source, proxy, job
 
 
-def output_storage(proxy: Asset, storage_id: str = "STO-003020", sha256: str | None = None) -> StorageObject:
+def output_storage(
+    proxy: Asset,
+    storage_id: str = "STO-003020",
+    sha256: str | None = None,
+) -> StorageObject:
     assert proxy.project_id is not None
     return StorageObject(
         storage_object_id=storage_id,
@@ -172,6 +176,20 @@ def test_derivative_persistence_is_idempotent_revisioned_and_lineage_safe(
     assert running.action == "updated"
     assert running.status is DerivativeStatus.RUNNING
     assert running.revision == 2
+
+    create_after_progress = repository.create(record)
+    assert create_after_progress.action == "reused"
+    assert create_after_progress.status is DerivativeStatus.RUNNING
+    assert create_after_progress.revision == 2
+
+    running_replay = repository.transition(
+        record.derivative_record_id,
+        expected_revision=1,
+        target_status=DerivativeStatus.RUNNING,
+        updated_at=running_at + timedelta(milliseconds=10),
+    )
+    assert running_replay.action == "noop"
+    assert running_replay.revision == 2
 
     with pytest.raises(DerivativePersistenceConflictError, match="stale derivative revision"):
         repository.transition(
