@@ -5,9 +5,9 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+from ai_automation_force_core import DerivativeKind, DerivativeSpec
 from pydantic import ValidationError
 
-from ai_automation_force_core import DerivativeKind, DerivativeSpec
 from ai_automation_force_worker.derivative_render import (
     DerivativeRenderRequest,
     DerivativeRenderSettings,
