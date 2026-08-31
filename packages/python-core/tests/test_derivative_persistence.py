@@ -234,6 +234,55 @@ def test_derivative_persistence_is_idempotent_revisioned_and_lineage_safe(
 
 
 @pytest.mark.postgres
+def test_derivative_create_reconciles_unique_operation_race(
+    migrated_engine: Engine,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    bundle, source, _, job = derivative_bundle()
+    PostgresProductionRepository(migrated_engine).save_bundle(bundle)
+
+    spec = proxy_spec()
+    created_at = source.audit.created_at + timedelta(seconds=1)
+    record = DerivativeRecord(
+        derivative_record_id="DRV-003040",
+        project_id=job.project_id,
+        source_asset_id=source.asset_id,
+        job_id=job.job_id,
+        spec=spec,
+        operation_fingerprint=derivative_operation_fingerprint(
+            project_id=job.project_id,
+            source_asset_id=source.asset_id,
+            spec=spec,
+        ),
+        created_at=created_at,
+        updated_at=created_at,
+    )
+    repository = PostgresDerivativeRepository(migrated_engine)
+    assert repository.create(record).action == "created"
+
+    original_row_by_operation = repository._row_by_operation
+    operation_reads = 0
+
+    def hide_first_operation(connection, **kwargs):
+        nonlocal operation_reads
+        operation_reads += 1
+        if operation_reads == 1:
+            return None
+        return original_row_by_operation(connection, **kwargs)
+
+    monkeypatch.setattr(repository, "_row_by_operation", hide_first_operation)
+    raced = repository.create(
+        record.model_copy(update={"derivative_record_id": "DRV-003041"})
+    )
+
+    assert operation_reads == 2
+    assert raced.action == "reused"
+    assert raced.derivative_record_id == record.derivative_record_id
+    assert raced.status is DerivativeStatus.PLANNED
+    assert raced.revision == 1
+
+
+@pytest.mark.postgres
 def test_derivative_completion_rejects_storage_hash_mismatch(
     migrated_engine: Engine,
 ) -> None:

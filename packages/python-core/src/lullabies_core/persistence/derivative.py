@@ -94,10 +94,7 @@ class PostgresDerivativeRepository:
                 existing = self._row_by_external(connection, record.derivative_record_id)
                 if existing is not None:
                     restored = self._from_row(connection, existing)
-                    if not self._same_creation_semantics(restored, record):
-                        raise DerivativePersistenceConflictError(
-                            "derivative identity is already bound to different creation semantics"
-                        )
+                    self._assert_creation_semantics(restored, record)
                     return self._result("reused", restored)
 
                 semantic = self._row_by_operation(
@@ -108,14 +105,7 @@ class PostgresDerivativeRepository:
                 )
                 if semantic is not None:
                     restored = self._from_row(connection, semantic)
-                    if restored.job_id != record.job_id:
-                        raise DerivativePersistenceConflictError(
-                            "derivative operation is already owned by another canonical job"
-                        )
-                    if not self._same_creation_semantics(restored, record):
-                        raise DerivativePersistenceConflictError(
-                            "derivative operation is already bound to different creation semantics"
-                        )
+                    self._assert_creation_semantics(restored, record)
                     return self._result("reused", restored)
 
                 connection.execute(
@@ -143,6 +133,9 @@ class PostgresDerivativeRepository:
         except (DerivativePersistenceConflictError, PersistenceReferenceError):
             raise
         except IntegrityError as exc:
+            reconciled = self._reconcile_create_race(record)
+            if reconciled is not None:
+                return reconciled
             raise DerivativePersistenceConflictError(
                 f"database rejected derivative record {record.derivative_record_id}: {exc.orig}"
             ) from exc
@@ -280,6 +273,58 @@ class PostgresDerivativeRepository:
                 )
             )
             return self._result("updated", requested)
+
+    def _reconcile_create_race(
+        self,
+        record: DerivativeRecord,
+    ) -> DerivativePersistResult | None:
+        with self.engine.connect() as connection:
+            existing = self._row_by_external(connection, record.derivative_record_id)
+            if existing is not None:
+                restored = self._from_row(connection, existing)
+                self._assert_creation_semantics(restored, record)
+                return self._result("reused", restored)
+
+            project = self._require_external(
+                connection,
+                self.projects,
+                record.project_id,
+                "project",
+            )
+            source = self._require_external(
+                connection,
+                self.assets,
+                record.source_asset_id,
+                "source asset",
+            )
+            semantic = self._row_by_operation(
+                connection,
+                project_id=cast(UUID, project["id"]),
+                source_asset_id=cast(UUID, source["id"]),
+                operation_fingerprint=record.operation_fingerprint,
+            )
+            if semantic is None:
+                return None
+            restored = self._from_row(connection, semantic)
+            self._assert_creation_semantics(restored, record)
+            return self._result("reused", restored)
+
+    @staticmethod
+    def _assert_creation_semantics(
+        persisted: DerivativeRecord,
+        requested: DerivativeRecord,
+    ) -> None:
+        if persisted.job_id != requested.job_id:
+            raise DerivativePersistenceConflictError(
+                "derivative operation is already owned by another canonical job"
+            )
+        if not PostgresDerivativeRepository._same_creation_semantics(
+            persisted,
+            requested,
+        ):
+            raise DerivativePersistenceConflictError(
+                "derivative operation is already bound to different creation semantics"
+            )
 
     @staticmethod
     def _build_target(
