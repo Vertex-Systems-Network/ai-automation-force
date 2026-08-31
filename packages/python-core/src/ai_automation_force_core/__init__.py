@@ -20,6 +20,8 @@ from lullabies_core.media_security import (
     evaluate_quarantine,
 )
 from lullabies_core.persistence import (
+    AssetProvenancePersistResult,
+    PostgresAssetProvenanceRepository,
     PostgresQuarantineInspectionRepository,
     PostgresStorageObjectRepository,
     PostgresUploadSessionRepository,
@@ -27,6 +29,15 @@ from lullabies_core.persistence import (
     QuarantinePersistResult,
     StorageObjectPersistResult,
     UploadPersistenceConflictError,
+)
+from lullabies_core.provenance import (
+    AssetProvenanceRecord,
+    AssetProvenanceRecordId,
+    AssetProvenanceSource,
+    AssetUsabilityDecision,
+    AssetUsabilityPolicy,
+    AssetUsabilityRejection,
+    evaluate_asset_usability,
 )
 from lullabies_core.storage import (
     FilesystemStorageAdapter,
@@ -62,12 +73,20 @@ from lullabies_core.upload_session import (
 
 __all__ = [
     *_legacy_all,
+    "AssetProvenancePersistResult",
+    "AssetProvenanceRecord",
+    "AssetProvenanceRecordId",
+    "AssetProvenanceSource",
+    "AssetUsabilityDecision",
+    "AssetUsabilityPolicy",
+    "AssetUsabilityRejection",
     "DirectUploadGrant",
     "FilesystemStorageAdapter",
     "MediaProbeResult",
     "MediaProbeStatus",
     "MediaSecurityPolicy",
     "MultipartPartGrant",
+    "PostgresAssetProvenanceRepository",
     "PostgresQuarantineInspectionRepository",
     "PostgresStorageObjectRepository",
     "PostgresUploadSessionRepository",
@@ -104,6 +123,7 @@ __all__ = [
     "build_object_key",
     "build_upload_object_key",
     "detect_magic_mime",
+    "evaluate_asset_usability",
     "evaluate_quarantine",
     "sha256_bytes",
     "storage_object_from_write",
