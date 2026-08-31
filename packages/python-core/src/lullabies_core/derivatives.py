@@ -38,6 +38,38 @@ class DerivativeStatus(StrEnum):
     CANCELLED = "cancelled"
 
 
+TERMINAL_DERIVATIVE_STATUSES = frozenset(
+    {
+        DerivativeStatus.COMPLETED,
+        DerivativeStatus.FAILED,
+        DerivativeStatus.CANCELLED,
+    }
+)
+
+DERIVATIVE_STATUS_TRANSITIONS: dict[DerivativeStatus, frozenset[DerivativeStatus]] = {
+    DerivativeStatus.PLANNED: frozenset(
+        {DerivativeStatus.RUNNING, DerivativeStatus.FAILED, DerivativeStatus.CANCELLED}
+    ),
+    DerivativeStatus.RUNNING: frozenset(
+        {DerivativeStatus.COMPLETED, DerivativeStatus.FAILED, DerivativeStatus.CANCELLED}
+    ),
+    DerivativeStatus.COMPLETED: frozenset(),
+    DerivativeStatus.FAILED: frozenset(),
+    DerivativeStatus.CANCELLED: frozenset(),
+}
+
+
+class InvalidDerivativeTransitionError(ValueError):
+    pass
+
+
+def assert_derivative_transition(current: DerivativeStatus, target: DerivativeStatus) -> None:
+    if target not in DERIVATIVE_STATUS_TRANSITIONS[current]:
+        raise InvalidDerivativeTransitionError(
+            f"invalid derivative transition: {current.value} -> {target.value}"
+        )
+
+
 class DerivativeSpec(StrictModel):
     kind: DerivativeKind
     width: Annotated[int | None, Field(gt=0)] = None
@@ -48,19 +80,45 @@ class DerivativeSpec(StrictModel):
 
     @model_validator(mode="after")
     def validate_shape(self) -> DerivativeSpec:
-        image_like = {
+        dimensioned = {
             DerivativeKind.THUMBNAIL,
             DerivativeKind.IMAGE_PREVIEW,
+            DerivativeKind.VIDEO_PROXY,
             DerivativeKind.VIDEO_POSTER,
         }
-        if self.kind in image_like and (self.width is None or self.height is None):
+        if self.kind in dimensioned and (self.width is None or self.height is None):
             raise ValueError(f"{self.kind.value} requires width and height")
+        if self.kind is DerivativeKind.AUDIO_PREVIEW and self.max_duration_seconds is None:
+            raise ValueError("audio-preview requires max_duration_seconds")
         if self.kind is DerivativeKind.AUDIO_WAVEFORM and self.max_duration_seconds is not None:
             raise ValueError("audio-waveform does not accept max_duration_seconds")
         return self
 
     def canonical_payload(self) -> dict[str, Any]:
         return self.model_dump(mode="json", exclude_none=True)
+
+
+def derivative_operation_fingerprint(
+    *,
+    project_id: str,
+    source_asset_id: str,
+    spec: DerivativeSpec,
+) -> str:
+    """Stable semantic identity for one source asset + derivative specification."""
+
+    payload = {
+        "project_id": project_id,
+        "source_asset_id": source_asset_id,
+        "spec": spec.canonical_payload(),
+    }
+    encoded = json.dumps(
+        payload,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+        allow_nan=False,
+    ).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
 
 
 class DerivativeRecord(StrictModel):
@@ -75,39 +133,39 @@ class DerivativeRecord(StrictModel):
     operation_fingerprint: str = Field(pattern=r"^[a-f0-9]{64}$")
     status: DerivativeStatus = DerivativeStatus.PLANNED
     created_at: AwareDatetime
+    updated_at: AwareDatetime
     completed_at: AwareDatetime | None = None
     error_code: str | None = Field(default=None, min_length=1, max_length=160)
+    revision: Annotated[int, Field(ge=1)] = 1
 
     @model_validator(mode="after")
-    def validate_terminal_state(self) -> DerivativeRecord:
+    def validate_state(self) -> DerivativeRecord:
+        if self.updated_at < self.created_at:
+            raise ValueError("updated_at cannot precede created_at")
         if self.completed_at is not None and self.completed_at < self.created_at:
             raise ValueError("completed_at cannot precede created_at")
+        expected_fingerprint = derivative_operation_fingerprint(
+            project_id=self.project_id,
+            source_asset_id=self.source_asset_id,
+            spec=self.spec,
+        )
+        if self.operation_fingerprint != expected_fingerprint:
+            raise ValueError("operation_fingerprint does not match derivative semantics")
         if self.status is DerivativeStatus.COMPLETED:
             if self.completed_at is None:
                 raise ValueError("completed derivative requires completed_at")
             if self.output_asset_id is None or self.output_storage_object_id is None:
                 raise ValueError("completed derivative requires output asset and storage object")
-        elif self.output_asset_id is not None or self.output_storage_object_id is not None:
-            raise ValueError("non-completed derivative cannot publish output identities")
+            if self.error_code is not None:
+                raise ValueError("completed derivative cannot carry error_code")
+        else:
+            if self.completed_at is not None:
+                raise ValueError("non-completed derivative cannot carry completed_at")
+            if self.output_asset_id is not None or self.output_storage_object_id is not None:
+                raise ValueError("non-completed derivative cannot publish output identities")
+        if self.status is DerivativeStatus.FAILED:
+            if self.error_code is None:
+                raise ValueError("failed derivative requires error_code")
+        elif self.error_code is not None:
+            raise ValueError("error_code is only valid for failed derivative")
         return self
-
-
-def derivative_operation_fingerprint(
-    *,
-    project_id: str,
-    source_asset_id: str,
-    spec: DerivativeSpec,
-) -> str:
-    """Stable semantic identity for one source asset + derivative specification.
-
-    Runtime timestamps, worker identity and output IDs are intentionally excluded so a
-    retried request resolves to the same operation fingerprint.
-    """
-
-    payload = {
-        "project_id": project_id,
-        "source_asset_id": source_asset_id,
-        "spec": spec.canonical_payload(),
-    }
-    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
