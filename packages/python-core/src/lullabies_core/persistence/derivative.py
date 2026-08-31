@@ -81,9 +81,9 @@ class PostgresDerivativeRepository:
                 existing = self._row_by_external(connection, record.derivative_record_id)
                 if existing is not None:
                     restored = self._from_row(connection, existing)
-                    if restored != record:
+                    if not self._same_creation_semantics(restored, record):
                         raise DerivativePersistenceConflictError(
-                            "derivative identity is already bound to different data"
+                            "derivative identity is already bound to different creation semantics"
                         )
                     return self._result("reused", restored)
 
@@ -94,7 +94,16 @@ class PostgresDerivativeRepository:
                     operation_fingerprint=record.operation_fingerprint,
                 )
                 if semantic is not None:
-                    return self._result("reused", self._from_row(connection, semantic))
+                    restored = self._from_row(connection, semantic)
+                    if restored.job_id != record.job_id:
+                        raise DerivativePersistenceConflictError(
+                            "derivative operation is already owned by another canonical job"
+                        )
+                    if not self._same_creation_semantics(restored, record):
+                        raise DerivativePersistenceConflictError(
+                            "derivative operation is already bound to different creation semantics"
+                        )
+                    return self._result("reused", restored)
 
                 connection.execute(
                     insert(self.derivatives).values(
@@ -264,6 +273,16 @@ class PostgresDerivativeRepository:
                 "error_code": error_code,
                 "revision": revision,
             }
+        )
+
+    @staticmethod
+    def _same_creation_semantics(left: DerivativeRecord, right: DerivativeRecord) -> bool:
+        return (
+            left.project_id == right.project_id
+            and left.source_asset_id == right.source_asset_id
+            and left.job_id == right.job_id
+            and left.spec == right.spec
+            and left.operation_fingerprint == right.operation_fingerprint
         )
 
     @staticmethod
