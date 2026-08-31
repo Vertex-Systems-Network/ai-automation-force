@@ -4,6 +4,7 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner
 
+from .derivative_render import render_media_derivative
 from .media_probe import media_probe_quarantine
 from .recovery import SyntheticRecoveryWorkflow, synthetic_recovery_shot
 from .settings import WorkerSettings
@@ -41,6 +42,7 @@ def build_worker(client: Client, settings: WorkerSettings) -> Worker:
             synthetic_provider_poll,
             synthetic_recovery_shot,
             media_probe_quarantine,
+            render_media_derivative,
         ],
         workflow_runner=SandboxedWorkflowRunner(),
     )
