@@ -71,11 +71,24 @@ class PostgresDerivativeRepository:
 
         try:
             with self.engine.begin() as connection:
-                project = self._require_external(connection, self.projects, record.project_id, "project")
-                source = self._require_external(
-                    connection, self.assets, record.source_asset_id, "source asset"
+                project = self._require_external(
+                    connection,
+                    self.projects,
+                    record.project_id,
+                    "project",
                 )
-                job = self._require_external(connection, self.jobs, record.job_id, "job")
+                source = self._require_external(
+                    connection,
+                    self.assets,
+                    record.source_asset_id,
+                    "source asset",
+                )
+                job = self._require_external(
+                    connection,
+                    self.jobs,
+                    record.job_id,
+                    "job",
+                )
                 self._require_same_project(record, project, source, job)
 
                 existing = self._row_by_external(connection, record.derivative_record_id)
@@ -159,7 +172,11 @@ class PostgresDerivativeRepository:
             row = self._require_for_update(connection, derivative_record_id)
             current = self._from_row(connection, row)
 
-            if current.status is target_status and current.status not in TERMINAL_DERIVATIVE_STATUSES:
+            same_non_terminal = (
+                current.status is target_status
+                and current.status not in TERMINAL_DERIVATIVE_STATUSES
+            )
+            if same_non_terminal:
                 if any(
                     value is not None
                     for value in (
@@ -194,8 +211,10 @@ class PostgresDerivativeRepository:
                 )
 
             if int(row["revision"]) != expected_revision:
+                current_revision = int(row["revision"])
                 raise DerivativePersistenceConflictError(
-                    f"stale derivative revision {expected_revision}; current revision is {row['revision']}"
+                    f"stale derivative revision {expected_revision}; "
+                    f"current revision is {current_revision}"
                 )
             try:
                 assert_derivative_transition(current.status, target_status)
@@ -203,16 +222,25 @@ class PostgresDerivativeRepository:
                 raise DerivativePersistenceConflictError(str(exc)) from exc
 
             project = self._require_internal(
-                connection, self.projects, cast(UUID, row["project_id"]), "project"
+                connection,
+                self.projects,
+                cast(UUID, row["project_id"]),
+                "project",
             )
             source = self._require_internal(
-                connection, self.assets, cast(UUID, row["source_asset_id"]), "source asset"
+                connection,
+                self.assets,
+                cast(UUID, row["source_asset_id"]),
+                "source asset",
             )
             if target_status is DerivativeStatus.COMPLETED:
                 assert requested.output_asset_id is not None
                 assert requested.output_storage_object_id is not None
                 output_asset = self._require_external(
-                    connection, self.assets, requested.output_asset_id, "output asset"
+                    connection,
+                    self.assets,
+                    requested.output_asset_id,
+                    "output asset",
                 )
                 output_storage = self._require_external(
                     connection,
@@ -233,7 +261,10 @@ class PostgresDerivativeRepository:
                 .where(self.derivatives.c.id == row["id"])
                 .values(
                     output_asset_id=self._optional_external_internal(
-                        connection, self.assets, requested.output_asset_id, "output asset"
+                        connection,
+                        self.assets,
+                        requested.output_asset_id,
+                        "output asset",
                     ),
                     output_storage_object_id=self._optional_external_internal(
                         connection,
@@ -294,7 +325,8 @@ class PostgresDerivativeRepository:
     ) -> None:
         if source["project_id"] != project["id"]:
             raise DerivativePersistenceConflictError(
-                f"source asset {record.source_asset_id} is outside derivative project {record.project_id}"
+                f"source asset {record.source_asset_id} is outside derivative project "
+                f"{record.project_id}"
             )
         if job["project_id"] != project["id"]:
             raise DerivativePersistenceConflictError(
@@ -311,9 +343,13 @@ class PostgresDerivativeRepository:
         output_storage: RowMapping,
     ) -> None:
         if output_asset["id"] == source["id"]:
-            raise DerivativePersistenceConflictError("derivative output cannot be the source asset")
+            raise DerivativePersistenceConflictError(
+                "derivative output cannot be the source asset"
+            )
         if output_asset["project_id"] != project["id"]:
-            raise DerivativePersistenceConflictError("derivative output asset is outside project boundary")
+            raise DerivativePersistenceConflictError(
+                "derivative output asset is outside project boundary"
+            )
         if output_storage["project_id"] != project["id"]:
             raise DerivativePersistenceConflictError(
                 "derivative output storage object is outside project boundary"
@@ -344,13 +380,22 @@ class PostgresDerivativeRepository:
             schema_version=cast(SchemaVersion, persisted_schema_version),
             derivative_record_id=str(row["external_id"]),
             project_id=self._external_for_internal(
-                connection, self.projects, cast(UUID, row["project_id"]), "project"
+                connection,
+                self.projects,
+                cast(UUID, row["project_id"]),
+                "project",
             ),
             source_asset_id=self._external_for_internal(
-                connection, self.assets, cast(UUID, row["source_asset_id"]), "source asset"
+                connection,
+                self.assets,
+                cast(UUID, row["source_asset_id"]),
+                "source asset",
             ),
             output_asset_id=self._optional_external_for_internal(
-                connection, self.assets, cast(UUID | None, row["output_asset_id"]), "output asset"
+                connection,
+                self.assets,
+                cast(UUID | None, row["output_asset_id"]),
+                "output asset",
             ),
             output_storage_object_id=self._optional_external_for_internal(
                 connection,
@@ -359,7 +404,10 @@ class PostgresDerivativeRepository:
                 "output storage object",
             ),
             job_id=self._external_for_internal(
-                connection, self.jobs, cast(UUID, row["job_id"]), "job"
+                connection,
+                self.jobs,
+                cast(UUID, row["job_id"]),
+                "job",
             ),
             spec=DerivativeSpec.model_validate(row["spec_json"]),
             operation_fingerprint=str(row["operation_fingerprint"]),
@@ -367,11 +415,19 @@ class PostgresDerivativeRepository:
             created_at=row["created_at"],
             updated_at=row["updated_at"],
             completed_at=row["completed_at"],
-            error_code=(str(row["error_code"]) if row["error_code"] is not None else None),
+            error_code=(
+                str(row["error_code"])
+                if row["error_code"] is not None
+                else None
+            ),
             revision=int(row["revision"]),
         )
 
-    def _row_by_external(self, connection: Connection, external_id: str) -> RowMapping | None:
+    def _row_by_external(
+        self,
+        connection: Connection,
+        external_id: str,
+    ) -> RowMapping | None:
         return connection.execute(
             select(self.derivatives).where(self.derivatives.c.external_id == external_id)
         ).mappings().one_or_none()
@@ -391,14 +447,20 @@ class PostgresDerivativeRepository:
             .where(self.derivatives.c.operation_fingerprint == operation_fingerprint)
         ).mappings().one_or_none()
 
-    def _require_for_update(self, connection: Connection, external_id: str) -> RowMapping:
+    def _require_for_update(
+        self,
+        connection: Connection,
+        external_id: str,
+    ) -> RowMapping:
         row = connection.execute(
             select(self.derivatives)
             .where(self.derivatives.c.external_id == external_id)
             .with_for_update()
         ).mappings().one_or_none()
         if row is None:
-            raise PersistenceNotFoundError(f"derivative record {external_id} was not found")
+            raise PersistenceNotFoundError(
+                f"derivative record {external_id} was not found"
+            )
         return row
 
     @staticmethod
@@ -426,7 +488,9 @@ class PostgresDerivativeRepository:
             select(table).where(table.c.id == internal_id)
         ).mappings().one_or_none()
         if row is None:
-            raise PersistenceReferenceError(f"missing {label} internal row {internal_id}")
+            raise PersistenceReferenceError(
+                f"missing {label} internal row {internal_id}"
+            )
         return row
 
     @classmethod
@@ -453,7 +517,9 @@ class PostgresDerivativeRepository:
             select(table.c.external_id).where(table.c.id == internal_id)
         ).scalar_one_or_none()
         if value is None:
-            raise PersistenceReferenceError(f"missing {label} external identity for {internal_id}")
+            raise PersistenceReferenceError(
+                f"missing {label} external identity for {internal_id}"
+            )
         return str(value)
 
     @classmethod
@@ -469,7 +535,10 @@ class PostgresDerivativeRepository:
         return cls._external_for_internal(connection, table, internal_id, label)
 
     @staticmethod
-    def _result(action: DerivativePersistAction, record: DerivativeRecord) -> DerivativePersistResult:
+    def _result(
+        action: DerivativePersistAction,
+        record: DerivativeRecord,
+    ) -> DerivativePersistResult:
         return DerivativePersistResult(
             action=action,
             derivative_record_id=record.derivative_record_id,

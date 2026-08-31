@@ -197,7 +197,8 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "revision",
         }.issubset(quarantine_columns)
         derivative_columns = {
-            column["name"] for column in db_inspector.get_columns("derivative_records", schema="core")
+            column["name"]
+            for column in db_inspector.get_columns("derivative_records", schema="core")
         }
         assert {
             "external_id",
