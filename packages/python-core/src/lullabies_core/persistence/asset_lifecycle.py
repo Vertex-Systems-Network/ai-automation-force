@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Literal, cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import MetaData, Table, insert, select, update
+from sqlalchemy import MetaData, insert, select, update
 from sqlalchemy.engine import Connection, Engine, RowMapping
 
 from ..lifecycle import (
