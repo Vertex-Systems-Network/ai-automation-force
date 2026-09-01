@@ -1,4 +1,4 @@
-version: 2
+version: 3
 owner_role: supervisor
 policy:
   default_module_agent_write: false
@@ -12,6 +12,7 @@ paths:
   - ai-native/ENGINEERING-CONTRACT.md
   - ai-native/DEVELOPMENT-CONSENT-GATE.md
   - ai-native/parallel/**
+  - scripts/validate_parallel_governance.py
   - packages/python-core/src/lullabies_core/__init__.py
   - packages/python-core/src/ai_automation_force_core/__init__.py
   - packages/python-core/src/lullabies_core/common.py
@@ -21,6 +22,7 @@ paths:
   - packages/python-core/migrations/sql/**
   - schemas/generated/**
   - .github/workflows/**
+  - .github/CODEOWNERS
   - config/project-taxonomy.yaml
   - config/execution-policy.yaml
   - config/content-policy.yaml
@@ -32,3 +34,4 @@ rules:
   - A temporary grant does not permit unrelated cleanup or refactoring.
   - README working-instruction summary is synchronized whenever material agent instructions change.
   - Supervisor coordination files are updated after every relevant submission, merge, and broadcast event.
+  - CODEOWNERS is defense-in-depth and becomes enforceable only when GitHub branch/ruleset protection requires code-owner review.

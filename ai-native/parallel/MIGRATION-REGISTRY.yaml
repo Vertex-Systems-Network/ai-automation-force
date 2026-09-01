@@ -1,4 +1,4 @@
-version: 2
+version: 3
 owner_role: supervisor
 policy:
   reservation_required_before_creation: true
@@ -7,20 +7,27 @@ policy:
   migration_dependency_must_match_landed_or_declared_parent: true
   merge_alert_requires_migration_revalidation: true
 
-reservations:
+reservations: []
+
+landed:
   - revision: 20260901_0015
     task_id: M03-WP7
     branch: supervisor/m03-wp7-retention
-    original_branch: agent/20260901-ai-automation-force-m03-wp7-retention
+    continuation_branch: supervisor/m03-wp7-retention-continuation
     parent_revision: 20260901_0014
     purpose: asset lifecycle state and event authority
-    status: in-use-unmerged
+    merged_pr: 51
+    submitted_head_sha: 745cc22e5680e164aa875631190c30b1c50aba76
+    landed_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+    status: landed
 
 next_allocation:
   rule: supervisor-assigns-next-unique-revision-after-current-main-and-active-reservations-are-reconciled
+  current_landed_head: 20260901_0015
 
 notes:
   - Never infer the next revision only from the current branch; inspect current main plus active reservations.
   - Parallel migrations may require an explicit dependency/merge ordering even when their SQL domains are independent.
   - If a branch synchronizes after another migration lands, Supervisor decides whether to renumber/re-parent before promotion.
   - Every mandatory post-merge alert forces migration-owning agents to revalidate parent revision and reservation before resuming.
+  - Landed revisions are history, not active reservations, and do not block allocation of the next unique revision.

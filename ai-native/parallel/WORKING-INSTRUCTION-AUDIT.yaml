@@ -1,0 +1,10 @@
+version: 1
+last_updated: 2026-09-02
+status: active
+
+policy:
+  material_working_instruction_change_requires_readme_sync: true
+  repository_state_change_without_instruction_change_does_not_require_readme_churn: true
+  current_cycle_classification: governance-enforcement-and-state-reconciliation
+  readme_material_instruction_delta: false
+  reason: existing README already requires non-overlapping active write claims, Supervisor ownership, migration reservations, broadcasts, and working-instruction audits; this cycle hardens enforcement and reconciles stale state rather than changing those instructions

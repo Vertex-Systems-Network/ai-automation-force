@@ -1,12 +1,11 @@
-version: 2
+version: 3
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_reconciled: ce0b96e891e330f455a89038d566f7c1856b716b
+  main_sha_last_reconciled: 8ed99a094cb443b789929d71c468464e2e0bb72a
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-retention
-  own_branch_head_after_broadcast_2_sync: 83347e5024140603c26b9fccd1d310e918a68498
-  current_mode: feature-development
+  own_branch: supervisor/m03-wp7-retention-continuation
+  current_mode: coordination-reconciliation
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
@@ -52,9 +51,28 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 2
-  agents_with_mandatory_sync: []
+  latest_broadcast_sequence: 3
+  agents_with_mandatory_sync:
+    - supervisor/m03-wp7-retention-continuation
+    - agent/m03-wp8-acceptance
+    - agent/m04-character-library
+    - agent/m05-content-memory
+    - agent/m06-audio-production
+    - agent/m07-storyboard-timeline
+    - agent/m08-video-provider-router
+    - agent/cross-cutting-qa-security
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
+
+known_external_risk:
+  main_branch_protection:
+    observed_protected: false
+    repository_side_mitigation:
+      - supervisor-only-promotion-policy
+      - exact-head-merge-guard
+      - required-promotion-ci-policy
+      - governance-validator
+      - CODEOWNERS-for-sensitive-shared-paths
+    resolution_requires_github_repository_setting: true
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
@@ -65,4 +83,5 @@ rules:
   - A submission signal means ready for review, not merged or production-ready.
   - Supervisor records pause state before interrupting its own feature work.
   - Every successful promotion merge produces a broadcast record before Supervisor resumes feature implementation.
-  - Main SHA, queue state, slot state, and broadcast state are reconciled after every promotion event.
+  - Main SHA, queue state, slot state, migration state, write claims, and broadcast state are reconciled after every promotion event.
+  - No active authoritative write claim may overlap another active authoritative write claim unless Supervisor records an explicit split/exception.

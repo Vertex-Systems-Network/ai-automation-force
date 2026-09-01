@@ -1,0 +1,13 @@
+# Sensitive shared/integration surfaces require Supervisor/maintainer review.
+# Server-side enforcement depends on GitHub branch/ruleset protection.
+
+/README.md @wpessential
+/AGENTS.md @wpessential
+/ai-native/parallel/ @wpessential
+/.github/workflows/ @wpessential
+/.github/CODEOWNERS @wpessential
+/scripts/validate_parallel_governance.py @wpessential
+/packages/python-core/migrations/ @wpessential
+/packages/python-core/src/lullabies_core/__init__.py @wpessential
+/packages/python-core/src/ai_automation_force_core/__init__.py @wpessential
+/schemas/generated/ @wpessential

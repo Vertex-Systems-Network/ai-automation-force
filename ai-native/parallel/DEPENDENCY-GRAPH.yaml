@@ -1,4 +1,4 @@
-version: 2
+version: 3
 owner_role: supervisor
 policy:
   update_when_dependencies_change: true
@@ -8,10 +8,20 @@ policy:
 
 current:
   M03-WP7:
-    branch: supervisor/m03-wp7-retention
-    state: sync-required-before-resume
+    branch: supervisor/m03-wp7-retention-continuation
+    state: active-continuation-after-foundation
+    landed_foundation:
+      pr: 51
+      main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
     depends_on:
       - M03-WP6
+    remaining_before_unlock:
+      - deletion-propagation
+      - delivery-lifecycle-denial
+      - bounded-temp-cleanup
+      - export-staging
+      - vector-index-cleanup-hooks
+      - wp7-acceptance
     unlocks:
       - M03-WP8
 
@@ -95,3 +105,4 @@ rules:
   - Contract-owner branches promote before consumers that depend on those contracts.
   - A newly merged contract may mark dependent branches sync-required before they resume.
   - Branch existence is not evidence that executable work is authorized.
+  - A landed foundation slice does not unlock a dependent package until the owning work package reaches its declared exit criteria.

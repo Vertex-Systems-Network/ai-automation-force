@@ -1,0 +1,19 @@
+version: 1
+status: audited
+live_main_protection:
+  protected: false
+  observed_at: 2026-09-02
+  impact: external safety risk; does not block parallel branch work but weakens server-side enforcement of Supervisor-only PR promotion
+repository_mitigations:
+  - exact-head merge guard policy
+  - required promotion CI policy
+  - governance validator
+  - sensitive-path CODEOWNERS
+  - Supervisor-only merge authority in canonical plan
+required_external_action:
+  - enable GitHub branch/ruleset protection for main
+  - require Repository Governance, Core Domain Contracts and Durable Control Plane
+  - require up-to-date branch/status checks
+  - block force pushes and deletion
+  - require conversation resolution
+  - require code-owner review where organization policy permits

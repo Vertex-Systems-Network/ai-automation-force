@@ -1,23 +1,26 @@
-version: 2
+version: 3
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
   main_branch: main
   review_and_merge_authority: true
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-retention
+  own_branch: supervisor/m03-wp7-retention-continuation
 
 active:
   - task_id: M03-WP7
     title: Retention/archive/delete/export primitives
     role: supervisor-module
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp7-retention
-    base_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
-    branch_head_at_supervisor_bootstrap: 1583845c3ddd9865ca2528c7dbd02ca14ba5b89f
-    synchronized_head: 83347e5024140603c26b9fccd1d310e918a68498
+    branch: supervisor/m03-wp7-retention-continuation
+    base_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+    previous_submission:
+      pr: 51
+      head_sha: 745cc22e5680e164aa875631190c30b1c50aba76
+      merged_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+      scope: durable asset lifecycle foundation
     module: asset_lifecycle
-    status: active
+    status: sync-required-broadcast-3
     writes:
       - packages/python-core/src/lullabies_core/lifecycle.py
       - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
@@ -25,23 +28,24 @@ active:
     shared_requests:
       - packages/python-core/src/lullabies_core/__init__.py
       - packages/python-core/src/lullabies_core/persistence/__init__.py
+      - packages/python-core/src/lullabies_core/persistence/delivery_access.py
+      - packages/python-core/src/lullabies_core/storage.py
       - packages/python-core/tests/test_migrations.py
       - packages/python-core/migrations/**
     depends_on:
       - M03-WP6
-    migration_reservation: 20260901_0015
+    migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_synced_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
     last_acknowledged_broadcast: 2
-    working_instruction_review:
-      material_delta: true
-      reason: Supervisor workflow and new-agent onboarding governance landed after original WP7 branch creation
-      required_before_next_resume: false
-      review_status: complete
-      readme_sync_required: false
-      readme_sync_status: complete-on-main-via-pr-50
-      semantic_sync_status: clean-intended-wp7-files-only
+    required_broadcast: 3
+    remaining_scope:
+      - deletion propagation and delivery fail-closed integration
+      - bounded temporary cleanup
+      - export staging
+      - vector/index cleanup hooks
+      - final WP7 acceptance and promotion
 
   - task_id: M03-WP8
     title: M03 end-to-end acceptance
@@ -50,8 +54,11 @@ active:
     branch: agent/m03-wp8-acceptance
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: m03_acceptance
-    status: planning-only-waiting-on-wp7
+    status: sync-required-planning-only-waiting-on-wp7
     writes:
+      - docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md
+      - ai-native/parallel/checkpoints/M03-WP8.md
+    future_executable_writes:
       - packages/python-core/tests/**
       - apps/api/tests/**
       - apps/worker/tests/**
@@ -63,6 +70,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
@@ -71,10 +79,10 @@ active:
     branch: agent/m04-character-library
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: characters_entities
-    status: planning-only
+    status: sync-required-planning-only
     writes:
-      - docs/**character**
-      - ai-native/checkpoints/**
+      - docs/milestones/M04/**
+      - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
       - M03-WP8
@@ -83,6 +91,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -91,11 +100,10 @@ active:
     branch: agent/m05-content-memory
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: content_memory
-    status: planning-only
+    status: sync-required-planning-only
     writes:
-      - docs/**content**
-      - docs/**memory**
-      - ai-native/checkpoints/**
+      - docs/milestones/M05/**
+      - ai-native/parallel/checkpoints/M05-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
       - M04-PARALLEL-LANE
@@ -104,6 +112,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -112,10 +121,10 @@ active:
     branch: agent/m06-audio-production
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: audio
-    status: planning-only
+    status: sync-required-planning-only
     writes:
-      - docs/**audio**
-      - ai-native/checkpoints/**
+      - docs/milestones/M06/**
+      - ai-native/parallel/checkpoints/M06-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
       - M03-WP8
@@ -124,6 +133,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -132,11 +142,10 @@ active:
     branch: agent/m07-storyboard-timeline
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: timeline_storyboard
-    status: planning-only
+    status: sync-required-planning-only
     writes:
-      - docs/**timeline**
-      - docs/**storyboard**
-      - ai-native/checkpoints/**
+      - docs/milestones/M07/**
+      - ai-native/parallel/checkpoints/M07-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
       - M04-PARALLEL-LANE
@@ -147,6 +156,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -155,11 +165,10 @@ active:
     branch: agent/m08-video-provider-router
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: providers
-    status: planning-only
+    status: sync-required-planning-only
     writes:
-      - docs/**provider**
-      - docs/**video**
-      - ai-native/checkpoints/**
+      - docs/milestones/M08/**
+      - ai-native/parallel/checkpoints/M08-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
       - M04-PARALLEL-LANE
@@ -169,6 +178,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -177,24 +187,27 @@ active:
     branch: agent/cross-cutting-qa-security
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: media_qa
-    status: active-audit-planning
+    status: sync-required-active-audit-planning
     writes:
-      - docs/**qa**
-      - docs/**security**
-      - ai-native/checkpoints/**
-    shared_requests: []
+      - docs/qa/**
+      - ai-native/parallel/checkpoints/CROSS-CUTTING-QA.md
+    shared_requests:
+      - docs/security/**
     depends_on: []
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
     last_acknowledged_broadcast: 2
+    required_broadcast: 3
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
-  - Completed/merged tasks are removed or moved to repository checkpoints/history.
+  - Completed/merged task branches are retired or replaced before a next bounded executable slice begins.
   - Before claiming a new task, compare its write set with every active entry.
-  - Overlapping write sets block parallel execution unless Supervisor splits/reassigns ownership.
+  - Overlapping active write claims block parallel execution unless Supervisor splits/reassigns ownership.
+  - future_executable_writes are non-authoritative until the task is explicitly promoted to executable status.
+  - Planning lanes use dedicated milestone directories and one exact per-task checkpoint file; broad shared checkpoint globs are forbidden.
   - Every resume must revalidate branch head, base/current main, dependencies, working instructions, broadcasts, slots, and consent.
   - Every ready submission must announce exactly Work Done and Submitted.
   - A mandatory unacknowledged Supervisor broadcast puts the task into sync-required state and blocks promotion.

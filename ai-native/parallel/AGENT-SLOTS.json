@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "source_branch_required": "main",
   "assignment_authority": "supervisor",
   "no_slot_response": "Go Home Come Back Next Time",
@@ -8,17 +8,18 @@
     "supervisor_assigns_first_open_slot": true,
     "agent_may_not_self_assign": true,
     "assignment_updates_plan_before_work": true,
-    "no_open_slot_blocks_all_work": true
+    "no_open_slot_blocks_all_work": true,
+    "completed_submission_branch_must_be_retired_or_replaced": true
   },
   "slots": [
     {
       "slot_id": "SUPERVISOR-M03-WP7",
       "module": "asset_lifecycle",
-      "branch": "supervisor/m03-wp7-retention",
+      "branch": "supervisor/m03-wp7-retention-continuation",
       "status": "occupied",
       "assigned_agent": "supervisor-agent",
       "accepts_new_agent": false,
-      "start_status": "active"
+      "start_status": "active-continuation"
     },
     {
       "slot_id": "M03-WP8",

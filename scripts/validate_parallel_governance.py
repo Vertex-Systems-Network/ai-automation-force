@@ -37,6 +37,78 @@ def yaml_int(text: str, key: str) -> int:
     return int(match.group(1))
 
 
+def active_write_claims(text: str) -> dict[str, list[str]]:
+    claims: dict[str, list[str]] = {}
+    current_task: str | None = None
+    in_writes = False
+
+    for raw in text.splitlines():
+        task_match = re.match(r"^  - task_id:\s*(\S+)\s*$", raw)
+        if task_match:
+            current_task = task_match.group(1)
+            claims.setdefault(current_task, [])
+            in_writes = False
+            continue
+
+        if current_task is None:
+            continue
+
+        if re.match(r"^    writes:\s*$", raw):
+            in_writes = True
+            continue
+
+        if in_writes:
+            item_match = re.match(r"^      -\s+(.+?)\s*$", raw)
+            if item_match:
+                claims[current_task].append(item_match.group(1))
+                continue
+            if raw.strip() and not raw.startswith("      "):
+                in_writes = False
+
+    return claims
+
+
+def wildcard_prefix(path: str) -> str | None:
+    marker = min(
+        [index for index in (path.find("*"), path.find("?")) if index >= 0],
+        default=-1,
+    )
+    if marker < 0:
+        return None
+    return path[:marker]
+
+
+def claims_overlap(left: str, right: str) -> bool:
+    if left == right:
+        return True
+    left_prefix = wildcard_prefix(left)
+    right_prefix = wildcard_prefix(right)
+    if left_prefix is not None and right.startswith(left_prefix):
+        return True
+    if right_prefix is not None and left.startswith(right_prefix):
+        return True
+    if left_prefix is not None and right_prefix is not None:
+        return left_prefix.startswith(right_prefix) or right_prefix.startswith(left_prefix)
+    return False
+
+
+def migration_reservations(text: str) -> set[str]:
+    reservations_section = text.split("landed:", 1)[0]
+    return {
+        match.group(1)
+        for match in re.finditer(r"(?m)^\s*- revision:\s*(\S+)\s*$", reservations_section)
+    }
+
+
+def active_migration_reservations(text: str) -> set[str]:
+    values: set[str] = set()
+    for match in re.finditer(r"(?m)^\s*migration_reservation:\s*(\S+)\s*$", text):
+        value = match.group(1)
+        if value not in {"null", "None", "~"}:
+            values.add(value)
+    return values
+
+
 def main() -> None:
     slots = json.loads(load_text(SLOTS_PATH))
     plan = load_text(PLAN_PATH)
@@ -101,22 +173,44 @@ def main() -> None:
         f"Supervisor broadcast sequence mismatch: broadcasts={broadcast_sequence}, state={state_sequence}",
     )
 
-    revisions: list[str] = []
-    for raw in migrations.splitlines():
-        line = raw.strip()
-        if line.startswith("- revision:"):
-            revisions.append(line.split(":", 1)[1].strip())
-    require(len(revisions) == len(set(revisions)), "duplicate migration reservations detected")
+    claims = active_write_claims(active)
+    flat_claims: list[tuple[str, str]] = [
+        (task, path) for task, paths in claims.items() for path in paths
+    ]
+    for task, path in flat_claims:
+        require(
+            path != "ai-native/checkpoints/**",
+            f"broad shared checkpoint claim is forbidden for parallel task {task}",
+        )
+    for index, (left_task, left_path) in enumerate(flat_claims):
+        for right_task, right_path in flat_claims[index + 1 :]:
+            if left_task == right_task:
+                continue
+            require(
+                not claims_overlap(left_path, right_path),
+                "overlapping active write claims: "
+                f"{left_task}:{left_path} vs {right_task}:{right_path}",
+            )
+
+    reserved = migration_reservations(migrations)
+    active_reserved = active_migration_reservations(active)
+    require(
+        active_reserved <= reserved,
+        f"active task migration reservation missing from registry: {sorted(active_reserved - reserved)}",
+    )
+    require(len(reserved) == len(set(reserved)), "duplicate migration reservations detected")
 
     if open_slots == 0:
         print(
             "Parallel governance PASS: "
-            f"broadcast={broadcast_sequence}; all module slots occupied; response='{REJECTION}'"
+            f"broadcast={broadcast_sequence}; write-claims={len(flat_claims)}; "
+            f"all module slots occupied; response='{REJECTION}'"
         )
     else:
         print(
             "Parallel governance PASS: "
-            f"broadcast={broadcast_sequence}; {open_slots} open module slot(s) available"
+            f"broadcast={broadcast_sequence}; write-claims={len(flat_claims)}; "
+            f"{open_slots} open module slot(s) available"
         )
 
 

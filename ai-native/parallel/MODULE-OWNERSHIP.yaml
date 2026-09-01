@@ -1,4 +1,4 @@
-version: 2
+version: 3
 policy:
   read_scope: repository-wide
   default_write_scope: claimed-paths-only
@@ -36,12 +36,14 @@ modules:
 
   asset_lifecycle:
     paths:
-      - packages/python-core/src/lullabies_core/asset_lifecycle.py
+      - packages/python-core/src/lullabies_core/lifecycle.py
       - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
       - packages/python-core/tests/test_asset_lifecycle*.py
     contracts:
       - AssetLifecycleState
+      - AssetLifecycleSnapshot
       - AssetLifecycleEvent
+      - PostgresAssetLifecycleRepository
 
   m03_acceptance:
     paths:
@@ -49,7 +51,7 @@ modules:
       - apps/api/tests/**
       - apps/worker/tests/**
     contracts: []
-    note: acceptance agent must avoid editing feature-owned tests/files concurrently without Supervisor split approval
+    note: executable acceptance ownership is granted only after WP7 completion and must exclude files still claimed by active feature tasks
 
   characters_entities:
     paths:
@@ -125,7 +127,7 @@ shared_ownership:
   registry: ai-native/parallel/SHARED-FILES.yaml
 
 notes:
-  - Module paths may be refined as new packages are introduced.
+  - Module ownership describes architectural boundaries; ACTIVE-WORK.yaml is authoritative for a currently assigned task's write paths.
   - A task manifest overrides ownership only when the Supervisor explicitly records the exception.
   - Existing broad legacy files should be split behind stable contracts over time rather than rewritten only to satisfy this map.
-  - Planning-only branches should normally write only dedicated docs/checkpoint paths until executable scope is authorized.
+  - Planning-only branches write only their dedicated milestone/checkpoint paths until executable scope is authorized.
