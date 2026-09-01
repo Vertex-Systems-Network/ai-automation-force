@@ -7,7 +7,6 @@ import pytest
 
 from ai_automation_force_core import delivery, delivery_s3, storage_s3
 
-
 NOW = datetime(2026, 9, 1, 19, 30, tzinfo=UTC)
 
 
