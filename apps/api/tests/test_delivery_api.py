@@ -186,6 +186,7 @@ def test_signed_delivery_api_enforces_tenant_public_share_and_canonical_bucket_b
     try:
         project_id, asset_id = seed_deliverable(engine)
         share_links = PostgresShareLinkRepository(engine)
+        share_now = datetime.now(UTC)
         share_links.create(
             ShareLinkConstraint(
                 share_link_id="SHARE-006501",
@@ -193,10 +194,10 @@ def test_signed_delivery_api_enforces_tenant_public_share_and_canonical_bucket_b
                 asset_id=asset_id,
                 token_sha256=hashlib.sha256(RAW_SHARE_TOKEN.encode()).hexdigest(),
                 allowed_modes=[DeliveryMode.STREAM],
-                expires_at=NOW + timedelta(hours=2),
+                expires_at=share_now + timedelta(hours=2),
                 max_uses=2,
             ),
-            created_at=NOW + timedelta(minutes=1),
+            created_at=share_now - timedelta(minutes=1),
         )
 
         settings = Settings(
