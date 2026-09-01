@@ -6,6 +6,20 @@ namespace for pre-M01 repository code. New consumers should import this package.
 
 from lullabies_core import *  # noqa: F403
 from lullabies_core import __all__ as _legacy_all
+from lullabies_core.delivery import (
+    AssetAccessClass,
+    DeliveryAuthorization,
+    DeliveryAuthorizationError,
+    DeliveryAuthorizationKind,
+    DeliveryBindingError,
+    DeliveryMode,
+    DeliverySubject,
+    ShareLinkConstraint,
+    SignedDeliveryGrant,
+    authorize_delivery,
+    bind_delivery_subject,
+)
+from lullabies_core.delivery_s3 import DeliverySigningError, S3DeliveryAdapter
 from lullabies_core.derivatives import (
     DERIVATIVE_STATUS_TRANSITIONS,
     TERMINAL_DERIVATIVE_STATUSES,
@@ -88,6 +102,7 @@ from lullabies_core.upload_session import (
 
 __all__ = [
     *_legacy_all,
+    "AssetAccessClass",
     "AssetProvenancePersistResult",
     "AssetProvenanceRecord",
     "AssetProvenanceRecordId",
@@ -96,6 +111,13 @@ __all__ = [
     "AssetUsabilityPolicy",
     "AssetUsabilityRejection",
     "DERIVATIVE_STATUS_TRANSITIONS",
+    "DeliveryAuthorization",
+    "DeliveryAuthorizationError",
+    "DeliveryAuthorizationKind",
+    "DeliveryBindingError",
+    "DeliveryMode",
+    "DeliverySigningError",
+    "DeliverySubject",
     "DerivativeKind",
     "DerivativePersistenceConflictError",
     "DerivativePersistResult",
@@ -121,8 +143,11 @@ __all__ = [
     "QuarantinePersistenceConflictError",
     "QuarantineRejectionCode",
     "QuarantineStatus",
+    "S3DeliveryAdapter",
     "S3UploadCompletionEvidence",
     "S3UploadSessionAdapter",
+    "ShareLinkConstraint",
+    "SignedDeliveryGrant",
     "StorageAdapter",
     "StorageBackend",
     "StorageBlobStat",
@@ -147,6 +172,8 @@ __all__ = [
     "UploadSessionExpiredError",
     "UploadSessionStatus",
     "assert_derivative_transition",
+    "authorize_delivery",
+    "bind_delivery_subject",
     "build_object_key",
     "build_upload_object_key",
     "derivative_operation_fingerprint",
