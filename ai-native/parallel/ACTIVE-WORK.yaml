@@ -8,9 +8,9 @@ active:
     title: Retention/archive/delete/export primitives
     role: module
     branch: agent/20260901-ai-automation-force-m03-wp7-retention
-    base_policy: pin-exact-main-at-task-start
+    base_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
     module: asset_lifecycle
-    status: active
+    status: active-instruction-sync-required
     writes:
       - packages/python-core/src/lullabies_core/asset_lifecycle.py
       - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
@@ -24,22 +24,12 @@ active:
       - M03-WP6
     migration_reservation: 20260901_0015
     consent_scope: M03
-
-  - task_id: PARALLEL-GOVERNANCE-001
-    title: Repository-wide parallel multi-agent development governance
-    role: integration
-    branch: docs/multi-agent-parallel-development
-    module: repository_governance
-    status: active
-    writes:
-      - ai-native/parallel/**
-      - docs/architecture/DEVELOPMENT-PLAN.md
-      - AGENTS.md
-      - README.md
-    shared_requests: []
-    depends_on: []
-    migration_reservation: null
-    consent_scope: documentation-only
+    working_instruction_review:
+      material_delta: true
+      reason: parallel multi-agent governance landed after this task branch was created
+      required_before_next_resume: true
+      readme_sync_required: false
+      readme_sync_status: complete-on-main-via-pr-47
 
 rules:
   - Integration Agent owns updates to this registry.
@@ -47,3 +37,4 @@ rules:
   - Before claiming a new task, compare its write set with every active entry.
   - Overlapping write sets block parallel execution unless Integration Agent splits/reassigns ownership.
   - Every resume must revalidate branch head, base/current main, dependencies, working instructions, and consent.
+  - When a task completes its required instruction synchronization, Integration Agent returns its status to active and records the review result.
