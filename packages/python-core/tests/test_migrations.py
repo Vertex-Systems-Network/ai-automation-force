@@ -40,6 +40,8 @@ EXPECTED_CORE_TABLES = {
     "derivative_records",
     "delivery_share_links",
     "asset_delivery_policies",
+    "asset_lifecycle_states",
+    "asset_lifecycle_events",
     "storage_objects",
     "upload_sessions",
     "upload_parts",
@@ -91,6 +93,7 @@ M03_WP4_TABLES = {"asset_provenance_records"}
 M03_WP5_TABLES = {"derivative_records"}
 M03_WP6_SHARE_TABLES = {"delivery_share_links"}
 M03_WP6_POLICY_TABLES = {"asset_delivery_policies"}
+M03_WP7_LIFECYCLE_TABLES = {"asset_lifecycle_states", "asset_lifecycle_events"}
 
 
 def alembic_config() -> Config:
@@ -254,6 +257,36 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "updated_at",
             "revision",
         }.issubset(delivery_policy_columns)
+        lifecycle_state_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("asset_lifecycle_states", schema="core")
+        }
+        assert {
+            "asset_id",
+            "project_id",
+            "state",
+            "recovery_state",
+            "recovery_until",
+            "updated_at",
+            "revision",
+        }.issubset(lifecycle_state_columns)
+        lifecycle_event_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("asset_lifecycle_events", schema="core")
+        }
+        assert {
+            "asset_external_id",
+            "project_external_id",
+            "from_state",
+            "to_state",
+            "operation_key",
+            "actor",
+            "reason",
+            "recovery_state",
+            "recovery_until",
+            "occurred_at",
+            "revision",
+        }.issubset(lifecycle_event_columns)
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -287,7 +320,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260901_0014"
+        assert revision == "20260901_0015"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -408,9 +441,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260901_0014")
+        m14_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_wp7_lifecycle_tables = EXPECTED_CORE_TABLES - M03_WP7_LIFECYCLE_TABLES
+        assert m14_tables == pre_wp7_lifecycle_tables
+
         command.downgrade(config, "20260901_0013")
         m13_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_wp6_policy_tables = EXPECTED_CORE_TABLES - M03_WP6_POLICY_TABLES
+        pre_wp6_policy_tables = pre_wp7_lifecycle_tables - M03_WP6_POLICY_TABLES
         assert m13_tables == pre_wp6_policy_tables
 
         command.downgrade(config, "20260831_0012")
