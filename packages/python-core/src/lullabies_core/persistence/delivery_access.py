@@ -136,7 +136,8 @@ class PostgresDeliveryRepository:
                 raise DeliveryResolutionError("asset has no storage-backed provenance")
             if len(provenance_rows) != 1:
                 raise DeliveryResolutionError(
-                    "asset delivery provenance is ambiguous; exactly one storage-backed record is required"
+                    "asset delivery provenance is ambiguous; exactly one "
+                    "storage-backed record is required"
                 )
             provenance_row = provenance_rows[0]
             storage_row = self._require_internal(
