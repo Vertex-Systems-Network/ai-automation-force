@@ -1,0 +1,131 @@
+version: 2
+policy:
+  read_scope: repository-wide
+  default_write_scope: claimed-paths-only
+  shared_files_require_supervisor_owner: true
+  overlapping_active_write_claims_allowed: false
+
+modules:
+  control_plane:
+    paths:
+      - apps/api/**
+      - apps/worker/**
+      - packages/python-core/src/lullabies_core/control_surface.py
+      - packages/python-core/src/lullabies_core/job_control.py
+      - packages/python-core/src/lullabies_core/workflow_runtime.py
+    contracts:
+      - Job
+      - WorkflowExecutionRef
+
+  storage_and_assets:
+    paths:
+      - packages/python-core/src/lullabies_core/storage.py
+      - packages/python-core/src/lullabies_core/storage_s3.py
+      - packages/python-core/src/lullabies_core/provenance.py
+      - packages/python-core/src/lullabies_core/delivery.py
+      - packages/python-core/src/lullabies_core/delivery_s3.py
+      - packages/python-core/src/lullabies_core/persistence/storage_object.py
+      - packages/python-core/src/lullabies_core/persistence/asset_provenance.py
+      - packages/python-core/src/lullabies_core/persistence/delivery_access.py
+      - packages/python-core/src/lullabies_core/persistence/share_link.py
+    contracts:
+      - Asset
+      - StorageObject
+      - AssetProvenanceRecord
+      - DeliverySubject
+
+  asset_lifecycle:
+    paths:
+      - packages/python-core/src/lullabies_core/asset_lifecycle.py
+      - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
+      - packages/python-core/tests/test_asset_lifecycle*.py
+    contracts:
+      - AssetLifecycleState
+      - AssetLifecycleEvent
+
+  m03_acceptance:
+    paths:
+      - packages/python-core/tests/**
+      - apps/api/tests/**
+      - apps/worker/tests/**
+    contracts: []
+    note: acceptance agent must avoid editing feature-owned tests/files concurrently without Supervisor split approval
+
+  characters_entities:
+    paths:
+      - packages/python-core/src/lullabies_core/character.py
+      - packages/python-core/src/lullabies_core/entities.py
+    contracts:
+      - Character
+      - CharacterVersion
+      - CharacterLook
+      - World
+      - Location
+      - Prop
+
+  content_memory:
+    paths:
+      - packages/python-core/src/lullabies_core/content.py
+      - automation/**
+    contracts:
+      - Content
+      - ContentVersion
+
+  audio:
+    paths:
+      - packages/python-core/src/**/audio/**
+      - apps/worker/src/**/audio/**
+    contracts: []
+
+  timeline_storyboard:
+    paths:
+      - packages/python-core/src/lullabies_core/timeline.py
+      - packages/python-core/src/**/storyboard/**
+    contracts:
+      - Timeline
+      - Act
+      - Sequence
+      - Scene
+      - Shot
+      - Take
+
+  providers:
+    paths:
+      - packages/python-core/src/**/providers/**
+      - config/provider-registry.yaml
+    contracts: []
+
+  media_qa:
+    paths:
+      - packages/python-core/src/**/qa/**
+      - packages/python-core/src/lullabies_core/media_security.py
+    contracts:
+      - QARecord
+      - QuarantineInspection
+
+  assembly:
+    paths:
+      - packages/python-core/src/**/assembly/**
+      - apps/worker/src/**/assembly/**
+    contracts: []
+
+  web:
+    paths:
+      - apps/web/**
+    contracts: []
+
+  publishing_analytics:
+    paths:
+      - packages/python-core/src/**/publishing/**
+      - packages/python-core/src/**/analytics/**
+    contracts: []
+
+shared_ownership:
+  owner_role: supervisor
+  registry: ai-native/parallel/SHARED-FILES.yaml
+
+notes:
+  - Module paths may be refined as new packages are introduced.
+  - A task manifest overrides ownership only when the Supervisor explicitly records the exception.
+  - Existing broad legacy files should be split behind stable contracts over time rather than rewritten only to satisfy this map.
+  - Planning-only branches should normally write only dedicated docs/checkpoint paths until executable scope is authorized.

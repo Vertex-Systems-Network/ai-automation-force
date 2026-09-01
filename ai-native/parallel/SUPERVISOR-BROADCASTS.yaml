@@ -1,0 +1,80 @@
+version: 1
+latest_sequence: 1
+canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+
+broadcasts:
+  - sequence: 1
+    trigger: supervisor-merge
+    merged_pr: 49
+    merged_branch: supervisor/multi-agent-workflow-v2
+    submitted_head_sha: 3f2d486d51e64666e3eb40673061c7257f707405
+    merged_main_sha: 8ccf33d07974bba80f9b7dedfd4b51419f0618a8
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-working-instruction-sync
+    changed_areas:
+      - README working instructions
+      - Supervisor/parallel coordination protocol and state
+      - active work and dependency registries
+      - migration reservation ownership metadata
+      - shared-file and contract coordination authority
+    contract_changes: []
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-wp7-retention
+      - agent/m03-wp8-acceptance
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security
+    mandatory: true
+
+recipient_states:
+  supervisor/m03-wp7-retention:
+    state: sync-required
+    required_sequence: 1
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
+  agent/m03-wp8-acceptance:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+  agent/m04-character-library:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+  agent/m05-content-memory:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+  agent/m06-audio-production:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+  agent/m07-storyboard-timeline:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+  agent/m08-video-provider-router:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+  agent/cross-cutting-qa-security:
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 1
+    last_synced_main_sha: e4e384c4d0e75baf0aab3ecf8d0f4a29d6bee14b
+
+rules:
+  - Supervisor increments latest_sequence after every successful merge to main that active agents must observe.
+  - Each broadcast records merged branch/PR, new main SHA, affected contracts/migrations/shared files, recipients, and mandatory/advisory sync classification.
+  - Mandatory recipients become sync-required until they acknowledge the sequence and record the new synchronized main SHA.
+  - An agent must inspect this registry on every start/resume and before announcing Work Done and Submitted.
+  - If a recipient branch was created from the broadcast main SHA or later and is unaffected, Supervisor may mark acknowledgement satisfied without a redundant merge.

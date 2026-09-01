@@ -27,6 +27,39 @@ Use vertical slices to prove architecture:
 
 Do not attempt a three-hour generated movie as the first acceptance test.
 
+## Parallel multi-agent development strategy
+
+Development is dependency-aware, contract-first, and parallel by default where scopes are genuinely independent.
+
+Canonical protocol and registries live under `ai-native/parallel/`:
+- `MULTI-AGENT-PROTOCOL.md`;
+- `MODULE-OWNERSHIP.yaml`;
+- `ACTIVE-WORK.yaml`;
+- `DEPENDENCY-GRAPH.yaml`;
+- `MIGRATION-REGISTRY.yaml`;
+- `SHARED-FILES.yaml`;
+- `CONTRACT-REGISTRY.yaml`;
+- `AGENT-TASK-SCHEMA.yaml`;
+- `INTEGRATION-PROTOCOL.md`.
+
+Operating model:
+
+`contract/freeze boundary -> identify independent ready work -> claim scopes -> isolated task branches -> scoped CI -> integration queue -> current-main synchronization -> full exact-head promotion CI -> merge`
+
+Concurrency guidance:
+- current/default safe target: **4–5 active agents**, including integration and QA/planning lanes;
+- after ownership and contract boundaries are stable: **6–8 implementation/review agents plus one Integration Agent**;
+- mature repository target: **8–12 active agents** only when enough independent ready nodes exist;
+- never split tightly coupled work merely to increase agent count.
+
+The plan's milestone numbering is an architecture/dependency guide, not a requirement that all work be executed serially. Independent planning, contract preparation, QA, frontend preparation, provider research, or module implementation may run in parallel when dependencies, ownership, consent, and shared-file rules permit.
+
+Every agent may read the full repository but may write only its claimed paths. Shared files, generated artifacts, public export surfaces, migration identifiers, global contracts, and repository-wide CI are coordinated by the Integration Agent unless a task receives an explicit scoped grant.
+
+Before every start/resume, the agent must perform the working-instruction audit defined in `MULTI-AGENT-PROTOCOL.md`. If a material change alters how agents must work, the canonical instruction source and affected task records must be updated, and the root README `Current agent working instructions` summary must be synchronized in the same integration cycle. If no material instruction delta exists, README should not be churned merely to refresh a date.
+
+Development consent remains scoped and authoritative. Parallel readiness or a dependency-graph `ready` state never grants executable-development permission by itself.
+
 ---
 
 ## Milestone 0 — Architecture and contract lock

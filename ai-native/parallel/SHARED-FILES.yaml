@@ -1,0 +1,34 @@
+version: 2
+owner_role: supervisor
+policy:
+  default_module_agent_write: false
+  temporary_write_grant_requires_task_record: true
+  generated_artifacts_updated_at_integration: true
+
+paths:
+  - README.md
+  - AGENTS.md
+  - ROADMAP.md
+  - ai-native/ENGINEERING-CONTRACT.md
+  - ai-native/DEVELOPMENT-CONSENT-GATE.md
+  - ai-native/parallel/**
+  - packages/python-core/src/lullabies_core/__init__.py
+  - packages/python-core/src/ai_automation_force_core/__init__.py
+  - packages/python-core/src/lullabies_core/common.py
+  - packages/python-core/pyproject.toml
+  - packages/python-core/alembic.ini
+  - packages/python-core/migrations/versions/**
+  - packages/python-core/migrations/sql/**
+  - schemas/generated/**
+  - .github/workflows/**
+  - config/project-taxonomy.yaml
+  - config/execution-policy.yaml
+  - config/content-policy.yaml
+
+rules:
+  - A module agent needing one of these paths records the required delta in its task/PR.
+  - Migration files require an explicit reservation in MIGRATION-REGISTRY.yaml before creation.
+  - Supervisor may grant scoped temporary ownership when the shared edit is inseparable from the feature.
+  - A temporary grant does not permit unrelated cleanup or refactoring.
+  - README working-instruction summary is synchronized whenever material agent instructions change.
+  - Supervisor coordination files are updated after every relevant submission, merge, and broadcast event.

@@ -118,9 +118,58 @@ Every engineering agent must follow:
 - `AGENTS.md`
 - `ai-native/ENGINEERING-CONTRACT.md`
 - `ai-native/MASTER-PLAN.md`
+- `ai-native/parallel/MULTI-AGENT-PROTOCOL.md` for development/maintenance work;
+- `ai-native/parallel/SUPERVISOR-PLAN.md` when parallel Supervisor mode is active;
 - relevant product/architecture documentation.
 
 The engineering constitution requires architecture-first development, current official-source research when material, security, tests, durable recovery, provenance, clear Git/checkpoints, and no fake completion.
+
+## Current agent working instructions
+
+This is the concise human-visible summary. Canonical details live in `AGENTS.md`, `ai-native/ENGINEERING-CONTRACT.md`, `ai-native/DEVELOPMENT-CONSENT-GATE.md`, and `ai-native/parallel/`.
+
+Current rules:
+- on **every start or resume**, including `continue`/`next`/`resume`, perform a working-instruction audit before proceeding;
+- read current repository/PR/checkpoint state rather than relying on chat memory;
+- in multi-agent Supervisor mode, the agent controlling the main integration lane is the **Supervisor** and owns review/merge authority;
+- when a new multi-agent orchestration assignment specifies parallel modules, the Supervisor's **first repository action is to create every intended module branch, including its own module branch, before documenting/starting the work**;
+- branch creation does not bypass dependency or development-consent gates; future/blocked lanes remain planning/contract-only;
+- for development work, read `MULTI-AGENT-PROTOCOL.md`, `SUPERVISOR-PLAN.md`, module ownership, active-work, dependency, migration, shared-file, contract, merge-queue, Supervisor-state, and broadcast registries;
+- an agent may **read the entire repository but write only its claimed paths**;
+- use task/work-package branches and pin an exact base commit when implementation starts;
+- overlapping active write claims are not allowed until the Supervisor resolves/splits ownership;
+- shared files, generated artifacts, public export surfaces, repository-wide CI and global contracts are Supervisor/integration-owned unless a task receives a scoped grant;
+- reserve migration identifiers before creating migrations;
+- define/freeze shared contracts before fanning dependent implementations out to multiple agents;
+- every agent must announce exactly **`Work Done and Submitted`** when its bounded branch submission is ready for Supervisor review;
+- when another agent submits, the Supervisor checkpoints/pauses its own module work, reviews the submission, promotes only after required synchronization and exact-head gates, records the merge, then resumes its saved checkpoint;
+- after a merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
+- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume;
+- an unacknowledged mandatory merge broadcast places a branch in `sync-required` and blocks submission/promotion;
+- parallel readiness does not bypass development consent;
+- scoped CI may accelerate feedback, but required exact-head full promotion CI remains mandatory before merge;
+- if a material governance/ownership/dependency/contract/CI/consent/Supervisor-workflow instruction changes how agents should work, update affected task instructions and **synchronize this README section in the same integration cycle**;
+- if the instruction audit finds no material change, do not churn README only to refresh a date.
+
+Parallel capacity guidance:
+- current/default: **4–5 active agents** including Supervisor and QA/planning lanes;
+- after stable module/contract boundaries: **6–8 implementation/review agents + 1 Supervisor**;
+- mature repository: **8–12 active agents** only when the dependency graph exposes enough independent ready work.
+
+Canonical coordination files:
+- `ai-native/parallel/MULTI-AGENT-PROTOCOL.md`
+- `ai-native/parallel/SUPERVISOR-PLAN.md`
+- `ai-native/parallel/SUPERVISOR-STATE.yaml`
+- `ai-native/parallel/SUPERVISOR-BROADCASTS.yaml`
+- `ai-native/parallel/MERGE-QUEUE.yaml`
+- `ai-native/parallel/MODULE-OWNERSHIP.yaml`
+- `ai-native/parallel/ACTIVE-WORK.yaml`
+- `ai-native/parallel/DEPENDENCY-GRAPH.yaml`
+- `ai-native/parallel/MIGRATION-REGISTRY.yaml`
+- `ai-native/parallel/SHARED-FILES.yaml`
+- `ai-native/parallel/CONTRACT-REGISTRY.yaml`
+- `ai-native/parallel/AGENT-TASK-SCHEMA.yaml`
+- `ai-native/parallel/INTEGRATION-PROTOCOL.md`
 
 ## Daily provider research
 

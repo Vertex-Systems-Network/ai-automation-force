@@ -1,0 +1,97 @@
+version: 2
+owner_role: supervisor
+policy:
+  update_when_dependencies_change: true
+  parallelize_only_independent_ready_nodes: true
+  branch_may_exist_before_executable_readiness: true
+  planning_only_does_not_grant_development_consent: true
+
+current:
+  M03-WP7:
+    branch: supervisor/m03-wp7-retention
+    state: sync-required-before-resume
+    depends_on:
+      - M03-WP6
+    unlocks:
+      - M03-WP8
+
+  M03-WP8:
+    branch: agent/m03-wp8-acceptance
+    state: planning-only-waiting
+    depends_on:
+      - M03-WP7
+    unlocks:
+      - M03-CLOSE
+
+  M03-CLOSE:
+    state: waiting
+    depends_on:
+      - M03-WP8
+    unlocks:
+      - M04-PARALLEL-LANE
+      - M06-PARALLEL-LANE
+
+parallel_planning_lanes:
+  M04-PARALLEL-LANE:
+    branch: agent/m04-character-library
+    state: planning-only
+    first_boundary: character-and-entity-contracts
+    executable_depends_on:
+      - M03-CLOSE
+    unlocks:
+      - M05-PARALLEL-LANE
+      - M07-PARALLEL-LANE
+      - M08-PARALLEL-LANE
+
+  M05-PARALLEL-LANE:
+    branch: agent/m05-content-memory
+    state: planning-only
+    first_boundary: content-and-memory-contracts
+    executable_depends_on:
+      - M04-PARALLEL-LANE
+    unlocks:
+      - M07-PARALLEL-LANE
+
+  M06-PARALLEL-LANE:
+    branch: agent/m06-audio-production
+    state: planning-only
+    first_boundary: audio-contracts
+    executable_depends_on:
+      - M03-CLOSE
+    unlocks:
+      - M07-PARALLEL-LANE
+
+  M07-PARALLEL-LANE:
+    branch: agent/m07-storyboard-timeline
+    state: planning-only
+    first_boundary: storyboard-timeline-contracts
+    executable_depends_on:
+      - M04-PARALLEL-LANE
+      - M05-PARALLEL-LANE
+      - M06-PARALLEL-LANE
+    unlocks:
+      - M08-PARALLEL-LANE
+
+  M08-PARALLEL-LANE:
+    branch: agent/m08-video-provider-router
+    state: planning-only
+    first_boundary: image-video-provider-contracts
+    executable_depends_on:
+      - M04-PARALLEL-LANE
+      - M07-PARALLEL-LANE
+
+continuous:
+  CROSS-CUTTING-QA:
+    branch: agent/cross-cutting-qa-security
+    state: audit-planning-ready
+    depends_on: []
+    note: executable test/security changes still require applicable ownership and consent
+
+rules:
+  - This registry describes dependency readiness and never grants development consent.
+  - Supervisor updates it before assigning newly unblocked executable work.
+  - Independent planning lanes may run in parallel where repository governance permits.
+  - Do not serialize independent work only because milestone numbers are sequential.
+  - Contract-owner branches promote before consumers that depend on those contracts.
+  - A newly merged contract may mark dependent branches sync-required before they resume.
+  - Branch existence is not evidence that executable work is authorized.

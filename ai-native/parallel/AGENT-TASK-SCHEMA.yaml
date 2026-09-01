@@ -1,0 +1,73 @@
+version: 2
+required_fields:
+  - task_id
+  - title
+  - role
+  - assigned_agent
+  - branch
+  - base_sha
+  - status
+  - owned_paths
+  - dependencies
+  - consumed_contracts
+  - produced_contracts
+  - shared_file_requests
+  - migration_reservation
+  - consent_scope
+  - required_checks
+  - working_instruction_review
+  - completion_signal
+  - last_synced_main_sha
+  - last_acknowledged_broadcast
+
+template:
+  task_id: EXAMPLE-WP1
+  title: Example bounded work package
+  role: module
+  assigned_agent: example-agent
+  branch: agent/example-wp1
+  base_sha: PIN_EXACT_SHA
+  status: planned
+  owned_paths:
+    - path/to/module/**
+  read_only_paths:
+    - path/to/dependency/**
+  dependencies: []
+  consumed_contracts: []
+  produced_contracts: []
+  shared_file_requests: []
+  migration_reservation: null
+  consent_scope: REQUIRED_SCOPE_OR_DOCS_ONLY
+  required_checks:
+    - lint
+    - type-check
+    - relevant-tests
+    - exact-head-promotion-ci
+  working_instruction_review:
+    reviewed_at: YYYY-MM-DD
+    material_delta: false
+    readme_sync_required: false
+    notes: null
+  completion_signal: Work Done and Submitted
+  last_synced_main_sha: PIN_EXACT_SHA
+  last_acknowledged_broadcast: 0
+  submission:
+    state: not-submitted
+    submitted_head_sha: null
+    pull_request: null
+    known_risks: []
+  sync_state:
+    state: synchronized
+    required_broadcast: null
+    semantic_conflicts: []
+
+validation_rules:
+  - owned_paths must not overlap another active task without Supervisor approval.
+  - base_sha must be an exact commit, not an ambiguous moving branch, when executable work starts.
+  - migration_reservation must exist in MIGRATION-REGISTRY.yaml before a migration is created.
+  - material working-instruction changes require README synchronization in the same integration cycle.
+  - consent_scope is descriptive evidence only; the development consent gate remains authoritative.
+  - completion_signal must be exactly Work Done and Submitted when a task is ready for Supervisor review.
+  - an agent with an unacknowledged mandatory Supervisor broadcast must be sync-required and may not submit for promotion.
+  - last_synced_main_sha must be refreshed after every mandatory merge alert before implementation resumes.
+  - submitted_head_sha is immutable unless the Supervisor requests fixes or a synchronization update.

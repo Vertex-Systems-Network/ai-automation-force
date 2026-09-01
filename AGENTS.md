@@ -18,30 +18,75 @@ The normal operator command is `next`.
 
 Before doing project work:
 
-1. Read `README.md`.
+1. Read `README.md`, including `Current agent working instructions`.
 2. Read `AGENTS.md`.
 3. Read `ai-native/DEVELOPMENT-CONSENT-GATE.md`.
 4. Read `ai-native/ENGINEERING-CONTRACT.md`.
 5. Read `ai-native/MASTER-PLAN.md`.
-6. Read `docs/architecture/DEVELOPMENT-PLAN.md` when development is relevant.
-7. Read `docs/architecture/TECH-STACK.md` when architecture/code is relevant.
-8. Read `config/project-taxonomy.yaml`.
-9. Read `config/execution-policy.yaml`.
-10. Read `config/content-policy.yaml` for child/content-policy work.
-11. Read `config/provider-registry.yaml`.
-12. Read `config/update-policy.yaml` when provider research/self-update is relevant.
-13. Read `ai-native/SYSTEM.md` and `ai-native/WORKFLOW.md` where applicable.
-14. Read `ai-native/QUALITY-GATES.md` and `ai-native/MEMORY-BANK.md`.
-15. Read `ai-native/AUDIO-ROUTER.md` when audio is relevant.
-16. Read `ai-native/VIDEO-CONTINUITY.md` when visual/video work is relevant.
-17. Read `ai-native/FREE-TIER-ROUTER.md` when provider routing/cost is relevant.
-18. Read product docs for character/timeline/project-option work.
-19. Read all machine-readable state/ledger files required for the current job.
-20. Inspect current implementation, tests and recent relevant Git history.
-21. Determine the first incomplete or highest-value eligible job.
-22. Before crossing from planning into executable development, verify that explicit operator consent exists for the exact development scope.
+6. For development/maintenance work, read `ai-native/parallel/MULTI-AGENT-PROTOCOL.md` and the relevant registries under `ai-native/parallel/`.
+7. Read `docs/architecture/DEVELOPMENT-PLAN.md` when development is relevant.
+8. Read `docs/architecture/TECH-STACK.md` when architecture/code is relevant.
+9. Read `config/project-taxonomy.yaml`.
+10. Read `config/execution-policy.yaml`.
+11. Read `config/content-policy.yaml` for child/content-policy work.
+12. Read `config/provider-registry.yaml`.
+13. Read `config/update-policy.yaml` when provider research/self-update is relevant.
+14. Read `ai-native/SYSTEM.md` and `ai-native/WORKFLOW.md` where applicable.
+15. Read `ai-native/QUALITY-GATES.md` and `ai-native/MEMORY-BANK.md`.
+16. Read `ai-native/AUDIO-ROUTER.md` when audio is relevant.
+17. Read `ai-native/VIDEO-CONTINUITY.md` when visual/video work is relevant.
+18. Read `ai-native/FREE-TIER-ROUTER.md` when provider routing/cost is relevant.
+19. Read product docs for character/timeline/project-option work.
+20. Read all machine-readable state/ledger files required for the current job.
+21. Inspect current implementation, tests and recent relevant Git/PR history.
+22. Determine the first incomplete or highest-value eligible job.
+23. Perform the mandatory working-instruction audit below.
+24. Before crossing from planning into executable development, verify that explicit operator consent exists for the exact development scope.
 
 Never rely only on chat memory when repository/runtime state exists.
+
+## Mandatory working-instruction audit
+
+Every agent must perform this audit on every start or resume, including when the operator only says `continue`, `next`, or `resume`.
+
+For development/maintenance work, compare the current repository state against the instructions under which the task previously operated. Check at minimum:
+- this file and the root README summary;
+- engineering and consent rules;
+- `ai-native/parallel/MULTI-AGENT-PROTOCOL.md`;
+- module ownership and active work claims;
+- dependency graph and public contract ownership;
+- shared-file rules;
+- migration reservation when schema/data work is possible;
+- relevant milestone/architecture docs;
+- current main/branch/PR/checkpoint evidence.
+
+The agent must determine whether the instructions it should follow have materially changed.
+
+If a material instruction change exists:
+1. update the affected canonical instruction/registry/task record before proceeding where permitted;
+2. re-evaluate scope, owned paths, dependencies, migration reservation, contracts, required checks and consent;
+3. stop or re-plan if the active assignment is no longer valid;
+4. ensure the root README `Current agent working instructions` summary is updated in the same integration cycle;
+5. record what changed and why in the relevant PR/checkpoint/integration record.
+
+If there is no material change, do not churn README just to refresh a timestamp. Continue using the verified current instructions.
+
+The README is a concise human-visible summary; canonical detailed rules remain in `AGENTS.md`, engineering/consent docs, and `ai-native/parallel/`.
+
+## Parallel agent coordination
+
+Parallel development is governed by `ai-native/parallel/MULTI-AGENT-PROTOCOL.md`.
+
+Core rules:
+- an agent may read the whole repository but may write only its claimed paths;
+- task branches are named for work packages, not AI/model identity;
+- overlapping active write claims are blocked until Integration Agent resolution;
+- shared files and generated artifacts are centrally coordinated unless explicitly granted;
+- migration identifiers are reserved before creation;
+- consumers depend on stable public contracts rather than another agent's private implementation;
+- every task pins an exact base commit when executable work starts;
+- exact-head promotion CI remains required where repository policy requires it;
+- parallel readiness never bypasses development consent.
 
 ## Mandatory development consent gate
 
