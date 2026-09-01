@@ -22,7 +22,7 @@ active:
       - packages/python-core/migrations/**
     depends_on:
       - M03-WP6
-    migration_reservation: 20260902_0015
+    migration_reservation: 20260901_0015
     consent_scope: M03
 
   - task_id: PARALLEL-GOVERNANCE-001
