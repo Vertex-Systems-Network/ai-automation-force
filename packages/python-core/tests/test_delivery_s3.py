@@ -5,15 +5,15 @@ from typing import Any
 
 import pytest
 
-from ai_automation_force_core import (
+from ai_automation_force_core.delivery import (
     AssetAccessClass,
     DeliveryAuthorization,
     DeliveryAuthorizationError,
     DeliveryAuthorizationKind,
     DeliveryMode,
     DeliverySubject,
-    S3DeliveryAdapter,
 )
+from ai_automation_force_core.delivery_s3 import S3DeliveryAdapter
 from ai_automation_force_core.storage_s3 import S3StorageAdapter, S3StorageSettings
 
 
