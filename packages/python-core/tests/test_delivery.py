@@ -5,7 +5,7 @@ from datetime import UTC, datetime, timedelta
 import pytest
 
 import ai_automation_force_core as core
-import ai_automation_force_core.delivery as delivery
+from ai_automation_force_core import delivery
 
 
 NOW = datetime(2026, 9, 1, 19, 0, tzinfo=UTC)
