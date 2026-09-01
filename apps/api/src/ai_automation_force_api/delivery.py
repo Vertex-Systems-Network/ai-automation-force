@@ -263,11 +263,13 @@ def delivery_router() -> APIRouter:
         project_id: Annotated[ProjectIdValue | None, Header(alias="X-Project-ID")] = None,
     ) -> DeliveryGrantResponse:
         try:
+            requester_project_id = _project_identity(request, project_id)
+            share_token = _share_token(authorization)
             return _service(request).create_grant(
                 asset_id,
                 body,
-                requester_project_id=_project_identity(request, project_id),
-                share_token=_share_token(authorization),
+                requester_project_id=requester_project_id,
+                share_token=share_token,
             )
         except Exception as exc:
             raise _translate_error(exc) from exc
