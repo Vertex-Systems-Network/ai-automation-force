@@ -68,5 +68,8 @@ jobs:
 
           Write-Host 'Repository governance static contract PASS.'
 
+      - name: Self-test parallel governance validator
+        run: python3 scripts/validate_parallel_governance.py --self-test
+
       - name: Validate Supervisor multi-agent governance
         run: python3 scripts/validate_parallel_governance.py
