@@ -1,0 +1,48 @@
+version: 1
+supervisor:
+  role: supervisor
+  main_branch: main
+  main_sha_at_plan_creation: 486c294f7be53aad49ee362465968e766a80899a
+  own_task_id: M03-WP7
+  own_branch: supervisor/m03-wp7-retention
+  own_branch_head_at_plan_creation: 1583845c3ddd9865ca2528c7dbd02ca14ba5b89f
+  current_mode: governance-integration
+  completion_signal: Work Done and Submitted
+  post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+
+interrupt_policy:
+  enabled: true
+  trigger: agent-submission-ready
+  required_signal: Work Done and Submitted
+  actions:
+    - checkpoint-supervisor-work
+    - review-submission
+    - reject-with-fixes-or-promote
+    - exact-head-ci-before-executable-merge
+    - merge-to-main
+    - emit-sync-broadcast
+    - restore-supervisor-checkpoint
+
+pause_checkpoint:
+  active: false
+  branch: null
+  head_sha: null
+  task_id: null
+  subtask: null
+  next_action: null
+  reason: null
+
+review_queue: []
+
+synchronization:
+  latest_broadcast_sequence: 0
+  agents_with_mandatory_sync: []
+  policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
+
+rules:
+  - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
+  - Supervisor implementation occurs on its own module branch, never by mixing feature work directly into main.
+  - A submission signal means ready for review, not merged or production-ready.
+  - Supervisor records pause state before interrupting its own feature work.
+  - Every successful merge produces a broadcast record before Supervisor resumes feature implementation.
+  - Main SHA and queue state are reconciled after every promotion event.
