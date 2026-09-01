@@ -39,6 +39,12 @@ from .quarantine_inspection import (
     QuarantinePersistResult,
 )
 from .repository import PostgresProductionRepository
+from .share_link import (
+    PostgresShareLinkRepository,
+    ShareLinkAuthorizationResult,
+    ShareLinkPersistenceConflictError,
+    ShareLinkPersistResult,
+)
 from .storage_object import PostgresStorageObjectRepository, StorageObjectPersistResult
 from .upload_session import PostgresUploadSessionRepository, UploadPersistenceConflictError
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
@@ -70,6 +76,7 @@ __all__ = [
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",
     "PostgresQuarantineInspectionRepository",
+    "PostgresShareLinkRepository",
     "PostgresStorageObjectRepository",
     "PostgresUploadSessionRepository",
     "PostgresWorkflowExecutionRepository",
@@ -78,6 +85,9 @@ __all__ = [
     "ProviderCallbackConflictError",
     "QuarantinePersistResult",
     "QuarantinePersistenceConflictError",
+    "ShareLinkAuthorizationResult",
+    "ShareLinkPersistenceConflictError",
+    "ShareLinkPersistResult",
     "StorageObjectPersistResult",
     "UploadPersistenceConflictError",
     "WorkflowPersistResult",
