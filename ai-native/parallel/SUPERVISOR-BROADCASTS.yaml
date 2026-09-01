@@ -1,32 +1,74 @@
 version: 1
-latest_sequence: 0
+latest_sequence: 1
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
-broadcasts: []
+broadcasts:
+  - sequence: 1
+    trigger: supervisor-merge
+    merged_pr: 49
+    merged_branch: supervisor/multi-agent-workflow-v2
+    submitted_head_sha: 3f2d486d51e64666e3eb40673061c7257f707405
+    merged_main_sha: 8ccf33d07974bba80f9b7dedfd4b51419f0618a8
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-working-instruction-sync
+    changed_areas:
+      - README working instructions
+      - Supervisor/parallel coordination protocol and state
+      - active work and dependency registries
+      - migration reservation ownership metadata
+      - shared-file and contract coordination authority
+    contract_changes: []
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-wp7-retention
+      - agent/m03-wp8-acceptance
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security
+    mandatory: true
 
 recipient_states:
   supervisor/m03-wp7-retention:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
-    last_synced_main_sha: null
+    last_synced_main_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
   agent/m03-wp8-acceptance:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
   agent/m04-character-library:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
   agent/m05-content-memory:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
   agent/m06-audio-production:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
   agent/m07-storyboard-timeline:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
   agent/m08-video-provider-router:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
   agent/cross-cutting-qa-security:
+    state: sync-required
+    required_sequence: 1
     last_acknowledged_sequence: 0
     last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
 
