@@ -1,0 +1,42 @@
+version: 1
+owner_role: supervisor
+submission_signal: Work Done and Submitted
+
+queue: []
+
+states:
+  - waiting
+  - review-paused-supervisor-work
+  - changes-requested
+  - approved-awaiting-main-sync
+  - approved-awaiting-ci
+  - ready-to-merge
+  - merged
+  - rejected
+
+priority_order:
+  - security-or-data-loss-blocker
+  - contract-owner-unblocks-multiple-agents
+  - current-critical-path
+  - independent-small-change
+  - future-planning
+
+required_review_evidence:
+  - exact-submitted-head-sha
+  - changed-file-scope
+  - ownership-and-shared-file-compliance
+  - dependency-state
+  - migration-reservation-when-applicable
+  - consumed-and-produced-contracts
+  - working-instruction-audit
+  - consent-scope
+  - required-scoped-checks
+  - current-main-synchronization
+  - exact-head-promotion-ci-for-executable-work
+  - security-data-and-rollback-review
+
+rules:
+  - Only the Supervisor changes a submission to ready-to-merge or merged.
+  - Agent completion order does not override dependency or security priority.
+  - Submitted branches are treated as immutable until Supervisor requests fixes or synchronization.
+  - After a merge, Supervisor updates SUPERVISOR-BROADCASTS.yaml before restoring its own paused work.
