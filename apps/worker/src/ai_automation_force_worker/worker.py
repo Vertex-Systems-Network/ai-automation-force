@@ -4,7 +4,6 @@ from temporalio.client import Client
 from temporalio.worker import Worker
 from temporalio.worker.workflow_sandbox import SandboxedWorkflowRunner
 
-from .derivative_render import render_media_derivative
 from .media_probe import media_probe_quarantine
 from .recovery import SyntheticRecoveryWorkflow, synthetic_recovery_shot
 from .settings import WorkerSettings
@@ -23,6 +22,12 @@ from .workflows import (
 
 
 def build_worker(client: Client, settings: WorkerSettings) -> Worker:
+    # Derivative rendering pulls in filesystem/process-backed dependencies that must
+    # never be imported while Temporal re-imports this package inside its workflow
+    # sandbox. Resolve the activity only at worker construction time, outside the
+    # deterministic workflow import boundary.
+    from .derivative_render import render_media_derivative
+
     return Worker(
         client,
         task_queue=settings.task_queue,
