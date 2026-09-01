@@ -9,6 +9,7 @@ from fastapi import APIRouter, FastAPI, Request, status
 from pydantic import BaseModel, ConfigDict
 
 from .control import ControlService, control_router
+from .delivery import DeliveryService, delivery_router
 from .errors import APIError, ErrorEnvelope, install_error_handlers
 from .request_context import RequestContextMiddleware
 from .settings import Settings, load_settings
@@ -23,6 +24,8 @@ class RuntimeState(BaseModel):
     ready: bool = False
     control_ready: bool = False
     control_error: str | None = None
+    delivery_ready: bool = False
+    delivery_error: str | None = None
 
 
 class HealthResponse(BaseModel):
@@ -40,6 +43,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         runtime = RuntimeState(started_at=datetime.now(UTC), ready=True)
         app.state.runtime = runtime
         app.state.control_service = None
+        app.state.delivery_service = None
         if resolved.control_surface_configured:
             try:
                 app.state.control_service = ControlService(resolved)
@@ -47,12 +51,22 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             except Exception:
                 runtime.ready = False
                 runtime.control_error = "durable control dependencies are unavailable"
+            try:
+                app.state.delivery_service = DeliveryService(resolved)
+                runtime.delivery_ready = True
+            except Exception:
+                runtime.ready = False
+                runtime.delivery_error = "signed delivery dependencies are unavailable"
         try:
             yield
         finally:
-            service = getattr(app.state, "control_service", None)
-            if isinstance(service, ControlService):
-                service.close()
+            delivery_service = getattr(app.state, "delivery_service", None)
+            if isinstance(delivery_service, DeliveryService):
+                delivery_service.close()
+            control_service = getattr(app.state, "control_service", None)
+            if isinstance(control_service, ControlService):
+                control_service.close()
+            runtime.delivery_ready = False
             runtime.control_ready = False
             runtime.ready = False
 
@@ -101,4 +115,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app.include_router(router, prefix=resolved.api_prefix)
     app.include_router(control_router(), prefix=resolved.api_prefix)
+    app.include_router(delivery_router(), prefix=resolved.api_prefix)
     return app
