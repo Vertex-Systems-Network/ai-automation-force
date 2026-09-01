@@ -152,7 +152,7 @@ The table below tracks the currently active implementation milestone. Completed 
 
 | Phase / Module | Scope | Start date | End date | Status | Progress |
 | --- | --- | --- | --- | --- | --- |
-| **M03 Overall** | Asset Storage and Provenance — 8 work packages | 2026-08-29 | TBD | 🟡 In progress | `██████▎░░░` **62.5% landed (5/8)** |
+| **M03 Overall** | Asset Storage and Provenance — 8 work packages | 2026-08-29 | TBD | 🟡 In progress | `███████▌░░` **75% landed (6/8)** |
 | **M03-WP1** | Storage adapter and object metadata | 2026-08-29 | 2026-08-29 | ✅ Complete / landed | `██████████` **100%** |
 | **M03-WP2** | Upload sessions | 2026-08-29 | 2026-08-29 | ✅ Complete / landed | `██████████` **100%** |
 | **M03-WP3** | Quarantine/probe/security | 2026-08-29 | 2026-08-30 | ✅ Complete / landed | `██████████` **100%** |
@@ -160,16 +160,19 @@ The table below tracks the currently active implementation milestone. Completed 
 | **M03-WP5** | Derivatives/proxies | 2026-08-31 | 2026-09-01 | ✅ Complete / promoted to `main` | `██████████` **100%** |
 | ↳ **PR #41** | WP5 deterministic derivative foundation promotion | 2026-09-01 | 2026-09-01 | ✅ Merged | `██████████` **100%** |
 | ↳ **PR #42** | WP5 executable resource-bounded derivative worker promotion | 2026-09-01 | 2026-09-01 | ✅ Merged — fresh Governance/Core/Durable green | `██████████` **100%** |
-| **M03-WP6** | Signed delivery | 2026-09-01 | TBD | 🟡 Active — authorized delivery foundation | `░░░░░░░░░░` **0% landed; implementation active** |
-| **M03-WP7** | Retention/archive/delete/export primitives | TBD | TBD | ⚪ Pending | `░░░░░░░░░░` **0%** |
+| **M03-WP6** | Signed delivery | 2026-09-01 | 2026-09-01 | ✅ Complete / promoted to `main` | `██████████` **100%** |
+| ↳ **PR #43** | Signed-delivery authorization and S3 grant foundation | 2026-09-01 | 2026-09-01 | ✅ Merged | `██████████` **100%** |
+| ↳ **PR #44** | Durable share-link authority and atomic use accounting | 2026-09-01 | 2026-09-01 | ✅ Merged — fresh Governance/Core/Durable green | `██████████` **100%** |
+| ↳ **PR #46** | Signed-delivery API, access policy and Range acceptance | 2026-09-01 | 2026-09-01 | ✅ Merged — fresh Governance/Core/Durable green | `██████████` **100%** |
+| **M03-WP7** | Retention/archive/delete/export primitives | 2026-09-01 | TBD | 🟡 Active — architecture/persistence audit | `░░░░░░░░░░` **0% landed; implementation active** |
 | **M03-WP8** | Acceptance | TBD | TBD | ⚪ Pending | `░░░░░░░░░░` **0%** |
 
 ### Current engineering checkpoint
 
-The active development frontier is **M03-WP6 — Signed delivery**. WP5 is fully promoted to `main`: PR #41 landed the deterministic derivative contract foundation and PR #42 landed the executable resource-bounded worker after fresh Repository Governance, Core Domain Contracts and Durable Control Plane verification.
+The active development frontier is **M03-WP7 — Retention/archive/delete/export primitives**. WP6 is fully promoted to `main`: PR #43 landed the authorization/signing foundation, PR #44 landed durable share-link authority with atomic use accounting, and PR #46 landed the signed-delivery API plus explicit access policy and Range acceptance after fresh Repository Governance, Core Domain Contracts and Durable Control Plane verification.
 
-WP6 remains fail-closed around tenant boundaries: private media must use authorized short-lived access, public exposure must be explicit, and share-link behavior must stay constrained rather than becoming an alternate authorization bypass.
+WP7 must preserve canonical media safety while adding lifecycle transitions: temporary cleanup must be bounded, archive/restore must be reversible, soft deletion must precede destructive deletion, hard-delete propagation must be explicit and auditable, export staging must not widen delivery authority, and vector/index cleanup must be represented as deterministic hooks rather than hidden side effects.
 
 Current continuation order:
 
-`WP6 delivery/access contract -> S3 signed GET adapter -> tenant/share-link authorization -> Range strategy acceptance -> exact-head CI -> WP6 promotion -> WP7`
+`WP7 lifecycle contract -> archive/restore state -> soft/hard deletion propagation -> temp cleanup -> export staging -> vector/index cleanup hooks -> exact-head CI -> WP7 promotion -> WP8`
