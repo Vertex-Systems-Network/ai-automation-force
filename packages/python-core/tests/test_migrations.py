@@ -37,6 +37,7 @@ EXPECTED_CORE_TABLES = {
     "takes",
     "assets",
     "asset_provenance_records",
+    "derivative_records",
     "storage_objects",
     "upload_sessions",
     "upload_parts",
@@ -85,6 +86,7 @@ M03_WP1_TABLES = {"storage_objects"}
 M03_WP2_TABLES = {"upload_sessions", "upload_parts", "upload_session_commands"}
 M03_WP3_TABLES = {"quarantine_inspections"}
 M03_WP4_TABLES = {"asset_provenance_records"}
+M03_WP5_TABLES = {"derivative_records"}
 
 
 def alembic_config() -> Config:
@@ -194,6 +196,27 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "inspected_at",
             "revision",
         }.issubset(quarantine_columns)
+        derivative_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("derivative_records", schema="core")
+        }
+        assert {
+            "external_id",
+            "project_id",
+            "source_asset_id",
+            "output_asset_id",
+            "output_storage_object_id",
+            "job_id",
+            "derivative_kind",
+            "spec_json",
+            "operation_fingerprint",
+            "status",
+            "created_at",
+            "updated_at",
+            "completed_at",
+            "error_code",
+            "revision",
+        }.issubset(derivative_columns)
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -227,7 +250,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260830_0011"
+        assert revision == "20260831_0012"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -348,9 +371,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260830_0011")
+        m11_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_wp5_tables = EXPECTED_CORE_TABLES - M03_WP5_TABLES
+        assert m11_tables == pre_wp5_tables
+
         command.downgrade(config, "20260829_0010")
         m10_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_wp4_tables = EXPECTED_CORE_TABLES - M03_WP4_TABLES
+        pre_wp4_tables = pre_wp5_tables - M03_WP4_TABLES
         assert m10_tables == pre_wp4_tables
 
         command.downgrade(config, "20260829_0009")

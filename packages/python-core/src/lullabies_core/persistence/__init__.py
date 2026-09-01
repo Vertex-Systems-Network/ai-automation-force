@@ -15,6 +15,11 @@ from .approval_wait import (
 from .asset_provenance import AssetProvenancePersistResult, PostgresAssetProvenanceRepository
 from .circuit_breaker import CircuitBreakerConflictError, PostgresCircuitBreakerRepository
 from .control_surface import PostgresControlSurfaceRepository
+from .derivative import (
+    DerivativePersistenceConflictError,
+    DerivativePersistResult,
+    PostgresDerivativeRepository,
+)
 from .job_control import (
     JobIdempotencyConflictError,
     JobLeaseConflictError,
@@ -44,6 +49,8 @@ __all__ = [
     "ApprovalWaitVersionConflictError",
     "AssetProvenancePersistResult",
     "CircuitBreakerConflictError",
+    "DerivativePersistenceConflictError",
+    "DerivativePersistResult",
     "JobIdempotencyConflictError",
     "JobLeaseConflictError",
     "JobStateConflictError",
@@ -58,6 +65,7 @@ __all__ = [
     "PostgresAssetProvenanceRepository",
     "PostgresCircuitBreakerRepository",
     "PostgresControlSurfaceRepository",
+    "PostgresDerivativeRepository",
     "PostgresJobControlRepository",
     "PostgresProductionRepository",
     "PostgresProviderAsyncRepository",
