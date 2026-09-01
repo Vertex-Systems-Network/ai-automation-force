@@ -7,7 +7,6 @@ import pytest
 import ai_automation_force_core as core
 from ai_automation_force_core import delivery
 
-
 NOW = datetime(2026, 9, 1, 19, 0, tzinfo=UTC)
 DIGEST = "a" * 64
 
