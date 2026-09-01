@@ -1,0 +1,23 @@
+version: 1
+owner_role: integration
+policy:
+  reservation_required_before_creation: true
+  duplicate_active_revision_forbidden: true
+  abandoned_reservations_must_be_released: true
+  migration_dependency_must_match_landed_or_declared_parent: true
+
+reservations:
+  - revision: 20260901_0015
+    task_id: M03-WP7
+    branch: agent/20260901-ai-automation-force-m03-wp7-retention
+    parent_revision: 20260901_0014
+    purpose: asset lifecycle state and event authority
+    status: in-use-unmerged
+
+next_allocation:
+  rule: integration-agent-assigns-next-unique-revision-after-current-main-and-active-reservations-are-reconciled
+
+notes:
+  - Never infer the next revision only from the current branch; inspect current main plus active reservations.
+  - Parallel migrations may require an explicit dependency/merge ordering even when their SQL domains are independent.
+  - If a branch is rebased after another migration lands, Integration Agent decides whether to renumber/re-parent before promotion.
