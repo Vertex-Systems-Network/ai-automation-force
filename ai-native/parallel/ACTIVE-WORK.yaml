@@ -1,16 +1,22 @@
-version: 1
-integration_owner:
-  role: integration
-  required: true
+version: 2
+supervisor:
+  role: supervisor
+  assigned_agent: supervisor-agent
+  main_branch: main
+  review_and_merge_authority: true
+  own_task_id: M03-WP7
+  own_branch: supervisor/m03-wp7-retention
 
 active:
   - task_id: M03-WP7
     title: Retention/archive/delete/export primitives
-    role: module
-    branch: agent/20260901-ai-automation-force-m03-wp7-retention
+    role: supervisor-module
+    assigned_agent: supervisor-agent
+    branch: supervisor/m03-wp7-retention
     base_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
+    branch_head_at_supervisor_bootstrap: 1583845c3ddd9865ca2528c7dbd02ca14ba5b89f
     module: asset_lifecycle
-    status: active-instruction-sync-required
+    status: sync-required-before-resume
     writes:
       - packages/python-core/src/lullabies_core/asset_lifecycle.py
       - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
@@ -24,17 +30,168 @@ active:
       - M03-WP6
     migration_reservation: 20260901_0015
     consent_scope: M03
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
+    last_acknowledged_broadcast: 0
     working_instruction_review:
       material_delta: true
-      reason: parallel multi-agent governance landed after this task branch was created
+      reason: supervisor workflow and parallel governance landed after original WP7 branch creation
       required_before_next_resume: true
-      readme_sync_required: false
-      readme_sync_status: complete-on-main-via-pr-47
+      readme_sync_required: true
+
+  - task_id: M03-WP8
+    title: M03 end-to-end acceptance
+    role: module
+    assigned_agent: acceptance-agent
+    branch: agent/m03-wp8-acceptance
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: m03_acceptance
+    status: planning-only-waiting-on-wp7
+    writes:
+      - packages/python-core/tests/**
+      - apps/api/tests/**
+      - apps/worker/tests/**
+    shared_requests: []
+    depends_on:
+      - M03-WP7
+    migration_reservation: null
+    consent_scope: M03
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
+
+  - task_id: M04-PARALLEL-LANE
+    title: Character and Entity Library planning/contracts
+    role: planning-contract
+    assigned_agent: character-agent
+    branch: agent/m04-character-library
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: characters_entities
+    status: planning-only
+    writes:
+      - docs/**character**
+      - ai-native/checkpoints/**
+    shared_requests: []
+    depends_on:
+      - M03-WP8
+    migration_reservation: null
+    consent_scope: planning-only-until-new-scope-approved
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
+
+  - task_id: M05-PARALLEL-LANE
+    title: Content Intelligence and Memory planning/contracts
+    role: planning-contract
+    assigned_agent: content-agent
+    branch: agent/m05-content-memory
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: content_memory
+    status: planning-only
+    writes:
+      - docs/**content**
+      - docs/**memory**
+      - ai-native/checkpoints/**
+    shared_requests: []
+    depends_on:
+      - M04-PARALLEL-LANE
+    migration_reservation: null
+    consent_scope: planning-only-until-new-scope-approved
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
+
+  - task_id: M06-PARALLEL-LANE
+    title: Hybrid Audio Production planning/contracts
+    role: planning-contract
+    assigned_agent: audio-agent
+    branch: agent/m06-audio-production
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: audio
+    status: planning-only
+    writes:
+      - docs/**audio**
+      - ai-native/checkpoints/**
+    shared_requests: []
+    depends_on:
+      - M03-WP8
+    migration_reservation: null
+    consent_scope: planning-only-until-new-scope-approved
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
+
+  - task_id: M07-PARALLEL-LANE
+    title: Storyboard and Timeline planning/contracts
+    role: planning-contract
+    assigned_agent: timeline-agent
+    branch: agent/m07-storyboard-timeline
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: timeline_storyboard
+    status: planning-only
+    writes:
+      - docs/**timeline**
+      - docs/**storyboard**
+      - ai-native/checkpoints/**
+    shared_requests: []
+    depends_on:
+      - M04-PARALLEL-LANE
+      - M05-PARALLEL-LANE
+      - M06-PARALLEL-LANE
+    migration_reservation: null
+    consent_scope: planning-only-until-new-scope-approved
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
+
+  - task_id: M08-PARALLEL-LANE
+    title: Hybrid Image/Video Provider Router planning/contracts
+    role: planning-contract
+    assigned_agent: provider-agent
+    branch: agent/m08-video-provider-router
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: providers
+    status: planning-only
+    writes:
+      - docs/**provider**
+      - docs/**video**
+      - ai-native/checkpoints/**
+    shared_requests: []
+    depends_on:
+      - M04-PARALLEL-LANE
+      - M07-PARALLEL-LANE
+    migration_reservation: null
+    consent_scope: planning-only-until-new-scope-approved
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
+
+  - task_id: CROSS-CUTTING-QA
+    title: Cross-cutting adversarial QA and security
+    role: qa
+    assigned_agent: qa-security-agent
+    branch: agent/cross-cutting-qa-security
+    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    module: media_qa
+    status: active-audit-planning
+    writes:
+      - docs/**qa**
+      - docs/**security**
+      - ai-native/checkpoints/**
+    shared_requests: []
+    depends_on: []
+    migration_reservation: null
+    consent_scope: audit-planning; executable test changes require applicable scope
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+    last_acknowledged_broadcast: 0
 
 rules:
-  - Integration Agent owns updates to this registry.
+  - Supervisor owns updates to this registry and all merge decisions.
   - Completed/merged tasks are removed or moved to repository checkpoints/history.
   - Before claiming a new task, compare its write set with every active entry.
-  - Overlapping write sets block parallel execution unless Integration Agent splits/reassigns ownership.
-  - Every resume must revalidate branch head, base/current main, dependencies, working instructions, and consent.
-  - When a task completes its required instruction synchronization, Integration Agent returns its status to active and records the review result.
+  - Overlapping write sets block parallel execution unless Supervisor splits/reassigns ownership.
+  - Every resume must revalidate branch head, base/current main, dependencies, working instructions, broadcasts, and consent.
+  - Every ready submission must announce exactly Work Done and Submitted.
+  - A mandatory unacknowledged Supervisor broadcast puts the task into sync-required state and blocks promotion.
+  - Future milestone branches may exist before executable readiness but must remain planning/contract-only until entry and consent gates allow implementation.
