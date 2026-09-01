@@ -1,5 +1,5 @@
-version: 1
-owner_role: integration
+version: 2
+owner_role: supervisor
 policy:
   default_module_agent_write: false
   temporary_write_grant_requires_task_record: true
@@ -28,6 +28,7 @@ paths:
 rules:
   - A module agent needing one of these paths records the required delta in its task/PR.
   - Migration files require an explicit reservation in MIGRATION-REGISTRY.yaml before creation.
-  - Integration may grant scoped temporary ownership when the shared edit is inseparable from the feature.
+  - Supervisor may grant scoped temporary ownership when the shared edit is inseparable from the feature.
   - A temporary grant does not permit unrelated cleanup or refactoring.
   - README working-instruction summary is synchronized whenever material agent instructions change.
+  - Supervisor coordination files are updated after every relevant submission, merge, and broadcast event.

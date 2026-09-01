@@ -1,8 +1,8 @@
-version: 1
+version: 2
 policy:
   read_scope: repository-wide
   default_write_scope: claimed-paths-only
-  shared_files_require_integration_owner: true
+  shared_files_require_supervisor_owner: true
   overlapping_active_write_claims_allowed: false
 
 modules:
@@ -42,6 +42,14 @@ modules:
     contracts:
       - AssetLifecycleState
       - AssetLifecycleEvent
+
+  m03_acceptance:
+    paths:
+      - packages/python-core/tests/**
+      - apps/api/tests/**
+      - apps/worker/tests/**
+    contracts: []
+    note: acceptance agent must avoid editing feature-owned tests/files concurrently without Supervisor split approval
 
   characters_entities:
     paths:
@@ -113,10 +121,11 @@ modules:
     contracts: []
 
 shared_ownership:
-  owner_role: integration
+  owner_role: supervisor
   registry: ai-native/parallel/SHARED-FILES.yaml
 
 notes:
   - Module paths may be refined as new packages are introduced.
-  - A task manifest overrides ownership only when the Integration Agent explicitly records the exception.
+  - A task manifest overrides ownership only when the Supervisor explicitly records the exception.
   - Existing broad legacy files should be split behind stable contracts over time rather than rewritten only to satisfy this map.
+  - Planning-only branches should normally write only dedicated docs/checkpoint paths until executable scope is authorized.
