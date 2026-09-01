@@ -39,6 +39,7 @@ EXPECTED_CORE_TABLES = {
     "asset_provenance_records",
     "derivative_records",
     "delivery_share_links",
+    "asset_delivery_policies",
     "storage_objects",
     "upload_sessions",
     "upload_parts",
@@ -88,7 +89,8 @@ M03_WP2_TABLES = {"upload_sessions", "upload_parts", "upload_session_commands"}
 M03_WP3_TABLES = {"quarantine_inspections"}
 M03_WP4_TABLES = {"asset_provenance_records"}
 M03_WP5_TABLES = {"derivative_records"}
-M03_WP6_TABLES = {"delivery_share_links"}
+M03_WP6_SHARE_TABLES = {"delivery_share_links"}
+M03_WP6_POLICY_TABLES = {"asset_delivery_policies"}
 
 
 def alembic_config() -> Config:
@@ -240,6 +242,18 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         }.issubset(share_link_columns)
         assert "token" not in share_link_columns
         assert "raw_token" not in share_link_columns
+        delivery_policy_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("asset_delivery_policies", schema="core")
+        }
+        assert {
+            "asset_id",
+            "project_id",
+            "access_class",
+            "created_at",
+            "updated_at",
+            "revision",
+        }.issubset(delivery_policy_columns)
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -273,7 +287,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260901_0013"
+        assert revision == "20260901_0014"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -394,9 +408,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260901_0013")
+        m13_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_wp6_policy_tables = EXPECTED_CORE_TABLES - M03_WP6_POLICY_TABLES
+        assert m13_tables == pre_wp6_policy_tables
+
         command.downgrade(config, "20260831_0012")
         m12_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_wp6_tables = EXPECTED_CORE_TABLES - M03_WP6_TABLES
+        pre_wp6_tables = pre_wp6_policy_tables - M03_WP6_SHARE_TABLES
         assert m12_tables == pre_wp6_tables
 
         command.downgrade(config, "20260830_0011")
