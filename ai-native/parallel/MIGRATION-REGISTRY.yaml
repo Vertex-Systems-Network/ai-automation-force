@@ -1,23 +1,26 @@
-version: 1
-owner_role: integration
+version: 2
+owner_role: supervisor
 policy:
   reservation_required_before_creation: true
   duplicate_active_revision_forbidden: true
   abandoned_reservations_must_be_released: true
   migration_dependency_must_match_landed_or_declared_parent: true
+  merge_alert_requires_migration_revalidation: true
 
 reservations:
   - revision: 20260901_0015
     task_id: M03-WP7
-    branch: agent/20260901-ai-automation-force-m03-wp7-retention
+    branch: supervisor/m03-wp7-retention
+    original_branch: agent/20260901-ai-automation-force-m03-wp7-retention
     parent_revision: 20260901_0014
     purpose: asset lifecycle state and event authority
     status: in-use-unmerged
 
 next_allocation:
-  rule: integration-agent-assigns-next-unique-revision-after-current-main-and-active-reservations-are-reconciled
+  rule: supervisor-assigns-next-unique-revision-after-current-main-and-active-reservations-are-reconciled
 
 notes:
   - Never infer the next revision only from the current branch; inspect current main plus active reservations.
   - Parallel migrations may require an explicit dependency/merge ordering even when their SQL domains are independent.
-  - If a branch is rebased after another migration lands, Integration Agent decides whether to renumber/re-parent before promotion.
+  - If a branch synchronizes after another migration lands, Supervisor decides whether to renumber/re-parent before promotion.
+  - Every mandatory post-merge alert forces migration-owning agents to revalidate parent revision and reservation before resuming.
