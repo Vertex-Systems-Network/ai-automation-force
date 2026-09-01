@@ -40,7 +40,9 @@ class S3DeliveryAdapter:
         expires_in_seconds: int = 900,
     ) -> SignedDeliveryGrant:
         if authorization.project_id != subject.project_id:
-            raise DeliveryAuthorizationError("authorization project does not match delivery subject")
+            raise DeliveryAuthorizationError(
+                "authorization project does not match delivery subject"
+            )
         if authorization.asset_id != subject.asset_id:
             raise DeliveryAuthorizationError("authorization asset does not match delivery subject")
         if expires_in_seconds < 1 or expires_in_seconds > self.max_expiry_seconds:
