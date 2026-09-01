@@ -1,19 +1,19 @@
-version: 3
+version: 4
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 8ed99a094cb443b789929d71c468464e2e0bb72a
+  main_sha_last_promotion: a8e987ce8e0697fdff5bf891e82daec2b28dd096
   main_sha_last_reconciled: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   own_task_id: M03-WP7
   own_branch: supervisor/m03-wp7-retention-continuation
-  current_mode: feature-development
+  current_mode: synchronization
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 51
-  submitted_head_sha: 745cc22e5680e164aa875631190c30b1c50aba76
-  merged_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+  pr: 52
+  submitted_head_sha: 31454da596ee590e443452cba98139bf80384029
+  merged_main_sha: a8e987ce8e0697fdff5bf891e82daec2b28dd096
   result: success
 
 new_agent_onboarding:
@@ -58,8 +58,16 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 3
-  agents_with_mandatory_sync: []
+  latest_broadcast_sequence: 4
+  agents_with_mandatory_sync:
+    - supervisor/m03-wp7-retention-continuation
+    - agent/m03-wp8-acceptance
+    - agent/m04-character-library
+    - agent/m05-content-memory
+    - agent/m06-audio-production
+    - agent/m07-storyboard-timeline
+    - agent/m08-video-provider-router
+    - agent/cross-cutting-qa-security
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
 rules:

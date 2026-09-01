@@ -1,4 +1,4 @@
-version: 3
+version: 4
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -20,7 +20,7 @@ active:
       merged_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
       scope: durable asset lifecycle foundation
     module: asset_lifecycle
-    status: active-continuation
+    status: sync-required-broadcast-4
     writes:
       - packages/python-core/src/lullabies_core/lifecycle.py
       - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
@@ -39,7 +39,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
     remaining_scope:
       - deletion propagation and delivery fail-closed integration
       - bounded temporary cleanup
@@ -54,7 +54,7 @@ active:
     branch: agent/m03-wp8-acceptance
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: m03_acceptance
-    status: planning-only-waiting-on-wp7
+    status: sync-required-planning-only-waiting-on-wp7
     writes:
       - docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md
       - ai-native/parallel/checkpoints/M03-WP8.md
@@ -70,7 +70,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
@@ -79,7 +79,7 @@ active:
     branch: agent/m04-character-library
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: characters_entities
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M04/**
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
@@ -91,7 +91,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -100,7 +100,7 @@ active:
     branch: agent/m05-content-memory
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: content_memory
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M05/**
       - ai-native/parallel/checkpoints/M05-PARALLEL-LANE.md
@@ -112,7 +112,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -121,7 +121,7 @@ active:
     branch: agent/m06-audio-production
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: audio
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M06/**
       - ai-native/parallel/checkpoints/M06-PARALLEL-LANE.md
@@ -133,7 +133,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -142,7 +142,7 @@ active:
     branch: agent/m07-storyboard-timeline
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: timeline_storyboard
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M07/**
       - ai-native/parallel/checkpoints/M07-PARALLEL-LANE.md
@@ -156,7 +156,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -165,7 +165,7 @@ active:
     branch: agent/m08-video-provider-router
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: providers
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M08/**
       - ai-native/parallel/checkpoints/M08-PARALLEL-LANE.md
@@ -178,7 +178,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -187,7 +187,7 @@ active:
     branch: agent/cross-cutting-qa-security
     base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: media_qa
-    status: active-audit-planning
+    status: sync-required-active-audit-planning
     writes:
       - docs/qa/**
       - ai-native/parallel/checkpoints/CROSS-CUTTING-QA.md
@@ -199,7 +199,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
     last_acknowledged_broadcast: 3
-    required_broadcast: null
+    required_broadcast: 4
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.

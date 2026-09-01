@@ -1,5 +1,5 @@
-version: 2
-latest_sequence: 3
+version: 3
+latest_sequence: 4
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -92,45 +92,73 @@ broadcasts:
       - agent/cross-cutting-qa-security
     mandatory: true
 
+  - sequence: 4
+    trigger: supervisor-merge
+    merged_pr: 52
+    merged_branch: supervisor/parallel-governance-hardening
+    submitted_head_sha: 31454da596ee590e443452cba98139bf80384029
+    merged_main_sha: a8e987ce8e0697fdff5bf891e82daec2b28dd096
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-parallel-governance-hardening-sync
+    changed_areas:
+      - fail-closed active write-claim collision validation
+      - exact occupied slot to active task branch/agent/module validation
+      - stale broadcast acknowledgement validation
+      - Supervisor open-slot count validation
+      - active and landed migration consistency validation
+      - synthetic governance validator self-tests
+    contract_changes: []
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-wp7-retention-continuation
+      - agent/m03-wp8-acceptance
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security
+    mandatory: true
+
 recipient_states:
   supervisor/m03-wp7-retention-continuation:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m03-wp8-acceptance:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m04-character-library:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m05-content-memory:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m06-audio-production:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m07-storyboard-timeline:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m08-video-provider-router:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/cross-cutting-qa-security:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required-before-agent-start
+    required_sequence: 4
     last_acknowledged_sequence: 3
     last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
 
