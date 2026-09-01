@@ -15,7 +15,7 @@ active:
     branch: supervisor/m03-wp7-retention
     base_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
     branch_head_at_supervisor_bootstrap: 1583845c3ddd9865ca2528c7dbd02ca14ba5b89f
-    synchronized_head: eba42c024b4a861014f4de22136adc21b55b0c11
+    synchronized_head: 83347e5024140603c26b9fccd1d310e918a68498
     module: asset_lifecycle
     status: active
     writes:
@@ -32,15 +32,15 @@ active:
     migration_reservation: 20260901_0015
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
     working_instruction_review:
       material_delta: true
-      reason: Supervisor workflow landed after original WP7 branch creation
+      reason: Supervisor workflow and new-agent onboarding governance landed after original WP7 branch creation
       required_before_next_resume: false
       review_status: complete
       readme_sync_required: false
-      readme_sync_status: complete-on-main-via-pr-49
+      readme_sync_status: complete-on-main-via-pr-50
       semantic_sync_status: clean-intended-wp7-files-only
 
   - task_id: M03-WP8
@@ -61,8 +61,8 @@ active:
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
@@ -81,8 +81,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -102,8 +102,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -122,8 +122,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -145,8 +145,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -167,8 +167,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -187,15 +187,15 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
-    last_acknowledged_broadcast: 1
+    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_acknowledged_broadcast: 2
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
   - Completed/merged tasks are removed or moved to repository checkpoints/history.
   - Before claiming a new task, compare its write set with every active entry.
   - Overlapping write sets block parallel execution unless Supervisor splits/reassigns ownership.
-  - Every resume must revalidate branch head, base/current main, dependencies, working instructions, broadcasts, and consent.
+  - Every resume must revalidate branch head, base/current main, dependencies, working instructions, broadcasts, slots, and consent.
   - Every ready submission must announce exactly Work Done and Submitted.
   - A mandatory unacknowledged Supervisor broadcast puts the task into sync-required state and blocks promotion.
   - Future milestone branches may exist before executable readiness but must remain planning/contract-only until entry and consent gates allow implementation.
