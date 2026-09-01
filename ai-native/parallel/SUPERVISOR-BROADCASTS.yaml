@@ -1,5 +1,5 @@
-version: 1
-latest_sequence: 2
+version: 2
+latest_sequence: 3
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -58,51 +58,85 @@ broadcasts:
       - agent/cross-cutting-qa-security
     mandatory: true
 
+  - sequence: 3
+    trigger: supervisor-merge
+    merged_pr: 51
+    merged_branch: supervisor/m03-wp7-retention
+    submitted_head_sha: 745cc22e5680e164aa875631190c30b1c50aba76
+    merged_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-asset-lifecycle-contract-sync
+    changed_areas:
+      - M03-WP7 durable asset lifecycle state authority
+      - migration 20260901_0015
+      - lifecycle persistence and public exports
+      - archive/restore and deletion scheduling contract
+      - migration-chain tests
+      - Supervisor WP7 continuation branch retirement/replacement
+      - parallel write-scope reconciliation
+    contract_changes:
+      - AssetLifecycleState
+      - AssetLifecycleSnapshot
+      - AssetLifecycleEvent
+      - PostgresAssetLifecycleRepository
+    schema_migration_changes:
+      - 20260901_0015
+    recipients:
+      - supervisor/m03-wp7-retention-continuation
+      - agent/m03-wp8-acceptance
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security
+    mandatory: true
+
 recipient_states:
-  supervisor/m03-wp7-retention:
-    state: synchronized
-    required_sequence: null
+  supervisor/m03-wp7-retention-continuation:
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    last_synced_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
   agent/m03-wp8-acceptance:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
   agent/m04-character-library:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
   agent/m05-content-memory:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
   agent/m06-audio-production:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
   agent/m07-storyboard-timeline:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
   agent/m08-video-provider-router:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
   agent/cross-cutting-qa-security:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 3
     last_acknowledged_sequence: 2
     last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
   - Each broadcast records merged branch/PR, new main SHA, affected contracts/migrations/shared files, recipients, and mandatory/advisory sync classification.
-  - Mandatory recipients become sync-required until they acknowledge the sequence and record the new synchronized main SHA.
+  - Mandatory recipients become sync-required until they acknowledge the sequence and record the synchronized main SHA.
   - An agent must inspect this registry on every start/resume and before announcing Work Done and Submitted.
   - If a recipient branch was created from the broadcast main SHA or later and is unaffected, Supervisor may mark acknowledgement satisfied without a redundant merge.
