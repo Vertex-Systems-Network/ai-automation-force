@@ -47,9 +47,12 @@ from lullabies_core.media_security import (
 )
 from lullabies_core.persistence import (
     AssetProvenancePersistResult,
+    DeliveryPolicyResult,
+    DeliveryResolutionError,
     DerivativePersistenceConflictError,
     DerivativePersistResult,
     PostgresAssetProvenanceRepository,
+    PostgresDeliveryRepository,
     PostgresDerivativeRepository,
     PostgresQuarantineInspectionRepository,
     PostgresShareLinkRepository,
@@ -57,6 +60,7 @@ from lullabies_core.persistence import (
     PostgresUploadSessionRepository,
     QuarantinePersistenceConflictError,
     QuarantinePersistResult,
+    ResolvedDeliveryAsset,
     ShareLinkAuthorizationResult,
     ShareLinkPersistenceConflictError,
     ShareLinkPersistResult,
@@ -89,6 +93,7 @@ from lullabies_core.storage import (
     storage_object_from_write,
     validate_object_key,
 )
+from lullabies_core.storage_s3 import S3StorageAdapter, S3StorageSettings
 from lullabies_core.upload_s3 import S3UploadCompletionEvidence, S3UploadSessionAdapter
 from lullabies_core.upload_session import (
     DirectUploadGrant,
@@ -120,6 +125,8 @@ __all__ = [
     "DeliveryAuthorizationKind",
     "DeliveryBindingError",
     "DeliveryMode",
+    "DeliveryPolicyResult",
+    "DeliveryResolutionError",
     "DeliverySigningError",
     "DeliverySubject",
     "DerivativeKind",
@@ -137,6 +144,7 @@ __all__ = [
     "MediaSecurityPolicy",
     "MultipartPartGrant",
     "PostgresAssetProvenanceRepository",
+    "PostgresDeliveryRepository",
     "PostgresDerivativeRepository",
     "PostgresQuarantineInspectionRepository",
     "PostgresShareLinkRepository",
@@ -148,7 +156,10 @@ __all__ = [
     "QuarantinePersistenceConflictError",
     "QuarantineRejectionCode",
     "QuarantineStatus",
+    "ResolvedDeliveryAsset",
     "S3DeliveryAdapter",
+    "S3StorageAdapter",
+    "S3StorageSettings",
     "S3UploadCompletionEvidence",
     "S3UploadSessionAdapter",
     "ShareLinkAuthorizationResult",
