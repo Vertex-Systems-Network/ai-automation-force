@@ -9,7 +9,7 @@ from sqlalchemy import MetaData, Table, insert, select, update
 from sqlalchemy.engine import Connection, Engine, RowMapping
 from sqlalchemy.exc import IntegrityError
 
-from ..common import SCHEMA_VERSION, SchemaVersion
+from ..common import SCHEMA_VERSION
 from ..delivery import (
     DeliveryAuthorization,
     DeliveryAuthorizationError,
