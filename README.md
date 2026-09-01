@@ -118,9 +118,45 @@ Every engineering agent must follow:
 - `AGENTS.md`
 - `ai-native/ENGINEERING-CONTRACT.md`
 - `ai-native/MASTER-PLAN.md`
+- `ai-native/parallel/MULTI-AGENT-PROTOCOL.md` for development/maintenance work;
 - relevant product/architecture documentation.
 
 The engineering constitution requires architecture-first development, current official-source research when material, security, tests, durable recovery, provenance, clear Git/checkpoints, and no fake completion.
+
+## Current agent working instructions
+
+This is the concise human-visible summary. Canonical details live in `AGENTS.md`, `ai-native/ENGINEERING-CONTRACT.md`, `ai-native/DEVELOPMENT-CONSENT-GATE.md`, and `ai-native/parallel/`.
+
+Current rules:
+- on **every start or resume**, including `continue`/`next`/`resume`, perform a working-instruction audit before proceeding;
+- read current repository/PR/checkpoint state rather than relying on chat memory;
+- for development work, read `MULTI-AGENT-PROTOCOL.md`, module ownership, active-work, dependency, migration, shared-file and contract registries;
+- an agent may **read the entire repository but write only its claimed paths**;
+- use task/work-package branches and pin an exact base commit when implementation starts;
+- overlapping active write claims are not allowed until the Integration Agent resolves/splits ownership;
+- shared files, generated artifacts, public export surfaces, repository-wide CI and global contracts are integration-owned unless a task receives a scoped grant;
+- reserve migration identifiers before creating migrations;
+- define/freeze shared contracts before fanning dependent implementations out to multiple agents;
+- parallel readiness does not bypass development consent;
+- scoped CI may accelerate feedback, but required exact-head full promotion CI remains mandatory before merge;
+- if a material governance/ownership/dependency/contract/CI/consent instruction changes how agents should work, update affected task instructions and **synchronize this README section in the same integration cycle**;
+- if the instruction audit finds no material change, do not churn README only to refresh a date.
+
+Parallel capacity guidance:
+- current/default: **4–5 active agents** including Integration and QA/planning lanes;
+- after stable module/contract boundaries: **6–8 implementation/review agents + 1 Integration Agent**;
+- mature repository: **8–12 active agents** only when the dependency graph exposes enough independent ready work.
+
+Canonical coordination files:
+- `ai-native/parallel/MULTI-AGENT-PROTOCOL.md`
+- `ai-native/parallel/MODULE-OWNERSHIP.yaml`
+- `ai-native/parallel/ACTIVE-WORK.yaml`
+- `ai-native/parallel/DEPENDENCY-GRAPH.yaml`
+- `ai-native/parallel/MIGRATION-REGISTRY.yaml`
+- `ai-native/parallel/SHARED-FILES.yaml`
+- `ai-native/parallel/CONTRACT-REGISTRY.yaml`
+- `ai-native/parallel/AGENT-TASK-SCHEMA.yaml`
+- `ai-native/parallel/INTEGRATION-PROTOCOL.md`
 
 ## Daily provider research
 
