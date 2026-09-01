@@ -182,4 +182,6 @@ def authorize_delivery(
             asset_id=subject.asset_id,
         )
 
-    raise DeliveryAuthorizationError("private asset delivery requires project or share-link authority")
+    raise DeliveryAuthorizationError(
+        "private asset delivery requires project or share-link authority"
+    )
