@@ -12,6 +12,12 @@ from .approval_wait import (
     ApprovalWaitVersionConflictError,
     PostgresApprovalWaitRepository,
 )
+from .asset_lifecycle import (
+    AssetLifecyclePersistenceConflictError,
+    AssetLifecycleTransitionResult,
+    AssetLifecycleVersionConflictError,
+    PostgresAssetLifecycleRepository,
+)
 from .asset_provenance import AssetProvenancePersistResult, PostgresAssetProvenanceRepository
 from .circuit_breaker import CircuitBreakerConflictError, PostgresCircuitBreakerRepository
 from .control_surface import PostgresControlSurfaceRepository
@@ -59,6 +65,9 @@ __all__ = [
     "ApprovalWaitConflictError",
     "ApprovalWaitExpiredError",
     "ApprovalWaitVersionConflictError",
+    "AssetLifecyclePersistenceConflictError",
+    "AssetLifecycleTransitionResult",
+    "AssetLifecycleVersionConflictError",
     "AssetProvenancePersistResult",
     "CircuitBreakerConflictError",
     "DeliveryPolicyResult",
@@ -76,6 +85,7 @@ __all__ = [
     "PersistenceReferenceError",
     "PersistenceShapeError",
     "PostgresApprovalWaitRepository",
+    "PostgresAssetLifecycleRepository",
     "PostgresAssetProvenanceRepository",
     "PostgresCircuitBreakerRepository",
     "PostgresControlSurfaceRepository",
