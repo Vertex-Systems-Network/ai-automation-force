@@ -15,29 +15,33 @@ active:
     branch: supervisor/m03-wp7-retention
     base_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
     branch_head_at_supervisor_bootstrap: 1583845c3ddd9865ca2528c7dbd02ca14ba5b89f
+    synchronized_head: eba42c024b4a861014f4de22136adc21b55b0c11
     module: asset_lifecycle
-    status: sync-required-before-resume
+    status: active
     writes:
-      - packages/python-core/src/lullabies_core/asset_lifecycle.py
+      - packages/python-core/src/lullabies_core/lifecycle.py
       - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
-      - packages/python-core/tests/test_asset_lifecycle*.py
+      - packages/python-core/tests/test_asset_lifecycle.py
     shared_requests:
-      - README.md
       - packages/python-core/src/lullabies_core/__init__.py
-      - packages/python-core/src/ai_automation_force_core/__init__.py
+      - packages/python-core/src/lullabies_core/persistence/__init__.py
+      - packages/python-core/tests/test_migrations.py
       - packages/python-core/migrations/**
     depends_on:
       - M03-WP6
     migration_reservation: 20260901_0015
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 08c1abdce1f877db7c704eeae2e1d6e382492333
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
     working_instruction_review:
       material_delta: true
-      reason: supervisor workflow and parallel governance landed after original WP7 branch creation
-      required_before_next_resume: true
-      readme_sync_required: true
+      reason: Supervisor workflow landed after original WP7 branch creation
+      required_before_next_resume: false
+      review_status: complete
+      readme_sync_required: false
+      readme_sync_status: complete-on-main-via-pr-49
+      semantic_sync_status: clean-intended-wp7-files-only
 
   - task_id: M03-WP8
     title: M03 end-to-end acceptance
@@ -57,8 +61,8 @@ active:
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
@@ -77,8 +81,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -98,8 +102,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -118,8 +122,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -141,8 +145,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -163,8 +167,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -183,8 +187,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
-    last_acknowledged_broadcast: 0
+    last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
+    last_acknowledged_broadcast: 1
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
