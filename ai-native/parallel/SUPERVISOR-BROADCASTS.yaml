@@ -1,0 +1,38 @@
+version: 1
+latest_sequence: 0
+canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+
+broadcasts: []
+
+recipient_states:
+  supervisor/m03-wp7-retention:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: null
+  agent/m03-wp8-acceptance:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+  agent/m04-character-library:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+  agent/m05-content-memory:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+  agent/m06-audio-production:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+  agent/m07-storyboard-timeline:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+  agent/m08-video-provider-router:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+  agent/cross-cutting-qa-security:
+    last_acknowledged_sequence: 0
+    last_synced_main_sha: 486c294f7be53aad49ee362465968e766a80899a
+
+rules:
+  - Supervisor increments latest_sequence after every successful merge to main that active agents must observe.
+  - Each broadcast records merged branch/PR, new main SHA, affected contracts/migrations/shared files, recipients, and mandatory/advisory sync classification.
+  - Mandatory recipients become sync-required until they acknowledge the sequence and record the new synchronized main SHA.
+  - An agent must inspect this registry on every start/resume and before announcing Work Done and Submitted.
+  - If a recipient branch was created from the broadcast main SHA or later and is unaffected, Supervisor may mark acknowledgement satisfied without a redundant merge.
