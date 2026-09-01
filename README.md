@@ -131,10 +131,13 @@ This is the concise human-visible summary. Canonical details live in `AGENTS.md`
 Current rules:
 - on **every start or resume**, including `continue`/`next`/`resume`, perform a working-instruction audit before proceeding;
 - read current repository/PR/checkpoint state rather than relying on chat memory;
-- in multi-agent Supervisor mode, the agent controlling the main integration lane is the **Supervisor** and owns review/merge authority;
+- in multi-agent Supervisor mode, the agent controlling the main integration lane is the **Supervisor** and owns assignment/review/merge authority;
 - when a new multi-agent orchestration assignment specifies parallel modules, the Supervisor's **first repository action is to create every intended module branch, including its own module branch, before documenting/starting the work**;
-- branch creation does not bypass dependency or development-consent gates; future/blocked lanes remain planning/contract-only;
-- for development work, read `MULTI-AGENT-PROTOCOL.md`, `SUPERVISOR-PLAN.md`, module ownership, active-work, dependency, migration, shared-file, contract, merge-queue, Supervisor-state, and broadcast registries;
+- every **new agent must start from current `main`** and may not start directly from a feature branch or self-assign a module;
+- on a new-agent arrival, the Supervisor checks `AGENT-SLOTS.json` + `SUPERVISOR-PLAN.md`; if an eligible `open` slot exists, the Supervisor assigns that module/branch and records the occupied agent/start state before work begins;
+- if all eligible module slots are occupied, the Supervisor stops the new agent immediately and says exactly **`Go Home Come Back Next Time`**; that agent receives no module/branch and starts no work;
+- branch creation or slot assignment does not bypass dependency or development-consent gates; future/blocked lanes remain planning/contract-only;
+- for development work, read `MULTI-AGENT-PROTOCOL.md`, `SUPERVISOR-PLAN.md`, `AGENT-SLOTS.json`, module ownership, active-work, dependency, migration, shared-file, contract, merge-queue, Supervisor-state, and broadcast registries;
 - an agent may **read the entire repository but write only its claimed paths**;
 - use task/work-package branches and pin an exact base commit when implementation starts;
 - overlapping active write claims are not allowed until the Supervisor resolves/splits ownership;
@@ -143,22 +146,25 @@ Current rules:
 - define/freeze shared contracts before fanning dependent implementations out to multiple agents;
 - every agent must announce exactly **`Work Done and Submitted`** when its bounded branch submission is ready for Supervisor review;
 - when another agent submits, the Supervisor checkpoints/pauses its own module work, reviews the submission, promotes only after required synchronization and exact-head gates, records the merge, then resumes its saved checkpoint;
-- after a merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
+- after a promotion merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
 - affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume;
 - an unacknowledged mandatory merge broadcast places a branch in `sync-required` and blocks submission/promotion;
 - parallel readiness does not bypass development consent;
 - scoped CI may accelerate feedback, but required exact-head full promotion CI remains mandatory before merge;
+- Repository Governance validates Supervisor/slot state, slot-to-plan/task consistency, exact completion/broadcast phrases, broadcast sequence consistency, and duplicate migration reservations;
 - if a material governance/ownership/dependency/contract/CI/consent/Supervisor-workflow instruction changes how agents should work, update affected task instructions and **synchronize this README section in the same integration cycle**;
 - if the instruction audit finds no material change, do not churn README only to refresh a date.
 
 Parallel capacity guidance:
 - current/default: **4–5 active agents** including Supervisor and QA/planning lanes;
 - after stable module/contract boundaries: **6–8 implementation/review agents + 1 Supervisor**;
-- mature repository: **8–12 active agents** only when the dependency graph exposes enough independent ready work.
+- mature repository: **8–12 active agents** only when the dependency graph exposes enough independent ready work;
+- current defined slot registry is fully occupied, so an extra agent currently receives **`Go Home Come Back Next Time`** until a slot is explicitly released/opened.
 
 Canonical coordination files:
 - `ai-native/parallel/MULTI-AGENT-PROTOCOL.md`
 - `ai-native/parallel/SUPERVISOR-PLAN.md`
+- `ai-native/parallel/AGENT-SLOTS.json`
 - `ai-native/parallel/SUPERVISOR-STATE.yaml`
 - `ai-native/parallel/SUPERVISOR-BROADCASTS.yaml`
 - `ai-native/parallel/MERGE-QUEUE.yaml`
@@ -213,7 +219,7 @@ The table below tracks the currently active implementation milestone. Completed 
 | ↳ **PR #43** | Signed-delivery authorization and S3 grant foundation | 2026-09-01 | 2026-09-01 | ✅ Merged | `██████████` **100%** |
 | ↳ **PR #44** | Durable share-link authority and atomic use accounting | 2026-09-01 | 2026-09-01 | ✅ Merged — fresh Governance/Core/Durable green | `██████████` **100%** |
 | ↳ **PR #46** | Signed-delivery API, access policy and Range acceptance | 2026-09-01 | 2026-09-01 | ✅ Merged — fresh Governance/Core/Durable green | `██████████` **100%** |
-| **M03-WP7** | Retention/archive/delete/export primitives | 2026-09-01 | TBD | 🟡 Active — architecture/persistence audit | `░░░░░░░░░░` **0% landed; implementation active** |
+| **M03-WP7** | Retention/archive/delete/export primitives | 2026-09-01 | TBD | 🟡 Active — lifecycle foundation synchronized; promotion pending | `░░░░░░░░░░` **0% landed; implementation active** |
 | **M03-WP8** | Acceptance | TBD | TBD | ⚪ Pending | `░░░░░░░░░░` **0%** |
 
 ### Current engineering checkpoint
@@ -224,4 +230,4 @@ WP7 must preserve canonical media safety while adding lifecycle transitions: tem
 
 Current continuation order:
 
-`WP7 lifecycle contract -> archive/restore state -> soft/hard deletion propagation -> temp cleanup -> export staging -> vector/index cleanup hooks -> exact-head CI -> WP7 promotion -> WP8`
+`WP7 lifecycle foundation promotion -> deletion propagation -> temp cleanup -> export staging -> vector/index cleanup hooks -> exact-head CI -> WP7 promotion -> WP8`
