@@ -94,45 +94,45 @@ broadcasts:
 
 recipient_states:
   supervisor/m03-wp7-retention-continuation:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m03-wp8-acceptance:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m04-character-library:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m05-content-memory:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m06-audio-production:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m07-storyboard-timeline:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/m08-video-provider-router:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
   agent/cross-cutting-qa-security:
-    state: sync-required
-    required_sequence: 3
-    last_acknowledged_sequence: 2
-    last_synced_main_sha: ce0b96e891e330f455a89038d566f7c1856b716b
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 3
+    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
