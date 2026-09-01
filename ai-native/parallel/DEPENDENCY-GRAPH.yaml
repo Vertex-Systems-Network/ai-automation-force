@@ -1,0 +1,35 @@
+version: 1
+owner_role: integration
+policy:
+  update_when_dependencies_change: true
+  parallelize_only_independent_ready_nodes: true
+
+current:
+  M03-WP7:
+    state: active
+    depends_on:
+      - M03-WP6
+    unlocks:
+      - M03-WP8
+
+  M03-WP8:
+    state: waiting
+    depends_on:
+      - M03-WP7
+
+future_planning_lanes:
+  M04:
+    state: planning-only-until-current-entry-gates-are-satisfied
+    first_boundary: character-and-entity-contracts
+  M05:
+    state: planning-only-until-current-entry-gates-are-satisfied
+    first_boundary: content-and-memory-contracts
+  M06:
+    state: planning-only-until-current-entry-gates-are-satisfied
+    first_boundary: audio-contracts
+
+rules:
+  - This registry describes dependency readiness and does not grant development consent.
+  - Integration Agent updates it before assigning newly unblocked work.
+  - Independent planning lanes may run in parallel where repository governance permits.
+  - Do not serialize independent work only because milestone numbers are sequential.

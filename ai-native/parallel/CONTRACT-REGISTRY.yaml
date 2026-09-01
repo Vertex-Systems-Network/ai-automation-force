@@ -1,0 +1,61 @@
+version: 1
+owner_role: integration
+policy:
+  contract_changes_require_dependency_review: true
+  breaking_changes_require_explicit_coordination: true
+  consumers_should_depend_on_public_contracts_not_private_implementation: true
+
+contracts:
+  Asset:
+    owner_module: storage_and_assets
+    stability: established
+    consumers:
+      - asset_lifecycle
+      - timeline_storyboard
+      - media_qa
+      - assembly
+      - publishing_analytics
+
+  StorageObject:
+    owner_module: storage_and_assets
+    stability: established
+    consumers:
+      - asset_lifecycle
+      - assembly
+
+  AssetProvenanceRecord:
+    owner_module: storage_and_assets
+    stability: established
+    consumers:
+      - asset_lifecycle
+      - media_qa
+      - publishing_analytics
+
+  DeliverySubject:
+    owner_module: storage_and_assets
+    stability: established
+    consumers:
+      - control_plane
+
+  Character:
+    owner_module: characters_entities
+    stability: existing-foundation
+    consumers:
+      - content_memory
+      - timeline_storyboard
+      - providers
+      - media_qa
+
+  Timeline:
+    owner_module: timeline_storyboard
+    stability: existing-foundation
+    consumers:
+      - providers
+      - media_qa
+      - assembly
+
+rules:
+  - Add new public contracts before assigning multiple consumers in parallel.
+  - A contract owner may not silently break consumers; update dependency state and affected task instructions first.
+  - Private helpers are not cross-agent integration contracts.
+  - Generated schema/OpenAPI updates remain shared integration work unless explicitly granted.

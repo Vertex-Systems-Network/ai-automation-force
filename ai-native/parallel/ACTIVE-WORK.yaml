@@ -1,0 +1,49 @@
+version: 1
+integration_owner:
+  role: integration
+  required: true
+
+active:
+  - task_id: M03-WP7
+    title: Retention/archive/delete/export primitives
+    role: module
+    branch: agent/20260901-ai-automation-force-m03-wp7-retention
+    base_policy: pin-exact-main-at-task-start
+    module: asset_lifecycle
+    status: active
+    writes:
+      - packages/python-core/src/lullabies_core/asset_lifecycle.py
+      - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
+      - packages/python-core/tests/test_asset_lifecycle*.py
+    shared_requests:
+      - README.md
+      - packages/python-core/src/lullabies_core/__init__.py
+      - packages/python-core/src/ai_automation_force_core/__init__.py
+      - packages/python-core/migrations/**
+    depends_on:
+      - M03-WP6
+    migration_reservation: 20260901_0015
+    consent_scope: M03
+
+  - task_id: PARALLEL-GOVERNANCE-001
+    title: Repository-wide parallel multi-agent development governance
+    role: integration
+    branch: docs/multi-agent-parallel-development
+    module: repository_governance
+    status: active
+    writes:
+      - ai-native/parallel/**
+      - docs/architecture/DEVELOPMENT-PLAN.md
+      - AGENTS.md
+      - README.md
+    shared_requests: []
+    depends_on: []
+    migration_reservation: null
+    consent_scope: documentation-only
+
+rules:
+  - Integration Agent owns updates to this registry.
+  - Completed/merged tasks are removed or moved to repository checkpoints/history.
+  - Before claiming a new task, compare its write set with every active entry.
+  - Overlapping write sets block parallel execution unless Integration Agent splits/reassigns ownership.
+  - Every resume must revalidate branch head, base/current main, dependencies, working instructions, and consent.
