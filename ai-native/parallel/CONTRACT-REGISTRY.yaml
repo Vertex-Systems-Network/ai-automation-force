@@ -1,9 +1,10 @@
-version: 1
-owner_role: integration
+version: 2
+owner_role: supervisor
 policy:
   contract_changes_require_dependency_review: true
   breaking_changes_require_explicit_coordination: true
   consumers_should_depend_on_public_contracts_not_private_implementation: true
+  contract_merge_requires_dependent_branch_sync: true
 
 contracts:
   Asset:
@@ -55,7 +56,8 @@ contracts:
       - assembly
 
 rules:
-  - Add new public contracts before assigning multiple consumers in parallel.
-  - A contract owner may not silently break consumers; update dependency state and affected task instructions first.
+  - Add new public contracts before assigning multiple executable consumers in parallel.
+  - A contract owner may not silently break consumers; Supervisor updates dependency state and affected task instructions first.
   - Private helpers are not cross-agent integration contracts.
-  - Generated schema/OpenAPI updates remain shared integration work unless explicitly granted.
+  - Generated schema/OpenAPI updates remain Supervisor-owned shared integration work unless explicitly granted.
+  - After a contract-owner merge, affected consumer branches receive a mandatory Supervisor broadcast and must sync before resuming.
