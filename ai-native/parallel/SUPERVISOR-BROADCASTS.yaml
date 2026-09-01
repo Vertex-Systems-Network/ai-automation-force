@@ -1,4 +1,4 @@
-version: 3
+version: 4
 latest_sequence: 4
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
@@ -122,45 +122,45 @@ broadcasts:
 
 recipient_states:
   supervisor/m03-wp7-retention-continuation:
-    state: sync-required
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m03-wp8-acceptance:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m04-character-library:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m05-content-memory:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m06-audio-production:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m07-storyboard-timeline:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m08-video-provider-router:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/cross-cutting-qa-security:
-    state: sync-required-before-agent-start
-    required_sequence: 4
-    last_acknowledged_sequence: 3
-    last_synced_main_sha: 3743b61d1d1b8c679792964753610b4c4be2b7b3
+    state: synchronized-before-agent-start
+    required_sequence: null
+    last_acknowledged_sequence: 4
+    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.

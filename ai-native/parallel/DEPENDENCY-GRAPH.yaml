@@ -1,4 +1,4 @@
-version: 4
+version: 5
 owner_role: supervisor
 policy:
   update_when_dependencies_change: true
@@ -9,7 +9,7 @@ policy:
 current:
   M03-WP7:
     branch: supervisor/m03-wp7-retention-continuation
-    state: sync-required-broadcast-4
+    state: active-continuation
     depends_on:
       - M03-WP6
     landed_slices:
@@ -27,7 +27,7 @@ current:
 
   M03-WP8:
     branch: agent/m03-wp8-acceptance
-    state: sync-required-planning-only-waiting
+    state: planning-only-waiting
     depends_on:
       - M03-WP7
     unlocks:
@@ -44,7 +44,7 @@ current:
 parallel_planning_lanes:
   M04-PARALLEL-LANE:
     branch: agent/m04-character-library
-    state: sync-required-planning-only
+    state: planning-only
     first_boundary: character-and-entity-contracts
     executable_depends_on:
       - M03-CLOSE
@@ -55,7 +55,7 @@ parallel_planning_lanes:
 
   M05-PARALLEL-LANE:
     branch: agent/m05-content-memory
-    state: sync-required-planning-only
+    state: planning-only
     first_boundary: content-and-memory-contracts
     executable_depends_on:
       - M04-PARALLEL-LANE
@@ -64,7 +64,7 @@ parallel_planning_lanes:
 
   M06-PARALLEL-LANE:
     branch: agent/m06-audio-production
-    state: sync-required-planning-only
+    state: planning-only
     first_boundary: audio-contracts
     executable_depends_on:
       - M03-CLOSE
@@ -73,7 +73,7 @@ parallel_planning_lanes:
 
   M07-PARALLEL-LANE:
     branch: agent/m07-storyboard-timeline
-    state: sync-required-planning-only
+    state: planning-only
     first_boundary: storyboard-timeline-contracts
     executable_depends_on:
       - M04-PARALLEL-LANE
@@ -84,7 +84,7 @@ parallel_planning_lanes:
 
   M08-PARALLEL-LANE:
     branch: agent/m08-video-provider-router
-    state: sync-required-planning-only
+    state: planning-only
     first_boundary: image-video-provider-contracts
     executable_depends_on:
       - M04-PARALLEL-LANE
@@ -93,7 +93,7 @@ parallel_planning_lanes:
 continuous:
   CROSS-CUTTING-QA:
     branch: agent/cross-cutting-qa-security
-    state: sync-required-audit-planning
+    state: audit-planning-ready
     depends_on: []
     note: executable test/security changes still require applicable ownership and consent
 
