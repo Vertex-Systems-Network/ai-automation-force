@@ -231,11 +231,19 @@ def _translate_error(exc: Exception) -> APIError:
     if isinstance(exc, APIError):
         return exc
     if isinstance(exc, PersistenceNotFoundError):
-        return APIError("DELIVERY_NOT_FOUND", "asset delivery target was not found", status_code=404)
+        return APIError(
+            "DELIVERY_NOT_FOUND",
+            "asset delivery target was not found",
+            status_code=404,
+        )
     if isinstance(exc, (DeliveryAuthorizationError, DeliveryResolutionError)):
         return APIError("DELIVERY_FORBIDDEN", str(exc), status_code=403)
     if isinstance(exc, DeliverySigningError):
-        return APIError("DELIVERY_SIGNING_FAILED", "delivery capability could not be issued", status_code=503)
+        return APIError(
+            "DELIVERY_SIGNING_FAILED",
+            "delivery capability could not be issued",
+            status_code=503,
+        )
     if isinstance(exc, DeliveryDependencyError):
         return APIError("DELIVERY_DEPENDENCY_UNAVAILABLE", str(exc), status_code=503)
     if isinstance(exc, ValueError):
