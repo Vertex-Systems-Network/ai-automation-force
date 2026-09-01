@@ -1,14 +1,31 @@
-version: 1
+version: 2
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_at_plan_creation: 486c294f7be53aad49ee362465968e766a80899a
+  main_sha_last_reconciled: 0589b1b86953c267be77b643efcc31006f56a88e
   own_task_id: M03-WP7
   own_branch: supervisor/m03-wp7-retention
-  own_branch_head_at_plan_creation: 1583845c3ddd9865ca2528c7dbd02ca14ba5b89f
+  own_branch_head_after_broadcast_1_sync: eba42c024b4a861014f4de22136adc21b55b0c11
   current_mode: governance-integration
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+
+new_agent_onboarding:
+  source_branch_required: main
+  slot_registry: ai-native/parallel/AGENT-SLOTS.json
+  assignment_authority: supervisor
+  current_open_slots: 0
+  no_slot_response: Go Home Come Back Next Time
+  actions:
+    - new-agent-starts-from-main
+    - supervisor-loads-slot-registry-and-supervisor-plan
+    - assign-first-valid-open-slot-or-reject
+    - update-slot-and-plan-before-agent-work
+    - agent-checks-out-assigned-branch-only-after-assignment
+  rejection_behavior:
+    stop_agent_immediately: true
+    branch_assignment: false
+    work_permitted: false
 
 interrupt_policy:
   enabled: true
@@ -35,14 +52,17 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 0
+  latest_broadcast_sequence: 1
   agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
   - Supervisor implementation occurs on its own module branch, never by mixing feature work directly into main.
+  - A new agent always begins onboarding from main and may not self-assign a module or branch.
+  - Supervisor assigns only a slot whose AGENT-SLOTS.json status is open and accepts_new_agent is true.
+  - If no eligible open slot exists, Supervisor replies exactly Go Home Come Back Next Time and the agent starts no work.
   - A submission signal means ready for review, not merged or production-ready.
   - Supervisor records pause state before interrupting its own feature work.
-  - Every successful merge produces a broadcast record before Supervisor resumes feature implementation.
-  - Main SHA and queue state are reconciled after every promotion event.
+  - Every successful promotion merge produces a broadcast record before Supervisor resumes feature implementation.
+  - Main SHA, queue state, slot state, and broadcast state are reconciled after every promotion event.

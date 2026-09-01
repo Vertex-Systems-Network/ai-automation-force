@@ -8,6 +8,9 @@ on:
       - ".github/workflows/**"
       - "scripts/apply_main_protection.ps1"
       - "scripts/verify_main_protection.ps1"
+      - "scripts/validate_parallel_governance.py"
+      - "ai-native/parallel/**"
+      - "README.md"
       - "docs/governance/**"
   workflow_dispatch:
 
@@ -64,3 +67,6 @@ jobs:
           if ($apply.Contains('"validate"')) { throw 'Protection applicator must not require ambiguous legacy validate context.' }
 
           Write-Host 'Repository governance static contract PASS.'
+
+      - name: Validate Supervisor multi-agent governance
+        run: python3 scripts/validate_parallel_governance.py

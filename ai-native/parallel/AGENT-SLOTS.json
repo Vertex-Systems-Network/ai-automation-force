@@ -1,1 +1,87 @@
-{}
+{
+  "version": 1,
+  "source_branch_required": "main",
+  "assignment_authority": "supervisor",
+  "no_slot_response": "Go Home Come Back Next Time",
+  "policy": {
+    "new_agent_must_start_from_main": true,
+    "supervisor_assigns_first_open_slot": true,
+    "agent_may_not_self_assign": true,
+    "assignment_updates_plan_before_work": true,
+    "no_open_slot_blocks_all_work": true
+  },
+  "slots": [
+    {
+      "slot_id": "SUPERVISOR-M03-WP7",
+      "module": "asset_lifecycle",
+      "branch": "supervisor/m03-wp7-retention",
+      "status": "occupied",
+      "assigned_agent": "supervisor-agent",
+      "accepts_new_agent": false,
+      "start_status": "active"
+    },
+    {
+      "slot_id": "M03-WP8",
+      "module": "m03_acceptance",
+      "branch": "agent/m03-wp8-acceptance",
+      "status": "occupied",
+      "assigned_agent": "acceptance-agent",
+      "accepts_new_agent": true,
+      "start_status": "planning-only-waiting-on-wp7"
+    },
+    {
+      "slot_id": "M04-CHARACTER",
+      "module": "characters_entities",
+      "branch": "agent/m04-character-library",
+      "status": "occupied",
+      "assigned_agent": "character-agent",
+      "accepts_new_agent": true,
+      "start_status": "planning-only"
+    },
+    {
+      "slot_id": "M05-CONTENT",
+      "module": "content_memory",
+      "branch": "agent/m05-content-memory",
+      "status": "occupied",
+      "assigned_agent": "content-agent",
+      "accepts_new_agent": true,
+      "start_status": "planning-only"
+    },
+    {
+      "slot_id": "M06-AUDIO",
+      "module": "audio",
+      "branch": "agent/m06-audio-production",
+      "status": "occupied",
+      "assigned_agent": "audio-agent",
+      "accepts_new_agent": true,
+      "start_status": "planning-only"
+    },
+    {
+      "slot_id": "M07-TIMELINE",
+      "module": "timeline_storyboard",
+      "branch": "agent/m07-storyboard-timeline",
+      "status": "occupied",
+      "assigned_agent": "timeline-agent",
+      "accepts_new_agent": true,
+      "start_status": "planning-only"
+    },
+    {
+      "slot_id": "M08-PROVIDER",
+      "module": "providers",
+      "branch": "agent/m08-video-provider-router",
+      "status": "occupied",
+      "assigned_agent": "provider-agent",
+      "accepts_new_agent": true,
+      "start_status": "planning-only"
+    },
+    {
+      "slot_id": "CROSS-CUTTING-QA",
+      "module": "media_qa",
+      "branch": "agent/cross-cutting-qa-security",
+      "status": "occupied",
+      "assigned_agent": "qa-security-agent",
+      "accepts_new_agent": true,
+      "start_status": "active-audit-planning"
+    }
+  ]
+}
