@@ -143,3 +143,31 @@ The recommended first vertical slice after core foundations is:
 **2-minute song + one locked recurring character + one environment + 12–20 shots + hybrid free/paid routing + final FFmpeg master.**
 
 This proves the difficult architecture before scaling to longer productions.
+
+## Milestone progress
+
+Last repository-history review: **2026-09-01**.
+
+The table below tracks the currently active implementation milestone. Completed dates are derived from repository/PR history. Active or not-yet-started packages keep `TBD` end dates until completion is evidenced; progress is based on landed work packages rather than speculative estimates.
+
+| Phase / Module | Scope | Start date | End date | Status | Progress |
+| --- | --- | --- | --- | --- | --- |
+| **M03 Overall** | Asset Storage and Provenance — 8 work packages | 2026-08-29 | TBD | 🟡 In progress | `█████░░░░░` **50% landed (4/8)** |
+| **M03-WP1** | Storage adapter and object metadata | 2026-08-29 | 2026-08-29 | ✅ Complete / landed | `██████████` **100%** |
+| **M03-WP2** | Upload sessions | 2026-08-29 | 2026-08-29 | ✅ Complete / landed | `██████████` **100%** |
+| **M03-WP3** | Quarantine/probe/security | 2026-08-29 | 2026-08-30 | ✅ Complete / landed | `██████████` **100%** |
+| **M03-WP4** | Asset lineage/provenance/rights | 2026-08-30 | 2026-08-31 | ✅ Complete / promoted to `main` | `██████████` **100%** |
+| **M03-WP5** | Derivatives/proxies | 2026-08-31 | TBD | 🟡 Active — stacked PR certification | `█████░░░░░` **active; not yet landed** |
+| ↳ **PR #39** | WP5 derivatives foundation | 2026-08-31 | TBD | 🟡 Stacked foundation | `███████░░░` **implementation present; awaiting stack promotion** |
+| ↳ **PR #40** | Executable derivative rendering worker | 2026-08-31 | TBD | 🟠 CI blocked — Core CI/Governance pass; Durable Control Plane failing | `███████░░░` **implementation present; certification pending** |
+| **M03-WP6** | Signed delivery | TBD | TBD | ⚪ Pending | `░░░░░░░░░░` **0%** |
+| **M03-WP7** | Retention/archive/delete/export primitives | TBD | TBD | ⚪ Pending | `░░░░░░░░░░` **0%** |
+| **M03-WP8** | Acceptance | TBD | TBD | ⚪ Pending | `░░░░░░░░░░` **0%** |
+
+### Current engineering checkpoint
+
+The active development frontier is **M03-WP5**. PR #40 is stacked on the WP5 foundation in PR #39. Promotion remains gated on the repository's required checks; passing tests are not weakened or bypassed to manufacture completion.
+
+Current continuation order:
+
+`WP5 failing test root cause -> minimal code fix -> Durable Control Plane green -> PR #40 certification -> stacked promotion -> WP5 completion -> WP6`

@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Temporal worker foundation for AI Automation Force"
 requires-python = ">=3.12"
 dependencies = [
+  "ai-automation-force-core==0.1.0",
   "pydantic>=2.8,<3",
   "temporalio==1.32.0",
 ]

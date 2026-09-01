@@ -22,6 +22,12 @@ from .workflows import (
 
 
 def build_worker(client: Client, settings: WorkerSettings) -> Worker:
+    # Derivative rendering pulls in filesystem/process-backed dependencies that must
+    # never be imported while Temporal re-imports this package inside its workflow
+    # sandbox. Resolve the activity only at worker construction time, outside the
+    # deterministic workflow import boundary.
+    from .derivative_render import render_media_derivative
+
     return Worker(
         client,
         task_queue=settings.task_queue,
@@ -41,6 +47,7 @@ def build_worker(client: Client, settings: WorkerSettings) -> Worker:
             synthetic_provider_poll,
             synthetic_recovery_shot,
             media_probe_quarantine,
+            render_media_derivative,
         ],
         workflow_runner=SandboxedWorkflowRunner(),
     )
