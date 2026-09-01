@@ -1,5 +1,5 @@
 version: 1
-latest_sequence: 1
+latest_sequence: 2
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -30,50 +30,78 @@ broadcasts:
       - agent/cross-cutting-qa-security
     mandatory: true
 
+  - sequence: 2
+    trigger: supervisor-merge
+    merged_pr: 50
+    merged_branch: supervisor/new-agent-onboarding
+    submitted_head_sha: 3dfd7c88d35c224cdfd60a70023105a9a446c2bc
+    merged_main_sha: 75a8fb19a797dfcc329f1c229d4b0688be9789c9
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-new-agent-onboarding-sync
+    changed_areas:
+      - new agent must start from main
+      - Supervisor module slot assignment authority
+      - AGENT-SLOTS.json occupancy registry
+      - exact Go Home Come Back Next Time no-slot behavior
+      - Repository Governance parallel-state validator
+      - README working instructions
+    contract_changes: []
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-wp7-retention
+      - agent/m03-wp8-acceptance
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security
+    mandatory: true
+
 recipient_states:
   supervisor/m03-wp7-retention:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/m03-wp8-acceptance:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/m04-character-library:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/m05-content-memory:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/m06-audio-production:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/m07-storyboard-timeline:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/m08-video-provider-router:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
   agent/cross-cutting-qa-security:
-    state: synchronized-before-agent-start
-    required_sequence: null
+    state: sync-required
+    required_sequence: 2
     last_acknowledged_sequence: 1
     last_synced_main_sha: 85785b06b49d96d1870552b35e644abb94513093
 
 rules:
-  - Supervisor increments latest_sequence after every successful merge to main that active agents must observe.
+  - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
   - Each broadcast records merged branch/PR, new main SHA, affected contracts/migrations/shared files, recipients, and mandatory/advisory sync classification.
   - Mandatory recipients become sync-required until they acknowledge the sequence and record the new synchronized main SHA.
   - An agent must inspect this registry on every start/resume and before announcing Work Done and Submitted.

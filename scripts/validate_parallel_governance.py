@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +29,12 @@ def require(condition: bool, message: str) -> None:
 def load_text(path: Path) -> str:
     require(path.is_file(), f"missing governance file: {path.relative_to(ROOT)}")
     return path.read_text(encoding="utf-8")
+
+
+def yaml_int(text: str, key: str) -> int:
+    match = re.search(rf"(?m)^\s*{re.escape(key)}:\s*(\d+)\s*$", text)
+    require(match is not None, f"missing integer governance key: {key}")
+    return int(match.group(1))
 
 
 def main() -> None:
@@ -86,7 +93,13 @@ def main() -> None:
     require(REJECTION in plan and REJECTION in readme, "new-agent rejection phrase must be visible")
     require(COMPLETION in plan and COMPLETION in state, "completion signal drifted")
     require(ALERT in plan and ALERT in state and ALERT in broadcasts, "post-merge alert drifted")
-    require("latest_broadcast_sequence: 1" in state, "Supervisor state broadcast sequence is stale")
+
+    broadcast_sequence = yaml_int(broadcasts, "latest_sequence")
+    state_sequence = yaml_int(state, "latest_broadcast_sequence")
+    require(
+        broadcast_sequence == state_sequence,
+        f"Supervisor broadcast sequence mismatch: broadcasts={broadcast_sequence}, state={state_sequence}",
+    )
 
     revisions: list[str] = []
     for raw in migrations.splitlines():
@@ -96,9 +109,15 @@ def main() -> None:
     require(len(revisions) == len(set(revisions)), "duplicate migration reservations detected")
 
     if open_slots == 0:
-        print(f"Parallel governance PASS: all module slots occupied; response='{REJECTION}'")
+        print(
+            "Parallel governance PASS: "
+            f"broadcast={broadcast_sequence}; all module slots occupied; response='{REJECTION}'"
+        )
     else:
-        print(f"Parallel governance PASS: {open_slots} open module slot(s) available")
+        print(
+            "Parallel governance PASS: "
+            f"broadcast={broadcast_sequence}; {open_slots} open module slot(s) available"
+        )
 
 
 if __name__ == "__main__":

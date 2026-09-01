@@ -2,11 +2,11 @@ version: 2
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_reconciled: 0589b1b86953c267be77b643efcc31006f56a88e
+  main_sha_last_reconciled: 75a8fb19a797dfcc329f1c229d4b0688be9789c9
   own_task_id: M03-WP7
   own_branch: supervisor/m03-wp7-retention
   own_branch_head_after_broadcast_1_sync: eba42c024b4a861014f4de22136adc21b55b0c11
-  current_mode: governance-integration
+  current_mode: broadcast-synchronization
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
@@ -52,8 +52,16 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 1
-  agents_with_mandatory_sync: []
+  latest_broadcast_sequence: 2
+  agents_with_mandatory_sync:
+    - supervisor/m03-wp7-retention
+    - agent/m03-wp8-acceptance
+    - agent/m04-character-library
+    - agent/m05-content-memory
+    - agent/m06-audio-production
+    - agent/m07-storyboard-timeline
+    - agent/m08-video-provider-router
+    - agent/cross-cutting-qa-security
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
 rules:
