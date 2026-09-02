@@ -11,7 +11,9 @@ from sqlalchemy import create_engine, text
 
 from ai_automation_force_core import (
     AssetAccessClass,
+    AssetLifecycleState,
     DeliveryResolutionError,
+    PostgresAssetLifecycleRepository,
     PostgresDeliveryRepository,
 )
 
@@ -249,6 +251,129 @@ def test_delivery_resolution_fails_closed_for_rights_or_provenance_ambiguity() -
             )
         with pytest.raises(DeliveryResolutionError, match="ambiguous"):
             repository.resolve(asset_id)
+    finally:
+        engine.dispose()
+        command.downgrade(config, "base")
+
+
+@pytest.mark.postgres
+@pytest.mark.skipif(DATABASE_URL is None, reason="DATABASE_URL is not configured")
+def test_delivery_resolution_fails_closed_outside_deliverable_lifecycle_states() -> None:
+    assert DATABASE_URL is not None
+    config = alembic_config()
+    command.downgrade(config, "base")
+    command.upgrade(config, "head")
+    engine = create_engine(DATABASE_URL)
+    try:
+        _, asset_id, _ = seed_deliverable(engine, suffix="006420")
+        delivery = PostgresDeliveryRepository(engine)
+        lifecycle = PostgresAssetLifecycleRepository(engine)
+
+        assert delivery.resolve(asset_id).access_class is AssetAccessClass.PRIVATE
+
+        requested = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.ARCHIVE_REQUESTED,
+            operation_key="archive-request-6420",
+            actor="wp7-test",
+            occurred_at=NOW + timedelta(minutes=1),
+            expected_revision=1,
+        )
+        assert delivery.resolve(asset_id).subject.asset_id == asset_id
+
+        archiving = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.ARCHIVING,
+            operation_key="archive-start-6420",
+            actor="wp7-worker",
+            occurred_at=NOW + timedelta(minutes=2),
+            expected_revision=requested.snapshot.revision,
+        )
+        with pytest.raises(DeliveryResolutionError, match="lifecycle state archiving"):
+            delivery.resolve(asset_id)
+        with pytest.raises(DeliveryResolutionError, match="not deliverable"):
+            delivery.set_access_class(
+                asset_id,
+                AssetAccessClass.PUBLIC,
+                now=NOW + timedelta(minutes=3),
+            )
+
+        archived = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.ARCHIVED,
+            operation_key="archive-complete-6420",
+            actor="wp7-worker",
+            occurred_at=NOW + timedelta(minutes=4),
+            expected_revision=archiving.snapshot.revision,
+        )
+        with pytest.raises(DeliveryResolutionError, match="lifecycle state archived"):
+            delivery.resolve(asset_id)
+
+        restore_requested = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.RESTORE_REQUESTED,
+            operation_key="restore-request-6420",
+            actor="wp7-test",
+            occurred_at=NOW + timedelta(minutes=5),
+            expected_revision=archived.snapshot.revision,
+        )
+        restoring = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.RESTORING,
+            operation_key="restore-start-6420",
+            actor="wp7-worker",
+            occurred_at=NOW + timedelta(minutes=6),
+            expected_revision=restore_requested.snapshot.revision,
+        )
+        active = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.ACTIVE,
+            operation_key="restore-complete-6420",
+            actor="wp7-worker",
+            occurred_at=NOW + timedelta(minutes=7),
+            expected_revision=restoring.snapshot.revision,
+        )
+        public = delivery.set_access_class(
+            asset_id,
+            AssetAccessClass.PUBLIC,
+            now=NOW + timedelta(minutes=8),
+        )
+        assert public.action == "created"
+        assert delivery.resolve(asset_id).access_class is AssetAccessClass.PUBLIC
+
+        pending = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.DELETION_PENDING,
+            operation_key="delete-request-6420",
+            actor="wp7-test",
+            occurred_at=NOW + timedelta(minutes=9),
+            expected_revision=active.snapshot.revision,
+            recovery_until=NOW + timedelta(hours=1),
+        )
+        with pytest.raises(DeliveryResolutionError, match="lifecycle state deletion-pending"):
+            delivery.resolve(asset_id)
+
+        scheduled = lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.HARD_DELETE_SCHEDULED,
+            operation_key="hard-delete-schedule-6420",
+            actor="wp7-worker",
+            occurred_at=NOW + timedelta(hours=1),
+            expected_revision=pending.snapshot.revision,
+        )
+        with pytest.raises(DeliveryResolutionError, match="hard-delete-scheduled"):
+            delivery.resolve(asset_id)
+
+        lifecycle.transition(
+            asset_id,
+            AssetLifecycleState.DELETED,
+            operation_key="hard-delete-complete-6420",
+            actor="wp7-worker",
+            occurred_at=NOW + timedelta(hours=1, minutes=1),
+            expected_revision=scheduled.snapshot.revision,
+        )
+        with pytest.raises(DeliveryResolutionError, match="lifecycle state deleted"):
+            delivery.resolve(asset_id)
     finally:
         engine.dispose()
         command.downgrade(config, "base")

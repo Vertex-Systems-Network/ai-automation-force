@@ -8,12 +8,19 @@ from uuid import UUID, uuid4
 from sqlalchemy import MetaData, insert, select, update
 from sqlalchemy.engine import Connection, Engine, RowMapping
 
+from ..derivatives import TERMINAL_DERIVATIVE_STATUSES, DerivativeStatus
 from ..lifecycle import (
+    AssetDeletionPropagationPlan,
     AssetLifecycleEvent,
     AssetLifecycleSnapshot,
     AssetLifecycleState,
+    DeletionPropagationTargetKind,
+    RetainedSharedStorageObject,
+    StorageObjectPurgeTarget,
+    build_deletion_propagation_plan,
     plan_asset_lifecycle_transition,
 )
+from ..storage import StorageBackend
 from ._db import PersistenceConflictError, PersistenceNotFoundError, PersistenceReferenceError
 
 AssetLifecycleAction = Literal["transitioned", "reused"]
@@ -44,8 +51,12 @@ class PostgresAssetLifecycleRepository:
         required = {
             "asset_lifecycle_events",
             "asset_lifecycle_states",
+            "asset_provenance_records",
             "assets",
+            "delivery_share_links",
+            "derivative_records",
             "projects",
+            "storage_objects",
         }
         missing = [name for name in required if f"core.{name}" not in metadata.tables]
         if missing:
@@ -56,6 +67,10 @@ class PostgresAssetLifecycleRepository:
         self.states = metadata.tables["core.asset_lifecycle_states"]
         self.assets = metadata.tables["core.assets"]
         self.projects = metadata.tables["core.projects"]
+        self.provenance = metadata.tables["core.asset_provenance_records"]
+        self.storage = metadata.tables["core.storage_objects"]
+        self.derivatives = metadata.tables["core.derivative_records"]
+        self.share_links = metadata.tables["core.delivery_share_links"]
 
     def load(self, asset_id: str) -> AssetLifecycleSnapshot:
         with self.engine.connect() as connection:
@@ -220,6 +235,166 @@ class PostgresAssetLifecycleRepository:
                 snapshot=next_snapshot,
                 event=event,
             )
+
+    def plan_deletion_propagation(
+        self,
+        asset_id: str,
+        *,
+        planned_at: datetime,
+    ) -> AssetDeletionPropagationPlan:
+        """Enumerate what hard deletion must purge, revoke, or cancel, without executing it.
+
+        Physical objects still referenced by another asset's provenance or derivative
+        output are reported as retained rather than purged, so shared content is never
+        destroyed through one asset's deletion. Derived assets keep their own lifecycle
+        and are listed for auditability rather than cascaded.
+        """
+
+        with self.engine.connect() as connection:
+            asset = self._require_asset(connection, asset_id)
+            project_id = self._project_external(connection, asset)
+            asset_internal_id = cast(UUID, asset["id"])
+            snapshot = self._snapshot(
+                asset_id,
+                project_id,
+                asset,
+                self._state_row(connection, asset_internal_id, for_update=False),
+            )
+
+            candidates: dict[UUID, tuple[DeletionPropagationTargetKind, str | None]] = {}
+            provenance_rows = connection.execute(
+                select(self.provenance.c.storage_object_id)
+                .where(self.provenance.c.asset_id == asset_internal_id)
+                .where(self.provenance.c.storage_object_id.is_not(None))
+            ).mappings()
+            for row in provenance_rows:
+                candidates.setdefault(
+                    cast(UUID, row["storage_object_id"]),
+                    (DeletionPropagationTargetKind.SOURCE_STORAGE_OBJECT, None),
+                )
+
+            output_rows = connection.execute(
+                select(
+                    self.derivatives.c.external_id,
+                    self.derivatives.c.output_storage_object_id,
+                )
+                .where(self.derivatives.c.output_asset_id == asset_internal_id)
+                .where(self.derivatives.c.output_storage_object_id.is_not(None))
+                .order_by(self.derivatives.c.external_id)
+            ).mappings()
+            for row in output_rows:
+                candidates.setdefault(
+                    cast(UUID, row["output_storage_object_id"]),
+                    (
+                        DeletionPropagationTargetKind.DERIVATIVE_STORAGE_OBJECT,
+                        str(row["external_id"]),
+                    ),
+                )
+
+            open_derivatives: list[str] = []
+            derived_assets: set[UUID] = set()
+            sourced_rows = connection.execute(
+                select(
+                    self.derivatives.c.external_id,
+                    self.derivatives.c.status,
+                    self.derivatives.c.output_asset_id,
+                ).where(self.derivatives.c.source_asset_id == asset_internal_id)
+            ).mappings()
+            for row in sourced_rows:
+                if DerivativeStatus(str(row["status"])) not in TERMINAL_DERIVATIVE_STATUSES:
+                    open_derivatives.append(str(row["external_id"]))
+                output_asset_id = cast(UUID | None, row["output_asset_id"])
+                if output_asset_id is not None:
+                    derived_assets.add(output_asset_id)
+
+            targets: list[StorageObjectPurgeTarget] = []
+            retained: list[RetainedSharedStorageObject] = []
+            for storage_internal_id, (kind, derivative_ref) in candidates.items():
+                storage_row = connection.execute(
+                    select(self.storage).where(self.storage.c.id == storage_internal_id)
+                ).mappings().one_or_none()
+                if storage_row is None:
+                    raise PersistenceReferenceError(
+                        f"missing storage object internal row {storage_internal_id}"
+                    )
+                other_owners = self._other_storage_owners(
+                    connection,
+                    storage_internal_id,
+                    asset_internal_id,
+                )
+                storage_external_id = str(storage_row["external_id"])
+                if other_owners:
+                    retained.append(
+                        RetainedSharedStorageObject(
+                            storage_object_id=storage_external_id,
+                            retained_for_asset_ids=other_owners,
+                        )
+                    )
+                    continue
+                targets.append(
+                    StorageObjectPurgeTarget(
+                        kind=kind,
+                        storage_object_id=storage_external_id,
+                        backend=StorageBackend(str(storage_row["backend"])),
+                        bucket=(
+                            str(storage_row["bucket"])
+                            if storage_row["bucket"] is not None
+                            else None
+                        ),
+                        object_key=str(storage_row["object_key"]),
+                        sha256=str(storage_row["sha256"]),
+                        derivative_record_id=derivative_ref,
+                    )
+                )
+
+            share_links = connection.execute(
+                select(self.share_links.c.external_id)
+                .where(self.share_links.c.asset_id == asset_internal_id)
+                .where(self.share_links.c.revoked_at.is_(None))
+            ).scalars()
+
+            return build_deletion_propagation_plan(
+                snapshot,
+                planned_at=planned_at,
+                storage_targets=targets,
+                retained_shared_storage=retained,
+                share_link_ids=[str(value) for value in share_links],
+                open_derivative_record_ids=open_derivatives,
+                derived_asset_ids=self._asset_externals(connection, derived_assets),
+            )
+
+    def _asset_externals(self, connection: Connection, internal_ids: set[UUID]) -> list[str]:
+        if not internal_ids:
+            return []
+        external_ids = connection.execute(
+            select(self.assets.c.external_id).where(self.assets.c.id.in_(sorted(internal_ids)))
+        ).scalars()
+        resolved = sorted(str(value) for value in external_ids)
+        if len(resolved) != len(internal_ids):
+            raise PersistenceReferenceError("asset references resolve to unknown asset rows")
+        return resolved
+
+    def _other_storage_owners(
+        self,
+        connection: Connection,
+        storage_internal_id: UUID,
+        asset_internal_id: UUID,
+    ) -> list[str]:
+        owners: set[UUID] = set()
+        provenance_owners = connection.execute(
+            select(self.provenance.c.asset_id)
+            .where(self.provenance.c.storage_object_id == storage_internal_id)
+            .where(self.provenance.c.asset_id != asset_internal_id)
+        ).scalars()
+        owners.update(cast(UUID, value) for value in provenance_owners)
+        derivative_outputs = connection.execute(
+            select(self.derivatives.c.output_asset_id)
+            .where(self.derivatives.c.output_storage_object_id == storage_internal_id)
+            .where(self.derivatives.c.output_asset_id.is_not(None))
+            .where(self.derivatives.c.output_asset_id != asset_internal_id)
+        ).scalars()
+        owners.update(cast(UUID, value) for value in derivative_outputs)
+        return self._asset_externals(connection, owners)
 
     def _snapshot(
         self,

@@ -10,6 +10,12 @@ from sqlalchemy.engine import Connection, Engine, RowMapping
 
 from ..common import AuditFields
 from ..delivery import AssetAccessClass, DeliverySubject, bind_delivery_subject
+from ..lifecycle import (
+    AssetLifecycleDeliveryError,
+    AssetLifecycleSnapshot,
+    AssetLifecycleState,
+    require_deliverable_lifecycle,
+)
 from ..production import Asset, RightsRecord
 from ..provenance import (
     AssetProvenanceRecord,
@@ -52,6 +58,7 @@ class PostgresDeliveryRepository:
         metadata.reflect(bind=engine, schema="core")
         required = {
             "asset_delivery_policies",
+            "asset_lifecycle_states",
             "asset_provenance_records",
             "assets",
             "projects",
@@ -64,6 +71,7 @@ class PostgresDeliveryRepository:
                 f"delivery persistence tables are not migrated: {', '.join(sorted(missing))}"
             )
         self.policies = metadata.tables["core.asset_delivery_policies"]
+        self.lifecycle_states = metadata.tables["core.asset_lifecycle_states"]
         self.provenance = metadata.tables["core.asset_provenance_records"]
         self.assets = metadata.tables["core.assets"]
         self.projects = metadata.tables["core.projects"]
@@ -82,6 +90,8 @@ class PostgresDeliveryRepository:
             project_id = cast(UUID | None, asset["project_id"])
             if project_id is None:
                 raise DeliveryResolutionError("delivery policy requires a project-scoped asset")
+            if access_class is AssetAccessClass.PUBLIC:
+                self._require_deliverable(connection, asset)
             existing = connection.execute(
                 select(self.policies)
                 .where(self.policies.c.asset_id == asset["id"])
@@ -123,6 +133,7 @@ class PostgresDeliveryRepository:
             asset_row = self._require_external(connection, self.assets, asset_id, "asset")
             if asset_row["project_id"] is None:
                 raise DeliveryResolutionError("delivery requires a project-scoped asset")
+            self._require_deliverable(connection, asset_row)
 
             provenance_rows = list(
                 connection.execute(
@@ -188,6 +199,54 @@ class PostgresDeliveryRepository:
                 rights_record=rights,
                 access_class=access_class,
             )
+
+    def _require_deliverable(self, connection: Connection, asset_row: RowMapping) -> None:
+        snapshot = self._lifecycle_snapshot(connection, asset_row)
+        try:
+            require_deliverable_lifecycle(snapshot)
+        except AssetLifecycleDeliveryError as exc:
+            raise DeliveryResolutionError(str(exc)) from exc
+
+    def _lifecycle_snapshot(
+        self,
+        connection: Connection,
+        asset_row: RowMapping,
+    ) -> AssetLifecycleSnapshot:
+        asset_id = str(asset_row["external_id"])
+        project_id = self._external_for_internal(
+            connection,
+            self.projects,
+            cast(UUID, asset_row["project_id"]),
+            "project",
+        )
+        row = connection.execute(
+            select(self.lifecycle_states).where(
+                self.lifecycle_states.c.asset_id == asset_row["id"]
+            )
+        ).mappings().one_or_none()
+        if row is None:
+            return AssetLifecycleSnapshot(
+                asset_id=asset_id,
+                project_id=project_id,
+                state=AssetLifecycleState.ACTIVE,
+                updated_at=asset_row["created_at"],
+                revision=1,
+            )
+        if row["project_id"] != asset_row["project_id"]:
+            raise DeliveryResolutionError("asset lifecycle project does not match asset")
+        return AssetLifecycleSnapshot(
+            asset_id=asset_id,
+            project_id=project_id,
+            state=AssetLifecycleState(str(row["state"])),
+            recovery_state=(
+                AssetLifecycleState(str(row["recovery_state"]))
+                if row["recovery_state"] is not None
+                else None
+            ),
+            recovery_until=row["recovery_until"],
+            updated_at=row["updated_at"],
+            revision=int(row["revision"]),
+        )
 
     def _asset(self, connection: Connection, row: RowMapping) -> Asset:
         return Asset(
