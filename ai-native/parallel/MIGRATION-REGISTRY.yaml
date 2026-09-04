@@ -7,7 +7,13 @@ policy:
   migration_dependency_must_match_landed_or_declared_parent: true
   merge_alert_requires_migration_revalidation: true
 
-reservations: []
+reservations:
+  - revision: 20260901_0016
+    task_id: M03-WP7
+    branch: supervisor/m03-wp7-export-staging
+    parent_revision: 20260901_0015
+    purpose: durable export staging object provenance and expiry authority
+    status: reserved
 
 landed:
   - revision: 20260901_0015
