@@ -1,5 +1,5 @@
-version: 4
-latest_sequence: 9
+version: 5
+latest_sequence: 10
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -49,24 +49,30 @@ broadcasts:
     schema_migration_changes:
       - 20260901_0016
   - sequence: 9
-    trigger: supervisor-merge
     merged_pr: 63
     merged_branch: supervisor/m03-wp7-vector-index-cleanup
     submitted_head_sha: 359b6173d062b48128b1722e8f6340262b5fee5e
     merged_main_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-wp7-vector-index-cleanup-sync
+    schema_migration_changes: []
+  - sequence: 10
+    trigger: supervisor-merge
+    merged_pr: 65
+    merged_branch: supervisor/m03-wp7-closeout
+    submitted_head_sha: 615ac1d287f2773a09d15ac74a390dcb0ccb4d47
+    merged_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-wp7-closeout-wp8-handoff-sync
     changed_areas:
-      - provider-neutral deterministic vector and search cleanup hooks
-      - deletion-result fingerprint and final-revision idempotency binding
-      - exact terminal receipt-set validation
-      - Supervisor WP7 closeout and WP8 handoff requirement
-    contract_changes:
-      - index cleanup internal primitive
+      - WP7 implementation closeout checkpoint
+      - migrations 20260901_0015 and 20260901_0016 confirmed landed
+      - M03-WP8 source acceptance unblocked
+      - Supervisor review authority separated from acceptance-agent writes
+    contract_changes: []
     schema_migration_changes: []
     recipients:
-      - supervisor/m03-wp7-closeout
-      - agent/m03-wp8-acceptance
+      - supervisor/m03-wp8-review
+      - agent/m03-wp8-acceptance-v2
       - agent/m04-character-library
       - agent/m05-content-memory
       - agent/m06-audio-production
@@ -76,44 +82,44 @@ broadcasts:
     mandatory: true
 
 recipient_states:
-  supervisor/m03-wp7-closeout:
+  supervisor/m03-wp8-review:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 9
-    last_synced_main_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
-  agent/m03-wp8-acceptance:
-    state: sync-required
-    required_sequence: 9
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
+    last_acknowledged_sequence: 10
+    last_synced_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
+  agent/m03-wp8-acceptance-v2:
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 10
+    last_synced_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
   agent/m04-character-library:
     state: sync-required
-    required_sequence: 9
+    required_sequence: 10
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m05-content-memory:
     state: sync-required
-    required_sequence: 9
+    required_sequence: 10
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m06-audio-production:
     state: sync-required
-    required_sequence: 9
+    required_sequence: 10
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m07-storyboard-timeline:
     state: sync-required
-    required_sequence: 9
+    required_sequence: 10
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m08-video-provider-router:
     state: sync-required
-    required_sequence: 9
+    required_sequence: 10
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/cross-cutting-qa-security:
     state: sync-required
-    required_sequence: 9
+    required_sequence: 10
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
 
