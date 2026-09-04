@@ -62,7 +62,9 @@ class ExportStagingObject(StrictModel):
             self.staging_storage_object_id,
         )
         if self.staging_object_key != expected_key:
-            raise ValueError("export staging object_key must equal the canonical private staging key")
+            raise ValueError(
+                "export staging object_key must equal the canonical private staging key"
+            )
         if self.expires_at <= self.audit.created_at:
             raise ValueError("export staging expiry must be after creation")
         return self
