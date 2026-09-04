@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
@@ -7,7 +8,14 @@ from types import SimpleNamespace
 from typing import cast
 
 import pytest
+from alembic import command
+from alembic.config import Config
+from sqlalchemy import create_engine, text
+from sqlalchemy.engine import Engine
 
+from lullabies_core.common import AuditFields
+from lullabies_core.persistence.temporary_cleanup import PostgresTemporaryCleanupRepository
+from lullabies_core.persistence.upload_session import PostgresUploadSessionRepository
 from lullabies_core.storage import FilesystemStorageAdapter, StorageBackend
 from lullabies_core.storage_s3 import S3StorageAdapter
 from lullabies_core.temporary_cleanup import (
@@ -17,7 +25,15 @@ from lullabies_core.temporary_cleanup import (
     TemporaryCleanupConflictError,
     TemporaryCleanupExecutor,
 )
-from lullabies_core.upload_session import UploadMode, UploadSessionStatus, build_upload_object_key
+from lullabies_core.upload_session import (
+    UploadMode,
+    UploadSession,
+    UploadSessionStatus,
+    build_upload_object_key,
+)
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+ALEMBIC_INI = Path(__file__).parents[1] / "alembic.ini"
 
 
 def candidate(
@@ -195,3 +211,126 @@ def test_s3_multipart_aborts_before_quarantine_delete() -> None:
     assert fake_s3.calls == ["abort", "delete"]
     assert result.multipart_abort_attempted is True
     assert result.object_delete_attempted is True
+
+
+def _alembic_config() -> Config:
+    return Config(str(ALEMBIC_INI))
+
+
+def _insert_project(engine: Engine, external_id: str) -> None:
+    with engine.begin() as connection:
+        connection.execute(
+            text(
+                """
+                INSERT INTO core.projects (
+                    id, external_id, title, status, audience, "cast", content_format,
+                    language, target_duration_seconds, output, creative, provider_policy,
+                    created_at, updated_at
+                ) VALUES (
+                    gen_random_uuid(), :external_id, :title, 'draft',
+                    '{}'::jsonb, '{}'::jsonb, 'song', 'en', 120,
+                    '{}'::jsonb, '{}'::jsonb, '{}'::jsonb, now(), now()
+                )
+                """
+            ),
+            {"external_id": external_id, "title": f"Cleanup fixture {external_id}"},
+        )
+
+
+@pytest.mark.postgres
+@pytest.mark.skipif(DATABASE_URL is None, reason="DATABASE_URL is not configured")
+def test_postgres_cleanup_requires_grace_and_rejects_canonical_storage() -> None:
+    assert DATABASE_URL is not None
+    config = _alembic_config()
+    command.downgrade(config, "base")
+    command.upgrade(config, "head")
+    engine = create_engine(DATABASE_URL)
+
+    try:
+        project_id = "PRJ-009901"
+        storage_object_id = "STO-009901"
+        upload_session_id = "UPS-009901"
+        object_key = build_upload_object_key(project_id, storage_object_id)
+        started = datetime(2026, 9, 5, 8, 0, tzinfo=UTC)
+        aborted_at = started + timedelta(minutes=10)
+        _insert_project(engine, project_id)
+
+        upload_repository = PostgresUploadSessionRepository(engine)
+        upload_repository.create(
+            UploadSession(
+                upload_session_id=upload_session_id,
+                project_id=project_id,
+                storage_object_id=storage_object_id,
+                backend=StorageBackend.S3,
+                bucket="aaf-private",
+                object_key=object_key,
+                expected_size_bytes=10,
+                expected_mime_type="video/mp4",
+                original_filename="abandoned.mp4",
+                mode=UploadMode.SINGLE,
+                creation_idempotency_key="create-UPS-009901",
+                expires_at=started + timedelta(hours=1),
+                audit=AuditFields(
+                    created_at=started,
+                    updated_at=started,
+                    created_by="temporary-cleanup-test",
+                ),
+            )
+        )
+        upload_repository.abort(
+            upload_session_id,
+            idempotency_key="abort-UPS-009901",
+            aborted_at=aborted_at,
+        )
+
+        cleanup_repository = PostgresTemporaryCleanupRepository(engine)
+        assert cleanup_repository.list_candidates(
+            now=aborted_at + timedelta(minutes=30),
+            grace_period=timedelta(hours=1),
+        ) == []
+
+        selected = cleanup_repository.list_candidates(
+            now=aborted_at + timedelta(hours=2),
+            grace_period=timedelta(hours=1),
+        )
+        assert len(selected) == 1
+        assert selected[0].upload_session_id == upload_session_id
+        assert selected[0].status is UploadSessionStatus.ABORTED
+
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    """
+                    INSERT INTO core.storage_objects (
+                        id, external_id, schema_version, project_id, backend, bucket,
+                        object_key, sha256, mime_type, size_bytes, original_filename,
+                        lifecycle_class, created_at, updated_at, created_by, revision
+                    )
+                    SELECT
+                        gen_random_uuid(), :storage_object_id, 1, p.id, 's3', :bucket,
+                        :object_key, :sha256, 'video/mp4', 10, 'accepted.mp4',
+                        'canonical', now(), now(), 'temporary-cleanup-test', 1
+                    FROM core.projects p
+                    WHERE p.external_id = :project_id
+                    """
+                ),
+                {
+                    "storage_object_id": storage_object_id,
+                    "project_id": project_id,
+                    "bucket": "aaf-private",
+                    "object_key": object_key,
+                    "sha256": "a" * 64,
+                },
+            )
+
+        assert cleanup_repository.list_candidates(
+            now=aborted_at + timedelta(hours=2),
+            grace_period=timedelta(hours=1),
+        ) == []
+        with pytest.raises(TemporaryCleanupConflictError, match="canonical storage metadata"):
+            cleanup_repository.revalidate(
+                selected[0],
+                cutoff=aborted_at + timedelta(hours=1),
+            )
+    finally:
+        engine.dispose()
