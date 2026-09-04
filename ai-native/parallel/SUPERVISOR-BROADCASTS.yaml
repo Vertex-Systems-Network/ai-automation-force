@@ -1,199 +1,67 @@
 version: 4
-latest_sequence: 7
+latest_sequence: 8
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
   - sequence: 1
-    trigger: supervisor-merge
     merged_pr: 49
     merged_branch: supervisor/multi-agent-workflow-v2
-    submitted_head_sha: 3f2d486d51e64666e3eb40673061c7257f707405
     merged_main_sha: 8ccf33d07974bba80f9b7dedfd4b51419f0618a8
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-working-instruction-sync
-    changed_areas:
-      - README working instructions
-      - Supervisor/parallel coordination protocol and state
-      - active work and dependency registries
-      - migration reservation ownership metadata
-      - shared-file and contract coordination authority
-    contract_changes: []
-    schema_migration_changes: []
-    recipients:
-      - supervisor/m03-wp7-retention
-      - agent/m03-wp8-acceptance
-      - agent/m04-character-library
-      - agent/m05-content-memory
-      - agent/m06-audio-production
-      - agent/m07-storyboard-timeline
-      - agent/m08-video-provider-router
-      - agent/cross-cutting-qa-security
-    mandatory: true
-
   - sequence: 2
-    trigger: supervisor-merge
     merged_pr: 50
     merged_branch: supervisor/new-agent-onboarding
-    submitted_head_sha: 3dfd7c88d35c224cdfd60a70023105a9a446c2bc
     merged_main_sha: 75a8fb19a797dfcc329f1c229d4b0688be9789c9
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-new-agent-onboarding-sync
-    changed_areas:
-      - new agent must start from main
-      - Supervisor module slot assignment authority
-      - AGENT-SLOTS.json occupancy registry
-      - exact Go Home Come Back Next Time no-slot behavior
-      - Repository Governance parallel-state validator
-      - README working instructions
-    contract_changes: []
-    schema_migration_changes: []
-    recipients:
-      - supervisor/m03-wp7-retention
-      - agent/m03-wp8-acceptance
-      - agent/m04-character-library
-      - agent/m05-content-memory
-      - agent/m06-audio-production
-      - agent/m07-storyboard-timeline
-      - agent/m08-video-provider-router
-      - agent/cross-cutting-qa-security
-    mandatory: true
-
   - sequence: 3
-    trigger: supervisor-merge
     merged_pr: 51
     merged_branch: supervisor/m03-wp7-retention
-    submitted_head_sha: 745cc22e5680e164aa875631190c30b1c50aba76
     merged_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-asset-lifecycle-contract-sync
-    changed_areas:
-      - M03-WP7 durable asset lifecycle state authority
-      - migration 20260901_0015
-      - lifecycle persistence and public exports
-      - archive/restore and deletion scheduling contract
-      - migration-chain tests
-      - Supervisor WP7 continuation branch retirement/replacement
-      - parallel write-scope reconciliation
-    contract_changes:
-      - AssetLifecycleState
-      - AssetLifecycleSnapshot
-      - AssetLifecycleEvent
-      - PostgresAssetLifecycleRepository
     schema_migration_changes:
       - 20260901_0015
-    recipients:
-      - supervisor/m03-wp7-retention-continuation
-      - agent/m03-wp8-acceptance
-      - agent/m04-character-library
-      - agent/m05-content-memory
-      - agent/m06-audio-production
-      - agent/m07-storyboard-timeline
-      - agent/m08-video-provider-router
-      - agent/cross-cutting-qa-security
-    mandatory: true
-
   - sequence: 4
-    trigger: supervisor-merge
     merged_pr: 52
     merged_branch: supervisor/parallel-governance-hardening
-    submitted_head_sha: 31454da596ee590e443452cba98139bf80384029
     merged_main_sha: a8e987ce8e0697fdff5bf891e82daec2b28dd096
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-parallel-governance-hardening-sync
-    changed_areas:
-      - fail-closed active write-claim collision validation
-      - exact occupied slot to active task branch/agent/module validation
-      - stale broadcast acknowledgement validation
-      - Supervisor open-slot count validation
-      - active and landed migration consistency validation
-      - synthetic governance validator self-tests
-    contract_changes: []
-    schema_migration_changes: []
-    recipients:
-      - supervisor/m03-wp7-retention-continuation
-      - agent/m03-wp8-acceptance
-      - agent/m04-character-library
-      - agent/m05-content-memory
-      - agent/m06-audio-production
-      - agent/m07-storyboard-timeline
-      - agent/m08-video-provider-router
-      - agent/cross-cutting-qa-security
-    mandatory: true
-
   - sequence: 5
-    trigger: supervisor-merge
     merged_pr: 55
     merged_branch: supervisor/m03-wp7-retention-continuation
-    submitted_head_sha: 843f431ec85b798957e4c5cbb1cad06798b28a4d
     merged_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-supervisor-reconciliation-sync
-    changed_areas:
-      - Supervisor state reconciliation after PR 54
-      - WP7 remaining-scope authority
-      - WP8 planning dependency state
-    contract_changes: []
-    schema_migration_changes: []
-    recipients:
-      - supervisor/m03-wp7-deletion-execution
-      - agent/m03-wp8-acceptance
-      - agent/m04-character-library
-      - agent/m05-content-memory
-      - agent/m06-audio-production
-      - agent/m07-storyboard-timeline
-      - agent/m08-video-provider-router
-      - agent/cross-cutting-qa-security
-    mandatory: true
-
   - sequence: 6
-    trigger: supervisor-merge
     merged_pr: 57
     merged_branch: supervisor/m03-wp7-deletion-execution
-    submitted_head_sha: da0e67a9297956ab34b664a736d6739d4742996a
     merged_main_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-wp7-deletion-execution-sync
-    changed_areas:
-      - approved deletion propagation execution
-      - fail-closed live-plan and lifecycle revision binding
-      - storage integrity verification before purge
-      - idempotent partial-retry semantics
-      - share-link revocation and derivative cancellation propagation
-      - Supervisor branch/slot/plan reconciliation
-    contract_changes:
-      - deletion execution internal primitive
-    schema_migration_changes: []
-    recipients:
-      - supervisor/m03-wp7-temp-cleanup
-      - agent/m03-wp8-acceptance
-      - agent/m04-character-library
-      - agent/m05-content-memory
-      - agent/m06-audio-production
-      - agent/m07-storyboard-timeline
-      - agent/m08-video-provider-router
-      - agent/cross-cutting-qa-security
-    mandatory: true
-
   - sequence: 7
-    trigger: supervisor-merge
     merged_pr: 59
     merged_branch: supervisor/m03-wp7-temp-cleanup
     submitted_head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
     merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
     alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-wp7-temp-cleanup-sync
+  - sequence: 8
+    trigger: supervisor-merge
+    merged_pr: 61
+    merged_branch: supervisor/m03-wp7-export-staging
+    submitted_head_sha: 2c0d4ab48e128af68f92c923567631c72ef1c20b
+    merged_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-wp7-export-staging-sync
     changed_areas:
-      - bounded abandoned upload and quarantine cleanup
-      - explicit terminal grace-window enforcement
-      - canonical storage identity and location collision guard
-      - idempotent filesystem cleanup
-      - S3 multipart abort-before-delete behavior
-      - Supervisor branch and ownership reconciliation
+      - deterministic private export staging namespace and source integrity checks
+      - durable export staging provenance and expiry authority
+      - migration 20260901_0016
+      - reversible migration chain coverage
+      - Supervisor branch and migration ownership reconciliation
     contract_changes:
-      - temporary cleanup internal primitive
-    schema_migration_changes: []
+      - export staging internal primitive
+    schema_migration_changes:
+      - 20260901_0016
     recipients:
-      - supervisor/m03-wp7-export-staging
+      - supervisor/m03-wp7-vector-index-cleanup
       - agent/m03-wp8-acceptance
       - agent/m04-character-library
       - agent/m05-content-memory
@@ -204,50 +72,47 @@ broadcasts:
     mandatory: true
 
 recipient_states:
-  supervisor/m03-wp7-export-staging:
+  supervisor/m03-wp7-vector-index-cleanup:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 7
-    last_synced_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
+    last_acknowledged_sequence: 8
+    last_synced_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
   agent/m03-wp8-acceptance:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
   agent/m04-character-library:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m05-content-memory:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m06-audio-production:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m07-storyboard-timeline:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m08-video-provider-router:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/cross-cutting-qa-security:
     state: sync-required
-    required_sequence: 7
+    required_sequence: 8
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
-  - Each broadcast records merged branch/PR, new main SHA, affected contracts/migrations/shared files, recipients, and mandatory/advisory sync classification.
-  - Mandatory recipients become sync-required until they acknowledge the sequence and record the synchronized main SHA.
-  - An agent must inspect this registry on every start/resume and before announcing Work Done and Submitted.
-  - If a recipient branch was created from the broadcast main SHA or later and is unaffected, Supervisor may mark acknowledgement satisfied without a redundant merge.
+  - Mandatory recipients become sync-required until synchronization is recorded.
