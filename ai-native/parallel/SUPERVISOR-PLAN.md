@@ -44,14 +44,14 @@ All defined module slots are occupied. An additional new agent therefore receive
 
 | Lane | Slot | Assigned agent role | Branch | Module / scope | Current execution state | Promotion strategy |
 | --- | --- | --- | --- | --- | --- | --- |
-| Supervisor | occupied / not new-agent assignable | `supervisor-agent` | `supervisor/m03-wp7-deletion-execution` | M03-WP7 deletion propagation execution | approved-plan execution implementation + exact-head validation | finish this bounded execution slice before starting temp cleanup |
-| Acceptance | occupied | `acceptance-agent` | `agent/m03-wp8-acceptance` | M03-WP8 end-to-end acceptance | planning-only until all WP7 exit criteria land | promote after WP7, then close M03 if acceptance passes |
-| Character | occupied | `character-agent` | `agent/m04-character-library` | M04 Character and Entity Library | planning/contract preparation only | executable work waits for entry + consent gates |
-| Content | occupied | `content-agent` | `agent/m05-content-memory` | M05 Content Intelligence and Memory | planning/contract preparation only | promote after required M04 contracts are stable |
-| Audio | occupied | `audio-agent` | `agent/m06-audio-production` | M06 provider-neutral audio production | planning/contract preparation only | executable work waits for entry + consent gates |
-| Timeline | occupied | `timeline-agent` | `agent/m07-storyboard-timeline` | M07 storyboard/hierarchy/timeline engine | planning-only | ordered after required Character/Content/Audio contracts |
-| Provider | occupied | `provider-agent` | `agent/m08-video-provider-router` | M08 hybrid image/video provider router | planning-only | ordered after relevant Character/Timeline contracts |
-| QA / Security | occupied | `qa-security-agent` | `agent/cross-cutting-qa-security` | adversarial QA/security planning and audits | audit/planning may run; executable writes require applicable ownership + consent | independent conflict-free QA work may promote when eligible |
+| Supervisor | occupied / not new-agent assignable | `supervisor-agent` | `supervisor/m03-wp7-temp-cleanup` | M03-WP7 bounded temporary upload cleanup | executable cleanup slice on current `main@6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6` | finish terminal abandoned upload/quarantine cleanup before export staging |
+| Acceptance | occupied | `acceptance-agent` | `agent/m03-wp8-acceptance` | M03-WP8 end-to-end acceptance | sync-required; planning-only until all WP7 exit criteria land | synchronize broadcast 6 before any promotion, then promote after WP7 |
+| Character | occupied | `character-agent` | `agent/m04-character-library` | M04 Character and Entity Library | sync-required planning/contract preparation only | synchronize before any promotion; executable work waits for entry + consent gates |
+| Content | occupied | `content-agent` | `agent/m05-content-memory` | M05 Content Intelligence and Memory | sync-required planning/contract preparation only | synchronize before any promotion; then follow M04 contracts |
+| Audio | occupied | `audio-agent` | `agent/m06-audio-production` | M06 provider-neutral audio production | sync-required planning/contract preparation only | synchronize before any promotion; executable work waits for entry + consent gates |
+| Timeline | occupied | `timeline-agent` | `agent/m07-storyboard-timeline` | M07 storyboard/hierarchy/timeline engine | sync-required planning-only | synchronize before any promotion; ordered after Character/Content/Audio contracts |
+| Provider | occupied | `provider-agent` | `agent/m08-video-provider-router` | M08 hybrid image/video provider router | sync-required planning-only | synchronize before any promotion; ordered after Character/Timeline contracts |
+| QA / Security | occupied | `qa-security-agent` | `agent/cross-cutting-qa-security` | adversarial QA/security planning and audits | sync-required audit/planning | synchronize before any promotion; independent conflict-free QA work may resume afterward |
 
 ## Write-claim isolation
 
@@ -67,21 +67,29 @@ Planning lanes use dedicated milestone directories and exact per-task checkpoint
 
 A `future_executable_writes` entry is informational only. It does not reserve or authorize those paths until the Supervisor explicitly promotes the task to executable state and rechecks collisions.
 
+The active Supervisor write set for this bounded slice is limited to:
+- `packages/python-core/src/lullabies_core/temporary_cleanup.py`;
+- `packages/python-core/src/lullabies_core/persistence/temporary_cleanup.py`;
+- `packages/python-core/tests/test_temporary_cleanup.py`.
+
+Coordination files are maintained only by the Supervisor to keep branch/slot/broadcast authority synchronized and are not shared implementation lanes.
+
 ## Current merge order
 
 Default merge order is dependency-driven:
 
-1. `supervisor/m03-wp7-deletion-execution`
-2. next bounded M03-WP7 branches (temporary cleanup, export staging, vector/index cleanup)
-3. `agent/m03-wp8-acceptance`
-4. M03 close/checkpoint reconciliation
-5. M04 Character/Entity public contract foundation
-6. M05 Content/Memory and M06 Audio when independently ready
-7. M07 Storyboard/Timeline after required upstream contracts land
-8. M08 Provider Router after relevant Character/Timeline contracts land
-9. Later milestones follow `DEPENDENCY-GRAPH.yaml`
+1. `supervisor/m03-wp7-temp-cleanup`
+2. next bounded M03-WP7 export-staging branch
+3. next bounded M03-WP7 vector/index cleanup branch
+4. `agent/m03-wp8-acceptance` after synchronization and WP7 completion
+5. M03 close/checkpoint reconciliation
+6. M04 Character/Entity public contract foundation
+7. M05 Content/Memory and M06 Audio when independently ready
+8. M07 Storyboard/Timeline after required upstream contracts land
+9. M08 Provider Router after relevant Character/Timeline contracts land
+10. Later milestones follow `DEPENDENCY-GRAPH.yaml`
 
-The QA/Security lane is continuous and may submit independent PRs when its authoritative write set is conflict-free.
+The QA/Security lane is continuous but is currently sync-required by broadcast 6 and cannot seek promotion until it records synchronization.
 
 If a new dependency appears, `DEPENDENCY-GRAPH.yaml` and affected task instructions are updated before further work. Contract-owner branches promote before consumers that require those contracts.
 
@@ -143,9 +151,13 @@ Completion order never overrides dependency safety, contract compatibility, curr
 
 ## Current Supervisor assignment
 
-PR #55 reconciled Supervisor coordination on `main@ddaf0547e1804945c6a585220f499b8efa614e5a`. The previous branch `supervisor/m03-wp7-retention-continuation` is retired for new executable work.
+PR #57 merged the approved deletion-propagation execution slice at `main@6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6`. The completed branch `supervisor/m03-wp7-deletion-execution` is retired for new executable work.
 
-The Supervisor now owns the bounded deletion-propagation execution slice on `supervisor/m03-wp7-deletion-execution`, created from that current main. Its authoritative executable write set is limited to `packages/python-core/src/lullabies_core/deletion_execution.py` and `packages/python-core/tests/test_deletion_execution.py`; coordination files are maintained only to keep Supervisor plan/slot/state authority synchronized. Remaining WP7 scope after this slice is bounded temporary cleanup, export staging, vector/index cleanup hooks, and final WP7 acceptance/promotion.
+The Supervisor now owns Issue #58 on `supervisor/m03-wp7-temp-cleanup`, created from that exact current main. This slice may clean only `ABORTED` or `EXPIRED` upload/quarantine state after an explicit grace cutoff. It must fail closed when canonical storage metadata exists for either the upload storage-object identity or exact physical location, must preserve project/key boundaries, must not touch `OPEN`, `UPLOADING`, or `COMPLETED` sessions, and must treat missing temporary backend state as idempotent cleanup success. Incomplete S3 multipart uploads are aborted before orphan quarantine object deletion when an UploadId exists.
+
+No migration, export staging, vector/index cleanup, provider integration, production credential change, or cost-bearing scope is authorized in this slice. Remaining WP7 scope after it lands is export staging, vector/index cleanup hooks, and final WP7 acceptance/promotion.
+
+Broadcast sequence 6 is current. The Supervisor temp-cleanup branch is synchronized to sequence 6/current main; all other occupied planning/QA lanes listed in `ACTIVE-WORK.yaml` are sync-required and cannot seek promotion until they acknowledge sequence 6.
 
 Migration `20260901_0015` is landed history and is no longer an active reservation.
 
