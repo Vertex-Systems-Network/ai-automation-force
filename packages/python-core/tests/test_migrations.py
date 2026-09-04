@@ -42,6 +42,7 @@ EXPECTED_CORE_TABLES = {
     "asset_delivery_policies",
     "asset_lifecycle_states",
     "asset_lifecycle_events",
+    "export_staging_objects",
     "storage_objects",
     "upload_sessions",
     "upload_parts",
@@ -94,6 +95,7 @@ M03_WP5_TABLES = {"derivative_records"}
 M03_WP6_SHARE_TABLES = {"delivery_share_links"}
 M03_WP6_POLICY_TABLES = {"asset_delivery_policies"}
 M03_WP7_LIFECYCLE_TABLES = {"asset_lifecycle_states", "asset_lifecycle_events"}
+M03_WP7_EXPORT_TABLES = {"export_staging_objects"}
 
 
 def alembic_config() -> Config:
@@ -287,6 +289,24 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
             "occurred_at",
             "revision",
         }.issubset(lifecycle_event_columns)
+        export_staging_columns = {
+            column["name"]
+            for column in db_inspector.get_columns("export_staging_objects", schema="core")
+        }
+        assert {
+            "external_id",
+            "project_id",
+            "source_storage_object_id",
+            "staging_storage_object_id",
+            "source_sha256",
+            "expires_at",
+            "created_at",
+            "updated_at",
+            "revision",
+        }.issubset(export_staging_columns)
+        assert "url" not in export_staging_columns
+        assert "token" not in export_staging_columns
+        assert "share_link_id" not in export_staging_columns
         approval_request_columns = {
             column["name"]
             for column in db_inspector.get_columns("approval_requests", schema="core")
@@ -320,7 +340,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260901_0015"
+        assert revision == "20260901_0016"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -441,9 +461,14 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         command.upgrade(config, "head")
         assert set(inspect(engine).get_table_names(schema="core")) == EXPECTED_CORE_TABLES
 
+        command.downgrade(config, "20260901_0015")
+        m15_tables = set(inspect(engine).get_table_names(schema="core"))
+        pre_export_tables = EXPECTED_CORE_TABLES - M03_WP7_EXPORT_TABLES
+        assert m15_tables == pre_export_tables
+
         command.downgrade(config, "20260901_0014")
         m14_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_wp7_lifecycle_tables = EXPECTED_CORE_TABLES - M03_WP7_LIFECYCLE_TABLES
+        pre_wp7_lifecycle_tables = pre_export_tables - M03_WP7_LIFECYCLE_TABLES
         assert m14_tables == pre_wp7_lifecycle_tables
 
         command.downgrade(config, "20260901_0013")
