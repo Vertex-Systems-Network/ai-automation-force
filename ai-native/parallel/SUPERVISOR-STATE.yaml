@@ -2,18 +2,18 @@ version: 5
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: ddaf0547e1804945c6a585220f499b8efa614e5a
-  main_sha_last_reconciled: ddaf0547e1804945c6a585220f499b8efa614e5a
+  main_sha_last_promotion: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
+  main_sha_last_reconciled: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-deletion-execution
+  own_branch: supervisor/m03-wp7-temp-cleanup
   current_mode: feature-development
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 55
-  submitted_head_sha: 843f431ec85b798957e4c5cbb1cad06798b28a4d
-  merged_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
+  pr: 57
+  submitted_head_sha: da0e67a9297956ab34b664a736d6739d4742996a
+  merged_main_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
   result: success
 
 new_agent_onboarding:
@@ -58,8 +58,15 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 4
-  agents_with_mandatory_sync: []
+  latest_broadcast_sequence: 6
+  agents_with_mandatory_sync:
+    - agent/m03-wp8-acceptance
+    - agent/m04-character-library
+    - agent/m05-content-memory
+    - agent/m06-audio-production
+    - agent/m07-storyboard-timeline
+    - agent/m08-video-provider-router
+    - agent/cross-cutting-qa-security
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
 rules:
