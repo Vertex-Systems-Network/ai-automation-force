@@ -13,12 +13,12 @@ active:
     role: supervisor-module
     assigned_agent: supervisor-agent
     branch: supervisor/m03-wp7-retention-continuation
-    base_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
+    base_sha: b3168d8742623390022be44cca51bacf21d92ef1
     previous_submission:
-      pr: 51
-      head_sha: 745cc22e5680e164aa875631190c30b1c50aba76
-      merged_main_sha: 8ed99a094cb443b789929d71c468464e2e0bb72a
-      scope: durable asset lifecycle foundation
+      pr: 54
+      head_sha: e15b05d51e46666cd2f6553b066466b3c092700e
+      merged_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
+      scope: deletion propagation planning and delivery fail-closed integration
     module: asset_lifecycle
     status: active-continuation
     writes:
@@ -37,11 +37,11 @@ active:
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    last_synced_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
     last_acknowledged_broadcast: 4
     required_broadcast: null
     remaining_scope:
-      - deletion propagation and delivery fail-closed integration
+      - deletion propagation execution
       - bounded temporary cleanup
       - export staging
       - vector/index cleanup hooks
@@ -52,7 +52,7 @@ active:
     role: module
     assigned_agent: acceptance-agent
     branch: agent/m03-wp8-acceptance
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
+    base_sha: b3168d8742623390022be44cca51bacf21d92ef1
     module: m03_acceptance
     status: planning-only-waiting-on-wp7
     writes:
@@ -68,7 +68,7 @@ active:
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    last_synced_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
     last_acknowledged_broadcast: 4
     required_broadcast: null
 
