@@ -1,5 +1,5 @@
 version: 4
-latest_sequence: 6
+latest_sequence: 7
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -174,45 +174,74 @@ broadcasts:
       - agent/cross-cutting-qa-security
     mandatory: true
 
+  - sequence: 7
+    trigger: supervisor-merge
+    merged_pr: 59
+    merged_branch: supervisor/m03-wp7-temp-cleanup
+    submitted_head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
+    merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-wp7-temp-cleanup-sync
+    changed_areas:
+      - bounded abandoned upload and quarantine cleanup
+      - explicit terminal grace-window enforcement
+      - canonical storage identity and location collision guard
+      - idempotent filesystem cleanup
+      - S3 multipart abort-before-delete behavior
+      - Supervisor branch and ownership reconciliation
+    contract_changes:
+      - temporary cleanup internal primitive
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-wp7-export-staging
+      - agent/m03-wp8-acceptance
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security
+    mandatory: true
+
 recipient_states:
-  supervisor/m03-wp7-temp-cleanup:
+  supervisor/m03-wp7-export-staging:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 6
-    last_synced_main_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
+    last_acknowledged_sequence: 7
+    last_synced_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
   agent/m03-wp8-acceptance:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
   agent/m04-character-library:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m05-content-memory:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m06-audio-production:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m07-storyboard-timeline:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m08-video-provider-router:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/cross-cutting-qa-security:
     state: sync-required
-    required_sequence: 6
+    required_sequence: 7
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
 

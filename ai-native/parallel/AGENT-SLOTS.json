@@ -15,11 +15,11 @@
     {
       "slot_id": "SUPERVISOR-M03-WP7",
       "module": "asset_lifecycle",
-      "branch": "supervisor/m03-wp7-temp-cleanup",
+      "branch": "supervisor/m03-wp7-export-staging",
       "status": "occupied",
       "assigned_agent": "supervisor-agent",
       "accepts_new_agent": false,
-      "start_status": "active-temp-cleanup"
+      "start_status": "active-export-staging"
     },
     {
       "slot_id": "M03-WP8",

@@ -2,18 +2,18 @@ version: 5
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
-  main_sha_last_reconciled: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
+  main_sha_last_promotion: f78a855f0b20dd150af93190b25bffbe6e1a0856
+  main_sha_last_reconciled: f78a855f0b20dd150af93190b25bffbe6e1a0856
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-temp-cleanup
+  own_branch: supervisor/m03-wp7-export-staging
   current_mode: feature-development
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 57
-  submitted_head_sha: da0e67a9297956ab34b664a736d6739d4742996a
-  merged_main_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
+  pr: 59
+  submitted_head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
+  merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
   result: success
 
 new_agent_onboarding:
@@ -58,7 +58,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 6
+  latest_broadcast_sequence: 7
   agents_with_mandatory_sync:
     - agent/m03-wp8-acceptance
     - agent/m04-character-library

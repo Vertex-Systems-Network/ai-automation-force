@@ -5,37 +5,40 @@ supervisor:
   main_branch: main
   review_and_merge_authority: true
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-temp-cleanup
+  own_branch: supervisor/m03-wp7-export-staging
 
 active:
   - task_id: M03-WP7
     title: Retention/archive/delete/export primitives
     role: supervisor-module
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp7-temp-cleanup
-    base_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
+    branch: supervisor/m03-wp7-export-staging
+    base_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
     previous_submission:
-      pr: 57
-      head_sha: da0e67a9297956ab34b664a736d6739d4742996a
-      merged_main_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
-      scope: approved deletion propagation execution
+      pr: 59
+      head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
+      merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
+      scope: bounded temporary upload and quarantine cleanup
     module: asset_lifecycle
-    status: active-temp-cleanup
+    status: active-export-staging
     writes:
-      - packages/python-core/src/lullabies_core/temporary_cleanup.py
-      - packages/python-core/src/lullabies_core/persistence/temporary_cleanup.py
-      - packages/python-core/tests/test_temporary_cleanup.py
+      - packages/python-core/src/lullabies_core/export_staging.py
+      - packages/python-core/src/lullabies_core/persistence/export_staging.py
+      - packages/python-core/migrations/versions/20260901_0016_export_staging.py
+      - packages/python-core/migrations/sql/0016_export_staging_up.sql
+      - packages/python-core/migrations/sql/0016_export_staging_down.sql
+      - packages/python-core/tests/test_export_staging.py
+      - packages/python-core/tests/test_migrations.py
     shared_requests: []
     depends_on:
       - M03-WP6
-    migration_reservation: null
+    migration_reservation: 20260901_0016
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 6e892e3417788d2fc9a1ea0a91cfc5d44ce47be6
-    last_acknowledged_broadcast: 6
+    last_synced_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
+    last_acknowledged_broadcast: 7
     required_broadcast: null
     remaining_scope:
-      - bounded temporary cleanup
       - export staging
       - vector/index cleanup hooks
       - final WP7 acceptance and promotion
@@ -63,7 +66,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
@@ -84,7 +87,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -105,7 +108,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -126,7 +129,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -149,7 +152,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -171,7 +174,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -192,7 +195,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 6
+    required_broadcast: 7
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
