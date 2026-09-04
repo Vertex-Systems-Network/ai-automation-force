@@ -1,5 +1,5 @@
 version: 4
-latest_sequence: 8
+latest_sequence: 9
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -38,30 +38,34 @@ broadcasts:
   - sequence: 7
     merged_pr: 59
     merged_branch: supervisor/m03-wp7-temp-cleanup
-    submitted_head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
     merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-wp7-temp-cleanup-sync
   - sequence: 8
-    trigger: supervisor-merge
     merged_pr: 61
     merged_branch: supervisor/m03-wp7-export-staging
     submitted_head_sha: 2c0d4ab48e128af68f92c923567631c72ef1c20b
     merged_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-wp7-export-staging-sync
-    changed_areas:
-      - deterministic private export staging namespace and source integrity checks
-      - durable export staging provenance and expiry authority
-      - migration 20260901_0016
-      - reversible migration chain coverage
-      - Supervisor branch and migration ownership reconciliation
-    contract_changes:
-      - export staging internal primitive
     schema_migration_changes:
       - 20260901_0016
+  - sequence: 9
+    trigger: supervisor-merge
+    merged_pr: 63
+    merged_branch: supervisor/m03-wp7-vector-index-cleanup
+    submitted_head_sha: 359b6173d062b48128b1722e8f6340262b5fee5e
+    merged_main_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-wp7-vector-index-cleanup-sync
+    changed_areas:
+      - provider-neutral deterministic vector and search cleanup hooks
+      - deletion-result fingerprint and final-revision idempotency binding
+      - exact terminal receipt-set validation
+      - Supervisor WP7 closeout and WP8 handoff requirement
+    contract_changes:
+      - index cleanup internal primitive
+    schema_migration_changes: []
     recipients:
-      - supervisor/m03-wp7-vector-index-cleanup
+      - supervisor/m03-wp7-closeout
       - agent/m03-wp8-acceptance
       - agent/m04-character-library
       - agent/m05-content-memory
@@ -72,44 +76,44 @@ broadcasts:
     mandatory: true
 
 recipient_states:
-  supervisor/m03-wp7-vector-index-cleanup:
+  supervisor/m03-wp7-closeout:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 8
-    last_synced_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
+    last_acknowledged_sequence: 9
+    last_synced_main_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
   agent/m03-wp8-acceptance:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
   agent/m04-character-library:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m05-content-memory:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m06-audio-production:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m07-storyboard-timeline:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m08-video-provider-router:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/cross-cutting-qa-security:
     state: sync-required
-    required_sequence: 8
+    required_sequence: 9
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
 
