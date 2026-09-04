@@ -2,16 +2,16 @@
 
 ## Authority
 
-The Supervisor owns assignment, coordination-state mutation, review order, and promotion to `main`. New executable slices start from current `main`; completed branches are retired before the next bounded slice.
+The Supervisor owns assignment, coordination-state mutation, review order, and promotion to `main`. New executable slices start from current `main`; completed or superseded branches are retired before the next bounded slice.
 
-New agents start from `main`, read `AGENT-SLOTS.json`, and may work only after Supervisor assignment. All defined slots are currently occupied, so an additional arrival receives exactly **Go Home Come Back Next Time**.
+New agents start from `main`, read `AGENT-SLOTS.json`, and may work only after Supervisor assignment. All defined slots are occupied, so an additional arrival receives exactly **Go Home Come Back Next Time**.
 
 ## Current branch matrix
 
 | Lane | Agent | Branch | State |
 | --- | --- | --- | --- |
-| M03-WP7 Closeout | `supervisor-agent` | `supervisor/m03-wp7-closeout` | governance-only closeout/handoff |
-| M03-WP8 | `acceptance-agent` | `agent/m03-wp8-acceptance` | sync-required planning-only until closeout lands |
+| M03-WP8 Review | `supervisor-agent` | `supervisor/m03-wp8-review` | active review/promotion authority only |
+| M03-WP8 Acceptance | `acceptance-agent` | `agent/m03-wp8-acceptance-v2` | active source acceptance |
 | M04 Character | `character-agent` | `agent/m04-character-library` | sync-required planning-only |
 | M05 Content | `content-agent` | `agent/m05-content-memory` | sync-required planning-only |
 | M06 Audio | `audio-agent` | `agent/m06-audio-production` | sync-required planning-only |
@@ -19,28 +19,40 @@ New agents start from `main`, read `AGENT-SLOTS.json`, and may work only after S
 | M08 Provider | `provider-agent` | `agent/m08-video-provider-router` | sync-required planning-only |
 | QA / Security | `qa-security-agent` | `agent/cross-cutting-qa-security` | sync-required audit/planning |
 
-## WP7 closeout
+The earlier `agent/m03-wp8-acceptance` branch is retired for executable work after a partial pre-reconciliation slot edit. It is not promotion authority and will not be force-reset. `agent/m03-wp8-acceptance-v2` is the clean current-main acceptance branch.
 
-PR #63 landed deterministic provider-neutral vector/index cleanup hooks at `main@4a898d0465382c62ae911a4d7f4581b4fdd2d60c`. The bounded WP7 implementation sequence now includes lifecycle state/retention, deletion planning/execution, temporary cleanup, private export staging, and vector/index cleanup hooks. Migrations `20260901_0015` and `20260901_0016` are landed; no active migration reservation remains.
+## M03 transition state
 
-Issue #64 on `supervisor/m03-wp7-closeout` records mandatory broadcast 9 and the handoff checkpoint only. No product/API/schema/provider change is authorized.
+PR #65 closed WP7 at `main@38b182f4ea886b48c4249aacf362fb58546bd3f5`. Broadcast 10 records that merge and unblocks bounded WP8 source acceptance. Migrations `20260901_0015` and `20260901_0016` remain landed; there is no active M03 migration reservation.
 
-After this closeout lands, `agent/m03-wp8-acceptance` may synchronize to the resulting current main and move from planning-only to bounded executable acceptance. Source acceptance may run, but final M03 governance/promotion remains blocked by Issue #36 until live GitHub main protection/ruleset evidence exists.
+WP8 may create only the canonical acceptance matrix/checkpoint and genuinely missing acceptance tests if the evidence audit proves a gap. Existing focused evidence already covers multipart restart/resume and lost-ack recovery, cross-project delivery denial and signer mismatch, malicious/MIME-spoof quarantine rejection, provenance/hash integrity, archive/restore, deletion propagation, temporary cleanup, export staging, and vector/index cleanup hooks.
+
+No product/API/schema/provider expansion, external provider credential, production bucket, or cost-bearing action is authorized by WP8.
+
+## External governance boundary
+
+Issue #36 remains open because live GitHub repository ruleset read-back does not prove protected `main`. WP8 source acceptance may be merged when its exact-head source checks are green, but that merge must not claim final M03 protected-main governance completion while Issue #36 is unresolved.
 
 ## Parallel safety
 
-`ACTIVE-WORK.yaml` is authoritative for write claims. Overlapping authoritative write claims block execution. All non-Supervisor lanes are sync-required by broadcast 9 and cannot seek promotion until synchronization is recorded.
+`ACTIVE-WORK.yaml` is authoritative for active write claims. The acceptance agent owns only:
+
+- `docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md`
+- `ai-native/parallel/checkpoints/M03-WP8.md`
+
+The Supervisor review lane owns only `ai-native/parallel/checkpoints/M03-WP8-REVIEW.md`. Other lanes remain disjoint and sync-required by broadcast 10.
 
 ## Merge order
 
-1. `supervisor/m03-wp7-closeout`
-2. synchronized `agent/m03-wp8-acceptance`
-3. M03 close/reconciliation only after acceptance and external governance gate evaluation
-4. later milestones according to dependency/consent gates
+1. `supervisor/m03-wp8-review` coordination reconciliation
+2. fast-forward `agent/m03-wp8-acceptance-v2` to the resulting current main
+3. `agent/m03-wp8-acceptance-v2` source acceptance submission
+4. Supervisor exact-head review and merge when all required source checks are green
+5. final M03 governance close only after Issue #36 live protection evidence is satisfied
 
 ## Completion and review
 
-Every ready bounded submission announces exactly **Work Done and Submitted**. Before promotion, the Supervisor verifies exact head/base, write ownership, migration state, dependency/consent state, tests, security/data implications, current-main freshness, and unresolved review findings. Required exact-head CI must be green.
+Every ready bounded submission announces exactly **Work Done and Submitted**. Before promotion, the Supervisor verifies exact head/base, current-main freshness, write ownership, migration state, consent/dependencies, tests, security/data implications, and unresolved review findings. Required exact-head CI must be green.
 
 After a successful promotion, emit exactly:
 
