@@ -4,33 +4,29 @@ supervisor:
   assigned_agent: supervisor-agent
   main_branch: main
   review_and_merge_authority: true
-  own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-vector-index-cleanup
+  own_task_id: M03-WP7-CLOSEOUT
+  own_branch: supervisor/m03-wp7-closeout
 
 active:
-  - task_id: M03-WP7
-    title: Retention/archive/delete/export/vector cleanup primitives
+  - task_id: M03-WP7-CLOSEOUT
+    title: M03-WP7 closeout and WP8 handoff
     role: supervisor-module
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp7-vector-index-cleanup
-    base_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
+    branch: supervisor/m03-wp7-closeout
+    base_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
     module: asset_lifecycle
-    status: active-vector-index-cleanup
+    status: active-wp7-closeout
     writes:
-      - packages/python-core/src/lullabies_core/index_cleanup.py
-      - packages/python-core/tests/test_index_cleanup.py
+      - ai-native/parallel/checkpoints/M03-WP7-CLOSEOUT.md
     shared_requests: []
     depends_on:
-      - M03-WP6
+      - M03-WP7
     migration_reservation: null
-    consent_scope: M03
+    consent_scope: M03-governance-closeout
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
-    last_acknowledged_broadcast: 8
+    last_synced_main_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
+    last_acknowledged_broadcast: 9
     required_broadcast: null
-    remaining_scope:
-      - vector/index cleanup hooks
-      - final WP7 acceptance and promotion
 
   - task_id: M03-WP8
     title: M03 end-to-end acceptance
@@ -38,19 +34,19 @@ active:
     assigned_agent: acceptance-agent
     branch: agent/m03-wp8-acceptance
     module: m03_acceptance
-    status: sync-required-planning-only-waiting-on-wp7
+    status: sync-required-planning-only-waiting-on-wp7-closeout
     writes:
       - docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md
       - ai-native/parallel/checkpoints/M03-WP8.md
     shared_requests: []
     depends_on:
-      - M03-WP7
+      - M03-WP7-CLOSEOUT
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
@@ -70,7 +66,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -90,7 +86,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -110,7 +106,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -132,7 +128,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -153,7 +149,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -173,13 +169,12 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 8
+    required_broadcast: 9
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
-  - Completed/merged task branches are retired or replaced before a next bounded executable slice begins.
-  - Before claiming a new task, compare its write set with every active entry.
-  - Overlapping active write claims block parallel execution unless Supervisor splits/reassigns ownership.
-  - Every resume revalidates current main, dependencies, working instructions, broadcasts, slots, migration state, write ownership, and consent.
+  - Completed/merged executable branches are retired or replaced before the next bounded executable slice.
+  - Overlapping active write claims block parallel execution.
+  - Every resume revalidates current main, dependencies, broadcasts, slots, migration state, write ownership, and consent.
   - Every ready submission announces exactly Work Done and Submitted.
   - A mandatory unacknowledged Supervisor broadcast puts the task into sync-required state and blocks promotion.
