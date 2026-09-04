@@ -2,18 +2,18 @@ version: 5
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: f78a855f0b20dd150af93190b25bffbe6e1a0856
-  main_sha_last_reconciled: f78a855f0b20dd150af93190b25bffbe6e1a0856
+  main_sha_last_promotion: 98e6808ec4034b93a4f1b417563f27866c6e91de
+  main_sha_last_reconciled: 98e6808ec4034b93a4f1b417563f27866c6e91de
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-export-staging
+  own_branch: supervisor/m03-wp7-vector-index-cleanup
   current_mode: feature-development
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 59
-  submitted_head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
-  merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
+  pr: 61
+  submitted_head_sha: 2c0d4ab48e128af68f92c923567631c72ef1c20b
+  merged_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
   result: success
 
 new_agent_onboarding:
@@ -22,29 +22,6 @@ new_agent_onboarding:
   assignment_authority: supervisor
   current_open_slots: 0
   no_slot_response: Go Home Come Back Next Time
-  actions:
-    - new-agent-starts-from-main
-    - supervisor-loads-slot-registry-and-supervisor-plan
-    - assign-first-valid-open-slot-or-reject
-    - update-slot-and-plan-before-agent-work
-    - agent-checks-out-assigned-branch-only-after-assignment
-  rejection_behavior:
-    stop_agent_immediately: true
-    branch_assignment: false
-    work_permitted: false
-
-interrupt_policy:
-  enabled: true
-  trigger: agent-submission-ready
-  required_signal: Work Done and Submitted
-  actions:
-    - checkpoint-supervisor-work
-    - review-submission
-    - reject-with-fixes-or-promote
-    - exact-head-ci-before-executable-merge
-    - merge-to-main
-    - emit-sync-broadcast
-    - restore-supervisor-checkpoint
 
 pause_checkpoint:
   active: false
@@ -58,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 7
+  latest_broadcast_sequence: 8
   agents_with_mandatory_sync:
     - agent/m03-wp8-acceptance
     - agent/m04-character-library
@@ -71,12 +48,9 @@ synchronization:
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
-  - Supervisor implementation occurs on its own bounded module branch, never by mixing feature work directly into main.
-  - A completed submission branch is retired or replaced before the Supervisor starts the next bounded slice.
-  - A new agent always begins onboarding from main and may not self-assign a module or branch.
-  - Supervisor assigns only a slot whose AGENT-SLOTS.json status is open and accepts_new_agent is true.
-  - If no eligible open slot exists, Supervisor replies exactly Go Home Come Back Next Time and the agent starts no work.
-  - A submission signal means ready for review, not merged or production-ready.
-  - Supervisor records pause state before interrupting its own feature work.
-  - Every successful promotion merge produces a broadcast record before Supervisor resumes feature implementation.
-  - Main SHA, queue state, slot state, migration state, write ownership, and broadcast state are reconciled after every promotion event.
+  - Supervisor implementation occurs on its own bounded module branch, never directly on main.
+  - Completed submission branches are retired or replaced before the next bounded slice.
+  - New agents begin from main and may not self-assign.
+  - If no eligible open slot exists, respond exactly Go Home Come Back Next Time and assign no work.
+  - Every successful promotion merge produces a broadcast before feature implementation resumes.
+  - Main SHA, slot state, migration state, write ownership, and broadcast state are reconciled after every promotion.
