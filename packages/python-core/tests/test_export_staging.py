@@ -93,7 +93,7 @@ def test_prepare_export_staging_fails_closed_when_source_bytes_drift(tmp_path: P
     filesystem = FilesystemStorageAdapter(tmp_path)
     source = source_object(filesystem)
     source_path = tmp_path / Path(*source.object_key.split("/"))
-    source_path.write_bytes(b"tampered source")
+    source_path.write_bytes(b"tampered! export source")
 
     with pytest.raises(StorageIntegrityError, match="live SHA-256"):
         prepare_export_staging(
