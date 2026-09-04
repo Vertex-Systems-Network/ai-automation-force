@@ -15,11 +15,11 @@
     {
       "slot_id": "SUPERVISOR-M03-WP7",
       "module": "asset_lifecycle",
-      "branch": "supervisor/m03-wp7-retention-continuation",
+      "branch": "supervisor/m03-wp7-deletion-execution",
       "status": "occupied",
       "assigned_agent": "supervisor-agent",
       "accepts_new_agent": false,
-      "start_status": "active-continuation"
+      "start_status": "active-deletion-execution"
     },
     {
       "slot_id": "M03-WP8",

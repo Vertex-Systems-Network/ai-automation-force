@@ -2,18 +2,18 @@ version: 5
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: b3168d8742623390022be44cca51bacf21d92ef1
-  main_sha_last_reconciled: b3168d8742623390022be44cca51bacf21d92ef1
+  main_sha_last_promotion: ddaf0547e1804945c6a585220f499b8efa614e5a
+  main_sha_last_reconciled: ddaf0547e1804945c6a585220f499b8efa614e5a
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-retention-continuation
+  own_branch: supervisor/m03-wp7-deletion-execution
   current_mode: feature-development
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 54
-  submitted_head_sha: e15b05d51e46666cd2f6553b066466b3c092700e
-  merged_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
+  pr: 55
+  submitted_head_sha: 843f431ec85b798957e4c5cbb1cad06798b28a4d
+  merged_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
   result: success
 
 new_agent_onboarding:

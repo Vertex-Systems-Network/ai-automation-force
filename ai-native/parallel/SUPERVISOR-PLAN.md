@@ -44,7 +44,7 @@ All defined module slots are occupied. An additional new agent therefore receive
 
 | Lane | Slot | Assigned agent role | Branch | Module / scope | Current execution state | Promotion strategy |
 | --- | --- | --- | --- | --- | --- | --- |
-| Supervisor | occupied / not new-agent assignable | `supervisor-agent` | `supervisor/m03-wp7-retention-continuation` | M03-WP7 remaining retention/delete/export primitives | PR #51 lifecycle foundation landed; broadcast #3 synchronization required before continuation | finish WP7 remaining slices before M03-WP8 promotion |
+| Supervisor | occupied / not new-agent assignable | `supervisor-agent` | `supervisor/m03-wp7-deletion-execution` | M03-WP7 deletion propagation execution | approved-plan execution implementation + exact-head validation | finish this bounded execution slice before starting temp cleanup |
 | Acceptance | occupied | `acceptance-agent` | `agent/m03-wp8-acceptance` | M03-WP8 end-to-end acceptance | planning-only until all WP7 exit criteria land | promote after WP7, then close M03 if acceptance passes |
 | Character | occupied | `character-agent` | `agent/m04-character-library` | M04 Character and Entity Library | planning/contract preparation only | executable work waits for entry + consent gates |
 | Content | occupied | `content-agent` | `agent/m05-content-memory` | M05 Content Intelligence and Memory | planning/contract preparation only | promote after required M04 contracts are stable |
@@ -71,14 +71,15 @@ A `future_executable_writes` entry is informational only. It does not reserve or
 
 Default merge order is dependency-driven:
 
-1. `supervisor/m03-wp7-retention-continuation`
-2. `agent/m03-wp8-acceptance`
-3. M03 close/checkpoint reconciliation
-4. M04 Character/Entity public contract foundation
-5. M05 Content/Memory and M06 Audio when independently ready
-6. M07 Storyboard/Timeline after required upstream contracts land
-7. M08 Provider Router after relevant Character/Timeline contracts land
-8. Later milestones follow `DEPENDENCY-GRAPH.yaml`
+1. `supervisor/m03-wp7-deletion-execution`
+2. next bounded M03-WP7 branches (temporary cleanup, export staging, vector/index cleanup)
+3. `agent/m03-wp8-acceptance`
+4. M03 close/checkpoint reconciliation
+5. M04 Character/Entity public contract foundation
+6. M05 Content/Memory and M06 Audio when independently ready
+7. M07 Storyboard/Timeline after required upstream contracts land
+8. M08 Provider Router after relevant Character/Timeline contracts land
+9. Later milestones follow `DEPENDENCY-GRAPH.yaml`
 
 The QA/Security lane is continuous and may submit independent PRs when its authoritative write set is conflict-free.
 
@@ -142,9 +143,9 @@ Completion order never overrides dependency safety, contract compatibility, curr
 
 ## Current Supervisor assignment
 
-PR #51 landed the durable lifecycle foundation at `8ed99a094cb443b789929d71c468464e2e0bb72a`. The previous submission branch `supervisor/m03-wp7-retention` is retired for new executable work.
+PR #55 reconciled Supervisor coordination on `main@ddaf0547e1804945c6a585220f499b8efa614e5a`. The previous branch `supervisor/m03-wp7-retention-continuation` is retired for new executable work.
 
-The Supervisor continues M03-WP7 on `supervisor/m03-wp7-retention-continuation`, created from the PR #51 merged `main`. Remaining scope is deletion propagation/delivery blocking, bounded temp cleanup, export staging, vector/index cleanup hooks, and final WP7 acceptance/promotion.
+The Supervisor now owns the bounded deletion-propagation execution slice on `supervisor/m03-wp7-deletion-execution`, created from that current main. Its authoritative executable write set is limited to `packages/python-core/src/lullabies_core/deletion_execution.py` and `packages/python-core/tests/test_deletion_execution.py`; coordination files are maintained only to keep Supervisor plan/slot/state authority synchronized. Remaining WP7 scope after this slice is bounded temporary cleanup, export staging, vector/index cleanup hooks, and final WP7 acceptance/promotion.
 
 Migration `20260901_0015` is landed history and is no longer an active reservation.
 
