@@ -5,39 +5,32 @@ supervisor:
   main_branch: main
   review_and_merge_authority: true
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-retention-continuation
+  own_branch: supervisor/m03-wp7-deletion-execution
 
 active:
   - task_id: M03-WP7
     title: Retention/archive/delete/export primitives
     role: supervisor-module
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp7-retention-continuation
-    base_sha: b3168d8742623390022be44cca51bacf21d92ef1
+    branch: supervisor/m03-wp7-deletion-execution
+    base_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     previous_submission:
-      pr: 54
-      head_sha: e15b05d51e46666cd2f6553b066466b3c092700e
-      merged_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
-      scope: deletion propagation planning and delivery fail-closed integration
+      pr: 55
+      head_sha: 843f431ec85b798957e4c5cbb1cad06798b28a4d
+      merged_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
+      scope: supervisor reconciliation after deletion propagation planning promotion
     module: asset_lifecycle
-    status: active-continuation
+    status: active-deletion-execution
     writes:
-      - packages/python-core/src/lullabies_core/lifecycle.py
-      - packages/python-core/src/lullabies_core/persistence/asset_lifecycle.py
-      - packages/python-core/tests/test_asset_lifecycle.py
-    shared_requests:
-      - packages/python-core/src/lullabies_core/__init__.py
-      - packages/python-core/src/lullabies_core/persistence/__init__.py
-      - packages/python-core/src/lullabies_core/persistence/delivery_access.py
-      - packages/python-core/src/lullabies_core/storage.py
-      - packages/python-core/tests/test_migrations.py
-      - packages/python-core/migrations/**
+      - packages/python-core/src/lullabies_core/deletion_execution.py
+      - packages/python-core/tests/test_deletion_execution.py
+    shared_requests: []
     depends_on:
       - M03-WP6
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
+    last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     last_acknowledged_broadcast: 4
     required_broadcast: null
     remaining_scope:
@@ -52,7 +45,7 @@ active:
     role: module
     assigned_agent: acceptance-agent
     branch: agent/m03-wp8-acceptance
-    base_sha: b3168d8742623390022be44cca51bacf21d92ef1
+    base_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     module: m03_acceptance
     status: planning-only-waiting-on-wp7
     writes:
@@ -68,7 +61,7 @@ active:
     migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: b3168d8742623390022be44cca51bacf21d92ef1
+    last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     last_acknowledged_broadcast: 4
     required_broadcast: null
 
