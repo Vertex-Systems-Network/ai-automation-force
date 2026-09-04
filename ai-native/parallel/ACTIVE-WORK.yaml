@@ -5,41 +5,30 @@ supervisor:
   main_branch: main
   review_and_merge_authority: true
   own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-export-staging
+  own_branch: supervisor/m03-wp7-vector-index-cleanup
 
 active:
   - task_id: M03-WP7
-    title: Retention/archive/delete/export primitives
+    title: Retention/archive/delete/export/vector cleanup primitives
     role: supervisor-module
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp7-export-staging
-    base_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
-    previous_submission:
-      pr: 59
-      head_sha: a46f2d80d4d5022e62bcbdf3294d4fc489a7fe6f
-      merged_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
-      scope: bounded temporary upload and quarantine cleanup
+    branch: supervisor/m03-wp7-vector-index-cleanup
+    base_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
     module: asset_lifecycle
-    status: active-export-staging
+    status: active-vector-index-cleanup
     writes:
-      - packages/python-core/src/lullabies_core/export_staging.py
-      - packages/python-core/src/lullabies_core/persistence/export_staging.py
-      - packages/python-core/migrations/versions/20260901_0016_export_staging.py
-      - packages/python-core/migrations/sql/0016_export_staging_up.sql
-      - packages/python-core/migrations/sql/0016_export_staging_down.sql
-      - packages/python-core/tests/test_export_staging.py
-      - packages/python-core/tests/test_migrations.py
+      - packages/python-core/src/lullabies_core/index_cleanup.py
+      - packages/python-core/tests/test_index_cleanup.py
     shared_requests: []
     depends_on:
       - M03-WP6
-    migration_reservation: 20260901_0016
+    migration_reservation: null
     consent_scope: M03
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: f78a855f0b20dd150af93190b25bffbe6e1a0856
-    last_acknowledged_broadcast: 7
+    last_synced_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
+    last_acknowledged_broadcast: 8
     required_broadcast: null
     remaining_scope:
-      - export staging
       - vector/index cleanup hooks
       - final WP7 acceptance and promotion
 
@@ -48,16 +37,11 @@ active:
     role: module
     assigned_agent: acceptance-agent
     branch: agent/m03-wp8-acceptance
-    base_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     module: m03_acceptance
     status: sync-required-planning-only-waiting-on-wp7
     writes:
       - docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md
       - ai-native/parallel/checkpoints/M03-WP8.md
-    future_executable_writes:
-      - packages/python-core/tests/**
-      - apps/api/tests/**
-      - apps/worker/tests/**
     shared_requests: []
     depends_on:
       - M03-WP7
@@ -66,14 +50,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: ddaf0547e1804945c6a585220f499b8efa614e5a
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
   - task_id: M04-PARALLEL-LANE
     title: Character and Entity Library planning/contracts
     role: planning-contract
     assigned_agent: character-agent
     branch: agent/m04-character-library
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: characters_entities
     status: sync-required-planning-only
     writes:
@@ -87,14 +70,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
     role: planning-contract
     assigned_agent: content-agent
     branch: agent/m05-content-memory
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: content_memory
     status: sync-required-planning-only
     writes:
@@ -108,14 +90,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
     role: planning-contract
     assigned_agent: audio-agent
     branch: agent/m06-audio-production
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: audio
     status: sync-required-planning-only
     writes:
@@ -129,14 +110,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
     role: planning-contract
     assigned_agent: timeline-agent
     branch: agent/m07-storyboard-timeline
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: timeline_storyboard
     status: sync-required-planning-only
     writes:
@@ -152,14 +132,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
     role: planning-contract
     assigned_agent: provider-agent
     branch: agent/m08-video-provider-router
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: providers
     status: sync-required-planning-only
     writes:
@@ -174,14 +153,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
     role: qa
     assigned_agent: qa-security-agent
     branch: agent/cross-cutting-qa-security
-    base_sha: 486c294f7be53aad49ee362465968e766a80899a
     module: media_qa
     status: sync-required-active-audit-planning
     writes:
@@ -195,16 +173,13 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 7
+    required_broadcast: 8
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
   - Completed/merged task branches are retired or replaced before a next bounded executable slice begins.
   - Before claiming a new task, compare its write set with every active entry.
   - Overlapping active write claims block parallel execution unless Supervisor splits/reassigns ownership.
-  - future_executable_writes are non-authoritative until the task is explicitly promoted to executable status.
-  - Planning lanes use dedicated milestone directories and one exact per-task checkpoint file; broad shared checkpoint globs are forbidden.
-  - Every resume must revalidate branch head, base/current main, dependencies, working instructions, broadcasts, slots, and consent.
-  - Every ready submission must announce exactly Work Done and Submitted.
+  - Every resume revalidates current main, dependencies, working instructions, broadcasts, slots, migration state, write ownership, and consent.
+  - Every ready submission announces exactly Work Done and Submitted.
   - A mandatory unacknowledged Supervisor broadcast puts the task into sync-required state and blocks promotion.
-  - Future milestone branches may exist before executable readiness but must remain planning/contract-only until entry and consent gates allow implementation.
