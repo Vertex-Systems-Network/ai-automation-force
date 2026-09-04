@@ -133,7 +133,9 @@ class PostgresExportStagingRepository:
         if str(target["object_key"]) != record.staging_object_key:
             raise PersistenceConflictError("export staging target object key changed")
         if str(target["lifecycle_class"]) != EXPORT_STAGING_LIFECYCLE_CLASS:
-            raise PersistenceConflictError("export staging target is not classified as export staging")
+            raise PersistenceConflictError(
+                "export staging target is not classified as export staging"
+            )
 
     def _from_row(self, connection: Connection, row: RowMapping) -> ExportStagingObject:
         persisted_schema_version = int(row["schema_version"])
