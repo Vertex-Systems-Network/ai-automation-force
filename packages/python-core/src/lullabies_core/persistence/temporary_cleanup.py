@@ -138,7 +138,11 @@ class PostgresTemporaryCleanupRepository:
             raise TemporaryCleanupConflictError(
                 f"upload session is not cleanup-terminal: {status.value}"
             )
-        terminal_at = row["aborted_at"] if status is UploadSessionStatus.ABORTED else row["updated_at"]
+        terminal_at = (
+            row["aborted_at"]
+            if status is UploadSessionStatus.ABORTED
+            else row["updated_at"]
+        )
         if terminal_at is None:
             raise TemporaryCleanupConflictError("terminal upload session is missing terminal time")
         return TemporaryCleanupCandidate(
