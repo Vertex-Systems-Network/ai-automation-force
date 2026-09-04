@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Callable, Protocol
+from typing import Protocol
 
 from .delivery import ShareLinkConstraint
-from .derivatives import DerivativeRecord, DerivativeStatus, TERMINAL_DERIVATIVE_STATUSES
+from .derivatives import TERMINAL_DERIVATIVE_STATUSES, DerivativeRecord, DerivativeStatus
 from .lifecycle import (
     AssetDeletionPropagationPlan,
     AssetLifecycleSnapshot,
@@ -276,12 +277,20 @@ def _require_compatible_live_plan(
     if live.storage_targets != approved.storage_targets:
         raise DeletionPropagationExecutionError("live storage purge targets changed after approval")
     if live.retained_shared_storage != approved.retained_shared_storage:
-        raise DeletionPropagationExecutionError("live shared-storage retention set changed after approval")
+        raise DeletionPropagationExecutionError(
+            "live shared-storage retention set changed after approval"
+        )
     if live.derived_asset_ids != approved.derived_asset_ids:
-        raise DeletionPropagationExecutionError("live derived-asset audit set changed after approval")
+        raise DeletionPropagationExecutionError(
+            "live derived-asset audit set changed after approval"
+        )
     if not set(live.share_link_ids).issubset(approved.share_link_ids):
-        raise DeletionPropagationExecutionError("live deletion plan introduced a new share-link effect")
+        raise DeletionPropagationExecutionError(
+            "live deletion plan introduced a new share-link effect"
+        )
     if not set(live.open_derivative_record_ids).issubset(
         approved.open_derivative_record_ids
     ):
-        raise DeletionPropagationExecutionError("live deletion plan introduced a new derivative effect")
+        raise DeletionPropagationExecutionError(
+            "live deletion plan introduced a new derivative effect"
+        )
