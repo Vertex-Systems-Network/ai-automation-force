@@ -2,18 +2,18 @@ version: 5
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 98e6808ec4034b93a4f1b417563f27866c6e91de
-  main_sha_last_reconciled: 98e6808ec4034b93a4f1b417563f27866c6e91de
-  own_task_id: M03-WP7
-  own_branch: supervisor/m03-wp7-vector-index-cleanup
-  current_mode: feature-development
+  main_sha_last_promotion: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
+  main_sha_last_reconciled: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
+  own_task_id: M03-WP7-CLOSEOUT
+  own_branch: supervisor/m03-wp7-closeout
+  current_mode: governance-closeout
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 61
-  submitted_head_sha: 2c0d4ab48e128af68f92c923567631c72ef1c20b
-  merged_main_sha: 98e6808ec4034b93a4f1b417563f27866c6e91de
+  pr: 63
+  submitted_head_sha: 359b6173d062b48128b1722e8f6340262b5fee5e
+  merged_main_sha: 4a898d0465382c62ae911a4d7f4581b4fdd2d60c
   result: success
 
 new_agent_onboarding:
@@ -35,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 8
+  latest_broadcast_sequence: 9
   agents_with_mandatory_sync:
     - agent/m03-wp8-acceptance
     - agent/m04-character-library
@@ -48,7 +48,7 @@ synchronization:
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
-  - Supervisor implementation occurs on its own bounded module branch, never directly on main.
+  - Supervisor implementation occurs on its own bounded branch, never directly on main.
   - Completed submission branches are retired or replaced before the next bounded slice.
   - New agents begin from main and may not self-assign.
   - If no eligible open slot exists, respond exactly Go Home Come Back Next Time and assign no work.
