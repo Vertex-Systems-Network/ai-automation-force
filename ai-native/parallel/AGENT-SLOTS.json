@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "source_branch_required": "main",
   "assignment_authority": "supervisor",
   "no_slot_response": "Go Home Come Back Next Time",
@@ -15,7 +15,7 @@
     {"slot_id":"SUPERVISOR-M03-GOV-HOLD","module":"m03_governance_hold","branch":"supervisor/m03-governance-hold-current","status":"occupied","assigned_agent":"supervisor-agent","accepts_new_agent":false,"start_status":"active-governance-hold"},
     {"slot_id":"M04-CHARACTER","module":"characters_entities","branch":"agent/m04-character-library-current","status":"occupied","assigned_agent":"character-agent","accepts_new_agent":true,"start_status":"planning-only"},
     {"slot_id":"M05-CONTENT","module":"content_memory","branch":"agent/m05-content-memory-current","status":"occupied","assigned_agent":"content-agent","accepts_new_agent":true,"start_status":"planning-only"},
-    {"slot_id":"M06-AUDIO","module":"audio","branch":"agent/m06-audio-production","status":"occupied","assigned_agent":"audio-agent","accepts_new_agent":true,"start_status":"planning-only"},
+    {"slot_id":"M06-AUDIO","module":"audio","branch":"agent/m06-audio-production-current","status":"occupied","assigned_agent":"audio-agent","accepts_new_agent":true,"start_status":"planning-only"},
     {"slot_id":"M07-TIMELINE","module":"timeline_storyboard","branch":"agent/m07-storyboard-timeline","status":"occupied","assigned_agent":"timeline-agent","accepts_new_agent":true,"start_status":"planning-only"},
     {"slot_id":"M08-PROVIDER","module":"providers","branch":"agent/m08-video-provider-router","status":"occupied","assigned_agent":"provider-agent","accepts_new_agent":true,"start_status":"planning-only"},
     {"slot_id":"CROSS-CUTTING-QA","module":"media_qa","branch":"agent/cross-cutting-qa-security-current","status":"occupied","assigned_agent":"qa-security-agent","accepts_new_agent":true,"start_status":"active-audit-planning"}

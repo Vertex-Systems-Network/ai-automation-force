@@ -1,9 +1,9 @@
-version: 11
+version: 12
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
-  main_sha_last_reconciled: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+  main_sha_last_promotion: 9762ea1e7c640aa91b8eec777055915030a71ebc
+  main_sha_last_reconciled: 9762ea1e7c640aa91b8eec777055915030a71ebc
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: external-governance-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 82
-  submitted_head_sha: 7a50697258127e7b263dfc3c32215ae405033c7e
-  merged_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+  pr: 86
+  submitted_head_sha: ca32cfc9b7fc4dda249188f4524ef11c562215cc
+  merged_main_sha: 9762ea1e7c640aa91b8eec777055915030a71ebc
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+  head_sha: 9762ea1e7c640aa91b8eec777055915030a71ebc
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 14
+  latest_broadcast_sequence: 15
   agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
@@ -64,8 +64,17 @@ planning_state:
       - executable M04 completion and acceptance
       - explicit M05 executable consent
       - then-current governance, write ownership and migration reservation if required
+  m06:
+    status: planning-hardened-only
+    promotion_pr: 86
+    active_branch: agent/m06-audio-production-current
+    executable_authority: false
+    executable_gates:
+      - required upstream executable milestone acceptance
+      - explicit M06 executable consent
+      - then-current governance, write ownership and migration reservation if required
+      - current audio provider APIs, licensing and commercial-use constraints revalidated
   downstream:
-    m06: dependency-gated-planning-only
     m07: dependency-gated-planning-only
     m08: dependency-gated-planning-only
 
