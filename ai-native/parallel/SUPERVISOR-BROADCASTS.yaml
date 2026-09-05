@@ -1,5 +1,5 @@
-version: 7
-latest_sequence: 11
+version: 8
+latest_sequence: 12
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -86,43 +86,68 @@ broadcasts:
       - agent/m08-video-provider-router
       - agent/cross-cutting-qa-security
     mandatory: true
+  - sequence: 12
+    trigger: qa-planning-promotion
+    merged_pr: 74
+    merged_branch: agent/cross-cutting-qa-security
+    submitted_head_sha: 6ce2de1bf01ae9562ee2b370ca53760bd05f9ebd
+    merged_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-cross-cutting-adversarial-qa-sync
+    changed_areas:
+      - cross-cutting adversarial QA audit plan
+      - M04-M08 future security acceptance hooks
+      - generic continuation remains non-privileged authorization
+      - M03 protected-main governance remains blocked by Issue 36
+    contract_changes:
+      - future module acceptance must re-evaluate newly reachable authority/trust boundaries
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
 
 recipient_states:
-  supervisor/m03-wp8-closeout:
+  supervisor/m03-governance-hold-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   agent/m04-character-library:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   agent/m05-content-memory:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   agent/m06-audio-production:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   agent/m07-storyboard-timeline:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   agent/m08-video-provider-router:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
-  agent/cross-cutting-qa-security:
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+  agent/cross-cutting-qa-security-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 11
-    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_sequence: 12
+    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
