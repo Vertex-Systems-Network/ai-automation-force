@@ -1,9 +1,9 @@
-version: 8
+version: 9
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 0d79b73e112c8145244f01abcaa7b2489ac03560
-  main_sha_last_reconciled: 0d79b73e112c8145244f01abcaa7b2489ac03560
+  main_sha_last_promotion: 6eab0440ef32280c16e41b41851deb3f11937495
+  main_sha_last_reconciled: 6eab0440ef32280c16e41b41851deb3f11937495
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: external-governance-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 70
-  submitted_head_sha: 532bfba093e3a18d1c1d6280c329b5747c9eef32
-  merged_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+  pr: 74
+  submitted_head_sha: 6ce2de1bf01ae9562ee2b370ca53760bd05f9ebd
+  merged_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+  head_sha: 6eab0440ef32280c16e41b41851deb3f11937495
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 11
+  latest_broadcast_sequence: 12
   agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
