@@ -10,50 +10,53 @@ New agents start from `main`, read `AGENT-SLOTS.json`, and may work only after S
 
 | Lane | Agent | Branch | State |
 | --- | --- | --- | --- |
-| M03 Governance Hold | `supervisor-agent` | `supervisor/m03-governance-hold-current` | active governance-only hold |
-| M04 Character | `character-agent` | `agent/m04-character-library` | broadcast-11 synchronized; planning-only; dependency-gated |
-| M05 Content | `content-agent` | `agent/m05-content-memory` | broadcast-11 synchronized; planning-only; dependency-gated |
-| M06 Audio | `audio-agent` | `agent/m06-audio-production` | broadcast-11 synchronized; planning-only; dependency-gated |
-| M07 Timeline | `timeline-agent` | `agent/m07-storyboard-timeline` | broadcast-11 synchronized; planning-only; dependency-gated |
-| M08 Provider | `provider-agent` | `agent/m08-video-provider-router` | broadcast-11 synchronized; planning-only; dependency-gated |
-| QA / Security | `qa-security-agent` | `agent/cross-cutting-qa-security` | broadcast-11 synchronized; audit/planning only |
+| M03 Governance Hold | `supervisor-agent` | `supervisor/m03-governance-hold-current` | active governance-only hold; broadcast 12 synchronized |
+| M04 Character | `character-agent` | `agent/m04-character-library` | broadcast 12 synchronized; planning-only; dependency-gated |
+| M05 Content | `content-agent` | `agent/m05-content-memory` | broadcast 12 synchronized; planning-only; dependency-gated |
+| M06 Audio | `audio-agent` | `agent/m06-audio-production` | broadcast 12 synchronized; planning-only; dependency-gated |
+| M07 Timeline | `timeline-agent` | `agent/m07-storyboard-timeline` | broadcast 12 synchronized; planning-only; dependency-gated |
+| M08 Provider | `provider-agent` | `agent/m08-video-provider-router` | broadcast 12 synchronized; planning-only; dependency-gated |
+| QA / Security | `qa-security-agent` | `agent/cross-cutting-qa-security-current` | broadcast 12 synchronized; audit/planning only |
 
-The completed `agent/m03-wp8-acceptance-v2`, `supervisor/m03-wp8-review`, and `supervisor/m03-wp8-closeout` branches are retired from active execution authority. The earlier `agent/m03-wp8-acceptance` branch also remains retired and is not promotion authority.
+Completed QA submission branch `agent/cross-cutting-qa-security` is retired from active authority after PR #74. `agent/cross-cutting-qa-security-current` is the fresh current-main audit/planning branch. Earlier completed M03/WP8 submission/review/closeout branches remain retired.
 
-## M03 source completion
+## M03 source completion and external hold
 
-PR #68 landed the canonical WP8 acceptance matrix/checkpoint. PR #70 then reconciled post-WP8 governance state and merged to `main@0d79b73e112c8145244f01abcaa7b2489ac03560`. Both promotions passed exact-head Repository Governance, Core Domain Contracts, and Durable Control Plane before merge.
+M03 implementation, WP8 source acceptance, and source-side closeout are complete. Issue #36 remains the final M03 protected-main governance blocker because live GitHub enforcement is not verified. No additional WP7/WP8 product/API/schema/provider work is authorized by this state.
 
-Broadcast 11 records WP8 source acceptance. WP7 implementation and WP8 source acceptance/closeout are complete. Migrations `20260901_0015` and `20260901_0016` remain landed; there is no active M03 migration reservation.
+Migrations `20260901_0015` and `20260901_0016` remain landed; there is no active M03 migration reservation.
 
-No further WP7/WP8 product/API/schema/provider implementation is authorized by this closeout.
+## Cross-cutting QA promotion
 
-## Broadcast 11 synchronization
+PR #74 landed `docs/qa/ADVERSARIAL-AUDIT-PLAN.md` and the QA checkpoint at `main@6eab0440ef32280c16e41b41851deb3f11937495` after exact-head Repository Governance, Core Domain Contracts and Durable Control Plane passed.
 
-Before Issue #71 reconciliation, M04, M05, M06, M07, M08, and cross-cutting QA were each exactly 0 commits ahead and 11 commits behind current main. Each branch was non-force fast-forwarded to `main@0d79b73e112c8145244f01abcaa7b2489ac03560`; no unique work was discarded.
+The plan reuses current M03 focused evidence and assigns future adversarial obligations only where later modules introduce new trust or authority surfaces. It covers authority isolation, tenant validation, memory poisoning, provider-output distrust, secret handling, budget/retry ceilings, rights/provenance and multimodal instruction isolation.
 
-This synchronization clears only the stale mandatory broadcast receipt. It does **not** expand consent or satisfy dependency gates.
+Broadcast 12 records this cross-cutting acceptance guidance because future M04-M08 work must observe it. The broadcast is an acceptance/planning constraint, not feature-execution authority.
 
-## External governance boundary
+## Dependency and consent boundary
 
-Issue #36 is the remaining M03 blocker. Live GitHub branch read-back shows `main` is not protected and repository rulesets remain empty. Protected-main enforcement is therefore not verified.
+- M04 and M06 remain dependent on `M03-GOV-HOLD`.
+- M05 remains dependent on M04.
+- M07 remains dependent on M04/M05/M06.
+- M08 remains dependent on M04/M07.
+- Cross-cutting QA has no module dependency but remains audit/planning only unless an applicable executable scope authorizes tests.
+- `docs/milestones/M04/PLAN.md` requires M01-M03 accepted plus explicit M04 consent before executable M04 work.
+- The repository threat model explicitly states generic `continue` is not privileged development, publish or security authorization.
 
-The current connector exposes ruleset/protection read evidence but no administration/environment write action. The Supervisor must not claim, simulate, or bypass live protection. An administrator must apply and verify the retained protection policy from an admin-capable context, after which Issue #36 can be re-evaluated against repository-native read-back evidence.
+Therefore no later module may treat branch synchronization or conversational continuation as satisfying its executable entry criteria.
 
 ## Parallel safety
 
-`ACTIVE-WORK.yaml` is authoritative for active write claims. The M03 governance-hold lane owns only:
-
-- `ai-native/parallel/checkpoints/M03-GOV-HOLD.md`
-
-Later milestone lanes are now synchronized but remain planning-only under their existing consent/dependency contracts. In particular, M04 and M06 depend on `M03-GOV-HOLD`; M05 depends on M04; M07 depends on M04/M05/M06; M08 depends on M04/M07. Cross-cutting QA remains audit/planning only unless an applicable executable scope is granted.
+`ACTIVE-WORK.yaml` is authoritative for active write claims. Later planning lanes remain disjoint and may update only their claimed planning/checkpoint surfaces. QA owns `docs/qa/**` and its checkpoint plus shared-request access to security docs; executable product/test changes require separate applicable scope.
 
 ## Hold order
 
-1. keep Issue #36 open while live protected-main evidence is absent;
-2. do not start new M03 product implementation while the external governance hold is active;
-3. do not treat broadcast synchronization as feature-execution authority;
-4. later milestone execution requires its dependency chain plus explicit executable scope/consent to be satisfied.
+1. maintain Issue #36 as `EXTERNAL_NOT_VERIFIED` while protected-main evidence is absent;
+2. preserve broadcast 12 adversarial obligations in future milestone acceptance;
+3. do not start M04/M06 executable work until M03 acceptance/governance dependency and explicit executable consent are satisfied;
+4. do not promote downstream M05/M07/M08 past their dependency chain;
+5. do not create synthetic provider/admin/production evidence from mocks or source CI.
 
 ## Completion and review
 
