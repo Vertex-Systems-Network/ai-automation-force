@@ -1,4 +1,4 @@
-version: 6
+version: 7
 latest_sequence: 11
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
@@ -94,35 +94,35 @@ recipient_states:
     last_acknowledged_sequence: 11
     last_synced_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
   agent/m04-character-library:
-    state: sync-required
-    required_sequence: 11
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   agent/m05-content-memory:
-    state: sync-required
-    required_sequence: 11
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   agent/m06-audio-production:
-    state: sync-required
-    required_sequence: 11
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   agent/m07-storyboard-timeline:
-    state: sync-required
-    required_sequence: 11
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   agent/m08-video-provider-router:
-    state: sync-required
-    required_sequence: 11
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   agent/cross-cutting-qa-security:
-    state: sync-required
-    required_sequence: 11
-    last_acknowledged_sequence: 4
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
+    state: synchronized
+    required_sequence: null
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
