@@ -1,9 +1,9 @@
-version: 10
+version: 11
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 5367ffe5401292744cbe29d8f1a16c36591fae27
-  main_sha_last_reconciled: 5367ffe5401292744cbe29d8f1a16c36591fae27
+  main_sha_last_promotion: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+  main_sha_last_reconciled: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: external-governance-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 78
-  submitted_head_sha: 8525499dcaf6889c252de89369ff312cde0464f7
-  merged_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+  pr: 82
+  submitted_head_sha: 7a50697258127e7b263dfc3c32215ae405033c7e
+  merged_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+  head_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 13
+  latest_broadcast_sequence: 14
   agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
@@ -55,8 +55,16 @@ planning_state:
       - Issue 36 live protected-main governance
       - explicit M04 executable consent
       - fresh write ownership and migration reservation if required
+  m05:
+    status: planning-hardened-only
+    promotion_pr: 82
+    active_branch: agent/m05-content-memory-current
+    executable_authority: false
+    executable_gates:
+      - executable M04 completion and acceptance
+      - explicit M05 executable consent
+      - then-current governance, write ownership and migration reservation if required
   downstream:
-    m05: dependency-gated-planning-only
     m06: dependency-gated-planning-only
     m07: dependency-gated-planning-only
     m08: dependency-gated-planning-only

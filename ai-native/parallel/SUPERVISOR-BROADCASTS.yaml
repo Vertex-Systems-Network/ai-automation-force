@@ -1,5 +1,5 @@
-version: 9
-latest_sequence: 13
+version: 10
+latest_sequence: 14
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -138,43 +138,72 @@ broadcasts:
       - agent/m08-video-provider-router
       - agent/cross-cutting-qa-security-current
     mandatory: true
+  - sequence: 14
+    trigger: m05-planning-promotion
+    merged_pr: 82
+    merged_branch: agent/m05-content-memory
+    submitted_head_sha: 7a50697258127e7b263dfc3c32215ae405033c7e
+    merged_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-m05-memory-planning-hardening-sync
+    changed_areas:
+      - M05 planning contract hardened against memory poisoning and authority escalation
+      - missing M05 planning checkpoint created
+      - deterministic memory promotion, provenance, isolation, correction/forget and secret-exclusion obligations recorded
+      - executable M04 completion and explicit M05 executable consent remain mandatory gates
+      - M07 dependency remains a hold; planning completion is not executable completion
+      - Issue 36 protected-main governance remains externally unverified
+    contract_changes:
+      - low-trust memory, research and model output cannot self-promote into policy, approval, budget or security authority
+      - future M05 executable work must revalidate dependency, consent, migration, write ownership, provider trust, tenant isolation and bounded cost/retry controls
+      - planning synchronization does not grant executable M05 or downstream authority
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
 
 recipient_states:
   supervisor/m03-governance-hold-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   agent/m04-character-library-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-  agent/m05-content-memory:
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+  agent/m05-content-memory-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   agent/m06-audio-production:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   agent/m07-storyboard-timeline:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   agent/m08-video-provider-router:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
   agent/cross-cutting-qa-security-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 13
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    last_acknowledged_sequence: 14
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
