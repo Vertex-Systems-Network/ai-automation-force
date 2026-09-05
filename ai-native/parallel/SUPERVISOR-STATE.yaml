@@ -1,9 +1,9 @@
-version: 9
+version: 10
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 6eab0440ef32280c16e41b41851deb3f11937495
-  main_sha_last_reconciled: 6eab0440ef32280c16e41b41851deb3f11937495
+  main_sha_last_promotion: 5367ffe5401292744cbe29d8f1a16c36591fae27
+  main_sha_last_reconciled: 5367ffe5401292744cbe29d8f1a16c36591fae27
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: external-governance-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 74
-  submitted_head_sha: 6ce2de1bf01ae9562ee2b370ca53760bd05f9ebd
-  merged_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+  pr: 78
+  submitted_head_sha: 8525499dcaf6889c252de89369ff312cde0464f7
+  merged_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+  head_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 12
+  latest_broadcast_sequence: 13
   agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
@@ -45,11 +45,28 @@ external_gates:
   live_ruleset_readback: []
   effect: M03 source acceptance complete; final protected-main governance/promotion remains blocked
 
+planning_state:
+  m04:
+    status: planning-hardened-only
+    promotion_pr: 78
+    active_branch: agent/m04-character-library-current
+    executable_authority: false
+    executable_gates:
+      - Issue 36 live protected-main governance
+      - explicit M04 executable consent
+      - fresh write ownership and migration reservation if required
+  downstream:
+    m05: dependency-gated-planning-only
+    m06: dependency-gated-planning-only
+    m07: dependency-gated-planning-only
+    m08: dependency-gated-planning-only
+
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
   - Supervisor implementation occurs on its own bounded branch, never directly on main.
-  - Completed submission branches are retired or replaced before the next bounded slice.
+  - Completed submission branches are retired or replaced before the next bounded executable slice.
   - New agents begin from main and may not self-assign.
   - If no eligible open slot exists, respond exactly Go Home Come Back Next Time and assign no work.
-  - Every successful promotion merge produces a broadcast before feature implementation resumes.
+  - Every successful promotion merge produces a broadcast before affected planning or feature work resumes.
   - Main SHA, slot state, migration state, write ownership, and broadcast state are reconciled after every promotion.
+  - Planning promotion or branch synchronization does not grant executable milestone authority.
