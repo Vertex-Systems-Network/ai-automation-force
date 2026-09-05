@@ -1,4 +1,4 @@
-version: 10
+version: 11
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -13,7 +13,7 @@ active:
     role: supervisor-governance
     assigned_agent: supervisor-agent
     branch: supervisor/m03-governance-hold-current
-    base_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    base_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
     module: m03_governance_hold
     status: active-governance-hold
     writes:
@@ -24,8 +24,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -44,15 +44,15 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
     role: planning-contract
     assigned_agent: content-agent
-    branch: agent/m05-content-memory
+    branch: agent/m05-content-memory-current
     module: content_memory
     status: planning-only
     writes:
@@ -64,8 +64,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -84,8 +84,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -106,8 +106,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -127,8 +127,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -147,8 +147,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
-    last_acknowledged_broadcast: 13
+    last_synced_main_sha: 4a6f03c9476fee7dada6df48e6ea6e64fb164a1d
+    last_acknowledged_broadcast: 14
     required_broadcast: null
 
 rules:
