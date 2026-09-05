@@ -1,52 +1,31 @@
-version: 6
+version: 7
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
   main_branch: main
   review_and_merge_authority: true
-  own_task_id: M03-WP8-REVIEW
-  own_branch: supervisor/m03-wp8-review
+  own_task_id: M03-GOV-HOLD
+  own_branch: supervisor/m03-wp8-closeout
 
 active:
-  - task_id: M03-WP8-REVIEW
-    title: M03-WP8 acceptance review and promotion authority
-    role: supervisor-review
+  - task_id: M03-GOV-HOLD
+    title: M03 post-WP8 governance hold
+    role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp8-review
-    base_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-    module: m03_acceptance_review
-    status: active-review-only
+    branch: supervisor/m03-wp8-closeout
+    base_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+    module: m03_governance_hold
+    status: active-governance-hold
     writes:
-      - ai-native/parallel/checkpoints/M03-WP8-REVIEW.md
+      - ai-native/parallel/checkpoints/M03-GOV-HOLD.md
     shared_requests: []
     depends_on:
-      - M03-WP7-CLOSEOUT
+      - M03-WP8
     migration_reservation: null
-    consent_scope: M03-review-and-promotion
+    consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-    last_acknowledged_broadcast: 10
-    required_broadcast: null
-
-  - task_id: M03-WP8
-    title: M03 end-to-end source acceptance
-    role: module
-    assigned_agent: acceptance-agent
-    branch: agent/m03-wp8-acceptance-v2
-    base_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-    module: m03_acceptance
-    status: active-acceptance
-    writes:
-      - docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md
-      - ai-native/parallel/checkpoints/M03-WP8.md
-    shared_requests: []
-    depends_on:
-      - M03-WP7-CLOSEOUT
-    migration_reservation: null
-    consent_scope: M03-source-acceptance-only
-    completion_signal: Work Done and Submitted
-    last_synced_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-    last_acknowledged_broadcast: 10
+    last_synced_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+    last_acknowledged_broadcast: 11
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -61,13 +40,13 @@ active:
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
-      - M03-WP8
+      - M03-GOV-HOLD
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 10
+    required_broadcast: 11
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -87,7 +66,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 10
+    required_broadcast: 11
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -101,13 +80,13 @@ active:
       - ai-native/parallel/checkpoints/M06-PARALLEL-LANE.md
     shared_requests: []
     depends_on:
-      - M03-WP8
+      - M03-GOV-HOLD
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 10
+    required_broadcast: 11
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -129,7 +108,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 10
+    required_broadcast: 11
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -150,7 +129,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 10
+    required_broadcast: 11
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -170,7 +149,7 @@ active:
     completion_signal: Work Done and Submitted
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
     last_acknowledged_broadcast: 4
-    required_broadcast: 10
+    required_broadcast: 11
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.

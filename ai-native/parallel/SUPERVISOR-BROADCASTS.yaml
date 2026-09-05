@@ -1,5 +1,5 @@
-version: 5
-latest_sequence: 10
+version: 6
+latest_sequence: 11
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -56,23 +56,29 @@ broadcasts:
     classification: mandatory-wp7-vector-index-cleanup-sync
     schema_migration_changes: []
   - sequence: 10
-    trigger: supervisor-merge
     merged_pr: 65
     merged_branch: supervisor/m03-wp7-closeout
     submitted_head_sha: 615ac1d287f2773a09d15ac74a390dcb0ccb4d47
     merged_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
     classification: mandatory-wp7-closeout-wp8-handoff-sync
+    schema_migration_changes: []
+  - sequence: 11
+    trigger: supervisor-merge
+    merged_pr: 68
+    merged_branch: agent/m03-wp8-acceptance-v2
+    submitted_head_sha: 66d81de4a4c0aea16186dae43d3a1922cd8d2123
+    merged_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-wp8-source-acceptance-closeout-sync
     changed_areas:
-      - WP7 implementation closeout checkpoint
-      - migrations 20260901_0015 and 20260901_0016 confirmed landed
-      - M03-WP8 source acceptance unblocked
-      - Supervisor review authority separated from acceptance-agent writes
+      - M03-WP8 acceptance matrix and checkpoint landed
+      - exact-head Repository Governance, Core Domain Contracts and Durable Control Plane passed
+      - M03 source acceptance complete
+      - final protected-main governance remains blocked by Issue 36
     contract_changes: []
     schema_migration_changes: []
     recipients:
-      - supervisor/m03-wp8-review
-      - agent/m03-wp8-acceptance-v2
+      - supervisor/m03-wp8-closeout
       - agent/m04-character-library
       - agent/m05-content-memory
       - agent/m06-audio-production
@@ -82,44 +88,39 @@ broadcasts:
     mandatory: true
 
 recipient_states:
-  supervisor/m03-wp8-review:
+  supervisor/m03-wp8-closeout:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 10
-    last_synced_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-  agent/m03-wp8-acceptance-v2:
-    state: synchronized
-    required_sequence: null
-    last_acknowledged_sequence: 10
-    last_synced_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
+    last_acknowledged_sequence: 11
+    last_synced_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
   agent/m04-character-library:
     state: sync-required
-    required_sequence: 10
+    required_sequence: 11
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m05-content-memory:
     state: sync-required
-    required_sequence: 10
+    required_sequence: 11
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m06-audio-production:
     state: sync-required
-    required_sequence: 10
+    required_sequence: 11
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m07-storyboard-timeline:
     state: sync-required
-    required_sequence: 10
+    required_sequence: 11
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/m08-video-provider-router:
     state: sync-required
-    required_sequence: 10
+    required_sequence: 11
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
   agent/cross-cutting-qa-security:
     state: sync-required
-    required_sequence: 10
+    required_sequence: 11
     last_acknowledged_sequence: 4
     last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
 

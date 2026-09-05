@@ -1,19 +1,19 @@
-version: 6
+version: 7
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-  main_sha_last_reconciled: 38b182f4ea886b48c4249aacf362fb58546bd3f5
-  own_task_id: M03-WP8-REVIEW
-  own_branch: supervisor/m03-wp8-review
-  current_mode: acceptance-review
+  main_sha_last_promotion: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+  main_sha_last_reconciled: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+  own_task_id: M03-GOV-HOLD
+  own_branch: supervisor/m03-wp8-closeout
+  current_mode: external-governance-hold
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 65
-  submitted_head_sha: 615ac1d287f2773a09d15ac74a390dcb0ccb4d47
-  merged_main_sha: 38b182f4ea886b48c4249aacf362fb58546bd3f5
+  pr: 68
+  submitted_head_sha: 66d81de4a4c0aea16186dae43d3a1922cd8d2123
+  merged_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
   result: success
 
 new_agent_onboarding:
@@ -24,22 +24,18 @@ new_agent_onboarding:
   no_slot_response: Go Home Come Back Next Time
 
 pause_checkpoint:
-  active: false
-  branch: null
+  active: true
+  branch: supervisor/m03-wp8-closeout
   head_sha: null
-  task_id: null
-  subtask: null
-  next_action: null
-  reason: null
+  task_id: M03-GOV-HOLD
+  subtask: wait-for-live-protected-main-evidence
+  next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
+  reason: M03 source acceptance is complete; final governance truth state depends on external GitHub administration
 
-review_queue:
-  - task_id: M03-WP8
-    branch: agent/m03-wp8-acceptance-v2
-    state: awaiting-submission
-    exact_head_sha: null
+review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 10
+  latest_broadcast_sequence: 11
   agents_with_mandatory_sync:
     - agent/m04-character-library
     - agent/m05-content-memory
@@ -52,7 +48,8 @@ synchronization:
 external_gates:
   m03_main_protection_issue: 36
   status: not-verified
-  effect: source acceptance may complete; final M03 governance/promotion may not claim protected-main completion
+  live_ruleset_readback: []
+  effect: M03 source acceptance complete; final protected-main governance/promotion remains blocked
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
