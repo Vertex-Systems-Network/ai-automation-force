@@ -1,5 +1,5 @@
-version: 8
-latest_sequence: 12
+version: 9
+latest_sequence: 13
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -111,43 +111,70 @@ broadcasts:
       - agent/m08-video-provider-router
       - agent/cross-cutting-qa-security-current
     mandatory: true
+  - sequence: 13
+    trigger: m04-planning-promotion
+    merged_pr: 78
+    merged_branch: agent/m04-character-library
+    submitted_head_sha: 8525499dcaf6889c252de89369ff312cde0464f7
+    merged_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-m04-planning-hardening-sync
+    changed_areas:
+      - M04 planning contract hardened with cross-cutting adversarial obligations
+      - missing M04 planning checkpoint created
+      - Issue 36 protected-main governance remains an executable M04 dependency
+      - explicit M04 executable consent remains required
+      - downstream M05/M07/M08 dependencies remain holds, not completion signals
+    contract_changes:
+      - M04 future executable promotion must revalidate tenant authority, lock integrity, version immutability, rights/provenance and reference-pack trust boundaries
+      - planning synchronization does not grant executable M04 or downstream authority
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory
+      - agent/m06-audio-production
+      - agent/m07-storyboard-timeline
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
 
 recipient_states:
   supervisor/m03-governance-hold-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
-  agent/m04-character-library:
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
+  agent/m04-character-library-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   agent/m05-content-memory:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   agent/m06-audio-production:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   agent/m07-storyboard-timeline:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   agent/m08-video-provider-router:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
   agent/cross-cutting-qa-security-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 12
-    last_synced_main_sha: 6eab0440ef32280c16e41b41851deb3f11937495
+    last_acknowledged_sequence: 13
+    last_synced_main_sha: 5367ffe5401292744cbe29d8f1a16c36591fae27
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
