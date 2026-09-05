@@ -10,8 +10,7 @@ New agents start from `main`, read `AGENT-SLOTS.json`, and may work only after S
 
 | Lane | Agent | Branch | State |
 | --- | --- | --- | --- |
-| M03-WP8 Review | `supervisor-agent` | `supervisor/m03-wp8-review` | active review/promotion authority only |
-| M03-WP8 Acceptance | `acceptance-agent` | `agent/m03-wp8-acceptance-v2` | active source acceptance |
+| M03 Governance Hold | `supervisor-agent` | `supervisor/m03-wp8-closeout` | active governance-only hold |
 | M04 Character | `character-agent` | `agent/m04-character-library` | sync-required planning-only |
 | M05 Content | `content-agent` | `agent/m05-content-memory` | sync-required planning-only |
 | M06 Audio | `audio-agent` | `agent/m06-audio-production` | sync-required planning-only |
@@ -19,36 +18,36 @@ New agents start from `main`, read `AGENT-SLOTS.json`, and may work only after S
 | M08 Provider | `provider-agent` | `agent/m08-video-provider-router` | sync-required planning-only |
 | QA / Security | `qa-security-agent` | `agent/cross-cutting-qa-security` | sync-required audit/planning |
 
-The earlier `agent/m03-wp8-acceptance` branch is retired for executable work after a partial pre-reconciliation slot edit. It is not promotion authority and will not be force-reset. `agent/m03-wp8-acceptance-v2` is the clean current-main acceptance branch.
+The completed `agent/m03-wp8-acceptance-v2` and `supervisor/m03-wp8-review` branches are retired from active execution authority. The earlier `agent/m03-wp8-acceptance` branch also remains retired and is not promotion authority.
 
-## M03 transition state
+## M03 source completion
 
-PR #65 closed WP7 at `main@38b182f4ea886b48c4249aacf362fb58546bd3f5`. Broadcast 10 records that merge and unblocks bounded WP8 source acceptance. Migrations `20260901_0015` and `20260901_0016` remain landed; there is no active M03 migration reservation.
+PR #68 landed the canonical WP8 acceptance matrix/checkpoint at `main@c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3`. Its exact head `66d81de4a4c0aea16186dae43d3a1922cd8d2123` passed Repository Governance, Core Domain Contracts, and Durable Control Plane before merge.
 
-WP8 may create only the canonical acceptance matrix/checkpoint and genuinely missing acceptance tests if the evidence audit proves a gap. Existing focused evidence already covers multipart restart/resume and lost-ack recovery, cross-project delivery denial and signer mismatch, malicious/MIME-spoof quarantine rejection, provenance/hash integrity, archive/restore, deletion propagation, temporary cleanup, export staging, and vector/index cleanup hooks.
+Broadcast 11 records that successful promotion. WP7 implementation and WP8 source acceptance are complete. Migrations `20260901_0015` and `20260901_0016` remain landed; there is no active M03 migration reservation.
 
-No product/API/schema/provider expansion, external provider credential, production bucket, or cost-bearing action is authorized by WP8.
+No further WP7/WP8 product/API/schema/provider implementation is authorized by this closeout.
 
 ## External governance boundary
 
-Issue #36 remains open because live GitHub repository ruleset read-back does not prove protected `main`. WP8 source acceptance may be merged when its exact-head source checks are green, but that merge must not claim final M03 protected-main governance completion while Issue #36 is unresolved.
+Issue #36 is now the only M03 blocker. Live GitHub repository ruleset read-back still returns `[]`, so protected-main enforcement is not verified.
+
+The current connector exposes ruleset read-only access and no administration/environment write action. Therefore the Supervisor must not claim, simulate, or bypass live protection. An administrator must apply and verify the retained protection policy from an admin-capable context, after which Issue #36 can be re-evaluated against repository-native read-back evidence.
 
 ## Parallel safety
 
-`ACTIVE-WORK.yaml` is authoritative for active write claims. The acceptance agent owns only:
+`ACTIVE-WORK.yaml` is authoritative for active write claims. The M03 governance-hold lane owns only:
 
-- `docs/milestones/M03/WP8-ACCEPTANCE-MATRIX.md`
-- `ai-native/parallel/checkpoints/M03-WP8.md`
+- `ai-native/parallel/checkpoints/M03-GOV-HOLD.md`
 
-The Supervisor review lane owns only `ai-native/parallel/checkpoints/M03-WP8-REVIEW.md`. Other lanes remain disjoint and sync-required by broadcast 10.
+All later milestone and QA lanes remain disjoint, sync-required by broadcast 11, and planning-only until their dependency/consent gates are explicitly satisfied.
 
-## Merge order
+## Merge / hold order
 
-1. `supervisor/m03-wp8-review` coordination reconciliation
-2. fast-forward `agent/m03-wp8-acceptance-v2` to the resulting current main
-3. `agent/m03-wp8-acceptance-v2` source acceptance submission
-4. Supervisor exact-head review and merge when all required source checks are green
-5. final M03 governance close only after Issue #36 live protection evidence is satisfied
+1. merge `supervisor/m03-wp8-closeout` only after exact-head Repository Governance, Core Domain Contracts and Durable Control Plane are green;
+2. keep Issue #36 open while live ruleset/protection read-back is absent;
+3. do not start new M03 source implementation while the external governance hold is active;
+4. later milestone execution requires fresh scope/dependency synchronization and may not treat unresolved M03 governance as completed.
 
 ## Completion and review
 
