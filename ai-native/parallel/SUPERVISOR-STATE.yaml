@@ -1,19 +1,19 @@
-version: 7
+version: 8
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
-  main_sha_last_reconciled: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+  main_sha_last_promotion: 0d79b73e112c8145244f01abcaa7b2489ac03560
+  main_sha_last_reconciled: 0d79b73e112c8145244f01abcaa7b2489ac03560
   own_task_id: M03-GOV-HOLD
-  own_branch: supervisor/m03-wp8-closeout
+  own_branch: supervisor/m03-governance-hold-current
   current_mode: external-governance-hold
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 68
-  submitted_head_sha: 66d81de4a4c0aea16186dae43d3a1922cd8d2123
-  merged_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+  pr: 70
+  submitted_head_sha: 532bfba093e3a18d1c1d6280c329b5747c9eef32
+  merged_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   result: success
 
 new_agent_onboarding:
@@ -25,24 +25,18 @@ new_agent_onboarding:
 
 pause_checkpoint:
   active: true
-  branch: supervisor/m03-wp8-closeout
-  head_sha: null
+  branch: supervisor/m03-governance-hold-current
+  head_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
-  reason: M03 source acceptance is complete; final governance truth state depends on external GitHub administration
+  reason: M03 source acceptance and closeout are complete; final governance truth state depends on external GitHub administration
 
 review_queue: []
 
 synchronization:
   latest_broadcast_sequence: 11
-  agents_with_mandatory_sync:
-    - agent/m04-character-library
-    - agent/m05-content-memory
-    - agent/m06-audio-production
-    - agent/m07-storyboard-timeline
-    - agent/m08-video-provider-router
-    - agent/cross-cutting-qa-security
+  agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
 external_gates:

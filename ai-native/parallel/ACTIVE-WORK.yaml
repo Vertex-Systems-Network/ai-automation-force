@@ -1,19 +1,19 @@
-version: 7
+version: 8
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
   main_branch: main
   review_and_merge_authority: true
   own_task_id: M03-GOV-HOLD
-  own_branch: supervisor/m03-wp8-closeout
+  own_branch: supervisor/m03-governance-hold-current
 
 active:
   - task_id: M03-GOV-HOLD
     title: M03 post-WP8 governance hold
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/m03-wp8-closeout
-    base_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+    branch: supervisor/m03-governance-hold-current
+    base_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
     module: m03_governance_hold
     status: active-governance-hold
     writes:
@@ -24,7 +24,7 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c61955f56ef5c9c7f3e6ff717e12dac5364d8fc3
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
     last_acknowledged_broadcast: 11
     required_broadcast: null
 
@@ -34,7 +34,7 @@ active:
     assigned_agent: character-agent
     branch: agent/m04-character-library
     module: characters_entities
-    status: sync-required-planning-only
+    status: planning-only
     writes:
       - docs/milestones/M04/**
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
@@ -44,9 +44,9 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
-    last_acknowledged_broadcast: 4
-    required_broadcast: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_broadcast: 11
+    required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
     title: Content Intelligence and Memory planning/contracts
@@ -54,7 +54,7 @@ active:
     assigned_agent: content-agent
     branch: agent/m05-content-memory
     module: content_memory
-    status: sync-required-planning-only
+    status: planning-only
     writes:
       - docs/milestones/M05/**
       - ai-native/parallel/checkpoints/M05-PARALLEL-LANE.md
@@ -64,9 +64,9 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
-    last_acknowledged_broadcast: 4
-    required_broadcast: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_broadcast: 11
+    required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
     title: Hybrid Audio Production planning/contracts
@@ -74,7 +74,7 @@ active:
     assigned_agent: audio-agent
     branch: agent/m06-audio-production
     module: audio
-    status: sync-required-planning-only
+    status: planning-only
     writes:
       - docs/milestones/M06/**
       - ai-native/parallel/checkpoints/M06-PARALLEL-LANE.md
@@ -84,9 +84,9 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
-    last_acknowledged_broadcast: 4
-    required_broadcast: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_broadcast: 11
+    required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
     title: Storyboard and Timeline planning/contracts
@@ -94,7 +94,7 @@ active:
     assigned_agent: timeline-agent
     branch: agent/m07-storyboard-timeline
     module: timeline_storyboard
-    status: sync-required-planning-only
+    status: planning-only
     writes:
       - docs/milestones/M07/**
       - ai-native/parallel/checkpoints/M07-PARALLEL-LANE.md
@@ -106,9 +106,9 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
-    last_acknowledged_broadcast: 4
-    required_broadcast: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_broadcast: 11
+    required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
     title: Hybrid Image/Video Provider Router planning/contracts
@@ -116,7 +116,7 @@ active:
     assigned_agent: provider-agent
     branch: agent/m08-video-provider-router
     module: providers
-    status: sync-required-planning-only
+    status: planning-only
     writes:
       - docs/milestones/M08/**
       - ai-native/parallel/checkpoints/M08-PARALLEL-LANE.md
@@ -127,9 +127,9 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
-    last_acknowledged_broadcast: 4
-    required_broadcast: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_broadcast: 11
+    required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
     title: Cross-cutting adversarial QA and security
@@ -137,7 +137,7 @@ active:
     assigned_agent: qa-security-agent
     branch: agent/cross-cutting-qa-security
     module: media_qa
-    status: sync-required-active-audit-planning
+    status: active-audit-planning
     writes:
       - docs/qa/**
       - ai-native/parallel/checkpoints/CROSS-CUTTING-QA.md
@@ -147,9 +147,9 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: d4cd69c53af832a75285650453ba480744afbd04
-    last_acknowledged_broadcast: 4
-    required_broadcast: 11
+    last_synced_main_sha: 0d79b73e112c8145244f01abcaa7b2489ac03560
+    last_acknowledged_broadcast: 11
+    required_broadcast: null
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
