@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "source_branch_required": "main",
   "assignment_authority": "supervisor",
   "no_slot_response": "Go Home Come Back Next Time",
@@ -12,7 +12,7 @@
     "completed_submission_branch_must_be_retired_or_replaced": true
   },
   "slots": [
-    {"slot_id":"SUPERVISOR-M03-GOV-HOLD","module":"m03_governance_hold","branch":"supervisor/m03-wp8-closeout","status":"occupied","assigned_agent":"supervisor-agent","accepts_new_agent":false,"start_status":"active-governance-hold"},
+    {"slot_id":"SUPERVISOR-M03-GOV-HOLD","module":"m03_governance_hold","branch":"supervisor/m03-governance-hold-current","status":"occupied","assigned_agent":"supervisor-agent","accepts_new_agent":false,"start_status":"active-governance-hold"},
     {"slot_id":"M04-CHARACTER","module":"characters_entities","branch":"agent/m04-character-library","status":"occupied","assigned_agent":"character-agent","accepts_new_agent":true,"start_status":"planning-only"},
     {"slot_id":"M05-CONTENT","module":"content_memory","branch":"agent/m05-content-memory","status":"occupied","assigned_agent":"content-agent","accepts_new_agent":true,"start_status":"planning-only"},
     {"slot_id":"M06-AUDIO","module":"audio","branch":"agent/m06-audio-production","status":"occupied","assigned_agent":"audio-agent","accepts_new_agent":true,"start_status":"planning-only"},
