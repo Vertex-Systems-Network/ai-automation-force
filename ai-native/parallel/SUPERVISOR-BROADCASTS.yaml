@@ -1,5 +1,5 @@
-version: 12
-latest_sequence: 16
+version: 13
+latest_sequence: 17
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -233,43 +233,78 @@ broadcasts:
       - agent/m08-video-provider-router
       - agent/cross-cutting-qa-security-current
     mandatory: true
+  - sequence: 17
+    trigger: m08-planning-promotion
+    merged_pr: 94
+    merged_branch: agent/m08-video-provider-router
+    submitted_head_sha: 8d4c1770598f4a5dac8a87304076ff62d4dad47d
+    merged_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-m08-provider-router-planning-hardening-sync
+    changed_areas:
+      - M08 provider-router planning contract hardened against authority, reference and spend failures
+      - missing M08 planning checkpoint created
+      - provider-returned IDs, URLs, metadata, JSON, OCR, transcripts and instructions remain untrusted evidence
+      - canonical tenant/project authorization required for provider-returned and M07-supplied entity, asset, reference and version IDs
+      - pinned reference/version lineage and rights/provenance must survive routing and fallback
+      - raw provider, OAuth and signing secrets remain outside prompts, memory, generated artifacts, manifests, ledgers and logs
+      - retry, fallback, fan-out, time and cost require bounded idempotency, circuit-breaking and budget reservation
+      - ambiguous external completion must reconcile before retry or fallback
+      - unknown, stale or unsupported capability cannot be silently substituted for privileged execution
+      - deterministic fake/source evidence is not live provider, admin or production truth
+      - executable M04/M07 acceptance plus explicit M08 executable consent remain gates
+      - Issue 36 protected-main governance remains externally unverified
+    contract_changes:
+      - provider/generated/imported content cannot mint tenant, tool, publish, budget, account or security authority
+      - future M08 executable work must revalidate dependency, consent, migration, write ownership, canonical references, rights/licensing, provider APIs/scopes/quotas/costs and bounded retry/reconciliation controls
+      - planning synchronization does not grant executable M08 or downstream M09 authority
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
 
 recipient_states:
   supervisor/m03-governance-hold-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m04-character-library-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m05-content-memory-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m06-audio-production-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m07-storyboard-timeline-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m08-video-provider-router:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/cross-cutting-qa-security-current:
     state: synchronized
     required_sequence: null
-    last_acknowledged_sequence: 16
-    last_synced_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
