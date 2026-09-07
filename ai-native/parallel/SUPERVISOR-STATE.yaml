@@ -1,9 +1,9 @@
-version: 13
+version: 14
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
-  main_sha_last_reconciled: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+  main_sha_last_promotion: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
+  main_sha_last_reconciled: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: external-governance-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 90
-  submitted_head_sha: 9f7f1073823eb898f8dd3dc7de162a040d40d8b4
-  merged_main_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+  pr: 94
+  submitted_head_sha: 8d4c1770598f4a5dac8a87304076ff62d4dad47d
+  merged_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 29c66616ce1e79c90b4bb40f8e2158d0f9edd434
+  head_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,7 +35,7 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 16
+  latest_broadcast_sequence: 17
   agents_with_mandatory_sync: []
   policy: branches-with-unacknowledged-mandatory-broadcast-cannot-seek-promotion
 
@@ -85,8 +85,21 @@ planning_state:
       - Issue 36/live governance where required by the accepted upstream chain
       - fresh write ownership and migration reservation if required
       - canonical reference authorization, rights/provenance and non-destructive versioning revalidation
+  m08:
+    status: planning-hardened-only
+    promotion_pr: 94
+    active_branch: agent/m08-video-provider-router
+    executable_authority: false
+    executable_gates:
+      - executable M04 and M07 completion and acceptance
+      - explicit M08 executable consent
+      - Issue 36/live governance where required by the accepted upstream chain
+      - fresh write ownership and migration reservation if required
+      - canonical tenant/project/reference authority and pinned lineage revalidation
+      - current provider APIs, scopes, rights, licensing, quotas and cost evidence revalidated
+      - bounded retry, fallback, fan-out, time, cost, idempotency and reconciliation controls executable
   downstream:
-    m08: dependency-gated-planning-only
+    m09: planning-not-activated
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
