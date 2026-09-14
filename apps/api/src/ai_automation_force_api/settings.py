@@ -83,15 +83,21 @@ class Settings(BaseModel):
         if self.control_api_key is not None:
             key = self.control_api_key.get_secret_value()
             if key != key.strip() or len(key) < 32:
-                raise ValueError("control_api_key must be at least 32 characters with no surrounding whitespace")
+                raise ValueError(
+                    "control_api_key must be at least 32 characters with no surrounding whitespace"
+                )
             if any(ord(character) < 33 or ord(character) == 127 for character in key):
-                raise ValueError("control_api_key must not contain whitespace or control characters")
+                raise ValueError(
+                    "control_api_key must not contain whitespace or control characters"
+                )
         if (
             self.environment in {"staging", "production"}
             and self.database_url is not None
             and self.control_api_key is None
         ):
-            raise ValueError("control_api_key is required when the durable control surface is enabled")
+            raise ValueError(
+                "control_api_key is required when the durable control surface is enabled"
+            )
         if (self.s3_access_key_id is None) != (self.s3_secret_access_key is None):
             raise ValueError("s3_access_key_id and s3_secret_access_key must be supplied together")
         if (
