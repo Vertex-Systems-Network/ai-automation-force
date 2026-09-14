@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+from typing import Final
+
 from fastapi.testclient import TestClient
 
 from ai_automation_force_api import Settings, create_app
 
-
-CONTROL_KEY = "control-plane-test-key-0123456789abcdef"
+CONTROL_KEY: Final = "control-plane-test-key-0123456789abcdef"
 
 
 def test_control_routes_require_bearer_auth_when_key_is_configured() -> None:
