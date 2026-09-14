@@ -17,18 +17,20 @@ permissions:
 jobs:
   scout:
     name: Research provider changes
-    runs-on: ${{ vars.PROVIDER_SCOUT_RUNNER || 'ubuntu-latest' }}
+    # Secret-bearing AI research must stay on a GitHub-hosted runner. Do not
+    # redirect this job to a repository-variable-selected self-hosted runner.
+    runs-on: ubuntu-24.04
     timeout-minutes: 12
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-          token: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+          persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7
         with:
           python-version: "3.12"
           cache: pip
@@ -49,7 +51,7 @@ jobs:
           PROVIDER_SCOUT_MODEL: ${{ vars.PROVIDER_SCOUT_MODEL || 'gemini-2.5-flash-lite' }}
         run: python automation/provider_scout.py
 
-      - name: Independent evidence and auto-merge safety gate
+      - name: Independent evidence and classification gate
         run: |
           rm -f .provider-scout-automerge-safe
           python automation/validate_provider_update.py
@@ -59,9 +61,9 @@ jobs:
         shell: bash
         run: |
           if [[ -f .provider-scout-automerge-safe ]]; then
-            echo "automerge_safe=true" >> "$GITHUB_OUTPUT"
+            echo "lower_risk=true" >> "$GITHUB_OUTPUT"
           else
-            echo "automerge_safe=false" >> "$GITHUB_OUTPUT"
+            echo "lower_risk=false" >> "$GITHUB_OUTPUT"
           fi
           rm -f .provider-scout-automerge-safe
 
@@ -88,7 +90,17 @@ jobs:
           git checkout -b "$branch"
           git add config/provider-registry.yaml memory/provider-source-state.json research/provider-updates/
           git commit -m "chore(providers): refresh AI provider research"
-          git push origin "$branch"
+
+      - name: Push update branch with short-lived credentials
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+          BRANCH: ${{ steps.commit.outputs.branch }}
+        run: |
+          set -euo pipefail
+          gh auth setup-git
+          git push origin "$BRANCH"
 
       - name: Open pull request
         if: steps.changes.outputs.changed == 'true'
@@ -96,33 +108,25 @@ jobs:
         shell: bash
         env:
           GH_TOKEN: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+          HEAD_BRANCH: ${{ steps.commit.outputs.branch }}
         run: |
           pr_url="$(gh pr create \
             --base main \
-            --head '${{ steps.commit.outputs.branch }}' \
+            --head "$HEAD_BRANCH" \
             --title 'chore(providers): daily AI provider research update' \
-            --body 'Automated daily provider research. Evidence and change classification are stored under research/provider-updates/. Safe registry changes are restricted by config/update-policy.yaml and independently validated against registered official-source domains. New provider integrations, architecture changes, schemas, security, publishing, and budget behavior are never auto-enabled by this scout.')"
+            --body 'Automated daily provider research. Evidence and change classification are stored under research/provider-updates/. Registry changes remain human-review-only because model output and externally retrieved content are untrusted inputs. New provider integrations, architecture changes, schemas, security, publishing, and budget behavior are never auto-enabled by this scout.')"
           echo "url=$pr_url" >> "$GITHUB_OUTPUT"
           echo "$pr_url"
 
-      - name: Merge safe Class A/B update when repository rules allow
-        if: steps.changes.outputs.changed == 'true' && steps.changes.outputs.automerge_safe == 'true'
-        shell: bash
-        env:
-          GH_TOKEN: ${{ secrets.PROVIDER_SCOUT_APP_TOKEN || github.token }}
+      - name: Report lower-risk update requiring human review
+        if: steps.changes.outputs.changed == 'true' && steps.changes.outputs.lower_risk == 'true'
         run: |
-          set +e
-          gh pr merge '${{ steps.pr.outputs.url }}' --squash --delete-branch
-          status=$?
-          if [[ $status -ne 0 ]]; then
-            echo "Safe update PR was created but repository checks/reviews/permissions blocked immediate merge. Leaving it open."
-          fi
-          exit 0
+          echo "Independent checks classified this as lower risk, but AI-generated/external-content-derived changes are never auto-merged. Human review is required."
 
       - name: Report review-required update
-        if: steps.changes.outputs.changed == 'true' && steps.changes.outputs.automerge_safe != 'true'
+        if: steps.changes.outputs.changed == 'true' && steps.changes.outputs.lower_risk != 'true'
         run: |
-          echo "Provider scout found a Class C/D or otherwise review-required change. PR remains open by design."
+          echo "Provider scout found a higher-risk or otherwise review-required change. PR remains open by design."
 
       - name: No material change
         if: steps.changes.outputs.changed != 'true'
