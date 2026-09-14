@@ -9,6 +9,7 @@ on:
       - "scripts/apply_main_protection.ps1"
       - "scripts/verify_main_protection.ps1"
       - "scripts/validate_parallel_governance.py"
+      - "scripts/validate_workflow_security.py"
       - "ai-native/parallel/**"
       - "README.md"
       - "docs/governance/**"
@@ -26,6 +27,9 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+
+      - name: Enforce workflow security trust boundaries
+        run: python3 scripts/validate_workflow_security.py
 
       - name: Parse protection PowerShell
         shell: pwsh
