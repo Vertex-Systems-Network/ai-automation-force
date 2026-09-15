@@ -46,7 +46,10 @@ async def require_control_auth(
 
     configured = settings.control_api_key
     if configured is None:
-        if settings.environment in {"development", "test"}:
+        # Keep test fixtures lightweight, but never fail open in a runnable
+        # development/staging/production service. A forgotten environment or API
+        # key must not silently expose the control plane.
+        if settings.environment == "test":
             return
         raise APIError(
             "CONTROL_AUTH_UNAVAILABLE",
