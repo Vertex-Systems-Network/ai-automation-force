@@ -42,10 +42,19 @@ def test_control_routes_require_bearer_auth_when_key_is_configured() -> None:
         assert authorized.json()["error"]["code"] == "CONTROL_SURFACE_UNAVAILABLE"
 
 
-def test_local_control_routes_remain_available_without_key_for_dev_compatibility() -> None:
+def test_control_routes_can_skip_key_only_in_test_environment() -> None:
     app = create_app(Settings(environment="test"))
 
     with TestClient(app) as client:
         response = client.get("/api/v1/jobs/JOB-999999")
         assert response.status_code == 503
         assert response.json()["error"]["code"] == "CONTROL_SURFACE_UNAVAILABLE"
+
+
+def test_development_control_routes_fail_closed_without_key() -> None:
+    app = create_app(Settings(environment="development"))
+
+    with TestClient(app) as client:
+        response = client.get("/api/v1/jobs/JOB-999999")
+        assert response.status_code == 503
+        assert response.json()["error"]["code"] == "CONTROL_AUTH_UNAVAILABLE"
