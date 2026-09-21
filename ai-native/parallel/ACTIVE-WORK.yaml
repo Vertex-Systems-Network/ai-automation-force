@@ -1,4 +1,4 @@
-version: 15
+version: 16
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,6 +8,45 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
+  - task_id: SUP-GOV-DURABLE-BOOTSTRAP
+    title: Durable resume state, runner benchmark and reporting governance bootstrap
+    role: supervisor-governance
+    assigned_agent: supervisor-agent
+    branch: supervisor/durable-resume-runner-bootstrap
+    base_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+    module: supervisor_governance
+    status: verifying
+    writes:
+      - AGENTS.md
+      - README.md
+      - ai-native/parallel/ACTIVE-WORK.yaml
+      - ai-native/parallel/MERGE-QUEUE.yaml
+      - ai-native/parallel/SUPERVISOR-PLAN.md
+      - ai-native/parallel/SUPERVISOR-STATE.yaml
+      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
+      - ai-native/parallel/state/**
+    shared_requests:
+      - AGENTS.md
+      - README.md
+      - ai-native/parallel/**
+    depends_on:
+      - SEC-97-WORKFLOW-GOVERNANCE
+    migration_reservation: null
+    consent_scope: governance-only; no product/provider/runtime/deployment/destructive authority
+    required_checks:
+      - Repository Governance
+      - Core Domain Contracts
+      - Durable Control Plane
+    working_instruction_review:
+      reviewed_at: 2026-09-21
+      material_delta: true
+      readme_sync_required: true
+      notes: Introduces compact durable resume state, bounded-turn/timeout rules, Runner Benchmark, and mandatory evidence-based response progress footer.
+    completion_signal: Work Done and Submitted
+    last_synced_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+    last_acknowledged_broadcast: 18
+    required_broadcast: null
+
   - task_id: SEC-97-WORKFLOW-GOVERNANCE
     title: Workflow trust-boundary regression guard for Issue 97 / PR 99
     role: security-integration
@@ -15,7 +54,7 @@ active:
     branch: security/workflow-regression-guard-2026-09-15
     base_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
     module: repository_governance
-    status: submitted-awaiting-main-sync
+    status: sync-required-submitted-awaiting-main-sync
     writes:
       - .github/workflows/repository-governance.yml
       - scripts/validate_workflow_security.py
@@ -56,7 +95,7 @@ active:
     branch: supervisor/m03-governance-hold-current
     base_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
     module: m03_governance_hold
-    status: active-governance-hold
+    status: sync-required-active-governance-hold
     writes:
       - ai-native/parallel/checkpoints/M03-GOV-HOLD.md
     shared_requests: []
@@ -75,7 +114,7 @@ active:
     assigned_agent: character-agent
     branch: agent/m04-character-library-current
     module: characters_entities
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M04/**
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
@@ -95,7 +134,7 @@ active:
     assigned_agent: content-agent
     branch: agent/m05-content-memory-current
     module: content_memory
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M05/**
       - ai-native/parallel/checkpoints/M05-PARALLEL-LANE.md
@@ -115,7 +154,7 @@ active:
     assigned_agent: audio-agent
     branch: agent/m06-audio-production-current
     module: audio
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M06/**
       - ai-native/parallel/checkpoints/M06-PARALLEL-LANE.md
@@ -135,7 +174,7 @@ active:
     assigned_agent: timeline-agent
     branch: agent/m07-storyboard-timeline-current
     module: timeline_storyboard
-    status: planning-only
+    status: sync-required-planning-only
     writes:
       - docs/milestones/M07/**
       - ai-native/parallel/checkpoints/M07-PARALLEL-LANE.md
@@ -157,7 +196,7 @@ active:
     assigned_agent: provider-agent
     branch: agent/m08-video-provider-router
     module: providers
-    status: planning-hardened-only
+    status: sync-required-planning-hardened-only
     writes:
       - docs/milestones/M08/**
       - ai-native/parallel/checkpoints/M08-PARALLEL-LANE.md
@@ -178,7 +217,7 @@ active:
     assigned_agent: qa-security-agent
     branch: agent/cross-cutting-qa-security-current
     module: media_qa
-    status: active-audit-planning
+    status: sync-required-active-audit-planning
     writes:
       - docs/qa/**
       - ai-native/parallel/checkpoints/CROSS-CUTTING-QA.md
