@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
 active_issue: 36
-active_pr: null
+active_pr: 112
 tracked_security_pr: null
 active_branch: supervisor/readme-progress-contract
 current_milestone: SUP-GOV-README-PROGRESS-CONTRACT
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-110-BROADCAST23-M04-CONSENT-READINESS
   merged_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-exact_next_safe_action: promote mandatory README progress reconciliation contract; after promotion synchronize affected agents once, then return to Issue 36 and M04 executable-consent path
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 112 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and mergeable use expected-head guarded merge; after promotion issue one material instruction broadcast without recursive bookkeeping
+pending_runner_ids:
+  - RB-PR112-GOV-001
+  - RB-PR112-CORE-001
+  - RB-PR112-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -32,8 +35,8 @@ timeout_control:
 progress:
   current_module:
     name: Mandatory README progress reconciliation contract
-    percent: 75
-    basis: root README dashboard plus AGENTS/Supervisor/shared-file progress rules are patched on a bounded Supervisor branch; promotion remains
+    percent: 90
+    basis: PR 112 is open with README dashboard plus AGENTS/Supervisor/shared-file progress rules bound to the live submission; exact-head verification remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
