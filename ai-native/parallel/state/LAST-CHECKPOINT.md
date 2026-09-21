@@ -19,10 +19,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-POST112-PROGRESS-SYNC` is `RECONCILING`.
+`SUP-GOV-POST112-PROGRESS-SYNC` is `VERIFYING`.
 
 Scope is limited to Broadcast 24, PR #112 terminal runner evidence, active-lane synchronization evidence, README progress reconciliation after #111 closure, and compact/Supervisor state cleanup.
 
 ## Exact next safe action
 
-Promote this single bounded handoff. After it lands, do not create another governance/broadcast/README bookkeeping PR from its own merge. The only remaining product-development gates are live Issue #36 protected-main evidence and explicit scoped M04 development consent; after both clear, revalidate current main, migration reservation, ownership and security state and begin M04-WP1A.
+PR #113 is open for this single bounded handoff. Resolve its exact head/base/review state and perform one consolidated exact-head CI/status refresh. If terminal green and clean, merge with an expected-head guard. After it lands, do not create Broadcast 25 or another README/state-only PR from this bookkeeping merge. The only remaining product-development gates are live Issue #36 protected-main evidence and explicit scoped M04 development consent; after both clear, revalidate current main, migration reservation, ownership and security state and begin M04-WP1A.
