@@ -15,7 +15,7 @@ active:
     branch: supervisor/m04-wp1a-execution-package
     base_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml
