@@ -56,3 +56,17 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Milestone moved to `VERIFYING`.
 - No PR #104 CI/status refresh was performed in this turn because the earlier PR #103 exact-head refresh and merge already consumed the bounded milestone's status/transition budget.
 - Next resume must resolve the final PR #104 head first, then perform one consolidated exact-head refresh.
+
+
+## 2026-09-21 — PR #104 durable-state closeout promotion
+
+- Exact candidate head `a6b1cd6f449a7c70f0c26ffd3f6d54e55a0f33a2` remained mergeable and review-clean.
+- Exact-head terminal CI passed:
+  - Repository Governance `35628267014`;
+  - Core Domain Contracts `35628267084`;
+  - Durable Control Plane `35628267027`.
+- PR #104 merged with expected-head guard.
+- New observed main: `497b4e20e4a5f4e311480e993ebb277a49c83737`.
+- Open PR reconciliation now leaves only PR #99.
+- PR #99 was intentionally not synchronized in the same milestone.
+- Post-merge handoff continues on `supervisor/post-104-handoff`.
