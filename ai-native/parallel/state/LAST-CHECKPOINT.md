@@ -25,4 +25,4 @@ Scope is limited to correcting stale AI-Native control-plane preplanning truth a
 
 ## Exact next safe action
 
-PR #109 is open for this bounded reconciliation. On the next resume, resolve its exact current head and perform one consolidated exact-head CI/status/review refresh. After promotion, prepare the scoped M04 Development Consent Brief. Do not begin executable M04 work until Issue #36 is closed with live protected-main evidence and the operator explicitly approves the M04 development scope.
+PR #109 is open for this bounded reconciliation. Initial exact-head Repository Governance run `35648015768` failed because the Supervisor task claimed `ai-native/parallel/**`, overlapping existing lane checkpoint ownership. The claim was narrowed to the exact files actually touched; a fresh exact-head CI attempt is required. After promotion, prepare the scoped M04 Development Consent Brief. Do not begin executable M04 work until Issue #36 is closed with live protected-main evidence and the operator explicitly approves the M04 development scope.
