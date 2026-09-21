@@ -1,4 +1,4 @@
-version: 19
+version: 20
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,36 +8,36 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-POST99-SECURITY-CLOSEOUT
-    title: Issue 97 / PR 99 terminal security promotion reconciliation
+  - task_id: SUP-GOV-BROADCAST21-RECONCILE
+    title: AI-Native broadcast 21 planning-lane synchronization reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/post-99-security-closeout
-    base_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
-    module: repository_governance
-    status: verifying
+    branch: supervisor/ai-native-broadcast21-reconcile
+    base_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    module: supervisor_governance
+    status: reconciling
     writes:
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/MERGE-QUEUE.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
+      - ai-native/parallel/SUPERVISOR-PLAN.md
       - ai-native/parallel/state/**
     shared_requests:
       - ai-native/parallel/**
     depends_on: []
     migration_reservation: null
-    consent_scope: post-security-promotion-governance-closeout-only
+    consent_scope: governance-and-planning-coordination-only; no executable product authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
       - Durable Control Plane
     working_instruction_review:
       reviewed_at: 2026-09-21
-      material_delta: false
+      material_delta: true
       readme_sync_required: false
-      notes: Records PR 99 terminal evidence, Issue 97 completion, empty merge queue and broadcast 21. No new executable product authority.
+      notes: Reconciles broadcast 21 branch synchronization and full-project preplanning / Issue 36 holds; no executable behavior changes.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
     last_acknowledged_broadcast: 21
     required_broadcast: null
 
@@ -48,7 +48,7 @@ active:
     branch: supervisor/m03-governance-hold-current
     base_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
     module: m03_governance_hold
-    status: sync-required-active-governance-hold
+    status: active-governance-hold
     writes:
       - ai-native/parallel/checkpoints/M03-GOV-HOLD.md
     shared_requests: []
@@ -57,8 +57,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -67,7 +67,7 @@ active:
     assigned_agent: character-agent
     branch: agent/m04-character-library-current
     module: characters_entities
-    status: sync-required-planning-only
+    status: active-planning-only
     writes:
       - docs/milestones/M04/**
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
@@ -77,8 +77,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
@@ -87,7 +87,7 @@ active:
     assigned_agent: content-agent
     branch: agent/m05-content-memory-current
     module: content_memory
-    status: sync-required-planning-only
+    status: active-planning-only
     writes:
       - docs/milestones/M05/**
       - ai-native/parallel/checkpoints/M05-PARALLEL-LANE.md
@@ -97,8 +97,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -107,7 +107,7 @@ active:
     assigned_agent: audio-agent
     branch: agent/m06-audio-production-current
     module: audio
-    status: sync-required-planning-only
+    status: active-planning-only
     writes:
       - docs/milestones/M06/**
       - ai-native/parallel/checkpoints/M06-PARALLEL-LANE.md
@@ -117,8 +117,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -127,7 +127,7 @@ active:
     assigned_agent: timeline-agent
     branch: agent/m07-storyboard-timeline-current
     module: timeline_storyboard
-    status: sync-required-planning-only
+    status: active-planning-only
     writes:
       - docs/milestones/M07/**
       - ai-native/parallel/checkpoints/M07-PARALLEL-LANE.md
@@ -139,8 +139,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -149,7 +149,7 @@ active:
     assigned_agent: provider-agent
     branch: agent/m08-video-provider-router
     module: providers
-    status: sync-required-planning-hardened-only
+    status: active-planning-hardened-only
     writes:
       - docs/milestones/M08/**
       - ai-native/parallel/checkpoints/M08-PARALLEL-LANE.md
@@ -160,8 +160,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -170,7 +170,7 @@ active:
     assigned_agent: qa-security-agent
     branch: agent/cross-cutting-qa-security-current
     module: media_qa
-    status: sync-required-active-audit-planning
+    status: active-audit-planning
     writes:
       - docs/qa/**
       - ai-native/parallel/checkpoints/CROSS-CUTTING-QA.md
@@ -180,8 +180,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-    last_acknowledged_broadcast: 17
+    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    last_acknowledged_broadcast: 21
     required_broadcast: null
 
 rules:
