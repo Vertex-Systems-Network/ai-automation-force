@@ -227,8 +227,9 @@ This is the authoritative human-visible progress snapshot. It must be reconciled
 - **M04 execution preflight:** `██████████` **100%** — Issue #111 completed/closed; existing M01 domain/persistence reuse confirmed and Path A minimal early Workspace ownership substrate selected
 - **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is now canonical
+- **Active PR:** #113 — one-time Broadcast 24/README handoff; this bookkeeping merge must not create Broadcast 25
 - **Open planning/governance Issues:** #36 only — M04 preflight #111 is completed/closed
-- **Current bounded work:** Broadcast 24 one-time synchronization of the newly landed README progress contract
+- **Current bounded work:** PR #113 — one-time Broadcast 24 synchronization + README progress reconciliation after PR #112/#111
 - **Exact next product-development path:** close Issue #36 with live protected-main evidence → record explicit scoped M04 development consent → revalidate ownership/migration/security state → begin M04-WP1A minimal Workspace ownership substrate + standalone Character/Entity repository boundary
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
