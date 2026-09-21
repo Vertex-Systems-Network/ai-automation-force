@@ -21,10 +21,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-POST99-SECURITY-CLOSEOUT` is `RECONCILING`.
+`SUP-GOV-POST99-SECURITY-CLOSEOUT` is `VERIFYING`.
 
 Scope is limited to canonical post-merge state, terminal Runner Benchmark evidence, empty merge queue, broadcast 21, and retirement of the completed Issue #97 / PR #99 security task.
 
 ## Exact next safe action
 
-Promote the bounded post-99 security closeout. After it lands, do not invent new executable milestone authority: the remaining roadmap hold is Issue #36 live protected-main administrator evidence unless newer repository truth introduces another accepted gate.
+Post-99 security closeout PR #106 is open. On the next resume, resolve PR #106 exact current head and perform one consolidated exact-head CI/status refresh. After that closeout lands, do not invent new executable milestone authority: the remaining roadmap hold is Issue #36 live protected-main administrator evidence unless newer repository truth introduces another accepted gate.
