@@ -1,19 +1,19 @@
-version: 26
+version: 27
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 024aa039ef5ae011b9c78a4a01b38c169607d782
-  main_sha_last_reconciled: 024aa039ef5ae011b9c78a4a01b38c169607d782
+  main_sha_last_promotion: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+  main_sha_last_reconciled: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
-  current_mode: m04-wp1a-execution-package-ready-and-m03-admin-hold
+  current_mode: m04-consent-granted-and-m03-admin-hold
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 113
-  submitted_head_sha: 7f117a0df3748f9b6b41b2e14d6b8202b5cb9bdf
-  merged_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+  pr: 115
+  submitted_head_sha: 6c8256376471a71174eda8a72d8acf096b85bb8d
+  merged_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+  head_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -61,24 +61,24 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 113
-  submitted_head_sha: 7f117a0df3748f9b6b41b2e14d6b8202b5cb9bdf
-  merged_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+  pr: 115
+  submitted_head_sha: 6c8256376471a71174eda8a72d8acf096b85bb8d
+  merged_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
   result: success
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: m04-wp1a-execution-package-readiness
-  milestone_status: VERIFYING
-  active_branch: supervisor/m04-wp1a-execution-package
+  current_milestone: m04-scoped-consent-recorded
+  milestone_status: RECONCILING
+  active_branch: supervisor/m04-consent-recorded
   active_issue: 36
-  active_pr: 115
+  active_pr: null
   tracked_security_pr: null
-  last_completed_milestone: pr-113-broadcast24-readme-handoff
-  exact_next_safe_action: resolve PR 115 exact head and perform one consolidated CI/review refresh; if terminal green and mergeable use expected-head guarded merge, then stop planning bookkeeping and wait only on Issue 36 plus explicit scoped M04 consent
+  last_completed_milestone: pr-115-m04-wp1a-execution-package
+  exact_next_safe_action: promote scoped M04-WP1A consent reconciliation; executable start remains blocked only by Issue 36, then fresh migration/write-ownership/security revalidation plus one migration reservation precede direct WP1A implementation
   progress:
-    current_module_percent: 95
-    current_module_basis: Issue 114 is a ready-to-code package for the first M04 slice; README/Active Work/Supervisor state reconciliation remains
+    current_module_percent: 80
+    current_module_basis: scoped consent is recorded and README/control-plane state is being reconciled; Issue 36 is the sole remaining executable gate
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
 
@@ -101,18 +101,19 @@ planning_state:
     master_index: docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md
     final_gap_audit: PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND
     completion_checkpoint: checkpoints/2026-08-29-full-project-preplanning-complete.md
-    executable_authority: false
+    executable_authority: conditional-after-issue36
   m04:
-    status: wp1a-execution-package-ready-consent-pending-issue36
+    status: wp1a-consent-granted-waiting-issue36
     promotion_pr: 78
     active_branch: agent/m04-character-library-current
     executable_authority: false
-    consent_brief: operator-ready
+    consent_brief: approved
+    consent_granted: true
+    consent_condition: start only after Issue 36 closes
     execution_package_issue: 114
     first_executable_slice: M04-WP1A
     executable_gates:
       - Issue 36 live protected-main governance
-      - explicit M04 executable consent
       - fresh write ownership and migration reservation if required
   m05:
     status: planning-hardened-only
