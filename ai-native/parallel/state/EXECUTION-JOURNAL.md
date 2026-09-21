@@ -162,3 +162,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Added an anti-recursion rule: a merge that only persists an already-issued broadcast, terminal runner evidence, compact-state handoff, or equivalent bookkeeping does not create another broadcast unless the merge itself introduces new material state active agents must observe.
 - Broadcast sequence intentionally remains 22.
 - Next real path after this reconciliation is the scoped M04 Development Consent Brief; M04 implementation remains blocked by Issue #36 and explicit operator consent.
+
+
+## 2026-09-22 — PR #109 planning-ready reconciliation opened
+
+- Opened PR #109 from `supervisor/preplanning-state-ready-reconcile` against `main@52728f827a253e5d4217c77ee0eeb2fb49ab29ac`.
+- Bound compact state, Supervisor state, Active Work and checkpoint to PR #109.
+- Milestone moved to `VERIFYING`.
+- Broadcast sequence remains 22; this correction intentionally does not manufacture a recursive broadcast.
+- No PR #109 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
+- Full-project planning prerequisite is satisfied; executable M04 remains blocked by Issue #36 plus explicit scoped operator consent.
