@@ -1,5 +1,5 @@
-version: 18
-latest_sequence: 21
+version: 19
+latest_sequence: 22
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -388,6 +388,36 @@ broadcasts:
       - agent/cross-cutting-qa-security-current
     mandatory: true
 
+
+  - sequence: 22
+    trigger: supervisor-coordination-merge
+    merged_pr: 107
+    merged_branch: supervisor/ai-native-broadcast21-reconcile
+    submitted_head_sha: a68a5e74020598e8a2b6e98a1c9e100e06b9154a
+    merged_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-ai-native-control-plane-sync
+    changed_areas:
+      - broadcast 21 planning-lane synchronization is canonical on main
+      - compact/Supervisor state no longer points at stale PR 106/107 pre-merge truth
+      - README and Supervisor plan reflect FULL_PROJECT_PREPLANNING_IN_PROGRESS
+      - provider-scout documentation no longer claims auto-merge behavior
+      - executable M04+ remains blocked by preplanning plus applicable consent/dependency/governance gates
+      - Issue 36 live protected-main administrator gate remains unresolved
+    contract_changes:
+      - generic continuation remains non-executable while full-project preplanning is incomplete
+      - active planning/audit lanes must observe current AI-Native control-plane truth before promotion
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
 recipient_states:
   security/workflow-regression-guard-2026-09-15:
     state: sync-required
@@ -396,39 +426,39 @@ recipient_states:
     last_synced_main_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
   supervisor/m03-governance-hold-current:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   agent/m04-character-library-current:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   agent/m05-content-memory-current:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   agent/m06-audio-production-current:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   agent/m07-storyboard-timeline-current:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   agent/m08-video-provider-router:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   agent/cross-cutting-qa-security-current:
     state: synchronized
-    required_sequence: 21
-    last_acknowledged_sequence: 21
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    required_sequence: 22
+    last_acknowledged_sequence: 22
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
 
 rules:
   - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.

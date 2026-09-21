@@ -1,4 +1,4 @@
-version: 20
+version: 21
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,12 +8,12 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-BROADCAST21-RECONCILE
-    title: AI-Native broadcast 21 planning-lane synchronization reconciliation
+  - task_id: SUP-GOV-BROADCAST22-RECONCILE
+    title: Broadcast 22 post-PR107 planning-lane synchronization reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/ai-native-broadcast21-reconcile
-    base_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    branch: supervisor/broadcast22-post107-reconcile
+    base_sha: a315ff19300554901d2b55841a5e57151bdc631e
     module: supervisor_governance
     status: verifying
     writes:
@@ -34,11 +34,11 @@ active:
     working_instruction_review:
       reviewed_at: 2026-09-21
       material_delta: true
-      readme_sync_required: false
-      notes: Reconciles broadcast 21 branch synchronization and full-project preplanning / Issue 36 holds; no executable behavior changes.
+      readme_sync_required: true
+      notes: Records PR 107 promotion, broadcast 22, lane synchronization, and current preplanning/admin holds; no executable behavior changes.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: M03-GOV-HOLD
@@ -57,8 +57,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -77,8 +77,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
@@ -97,8 +97,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -117,8 +117,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -139,8 +139,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -160,8 +160,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -180,8 +180,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-    last_acknowledged_broadcast: 21
+    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_acknowledged_broadcast: 22
     required_broadcast: null
 
 rules:

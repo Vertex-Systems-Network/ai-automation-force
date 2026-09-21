@@ -1,9 +1,9 @@
-version: 20
+version: 21
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 01ff06fb30714256c16921fc5f644a87aff540cb
-  main_sha_last_reconciled: 01ff06fb30714256c16921fc5f644a87aff540cb
+  main_sha_last_promotion: a315ff19300554901d2b55841a5e57151bdc631e
+  main_sha_last_reconciled: a315ff19300554901d2b55841a5e57151bdc631e
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: full-project-preplanning-and-m03-admin-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 106
-  submitted_head_sha: 41a3fada3f15567d24ded9e98ecb2625f86441cd
-  merged_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+  pr: 107
+  submitted_head_sha: a68a5e74020598e8a2b6e98a1c9e100e06b9154a
+  merged_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+  head_sha: a315ff19300554901d2b55841a5e57151bdc631e
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,11 +35,11 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 21
+  latest_broadcast_sequence: 22
   agents_with_mandatory_sync: []
   last_completed_branch_sync:
-    broadcast_sequence: 21
-    main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+    broadcast_sequence: 22
+    main_sha: a315ff19300554901d2b55841a5e57151bdc631e
     branches:
       - supervisor/m03-governance-hold-current
       - agent/m04-character-library-current
@@ -61,24 +61,24 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 103
-  submitted_head_sha: 366d895c48cd9fdbb5e1640accb40a81d5eb7806
-  merged_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+  pr: 107
+  submitted_head_sha: a68a5e74020598e8a2b6e98a1c9e100e06b9154a
+  merged_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
   result: success
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: broadcast-21-planning-lane-reconciliation
+  current_milestone: broadcast-22-post-pr107-reconciliation
   milestone_status: VERIFYING
-  active_branch: supervisor/ai-native-broadcast21-reconcile
+  active_branch: supervisor/broadcast22-post107-reconcile
   active_issue: 36
-  active_pr: 107
+  active_pr: 108
   tracked_security_pr: null
-  last_completed_milestone: pr-106-security-closeout
-  exact_next_safe_action: resolve PR 107 exact head and perform one consolidated CI refresh; after promotion continue only already-claimed planning/audit work while full-project preplanning and applicable Issue 36/consent/dependency gates block executable development
+  last_completed_milestone: pr-107-ai-native-broadcast21-reconciliation
+  exact_next_safe_action: resolve PR 108 exact head and perform one consolidated CI refresh; after promotion continue only already-claimed planning/audit work while full-project preplanning and applicable Issue 36/consent/dependency gates block executable development
   progress:
     current_module_percent: 85
-    current_module_basis: all active governance/planning branches synchronized to current main and broadcast 21; shared control-plane reconciliation remains
+    current_module_basis: all active governance/planning branches re-synchronized to current main and broadcast 22; canonical coordination promotion remains
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance blocked by Issue 36 and executable development additionally blocked by full-project preplanning gate
 
