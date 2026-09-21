@@ -221,15 +221,16 @@ This proves the difficult architecture before scaling to longer productions.
 This is the authoritative human-visible progress snapshot. It must be reconciled before every engineering response and updated in the same integration cycle whenever material repository progress/state changes.
 
 - **Last reconciled:** 2026-09-22
-- **Progress snapshot baseline main:** `c4671a83173f84da058d82f28da2d4ee3d58229f` — live main is re-resolved every turn; this dashboard does not recursively update solely for its own merge SHA
+- **Progress snapshot baseline main:** `5c09918e6d1c0f06aa4d0890c58921f94466e509` — PR #112 is merged; live main is still re-resolved every turn
 - **Accepted roadmap milestones:** `3/16` — `██░░░░░░░░` **19%**
 - **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
-- **M04 execution preflight:** `██████████` **100%** — existing domain/persistence reuse confirmed; minimal early Workspace ownership substrate selected in Issue #111
+- **M04 execution preflight:** `██████████` **100%** — Issue #111 completed/closed; existing M01 domain/persistence reuse confirmed and Path A minimal early Workspace ownership substrate selected
 - **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
-- **README progress contract:** PR #112 promotion candidate — once landed, README progress reconciliation is mandatory for future material engineering state changes
-- **Open planning/governance Issues:** #36 and #111
-- **Current bounded work:** promote the mandatory README progress contract, then return to the real Issue #36 → M04 critical path
-- **Exact next product-development path:** satisfy Issue #36 live protected-main gate; record explicit scoped M04 consent; revalidate ownership/migration state; begin M04-WP1A. PR #112 only installs the reporting contract and must not create a recursive README/broadcast loop
+- **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is now canonical
+- **Active PR:** #113 — one-time Broadcast 24/README handoff; this bookkeeping merge must not create Broadcast 25
+- **Open planning/governance Issues:** #36 only — M04 preflight #111 is completed/closed
+- **Current bounded work:** PR #113 — one-time Broadcast 24 synchronization + README progress reconciliation after PR #112/#111
+- **Exact next product-development path:** close Issue #36 with live protected-main evidence → record explicit scoped M04 development consent → revalidate ownership/migration/security state → begin M04-WP1A minimal Workspace ownership substrate + standalone Character/Entity repository boundary
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
 
@@ -260,7 +261,7 @@ The table below tracks the currently active implementation milestone. Completed 
 
 ### Current engineering checkpoint
 
-M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` before this progress-contract branch is `c4671a83173f84da058d82f28da2d4ee3d58229f`.
+M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` after PR #112 is `5c09918e6d1c0f06aa4d0890c58921f94466e509`.
 
 The remaining M03 governance gate is Issue #36: live GitHub `main` protection is still not verified/applied in an admin-capable context. No additional WP7/WP8 product/API/schema/provider work is authorized merely to create activity.
 
