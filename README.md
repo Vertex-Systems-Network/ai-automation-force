@@ -131,7 +131,7 @@ This is the concise human-visible summary. Canonical details live in `AGENTS.md`
 Current rules:
 - canonical compact resume state lives under `ai-native/parallel/state/`; on every start/resume read `CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md` first, then resolve exact main, OPEN Issues, OPEN PRs, claims/queue, and Runner Benchmark before broad historical reading;
 - compact resume state is an index only and never overrides live repository/runtime evidence;
-- full-project preplanning is currently `FULL_PROJECT_PREPLANNING_IN_PROGRESS`; no new executable development may begin or resume until the full foreseeable product planning gate is complete and explicit scoped development consent is separately granted;
+- full-project preplanning is complete and canonical status is `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`; this does not authorize executable development, which still requires explicit scoped consent plus applicable milestone/dependency/governance gates;
 - one operator `continue`/`resume` turn defaults to one bounded logical milestone; do not chain unrelated development, repeated CI polling, merge, post-merge work, and another task in the same turn;
 - perform at most one consolidated CI/status refresh per milestone by default and never tight-poll remote checks;
 - persist `VERIFYING`/`WAITING_EXTERNAL` before final exact-head observation when remote checks are expected; if CI is still running, record run IDs on the PR/Issue status surface without creating a state-only source commit that invalidates the tested head;
@@ -155,6 +155,7 @@ Current rules:
 - every agent must announce exactly **`Work Done and Submitted`** when its bounded branch submission is ready for Supervisor review;
 - when another agent submits, the Supervisor checkpoints/pauses its own module work, reviews the submission, promotes only after required synchronization and exact-head gates, records the merge, then resumes its saved checkpoint;
 - after a promotion merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
+- a broadcast bookkeeping/reconciliation merge does not recursively create another broadcast unless that merge itself introduces new material state active agents must observe;
 - affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume; as of broadcast 22 the active M03/M04/M05/M06/M07/M08/QA branches have been reverified `ahead_by=0` and non-force fast-forwarded to `main@a315ff19300554901d2b55841a5e57151bdc631e`;
 - an unacknowledged mandatory merge broadcast places a branch in `sync-required` and blocks submission/promotion;
 - parallel readiness does not bypass development consent;
@@ -213,7 +214,7 @@ This proves the difficult architecture before scaling to longer productions.
 
 ## Milestone progress
 
-Current repository truth: M03 source implementation and WP8 source acceptance are complete, but M03 is **not fully accepted/governed** because Issue #36 still lacks live protected-main enforcement. The full-project preplanning gate is also `FULL_PROJECT_PREPLANNING_IN_PROGRESS`, so no new executable M04+ development is authorized by generic continuation.
+Current repository truth: M03 source implementation and WP8 source acceptance are complete, but M03 is **not fully accepted/governed** because Issue #36 still lacks live protected-main enforcement. Full-project preplanning is complete with canonical status `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`; executable M04+ development still requires Issue #36 closure where applicable and explicit scoped development consent.
 
 The table below is retained as a **historical 2026-09-01 snapshot**, not current execution truth. Current execution truth comes from `ai-native/parallel/state/CURRENT-STATE.yaml`, live GitHub evidence, and the current Supervisor plan.
 
@@ -246,6 +247,6 @@ The remaining M03 governance gate is Issue #36: live GitHub `main` protection is
 
 Current continuation order:
 
-`broadcast-22 planning-lane synchronization -> bounded coordination reconciliation -> continue already-claimed planning/audit work -> complete full-project preplanning -> obtain explicit scoped development consent -> executable milestone work only after its dependency/governance gates clear`
+`planning-ready state reconciliation -> prepare scoped M04 Development Consent Brief -> close Issue #36 live protected-main gate -> obtain explicit M04 development consent -> executable M04 work only after fresh ownership/migration/security revalidation`
 
 M04–M08 planning is hardened but not executable completion. M09 remains unactivated by implication.
