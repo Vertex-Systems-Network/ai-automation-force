@@ -15,7 +15,7 @@ active:
     branch: supervisor/readme-progress-contract
     base_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - README.md
       - AGENTS.md
