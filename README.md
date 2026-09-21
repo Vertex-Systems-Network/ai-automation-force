@@ -155,7 +155,7 @@ Current rules:
 - every agent must announce exactly **`Work Done and Submitted`** when its bounded branch submission is ready for Supervisor review;
 - when another agent submits, the Supervisor checkpoints/pauses its own module work, reviews the submission, promotes only after required synchronization and exact-head gates, records the merge, then resumes its saved checkpoint;
 - after a promotion merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
-- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume; as of broadcast 21 the active M03/M04/M05/M06/M07/M08/QA branches have been verified `ahead_by=0` and non-force fast-forwarded to `main@01ff06fb30714256c16921fc5f644a87aff540cb`;
+- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume; as of broadcast 22 the active M03/M04/M05/M06/M07/M08/QA branches have been reverified `ahead_by=0` and non-force fast-forwarded to `main@a315ff19300554901d2b55841a5e57151bdc631e`;
 - an unacknowledged mandatory merge broadcast places a branch in `sync-required` and blocks submission/promotion;
 - parallel readiness does not bypass development consent;
 - scoped CI may accelerate feedback, but required exact-head full promotion CI remains mandatory before merge;
@@ -240,12 +240,12 @@ The table below tracks the currently active implementation milestone. Completed 
 
 ### Current engineering checkpoint
 
-M03 source work, WP8 source acceptance, Issue #97 security remediation, and PR #106 security-governance closeout are complete. Current `main` is `01ff06fb30714256c16921fc5f644a87aff540cb`.
+M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, and PR #107 AI-Native control-plane reconciliation are complete. Current `main` is `a315ff19300554901d2b55841a5e57151bdc631e`.
 
 The remaining M03 governance gate is Issue #36: live GitHub `main` protection is still not verified/applied in an admin-capable context. No additional WP7/WP8 product/API/schema/provider work is authorized merely to create activity.
 
 Current continuation order:
 
-`broadcast-21 planning-lane synchronization -> bounded coordination reconciliation -> continue already-claimed planning/audit work -> complete full-project preplanning -> obtain explicit scoped development consent -> executable milestone work only after its dependency/governance gates clear`
+`broadcast-22 planning-lane synchronization -> bounded coordination reconciliation -> continue already-claimed planning/audit work -> complete full-project preplanning -> obtain explicit scoped development consent -> executable milestone work only after its dependency/governance gates clear`
 
 M04–M08 planning is hardened but not executable completion. M09 remains unactivated by implication.
