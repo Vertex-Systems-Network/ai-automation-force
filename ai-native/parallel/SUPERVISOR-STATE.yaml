@@ -63,13 +63,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: post-99-security-closeout
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/post-99-security-closeout
   active_issue: 36
-  active_pr: null
+  active_pr: 106
   tracked_security_pr: null
   last_completed_milestone: pr-99-security-promotion
-  exact_next_safe_action: promote post-99 security closeout; after it lands wait for Issue 36 live protected-main administrator evidence unless newer accepted repository truth exists
+  exact_next_safe_action: resolve PR 106 exact head and perform one consolidated CI refresh; after closeout promotion wait for Issue 36 live protected-main administrator evidence unless newer accepted repository truth exists
   progress:
     current_module_percent: 95
     current_module_basis: PR 99 merged with synchronized exact-head CI green and Issue 97 closed; canonical post-merge reconciliation remains
