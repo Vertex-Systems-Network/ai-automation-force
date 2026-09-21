@@ -137,7 +137,7 @@ Current rules:
 - persist `VERIFYING`/`WAITING_EXTERNAL` before final exact-head observation when remote checks are expected; if CI is still running, record run IDs on the PR/Issue status surface without creating a state-only source commit that invalidates the tested head;
 - register material remote/container/browser/runtime/full-regression/performance work in `ai-native/parallel/state/RUNNER-BENCHMARK.yaml`; runner registration never grants execution authority;
 - every engineering response ends with repository name, evidence-based current-module progress bar, and evidence-based overall roadmap progress bar; unknown progress is reported as unknown rather than guessed;
-- before every engineering response, reconcile the README `Live development progress` snapshot against live repository truth; whenever exact main, active PR/Issue, current module/status/percentage, accepted-milestone count, genuine blocker, or exact next action materially changes, update that README snapshot in the same integration cycle;
+- before every engineering response, reconcile the README `Live development progress` snapshot against live repository truth; whenever accepted product/governance milestone state, active blocker/Issue, current module/status/percentage, accepted-milestone count, or exact next product action materially changes, update that README snapshot in the same integration cycle; exact main/PR state must still be verified live but the progress-update PR's own merge SHA does not require a recursive README-only PR;
 - a strictly read-only turn with no material progress/state change must verify the README snapshot but must not fabricate percentage movement or create a timestamp-only commit solely to look active;
 - on **every start or resume**, including `continue`/`next`/`resume`, perform a working-instruction audit before proceeding;
 - read current repository/PR/checkpoint state rather than relying on chat memory;
@@ -221,15 +221,15 @@ This proves the difficult architecture before scaling to longer productions.
 This is the authoritative human-visible progress snapshot. It must be reconciled before every engineering response and updated in the same integration cycle whenever material repository progress/state changes.
 
 - **Last reconciled:** 2026-09-22
-- **Exact live main before this progress-contract branch:** `c4671a83173f84da058d82f28da2d4ee3d58229f`
+- **Progress snapshot baseline main:** `c4671a83173f84da058d82f28da2d4ee3d58229f` — live main is re-resolved every turn; this dashboard does not recursively update solely for its own merge SHA
 - **Accepted roadmap milestones:** `3/16` — `██░░░░░░░░` **19%**
 - **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
 - **M04 execution preflight:** `██████████` **100%** — existing domain/persistence reuse confirmed; minimal early Workspace ownership substrate selected in Issue #111
 - **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
-- **Active PR:** #112 — mandatory README progress reconciliation contract
+- **README progress contract:** PR #112 promotion candidate — once landed, README progress reconciliation is mandatory for future material engineering state changes
 - **Open planning/governance Issues:** #36 and #111
-- **Current bounded work:** PR #112 — make README progress reconciliation a mandatory AI-Native operating contract
-- **Exact next product-development path:** verify/guarded-merge PR #112; synchronize this material instruction once; satisfy Issue #36 live protected-main gate; record explicit scoped M04 consent; revalidate ownership/migration state; begin M04-WP1A
+- **Current bounded work:** promote the mandatory README progress contract, then return to the real Issue #36 → M04 critical path
+- **Exact next product-development path:** satisfy Issue #36 live protected-main gate; record explicit scoped M04 consent; revalidate ownership/migration state; begin M04-WP1A. PR #112 only installs the reporting contract and must not create a recursive README/broadcast loop
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
 
