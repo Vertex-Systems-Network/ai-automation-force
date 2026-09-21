@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
 active_issue: 97
-active_pr: null
+active_pr: 104
 tracked_security_pr: 99
 active_branch: supervisor/durable-resume-post-103
 current_milestone: SUP-GOV-DURABLE-CLOSEOUT
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-103-DURABLE-RESUME-RUNNER-GOVERNANCE
   merged_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
-exact_next_safe_action: open the bounded post-merge reconciliation PR, leave it for exact-head verification on the next resume, then synchronize PR 99 with current main only after reconciliation promotion
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 104 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave the guarded merge decision for the next bounded milestone; after closeout promotion synchronize PR 99 with current main
+pending_runner_ids:
+  - RB-PR104-GOV-001
+  - RB-PR104-CORE-001
+  - RB-PR104-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - PR 103 post-merge compact-state and runner-evidence reconciliation has not yet been promoted
