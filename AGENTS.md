@@ -14,6 +14,58 @@ The normal operator command is `next`.
 
 `next` does not always mean "write new content". It means inspect canonical project state and autonomously execute the highest-value safe next unit of work that is permitted by current policy and consent state.
 
+## Compact durable resume layer
+
+The canonical compact resume path is `ai-native/parallel/state/`.
+
+On every start, `continue`, `next`, `resume`, interrupted session, tool failure, or message-delivery timeout, reconcile in this order before broad repository reading:
+
+1. `ai-native/parallel/state/CURRENT-STATE.yaml`;
+2. `ai-native/parallel/state/LAST-CHECKPOINT.md`;
+3. exact current default/main branch and SHA;
+4. accepted actionable OPEN Issues first;
+5. accepted actionable OPEN PRs second;
+6. active claims, merge/coordination queue, deterministic contract state, and `ai-native/parallel/state/RUNNER-BENCHMARK.yaml`;
+7. only then read larger historical checkpoints when a specific fact or conflict requires them.
+
+Compact state is a resume index only. It never overrides current repository/runtime evidence. Never repeat a merge, migration, provider call, deployment, destructive action, or other irreversible work merely because a previous user-facing message was not delivered.
+
+Keep the compact layer bounded:
+- `CURRENT-STATE.yaml` <= 12 KiB;
+- `LAST-CHECKPOINT.md` <= 16 KiB;
+- rolling `EXECUTION-JOURNAL.md` <= 32 KiB.
+
+Before reporting a meaningful milestone as complete, blocked, verifying, or waiting, reconcile the compact state, rolling journal when a meaningful transition occurred, coordination queue when changed, and Runner Benchmark when changed. If durable state cannot be written, do not claim full completion.
+
+## One operator turn = one logical milestone
+
+By default, one operator `continue`/`resume` turn performs one bounded logical engineering milestone. Do not chain a broad audit, multiple unrelated implementations, repeated CI polling, merge, post-merge audit, and unrelated next task into one turn.
+
+Security/incident work may contain tightly coupled actions only when splitting them would reduce safety.
+
+## Remote-call and CI budget
+
+Batch related read-only calls where supported and read only evidence required for the active milestone. Perform at most one consolidated CI/status refresh per milestone by default. Never tight-poll workflows, deployments, providers, or status endpoints, and never rerun a workflow merely because a chat/UI response timed out.
+
+Before final exact-head CI observation, persist the milestone as `VERIFYING` or `WAITING_EXTERNAL` when remote checks are expected. If required CI is still running after the consolidated refresh, do not create another source commit solely to record that CI is pending. Record run IDs on the PR/Issue status surface when possible and end the milestone. A second same-turn refresh is allowed only after a material security/merge/incident/provider transition that makes it necessary for a safe decision; record the exception durably.
+
+## Runner Benchmark
+
+`ai-native/parallel/state/RUNNER-BENCHMARK.yaml` is the machine-readable registry for material remote/container/browser/runtime/full-regression/performance workloads.
+
+Each runner task records a stable task ID, source Issue/PR/work package, command/workflow, exact source identity, environment/matrix/input/fixture identity, authorization state, security-critical and merge-blocking classification, expected runner time, deterministic dedup key, status, and immutable terminal evidence when available.
+
+Runner registration never grants execution authority. Consumed, expired, historical, destructive, provider, production, deployment, release, or formal-runtime authority must never be inferred or silently reused.
+
+## Mandatory user-facing engineering footer
+
+Every engineering status/completion response must include all three of these evidence-based lines:
+- repository name;
+- current module progress bar and percentage;
+- overall roadmap progress bar and percentage.
+
+Progress must come from repository-defined lifecycle/milestone evidence, not conversational guessing. The default overall roadmap denominator is M0-M15 (16 milestones); a milestone counts as accepted only when its required acceptance/governance gates are satisfied. If a percentage cannot be supported, report the bar as `unknown` rather than inventing a number.
+
 ## Mandatory startup sequence
 
 Before doing project work:
