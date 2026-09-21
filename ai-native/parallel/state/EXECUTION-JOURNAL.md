@@ -47,3 +47,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - New observed main: `2930eda54527296cb2a54063dffbf21719b3af93`.
 - A GitHub secondary-rate-limit response interrupted the first batched post-merge readback; no merge or irreversible action was repeated.
 - Lightweight readback confirmed the merge commit, then mandatory post-merge reconciliation continued on `supervisor/durable-resume-post-103`.
+
+
+## 2026-09-21 — PR #104 post-merge reconciliation opened
+
+- Opened PR #104 from `supervisor/durable-resume-post-103` against `main@2930eda54527296cb2a54063dffbf21719b3af93`.
+- Bound compact state and Supervisor state to PR #104.
+- Milestone moved to `VERIFYING`.
+- No PR #104 CI/status refresh was performed in this turn because the earlier PR #103 exact-head refresh and merge already consumed the bounded milestone's status/transition budget.
+- Next resume must resolve the final PR #104 head first, then perform one consolidated exact-head refresh.
