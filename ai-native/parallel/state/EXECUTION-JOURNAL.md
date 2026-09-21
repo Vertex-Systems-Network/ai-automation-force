@@ -172,3 +172,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Broadcast sequence remains 22; this correction intentionally does not manufacture a recursive broadcast.
 - No PR #109 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
 - Full-project planning prerequisite is satisfied; executable M04 remains blocked by Issue #36 plus explicit scoped operator consent.
+
+
+## 2026-09-22 — PR #109 governance ownership collision repaired
+
+- Initial PR #109 exact head `79549588db1af2b39ceeae1ab92b59a80dc8e57a` reached Repository Governance run `35648015768`, which failed in `Validate Supervisor multi-agent governance`.
+- Exact failure: the Supervisor task write claim `ai-native/parallel/**` overlapped active M03/M04/M05/M06/M07/M08/QA checkpoint ownership.
+- This was a coordination-manifest defect, not product/runtime code failure.
+- Narrowed the Supervisor task write/shared-file claims to the exact governance/state files actually modified; no active lane checkpoint path is claimed.
+- Versioned the PR #109 Runner Benchmark attempt IDs to `RB-PR109-*-002` so stale-head evidence cannot certify the repaired head.
+- A second same-turn consolidated CI refresh is explicitly permitted for this material CI-failure -> source-fix transition; no tight polling or blind rerun is used.
