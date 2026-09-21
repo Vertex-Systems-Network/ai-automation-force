@@ -2,25 +2,22 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
+observed_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
 active_issue: 36
-active_pr: 106
+active_pr: null
 tracked_security_pr: null
-active_branch: supervisor/post-99-security-closeout
-current_milestone: SUP-GOV-POST99-SECURITY-CLOSEOUT
-milestone_status: VERIFYING
+active_branch: supervisor/ai-native-broadcast21-reconcile
+current_milestone: SUP-GOV-BROADCAST21-RECONCILE
+milestone_status: RECONCILING
 last_completed_milestone:
-  id: PR-99-SECURITY-PROMOTION
-  merged_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
-exact_next_safe_action: resolve PR 106 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave guarded merge for the next bounded milestone; after closeout promotion the only known roadmap blocker is Issue 36 live protected-main administrator evidence
-pending_runner_ids:
-  - RB-PR106-GOV-001
-  - RB-PR106-CORE-001
-  - RB-PR106-DURABLE-001
+  id: PR-106-SECURITY-CLOSEOUT
+  merged_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+exact_next_safe_action: promote the bounded broadcast-21 planning-lane synchronization reconciliation; then continue only already-claimed planning/audit work while Issue 36 and FULL_PROJECT_PREPLANNING_IN_PROGRESS block executable development
+pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
-  - post-99 security closeout reconciliation has not yet been promoted
   - Issue 36 requires live protected-main administrator evidence
+  - full-project preplanning gate remains FULL_PROJECT_PREPLANNING_IN_PROGRESS
 coordination:
   latest_broadcast_sequence: 21
   merge_queue_pr: null
@@ -34,9 +31,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Issue 97 / PR 99 security promotion closeout
-    percent: 95
-    basis: PR 99 merged with synchronized exact-head CI green and Issue 97 closed; canonical post-merge reconciliation remains
+    name: AI-Native broadcast 21 planning-lane reconciliation
+    percent: 85
+    basis: all seven active governance/planning branches were verified ahead_by=0 and non-force fast-forwarded to current main; shared coordination state promotion remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
