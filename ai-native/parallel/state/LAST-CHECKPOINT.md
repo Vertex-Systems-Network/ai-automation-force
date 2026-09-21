@@ -19,10 +19,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-M04-CONSENT-RECORDED` is `RECONCILING`.
+`SUP-GOV-M04-CONSENT-RECORDED` is `VERIFYING`.
 
 This milestone records authorization state only. It does not satisfy the Issue #36 condition and does not start executable development.
 
 ## Exact next safe action
 
-Promote this bounded consent reconciliation. Then wait only for live Issue #36 protected-main closure. Immediately after Issue #36 closes: re-read compact state and live main, synchronize the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one migration revision, activate M04-WP1A executable ownership, and implement Issue #114 without another consent round.
+PR #116 is open for this bounded consent reconciliation. Resolve its exact head/base/review/mergeability and perform one consolidated exact-head CI/status refresh. If terminal green and clean, merge with an expected-head guard. After promotion, wait only for live Issue #36 protected-main closure. Immediately after Issue #36 closes: re-read compact state and live main, synchronize the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one migration revision, activate M04-WP1A executable ownership, and implement Issue #114 without another consent round.
