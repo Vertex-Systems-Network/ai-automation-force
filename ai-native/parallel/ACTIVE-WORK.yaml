@@ -1,4 +1,4 @@
-version: 26
+version: 27
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,12 +8,12 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-M04-WP1A-EXECUTION-PACKAGE
-    title: M04-WP1A executable-ready planning package reconciliation
+  - task_id: SUP-GOV-M04-CONSENT-RECORDED
+    title: Persist scoped M04-WP1A consent pending Issue 36
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/m04-wp1a-execution-package
-    base_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    branch: supervisor/m04-consent-recorded
+    base_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     module: supervisor_governance
     status: verifying
     writes:
@@ -32,7 +32,7 @@ active:
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
     depends_on: []
     migration_reservation: null
-    consent_scope: planning-and-governance-only; no executable product authority
+    consent_scope: M04-WP1A explicitly approved; executable start conditioned on Issue 36 closure
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -41,9 +41,9 @@ active:
       reviewed_at: 2026-09-22
       material_delta: false
       readme_sync_required: true
-      notes: Issue 114 freezes M04-WP1A implementation details without changing executable authority or active-agent working instructions; no new broadcast is required.
+      notes: Operator explicitly approved M04-WP1A development to start after Issue 36 closes; no migration or executable product change occurs in this reconciliation.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -63,7 +63,7 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -73,8 +73,10 @@ active:
     assigned_agent: character-agent
     branch: agent/m04-character-library-current
     module: characters_entities
-    status: execution-package-ready-planning-only
+    status: consent-granted-waiting-issue36
     execution_package_issue: 114
+    executable_consent_granted: true
+    executable_start_condition: Issue 36 closed from live protected-main evidence
     writes:
       - docs/milestones/M04/**
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
@@ -82,9 +84,9 @@ active:
     depends_on:
       - M03-GOV-HOLD
     migration_reservation: null
-    consent_scope: planning-only-until-new-scope-approved
+    consent_scope: M04-WP1A executable scope approved; start only after Issue 36 closes
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -104,7 +106,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -124,7 +126,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -146,7 +148,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -167,7 +169,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -187,7 +189,7 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
