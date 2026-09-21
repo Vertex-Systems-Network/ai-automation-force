@@ -26,3 +26,11 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Reconciled PR #102 as broadcast 18; affected pre-existing lanes are sync-required rather than falsely marked synchronized.
 - Reconciled PR #99 queue observation to current main.
 - Milestone persisted as `VERIFYING` before final exact-head CI observation.
+
+
+## 2026-09-21 — Bootstrap PR opened
+
+- Opened PR #103 from exact candidate head `5b6a6e09bbe70702ed2dd2a594a385291a36f251`.
+- Recorded exact-head Runner Benchmark task registrations on the PR status surface.
+- Detected compact-state drift caused by the PR transition and reconciled it before final CI observation.
+- Source head must remain frozen after the final state reconciliation and consolidated status refresh.
