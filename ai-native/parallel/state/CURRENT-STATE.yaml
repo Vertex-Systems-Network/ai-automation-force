@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
 active_issue: 36
-active_pr: null
+active_pr: 115
 tracked_security_pr: null
 active_branch: supervisor/m04-wp1a-execution-package
 current_milestone: SUP-GOV-M04-WP1A-EXECUTION-PACKAGE
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-113-BROADCAST24-README-HANDOFF
   merged_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
-exact_next_safe_action: promote the M04-WP1A execution-package readiness reconciliation; after promotion no further planning is required before executable start except Issue 36 closure, explicit scoped M04 consent, and fresh migration/write-ownership/security revalidation
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 115 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and mergeable use expected-head guarded merge; after promotion stop planning bookkeeping and wait only on Issue 36 plus explicit scoped M04 consent before executable WP1A
+pending_runner_ids:
+  - RB-PR115-GOV-001
+  - RB-PR115-CORE-001
+  - RB-PR115-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -32,8 +35,8 @@ timeout_control:
 progress:
   current_module:
     name: M04-WP1A executable-ready planning package
-    percent: 90
-    basis: Issue 114 freezes schema/backfill/repository/concurrency/rollback/security-test boundaries and README/Active Work reflect readiness; bounded reconciliation promotion remains
+    percent: 95
+    basis: Issue 114 is complete and PR 115 is open with README/control-plane readiness bound to the live submission; exact-head verification remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
