@@ -1,5 +1,5 @@
-version: 13
-latest_sequence: 17
+version: 16
+latest_sequence: 20
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -269,40 +269,134 @@ broadcasts:
       - agent/cross-cutting-qa-security-current
     mandatory: true
 
+
+  - sequence: 18
+    trigger: supervisor-coordination-merge
+    merged_pr: 102
+    merged_branch: supervisor/sec-97-pr99-coordination
+    submitted_head_sha: ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-security-coordination-sync
+    changed_areas:
+      - Issue 97 shared-workflow authorization landed through task SEC-97-WORKFLOW-GOVERNANCE
+      - PR 99 remains approved-awaiting-main-sync and must not merge on stale head
+      - merge queue and Supervisor state now treat PR 99 current-main synchronization as the next security promotion step
+      - Issue 36 protected-main live administrator gate remains unresolved
+    contract_changes:
+      - shared-file authorization is now canonical repository evidence rather than chat-only state
+      - active lanes must re-read current governance state before resuming or seeking promotion
+    schema_migration_changes: []
+    recipients:
+      - security/workflow-regression-guard-2026-09-15
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
+
+  - sequence: 19
+    trigger: supervisor-governance-promotion
+    merged_pr: 103
+    merged_branch: supervisor/durable-resume-runner-bootstrap
+    submitted_head_sha: 366d895c48cd9fdbb5e1640accb40a81d5eb7806
+    merged_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-durable-resume-runner-governance-sync
+    changed_areas:
+      - canonical compact resume state now lives under ai-native/parallel/state
+      - every resume follows compact state then exact main then open Issues then open PRs then claims queue and Runner Benchmark
+      - one operator turn defaults to one bounded logical milestone
+      - CI and remote-status polling are bounded and timeout-driven reruns are forbidden
+      - material runner work is registered with exact source identity and immutable terminal evidence
+      - engineering responses require repository current-module and overall-roadmap evidence-based progress
+      - PR 99 remains the next accepted security path but must synchronize with current main first
+    contract_changes:
+      - repository/runtime evidence outranks compact state and chat memory
+      - historical or stale-head CI cannot certify a later synchronized head
+      - runner registration never grants execution authority
+    schema_migration_changes: []
+    recipients:
+      - security/workflow-regression-guard-2026-09-15
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
+
+  - sequence: 20
+    trigger: supervisor-state-closeout-merge
+    merged_pr: 104
+    merged_branch: supervisor/durable-resume-post-103
+    submitted_head_sha: a6b1cd6f449a7c70f0c26ffd3f6d54e55a0f33a2
+    merged_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-durable-state-closeout-sync
+    changed_areas:
+      - PR 103 terminal Runner Benchmark evidence is now canonical on main
+      - compact state, merge queue, Supervisor state and broadcast 19 are promoted
+      - PR 99 is the sole open security PR and remains current-main-sync-required
+      - Issue 36 protected-main live administrator gate remains unresolved
+    contract_changes: []
+    schema_migration_changes: []
+    recipients:
+      - security/workflow-regression-guard-2026-09-15
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
 recipient_states:
+  security/workflow-regression-guard-2026-09-15:
+    state: sync-required
+    required_sequence: 20
+    last_acknowledged_sequence: 17
+    last_synced_main_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
   supervisor/m03-governance-hold-current:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m04-character-library-current:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m05-content-memory-current:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m06-audio-production-current:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m07-storyboard-timeline-current:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m08-video-provider-router:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/cross-cutting-qa-security-current:
-    state: synchronized
-    required_sequence: null
+    state: sync-required
+    required_sequence: 20
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
 

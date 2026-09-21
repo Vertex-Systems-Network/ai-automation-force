@@ -31,6 +31,7 @@ class Settings(BaseModel):
     api_version: str = Field(default="v1", pattern=r"^v[1-9][0-9]*$")
     build_revision: str = Field(default="dev", min_length=1, max_length=80)
     internal_dev_identity: str | None = Field(default=None, min_length=3, max_length=120)
+    control_api_key: SecretStr | None = None
     database_url: SecretStr | None = None
     temporal_target: str = Field(default="127.0.0.1:7233", min_length=3, max_length=255)
     temporal_namespace: str = Field(default="default", min_length=1, max_length=160)
@@ -79,6 +80,24 @@ class Settings(BaseModel):
     def prevent_unsafe_configuration(self) -> Settings:
         if self.environment in {"staging", "production"} and self.internal_dev_identity:
             raise ValueError("internal_dev_identity is allowed only in development/test")
+        if self.control_api_key is not None:
+            key = self.control_api_key.get_secret_value()
+            if key != key.strip() or len(key) < 32:
+                raise ValueError(
+                    "control_api_key must be at least 32 characters with no surrounding whitespace"
+                )
+            if any(ord(character) < 33 or ord(character) == 127 for character in key):
+                raise ValueError(
+                    "control_api_key must not contain whitespace or control characters"
+                )
+        if (
+            self.environment in {"staging", "production"}
+            and self.database_url is not None
+            and self.control_api_key is None
+        ):
+            raise ValueError(
+                "control_api_key is required when the durable control surface is enabled"
+            )
         if (self.s3_access_key_id is None) != (self.s3_secret_access_key is None):
             raise ValueError("s3_access_key_id and s3_secret_access_key must be supplied together")
         if (
@@ -107,6 +126,7 @@ def load_settings(source: Mapping[str, str] | None = None) -> Settings:
         "AAF_API_VERSION": "api_version",
         "AAF_BUILD_REVISION": "build_revision",
         "AAF_INTERNAL_DEV_IDENTITY": "internal_dev_identity",
+        "AAF_CONTROL_API_KEY": "control_api_key",
         "DATABASE_URL": "database_url",
         "AAF_TEMPORAL_TARGET": "temporal_target",
         "AAF_TEMPORAL_NAMESPACE": "temporal_namespace",

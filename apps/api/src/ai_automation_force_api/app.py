@@ -5,9 +5,10 @@ from contextlib import asynccontextmanager
 from datetime import UTC, datetime
 from typing import Final
 
-from fastapi import APIRouter, FastAPI, Request, status
+from fastapi import APIRouter, Depends, FastAPI, Request, status
 from pydantic import BaseModel, ConfigDict
 
+from .auth import require_control_auth
 from .control import ControlService, control_router
 from .delivery import DeliveryService, delivery_router
 from .errors import APIError, ErrorEnvelope, install_error_handlers
@@ -114,6 +115,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         )
 
     app.include_router(router, prefix=resolved.api_prefix)
-    app.include_router(control_router(), prefix=resolved.api_prefix)
+    app.include_router(
+        control_router(),
+        prefix=resolved.api_prefix,
+        dependencies=[Depends(require_control_auth)],
+    )
     app.include_router(delivery_router(), prefix=resolved.api_prefix)
     return app
