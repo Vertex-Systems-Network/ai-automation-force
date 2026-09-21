@@ -1,4 +1,4 @@
-version: 21
+version: 22
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,36 +8,36 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-BROADCAST22-RECONCILE
-    title: Broadcast 22 post-PR107 planning-lane synchronization reconciliation
+  - task_id: SUP-GOV-PREPLANNING-STATE-RECONCILE
+    title: Reconcile canonical full-project planning-ready state
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/broadcast22-post107-reconcile
-    base_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    branch: supervisor/preplanning-state-ready-reconcile
+    base_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
     module: supervisor_governance
-    status: verifying
+    status: reconciling
     writes:
-      - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-STATE.yaml
-      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
-      - ai-native/parallel/SUPERVISOR-PLAN.md
-      - ai-native/parallel/state/**
+      - ai-native/FULL-PROJECT-PREPLANNING-GATE.md
+      - ai-native/DEVELOPMENT-CONSENT-GATE.md
+      - ai-native/parallel/**
+      - README.md
     shared_requests:
       - ai-native/parallel/**
+      - README.md
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-and-planning-coordination-only; no executable product authority
+    consent_scope: governance-and-planning-documentation-only; no executable product authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
       - Durable Control Plane
     working_instruction_review:
-      reviewed_at: 2026-09-21
+      reviewed_at: 2026-09-22
       material_delta: true
       readme_sync_required: true
-      notes: Records PR 107 promotion, broadcast 22, lane synchronization, and current preplanning/admin holds; no executable behavior changes.
+      notes: Corrects stale preplanning state to canonical READY_FOR_CONSENT evidence and prevents recursive broadcast bookkeeping loops.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    last_synced_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
     last_acknowledged_broadcast: 22
     required_broadcast: null
 
