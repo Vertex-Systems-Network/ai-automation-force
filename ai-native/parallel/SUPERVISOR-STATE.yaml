@@ -69,15 +69,15 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: m04-wp1a-execution-package-readiness
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/m04-wp1a-execution-package
   active_issue: 36
-  active_pr: null
+  active_pr: 115
   tracked_security_pr: null
   last_completed_milestone: pr-113-broadcast24-readme-handoff
-  exact_next_safe_action: promote M04-WP1A execution-package readiness; after that only Issue 36 closure, explicit scoped M04 consent, and fresh migration/write-ownership/security revalidation remain before executable WP1A
+  exact_next_safe_action: resolve PR 115 exact head and perform one consolidated CI/review refresh; if terminal green and mergeable use expected-head guarded merge, then stop planning bookkeeping and wait only on Issue 36 plus explicit scoped M04 consent
   progress:
-    current_module_percent: 90
+    current_module_percent: 95
     current_module_basis: Issue 114 is a ready-to-code package for the first M04 slice; README/Active Work/Supervisor state reconciliation remains
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
