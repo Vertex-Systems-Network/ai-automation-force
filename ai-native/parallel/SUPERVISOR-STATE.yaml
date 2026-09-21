@@ -73,13 +73,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: post-104-handoff
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/post-104-handoff
   active_issue: 97
-  active_pr: null
+  active_pr: 105
   tracked_security_pr: 99
   last_completed_milestone: pr-104-durable-state-closeout
-  exact_next_safe_action: promote post-104 handoff, then synchronize PR 99 with current main and run fresh exact-head CI
+  exact_next_safe_action: resolve PR 105 exact head and perform one consolidated CI refresh; after handoff promotion synchronize PR 99 with current main
   progress:
     current_module_percent: 99
     current_module_basis: PR 103 and PR 104 merged with terminal exact-head CI; bounded handoff reconciliation remains before PR 99 synchronization
