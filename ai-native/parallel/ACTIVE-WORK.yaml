@@ -15,7 +15,7 @@ active:
     branch: supervisor/post112-readme-progress-sync
     base_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml
