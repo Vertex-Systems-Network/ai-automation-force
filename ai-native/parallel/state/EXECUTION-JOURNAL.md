@@ -79,3 +79,24 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Milestone moved to `VERIFYING`.
 - PR #99 source branch remains untouched in this milestone.
 - No PR #105 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
+
+
+## 2026-09-21 — PR #105 governance handoff promotion
+
+- PR #105 exact head `a102f776403e252db916258f07e8d4d07297480e` passed Repository Governance, Core Domain Contracts and Durable Control Plane.
+- PR #105 merged with expected-head guard to `main@8a89652e34c2eb9c7fc0be2d2a90f4f980718f99`.
+- PR #99 became the sole accepted open security path.
+
+## 2026-09-21 — PR #99 current-main synchronization and security promotion
+
+- PR #99 old head `66ebd664dc726bea54c342e0f611a5ce31fcb0ce` was synchronized with exact current main `8a89652e34c2eb9c7fc0be2d2a90f4f980718f99` without force-push.
+- A manual merge-tree metadata check caught an accidental validator mode drift from `100644` to `100755`; a fast-forward corrective commit restored `100644` before certification.
+- Final synchronized candidate head: `fdbbf89284e1ff76daab1232430d6bc0030e6e1c`.
+- Effective PR scope remained exactly two authorized security files.
+- Final exact-head terminal CI passed:
+  - Repository Governance `35629890182`;
+  - Core Domain Contracts `35629890119`;
+  - Durable Control Plane `35629890067`.
+- PR #99 merged with expected-head guard to `main@2d9edb021e8025431bd9506c1c2c660df6bac1da`.
+- Issue #97 was closed completed after live-main source readback verified the required controls.
+- Issue #36 remains separate and unresolved.
