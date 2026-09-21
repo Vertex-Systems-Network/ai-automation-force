@@ -129,6 +129,13 @@ The engineering constitution requires architecture-first development, current of
 This is the concise human-visible summary. Canonical details live in `AGENTS.md`, `ai-native/ENGINEERING-CONTRACT.md`, `ai-native/DEVELOPMENT-CONSENT-GATE.md`, and `ai-native/parallel/`.
 
 Current rules:
+- canonical compact resume state lives under `ai-native/parallel/state/`; on every start/resume read `CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md` first, then resolve exact main, OPEN Issues, OPEN PRs, claims/queue, and Runner Benchmark before broad historical reading;
+- compact resume state is an index only and never overrides live repository/runtime evidence;
+- one operator `continue`/`resume` turn defaults to one bounded logical milestone; do not chain unrelated development, repeated CI polling, merge, post-merge work, and another task in the same turn;
+- perform at most one consolidated CI/status refresh per milestone by default and never tight-poll remote checks;
+- persist `VERIFYING`/`WAITING_EXTERNAL` before final exact-head observation when remote checks are expected; if CI is still running, record run IDs on the PR/Issue status surface without creating a state-only source commit that invalidates the tested head;
+- register material remote/container/browser/runtime/full-regression/performance work in `ai-native/parallel/state/RUNNER-BENCHMARK.yaml`; runner registration never grants execution authority;
+- every engineering response ends with repository name, evidence-based current-module progress bar, and evidence-based overall roadmap progress bar; unknown progress is reported as unknown rather than guessed;
 - on **every start or resume**, including `continue`/`next`/`resume`, perform a working-instruction audit before proceeding;
 - read current repository/PR/checkpoint state rather than relying on chat memory;
 - in multi-agent Supervisor mode, the agent controlling the main integration lane is the **Supervisor** and owns assignment/review/merge authority;
@@ -162,6 +169,10 @@ Parallel capacity guidance:
 - current defined slot registry is fully occupied, so an extra agent currently receives **`Go Home Come Back Next Time`** until a slot is explicitly released/opened.
 
 Canonical coordination files:
+- `ai-native/parallel/state/CURRENT-STATE.yaml`
+- `ai-native/parallel/state/LAST-CHECKPOINT.md`
+- `ai-native/parallel/state/EXECUTION-JOURNAL.md`
+- `ai-native/parallel/state/RUNNER-BENCHMARK.yaml`
 - `ai-native/parallel/MULTI-AGENT-PROTOCOL.md`
 - `ai-native/parallel/SUPERVISOR-PLAN.md`
 - `ai-native/parallel/AGENT-SLOTS.json`
