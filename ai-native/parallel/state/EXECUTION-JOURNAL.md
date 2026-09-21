@@ -245,3 +245,29 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Milestone moved to `VERIFYING`.
 - This PR is bookkeeping for already-issued Broadcast 24 and must not recursively create Broadcast 25.
 - Executable M04 remains unauthorized; after this handoff the only product-development gates are Issue #36 plus explicit scoped M04 consent.
+
+
+## 2026-09-22 — M04-WP1A execution package frozen
+
+- Live repository truth: `main@024aa039ef5ae011b9c78a4a01b38c169607d782`, PR #113 merged, no open PR, Issue #36 still the sole executable-governance blocker.
+- Continued non-executable M04 planning rather than creating fake M03 source work while the external protection gate remains.
+- Audited current M01 schema/domain/persistence and confirmed M04 must reuse existing Character/Version/Look/Lock and World/Location/Prop/Style/Voice foundations.
+- Created Issue #114 as the canonical ready-to-code M04-WP1A execution package.
+- Frozen Path A minimal early Workspace substrate:
+  - Workspace identity only;
+  - ownership on Project and reusable M04 root resources;
+  - child versions/looks derive owner scope from roots;
+  - one deterministic bootstrap Workspace for pre-tenancy rows;
+  - no users/login/memberships/full RBAC/billing/UI.
+- Frozen owner-scoped repository/service contract, optimistic concurrency, transaction/rollback rules, migration/backfill requirements and cross-workspace security tests.
+- No migration ID was reserved and no executable code/schema/API behavior was changed.
+- README progress and Supervisor durable state were reconciled to show WP1A planning readiness while overall accepted-roadmap progress remains 3/16 until Issue #36 closes.
+
+
+## 2026-09-22 — PR #115 M04-WP1A readiness opened
+
+- Opened PR #115 from `supervisor/m04-wp1a-execution-package` against `main@024aa039ef5ae011b9c78a4a01b38c169607d782`.
+- Substantive code-ready planning is canonical in Issue #114; PR #115 only reconciles Supervisor-owned README/control-plane readiness surfaces.
+- M04-owned `docs/milestones/M04/**` paths were intentionally not modified by Supervisor because the active M04 lane owns them.
+- No migration was reserved and no executable product/schema/API change was made.
+- Milestone moved to `VERIFYING`; after promotion, planning bookkeeping stops and only Issue #36 + explicit scoped M04 consent remain before fresh implementation preflight and WP1A execution.

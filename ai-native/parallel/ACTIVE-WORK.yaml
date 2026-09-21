@@ -1,4 +1,4 @@
-version: 25
+version: 26
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,46 +8,42 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-POST112-PROGRESS-SYNC
-    title: Broadcast 24 README progress contract synchronization
+  - task_id: SUP-GOV-M04-WP1A-EXECUTION-PACKAGE
+    title: M04-WP1A executable-ready planning package reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/post112-readme-progress-sync
-    base_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    branch: supervisor/m04-wp1a-execution-package
+    base_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     module: supervisor_governance
     status: verifying
     writes:
       - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
-      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
     shared_requests:
       - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
-      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-and-progress-reporting-sync-only; no executable product authority
+    consent_scope: planning-and-governance-only; no executable product authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
       - Durable Control Plane
     working_instruction_review:
       reviewed_at: 2026-09-22
-      material_delta: true
+      material_delta: false
       readme_sync_required: true
-      notes: One-time Broadcast 24 synchronization of PR 112 README progress contract; bookkeeping promotion must not create Broadcast 25.
+      notes: Issue 114 freezes M04-WP1A implementation details without changing executable authority or active-agent working instructions; no new broadcast is required.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -67,7 +63,7 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -77,7 +73,8 @@ active:
     assigned_agent: character-agent
     branch: agent/m04-character-library-current
     module: characters_entities
-    status: active-planning-only
+    status: execution-package-ready-planning-only
+    execution_package_issue: 114
     writes:
       - docs/milestones/M04/**
       - ai-native/parallel/checkpoints/M04-PARALLEL-LANE.md
@@ -87,7 +84,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -107,7 +104,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -127,7 +124,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -149,7 +146,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -170,7 +167,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -190,7 +187,7 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_synced_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
     last_acknowledged_broadcast: 24
     required_broadcast: null
 

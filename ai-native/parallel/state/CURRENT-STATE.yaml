@@ -2,21 +2,21 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+observed_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
 active_issue: 36
-active_pr: 113
+active_pr: 115
 tracked_security_pr: null
-active_branch: supervisor/post112-readme-progress-sync
-current_milestone: SUP-GOV-POST112-PROGRESS-SYNC
+active_branch: supervisor/m04-wp1a-execution-package
+current_milestone: SUP-GOV-M04-WP1A-EXECUTION-PACKAGE
 milestone_status: VERIFYING
 last_completed_milestone:
-  id: PR-112-README-PROGRESS-CONTRACT
-  merged_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-exact_next_safe_action: resolve PR 113 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and clean use expected-head guarded merge; after merge do not create Broadcast 25 and return directly to Issue 36 plus explicit M04 consent
+  id: PR-113-BROADCAST24-README-HANDOFF
+  merged_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+exact_next_safe_action: resolve PR 115 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and mergeable use expected-head guarded merge; after promotion stop planning bookkeeping and wait only on Issue 36 plus explicit scoped M04 consent before executable WP1A
 pending_runner_ids:
-  - RB-PR113-GOV-001
-  - RB-PR113-CORE-001
-  - RB-PR113-DURABLE-001
+  - RB-PR115-GOV-001
+  - RB-PR115-CORE-001
+  - RB-PR115-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -34,9 +34,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Broadcast 24 + README progress handoff
-    percent: 90
-    basis: PR 113 is open with Broadcast 24, PR 112 runner evidence, Issue 111 closure, seven-lane sync, and README progress reconciliation bound to the live submission; exact-head verification remains
+    name: M04-WP1A executable-ready planning package
+    percent: 95
+    basis: Issue 114 is complete and PR 115 is open with README/control-plane readiness bound to the live submission; exact-head verification remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
