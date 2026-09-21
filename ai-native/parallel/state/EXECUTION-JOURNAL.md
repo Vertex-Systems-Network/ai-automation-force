@@ -193,3 +193,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Broadcast 23 records planning-ready truth, non-recursive broadcast semantics, collision-free write ownership and M04 consent-readiness.
 - This handoff is bookkeeping for an already-issued material broadcast and therefore must not recursively create Broadcast 24 unless it itself introduces new material state.
 - M04 executable work remains blocked by Issue #36 plus explicit scoped operator consent.
+
+
+## 2026-09-22 — PR #110 Broadcast 23 handoff opened
+
+- Opened PR #110 from `supervisor/post109-material-sync` against `main@94160c21e2f7a6511c6d4fd58c6db9cbad168a5b`.
+- Scope is canonical Broadcast 23, active-lane synchronization evidence, PR #109 terminal Runner Benchmark evidence and M04 consent-readiness state.
+- Bound compact state, Supervisor state, Active Work and checkpoint to PR #110.
+- Milestone moved to `VERIFYING`.
+- PR #110 is a bookkeeping handoff for the already-issued material Broadcast 23 and must not recursively create Broadcast 24 unless new material agent-facing state is added.
+- No PR #110 CI/status refresh is performed in this turn; next resume must resolve the final exact head first.
