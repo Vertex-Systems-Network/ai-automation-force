@@ -15,7 +15,7 @@ active:
     branch: supervisor/preplanning-state-ready-reconcile
     base_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - ai-native/FULL-PROJECT-PREPLANNING-GATE.md
       - ai-native/DEVELOPMENT-CONSENT-GATE.md
