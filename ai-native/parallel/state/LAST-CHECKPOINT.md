@@ -5,24 +5,26 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current truth
 
-- Current live `main`: `5c09918e6d1c0f06aa4d0890c58921f94466e509`.
-- PR #112 mandatory README progress contract merged from exact head `599712cca20ac5b8a4da950b1503580854de1575`.
-- PR #112 exact-head terminal CI is green: Repository Governance `35653723665`, Core Domain Contracts `35653723656`, Durable Control Plane `35653723587`.
-- README Live development progress reconciliation is now mandatory and non-recursive for bookkeeping self-merges.
-- M04 execution preflight Issue #111 is completed/closed.
-- M04 first executable slice remains `M04-WP1A`: minimal Workspace ownership substrate + standalone Character/Entity repository boundary, reusing existing M01 domain/schema/persistence.
-- All seven active M03/M04/M05/M06/M07/M08/QA branches were reverified `ahead_by=0`, `behind_by=32`, then non-force fast-forwarded to current main.
-- Broadcast 24 is the one-time mandatory synchronization for PR #112's material working-instruction change.
-- Broadcast 24 bookkeeping must not recursively create Broadcast 25.
-- Issue #36 remains the only open planning/governance Issue and live protected-main administrator gate.
-- Executable M04 authority remains false until Issue #36 closes and explicit scoped M04 consent is recorded.
+- Current live `main`: `024aa039ef5ae011b9c78a4a01b38c169607d782`.
+- PR #113 Broadcast 24/README handoff is merged from exact head `7f117a0df3748f9b6b41b2e14d6b8202b5cb9bdf`.
+- PR #113 exact-head CI passed Repository Governance `35654762871`, Core Domain Contracts `35654762869`, and Durable Control Plane `35654762917`.
+- Open pull requests were empty before this bounded planning-readiness reconciliation.
+- Issue #36 remains the sole executable-governance blocker; live main protection remains unverified/unapplied in the connected runtime.
+- M04 execution preflight Issue #111 is completed.
+- Issue #114 is the canonical ready-to-code M04-WP1A execution package.
+- M04-WP1A reuses existing M01 Character/Entity domain models, PostgreSQL tables and aggregate persistence.
+- Frozen first-slice design: minimal early M11-compatible Workspace identity substrate; no users/login/memberships/full RBAC/UI.
+- Proposed owner roots: Project, Character, World, Location, Prop, StyleProfile and VoiceProfile; child versions/looks inherit owner scope through canonical roots.
+- Existing pre-tenancy rows use one deterministic bootstrap Workspace during migration; no migration is reserved until executable authority exists.
+- Initial M04-WP1A API surface remains internal/service-only until owner-scoped repository tests and trusted Workspace context exist.
+- Executable M04 authority remains false until Issue #36 closes and explicit scoped M04 development consent is recorded.
 
 ## Current milestone
 
-`SUP-GOV-POST112-PROGRESS-SYNC` is `VERIFYING`.
+`SUP-GOV-M04-WP1A-EXECUTION-PACKAGE` is `RECONCILING`.
 
-Scope is limited to Broadcast 24, PR #112 terminal runner evidence, active-lane synchronization evidence, README progress reconciliation after #111 closure, and compact/Supervisor state cleanup.
+This milestone is planning/governance only. It freezes implementation detail so executable work can start without first-time architecture decisions after the real gates clear.
 
 ## Exact next safe action
 
-PR #113 is open for this single bounded handoff. Resolve its exact head/base/review state and perform one consolidated exact-head CI/status refresh. If terminal green and clean, merge with an expected-head guard. After it lands, do not create Broadcast 25 or another README/state-only PR from this bookkeeping merge. The only remaining product-development gates are live Issue #36 protected-main evidence and explicit scoped M04 development consent; after both clear, revalidate current main, migration reservation, ownership and security state and begin M04-WP1A.
+Promote this bounded readiness reconciliation. After it lands, no additional M04 planning is required before WP1A start except fresh then-current main/write-ownership/migration/security revalidation. Do not create a migration or executable code until Issue #36 is closed and explicit scoped M04 consent is recorded.
