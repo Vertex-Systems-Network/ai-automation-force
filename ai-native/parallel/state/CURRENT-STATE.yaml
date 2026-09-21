@@ -2,21 +2,18 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+observed_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
 active_issue: 36
-active_pr: 113
+active_pr: null
 tracked_security_pr: null
-active_branch: supervisor/post112-readme-progress-sync
-current_milestone: SUP-GOV-POST112-PROGRESS-SYNC
-milestone_status: VERIFYING
+active_branch: supervisor/m04-wp1a-execution-package
+current_milestone: SUP-GOV-M04-WP1A-EXECUTION-PACKAGE
+milestone_status: RECONCILING
 last_completed_milestone:
-  id: PR-112-README-PROGRESS-CONTRACT
-  merged_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-exact_next_safe_action: resolve PR 113 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and clean use expected-head guarded merge; after merge do not create Broadcast 25 and return directly to Issue 36 plus explicit M04 consent
-pending_runner_ids:
-  - RB-PR113-GOV-001
-  - RB-PR113-CORE-001
-  - RB-PR113-DURABLE-001
+  id: PR-113-BROADCAST24-README-HANDOFF
+  merged_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+exact_next_safe_action: promote the M04-WP1A execution-package readiness reconciliation; after promotion no further planning is required before executable start except Issue 36 closure, explicit scoped M04 consent, and fresh migration/write-ownership/security revalidation
+pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -34,9 +31,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Broadcast 24 + README progress handoff
+    name: M04-WP1A executable-ready planning package
     percent: 90
-    basis: PR 113 is open with Broadcast 24, PR 112 runner evidence, Issue 111 closure, seven-lane sync, and README progress reconciliation bound to the live submission; exact-head verification remains
+    basis: Issue 114 freezes schema/backfill/repository/concurrency/rollback/security-test boundaries and README/Active Work reflect readiness; bounded reconciliation promotion remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
