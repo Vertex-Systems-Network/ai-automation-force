@@ -69,13 +69,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: preplanning-state-ready-reconciliation
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/preplanning-state-ready-reconcile
   active_issue: 36
-  active_pr: null
+  active_pr: 109
   tracked_security_pr: null
   last_completed_milestone: pr-108-broadcast22-reconciliation
-  exact_next_safe_action: promote planning-ready state reconciliation, then prepare the scoped M04 Development Consent Brief; executable M04 remains blocked by Issue 36 and explicit operator consent
+  exact_next_safe_action: resolve PR 109 exact head and perform one consolidated CI/review refresh; after promotion prepare the scoped M04 Development Consent Brief; executable M04 remains blocked by Issue 36 and explicit operator consent
   progress:
     current_module_percent: 85
     current_module_basis: canonical preplanning evidence is complete and READY_FOR_CONSENT; AI-Native control-plane reconciliation remains
