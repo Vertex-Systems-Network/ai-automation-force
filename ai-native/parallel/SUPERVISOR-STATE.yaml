@@ -73,13 +73,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: durable-resume-post-103-closeout
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/durable-resume-post-103
   active_issue: 97
-  active_pr: null
+  active_pr: 104
   tracked_security_pr: 99
   last_completed_milestone: pr-103-durable-resume-runner-governance
-  exact_next_safe_action: open and verify the bounded post-merge reconciliation PR; after it lands synchronize PR 99 with current main
+  exact_next_safe_action: resolve PR 104 exact head and perform one consolidated CI refresh; after closeout promotion synchronize PR 99 with current main
   progress:
     current_module_percent: 95
     current_module_basis: PR 103 merged with terminal exact-head CI; canonical post-merge state closeout remains
