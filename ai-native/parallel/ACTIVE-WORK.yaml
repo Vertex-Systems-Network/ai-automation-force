@@ -19,10 +19,28 @@ active:
     writes:
       - ai-native/FULL-PROJECT-PREPLANNING-GATE.md
       - ai-native/DEVELOPMENT-CONSENT-GATE.md
-      - ai-native/parallel/**
+      - ai-native/parallel/ACTIVE-WORK.yaml
+      - ai-native/parallel/INTEGRATION-PROTOCOL.md
+      - ai-native/parallel/MERGE-QUEUE.yaml
+      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
+      - ai-native/parallel/SUPERVISOR-PLAN.md
+      - ai-native/parallel/SUPERVISOR-STATE.yaml
+      - ai-native/parallel/state/CURRENT-STATE.yaml
+      - ai-native/parallel/state/LAST-CHECKPOINT.md
+      - ai-native/parallel/state/EXECUTION-JOURNAL.md
+      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
       - README.md
     shared_requests:
-      - ai-native/parallel/**
+      - ai-native/parallel/ACTIVE-WORK.yaml
+      - ai-native/parallel/INTEGRATION-PROTOCOL.md
+      - ai-native/parallel/MERGE-QUEUE.yaml
+      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
+      - ai-native/parallel/SUPERVISOR-PLAN.md
+      - ai-native/parallel/SUPERVISOR-STATE.yaml
+      - ai-native/parallel/state/CURRENT-STATE.yaml
+      - ai-native/parallel/state/LAST-CHECKPOINT.md
+      - ai-native/parallel/state/EXECUTION-JOURNAL.md
+      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
       - README.md
     depends_on: []
     migration_reservation: null
