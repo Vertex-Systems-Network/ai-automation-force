@@ -2,25 +2,21 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
+observed_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
 active_issue: 36
-active_pr: 115
+active_pr: null
 tracked_security_pr: null
-active_branch: supervisor/m04-wp1a-execution-package
-current_milestone: SUP-GOV-M04-WP1A-EXECUTION-PACKAGE
-milestone_status: VERIFYING
+active_branch: supervisor/m04-consent-recorded
+current_milestone: SUP-GOV-M04-CONSENT-RECORDED
+milestone_status: RECONCILING
 last_completed_milestone:
-  id: PR-113-BROADCAST24-README-HANDOFF
-  merged_main_sha: 024aa039ef5ae011b9c78a4a01b38c169607d782
-exact_next_safe_action: resolve PR 115 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and mergeable use expected-head guarded merge; after promotion stop planning bookkeeping and wait only on Issue 36 plus explicit scoped M04 consent before executable WP1A
-pending_runner_ids:
-  - RB-PR115-GOV-001
-  - RB-PR115-CORE-001
-  - RB-PR115-DURABLE-001
+  id: PR-115-M04-WP1A-EXECUTION-PACKAGE
+  merged_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+exact_next_safe_action: promote scoped M04-WP1A consent reconciliation; executable start remains blocked only by Issue 36, after which fresh live-main/write-ownership/migration/security revalidation and one migration reservation precede direct WP1A implementation
+pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
-  - explicit scoped M04 executable development consent has not been granted
 coordination:
   latest_broadcast_sequence: 24
   merge_queue_pr: null
@@ -34,9 +30,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: M04-WP1A executable-ready planning package
-    percent: 95
-    basis: Issue 114 is complete and PR 115 is open with README/control-plane readiness bound to the live submission; exact-head verification remains
+    name: M04-WP1A consent reconciliation
+    percent: 80
+    basis: scoped M04-WP1A consent is durably recorded on Issue 114 and README/Active Work are reconciled; bounded promotion remains while Issue 36 is the sole executable gate
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
