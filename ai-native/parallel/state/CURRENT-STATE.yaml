@@ -2,27 +2,24 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
+observed_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
 active_issue: 36
-active_pr: 112
+active_pr: null
 tracked_security_pr: null
-active_branch: supervisor/readme-progress-contract
-current_milestone: SUP-GOV-README-PROGRESS-CONTRACT
-milestone_status: VERIFYING
+active_branch: supervisor/post112-readme-progress-sync
+current_milestone: SUP-GOV-POST112-PROGRESS-SYNC
+milestone_status: RECONCILING
 last_completed_milestone:
-  id: PR-110-BROADCAST23-M04-CONSENT-READINESS
-  merged_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-exact_next_safe_action: resolve PR 112 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and mergeable use expected-head guarded merge; after promotion issue one material instruction broadcast without recursive bookkeeping
-pending_runner_ids:
-  - RB-PR112-GOV-001
-  - RB-PR112-CORE-001
-  - RB-PR112-DURABLE-001
+  id: PR-112-README-PROGRESS-CONTRACT
+  merged_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+exact_next_safe_action: promote one-time Broadcast 24/README progress handoff; after promotion do not create Broadcast 25 from bookkeeping and return directly to Issue 36 plus explicit M04 consent
+pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
   - explicit scoped M04 executable development consent has not been granted
 coordination:
-  latest_broadcast_sequence: 23
+  latest_broadcast_sequence: 24
   merge_queue_pr: null
   merge_queue_state: empty
   runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
@@ -34,9 +31,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Mandatory README progress reconciliation contract
-    percent: 90
-    basis: PR 112 is open with README dashboard plus AGENTS/Supervisor/shared-file progress rules bound to the live submission; exact-head verification remains
+    name: Broadcast 24 + README progress handoff
+    percent: 85
+    basis: PR 112 merged, Issue 111 closed, and seven active lanes non-force synchronized to main@5c09918e6d1c0f06aa4d0890c58921f94466e509; handoff promotion remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
