@@ -1,19 +1,19 @@
-version: 22
+version: 23
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
-  main_sha_last_reconciled: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+  main_sha_last_promotion: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+  main_sha_last_reconciled: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
-  current_mode: planning-ready-for-consent-and-m03-admin-hold
+  current_mode: m04-consent-ready-and-m03-admin-hold
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 108
-  submitted_head_sha: 8fceaf150eb547f5d283ae95b6c430f2a9a5f06b
-  merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+  pr: 109
+  submitted_head_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
+  merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+  head_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,11 +35,11 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 22
+  latest_broadcast_sequence: 23
   agents_with_mandatory_sync: []
   last_completed_branch_sync:
-    broadcast_sequence: 22
-    main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+    broadcast_sequence: 23
+    main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
     branches:
       - supervisor/m03-governance-hold-current
       - agent/m04-character-library-current
@@ -61,26 +61,26 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 108
-  submitted_head_sha: 8fceaf150eb547f5d283ae95b6c430f2a9a5f06b
-  merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+  pr: 109
+  submitted_head_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
+  merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
   result: success
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: preplanning-state-ready-reconciliation
-  milestone_status: VERIFYING
-  active_branch: supervisor/preplanning-state-ready-reconcile
+  current_milestone: post-109-material-sync-and-m04-consent-readiness
+  milestone_status: RECONCILING
+  active_branch: supervisor/post109-material-sync
   active_issue: 36
-  active_pr: 109
+  active_pr: null
   tracked_security_pr: null
-  last_completed_milestone: pr-108-broadcast22-reconciliation
-  exact_next_safe_action: resolve PR 109 exact head and perform one consolidated CI/review refresh; after promotion prepare the scoped M04 Development Consent Brief; executable M04 remains blocked by Issue 36 and explicit operator consent
+  last_completed_milestone: pr-109-planning-ready-reconciliation
+  exact_next_safe_action: promote Broadcast 23 material-state handoff, then hold executable M04 until Issue 36 closes and explicit scoped M04 operator consent is recorded
   progress:
     current_module_percent: 85
-    current_module_basis: canonical preplanning evidence is complete and READY_FOR_CONSENT; AI-Native control-plane reconciliation remains
+    current_module_basis: PR 109 merged green, all active lanes synchronized to current main, Broadcast 23 and M04 consent-readiness handoff are being persisted
     overall_roadmap_percent: 19
-    overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
+    overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked solely by Issue 36
 
 security_reconciliation:
   issue: 97
@@ -103,10 +103,11 @@ planning_state:
     completion_checkpoint: checkpoints/2026-08-29-full-project-preplanning-complete.md
     executable_authority: false
   m04:
-    status: planning-hardened-only
+    status: consent-ready-pending-issue36-and-explicit-approval
     promotion_pr: 78
     active_branch: agent/m04-character-library-current
     executable_authority: false
+    consent_brief: operator-ready
     executable_gates:
       - Issue 36 live protected-main governance
       - explicit M04 executable consent
