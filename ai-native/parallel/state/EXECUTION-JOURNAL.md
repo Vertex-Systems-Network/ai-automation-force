@@ -235,3 +235,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - README Live development progress now reflects #111 closed, PR #112 landed, M04 preflight complete, and Issue #36 as the only open planning/governance Issue.
 - This handoff is bookkeeping for the already-issued Broadcast 24 and must not recursively create Broadcast 25.
 - Executable M04 remains blocked only by live Issue #36 plus explicit scoped M04 consent, followed by fresh migration/ownership/security revalidation.
+
+
+## 2026-09-22 — PR #113 Broadcast 24 handoff opened
+
+- Opened PR #113 from `supervisor/post112-readme-progress-sync` against `main@5c09918e6d1c0f06aa4d0890c58921f94466e509`.
+- Scope is one-time Broadcast 24, PR #112 terminal Runner Benchmark evidence, Issue #111 closure, seven-lane synchronization evidence, README Live development progress reconciliation, and compact/Supervisor cleanup.
+- Bound README, compact state, Supervisor state, Active Work and checkpoint to PR #113.
+- Milestone moved to `VERIFYING`.
+- This PR is bookkeeping for already-issued Broadcast 24 and must not recursively create Broadcast 25.
+- Executable M04 remains unauthorized; after this handoff the only product-development gates are Issue #36 plus explicit scoped M04 consent.
