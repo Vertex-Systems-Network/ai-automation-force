@@ -517,6 +517,79 @@ tasks:
       conclusion: success
       merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
 
+
+  - task_id: RB-PR109-GOV-002
+    source:
+      issue: 36
+      pr: 109
+      work_package: SUP-GOV-PREPLANNING-STATE-RECONCILE
+    command_workflow: Repository Governance
+    exact_source_identity:
+      commit_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: repository-governance
+      trigger: pull_request
+    authorization_state: governance-and-planning-documentation-only
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 5m
+    deterministic_dedup_key: github-actions:repository-governance:66c636701167b7228007f4ad05d8f69d88fc919c
+    status: terminal-success
+    immutable_evidence:
+      run_id: 35648380753
+      conclusion: success
+      merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+
+  - task_id: RB-PR109-CORE-002
+    source:
+      issue: 36
+      pr: 109
+      work_package: SUP-GOV-PREPLANNING-STATE-RECONCILE
+    command_workflow: Core Domain Contracts
+    exact_source_identity:
+      commit_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: core-domain-contracts
+      trigger: pull_request
+      postgres: "18"
+    authorization_state: governance-and-planning-documentation-only
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 15m
+    deterministic_dedup_key: github-actions:core-domain-contracts:66c636701167b7228007f4ad05d8f69d88fc919c
+    status: terminal-success
+    immutable_evidence:
+      run_id: 35648380476
+      conclusion: success
+      merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+
+  - task_id: RB-PR109-DURABLE-002
+    source:
+      issue: 36
+      pr: 109
+      work_package: SUP-GOV-PREPLANNING-STATE-RECONCILE
+    command_workflow: Durable Control Plane
+    exact_source_identity:
+      commit_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: durable-control-plane
+      trigger: pull_request
+      postgres: "18"
+      temporal_cli: 1.8.2
+    authorization_state: governance-and-planning-documentation-only
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 25m
+    deterministic_dedup_key: github-actions:durable-control-plane:66c636701167b7228007f4ad05d8f69d88fc919c
+    status: terminal-success
+    immutable_evidence:
+      run_id: 35648380579
+      conclusion: success
+      merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+
 rolling_notes:
   - Future synchronized PR 99 runs require new task IDs or versioned suffixes tied to the new exact head; historical success above cannot be silently reused.
   - For a candidate whose exact SHA is produced by the same state-changing commit, record exact SHA and run IDs on the PR/Issue status surface, then reconcile terminal evidence into this ledger on the next safe state transition rather than invalidating the certified head with a state-only commit.
