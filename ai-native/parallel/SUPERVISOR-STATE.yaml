@@ -69,13 +69,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: post-109-material-sync-and-m04-consent-readiness
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/post109-material-sync
   active_issue: 36
-  active_pr: null
+  active_pr: 110
   tracked_security_pr: null
   last_completed_milestone: pr-109-planning-ready-reconciliation
-  exact_next_safe_action: promote Broadcast 23 material-state handoff, then hold executable M04 until Issue 36 closes and explicit scoped M04 operator consent is recorded
+  exact_next_safe_action: resolve PR 110 exact head and perform one consolidated CI/review refresh; if terminal green use expected-head guarded merge, then hold executable M04 until Issue 36 closes and explicit scoped operator consent is recorded
   progress:
     current_module_percent: 85
     current_module_basis: PR 109 merged green, all active lanes synchronized to current main, Broadcast 23 and M04 consent-readiness handoff are being persisted
