@@ -17,10 +17,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-POST109-MATERIAL-SYNC` is `RECONCILING`.
+`SUP-GOV-POST109-MATERIAL-SYNC` is `VERIFYING`.
 
 Scope is limited to canonical Broadcast 23, active-lane synchronization evidence, PR #109 terminal runner evidence and M04 consent-readiness handoff. No executable product/schema/provider/deployment behavior is changed.
 
 ## Exact next safe action
 
-Promote this bounded handoff. After it lands, do not create another broadcast/state-only PR. Hold executable M04 until live Issue #36 protection evidence closes the dependency and explicit scoped M04 development consent is recorded.
+PR #110 is open for this bounded handoff. Next resume resolves its exact current head and performs one consolidated exact-head CI/status/review refresh. If terminal green, merge with an expected-head guard. After merge, do not create Broadcast 24 from this bookkeeping handoff. Hold executable M04 until live Issue #36 protection evidence closes the dependency and explicit scoped M04 development consent is recorded.
