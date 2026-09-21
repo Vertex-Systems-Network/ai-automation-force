@@ -284,3 +284,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Active M04 lane moves to `consent-granted-waiting-issue36`.
 - No migration reservation, code, schema, test, workflow, provider, credential or deployment change was made.
 - No broadcast is emitted while Issue #36 still blocks all executable M04 work; fresh synchronization/revalidation is mandatory immediately after gate closure.
+
+
+## 2026-09-22 — PR #116 scoped M04 consent reconciliation opened
+
+- Opened PR #116 from `supervisor/m04-consent-recorded` against `main@5efdd3485e24f29f894929d7dcd0bf93369d06dc`.
+- Bound README, compact state, Supervisor state and Active Work to the new durable authorization truth.
+- M04-WP1A consent is granted but executable authority is conditional on Issue #36 closure.
+- Missing consent is removed from the blocker set; Issue #36 is now the sole executable gate.
+- No migration reservation, runtime/schema/API/test/workflow/provider/credential/deployment change is included.
+- Pre-PR review caught and corrected an authorization-state bug so full-project preplanning remains non-executable while only M04 carries conditional-after-Issue36 authority.
