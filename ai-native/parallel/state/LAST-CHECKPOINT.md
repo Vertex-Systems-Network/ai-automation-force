@@ -18,12 +18,12 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-DURABLE-CLOSEOUT` is `RECONCILING`.
+`SUP-GOV-DURABLE-CLOSEOUT` is `VERIFYING`.
 
 Scope is limited to post-merge durable state, terminal Runner Benchmark evidence, broadcast/queue/Supervisor-state reconciliation, and no product/runtime/provider behavior.
 
 ## Exact next safe action
 
-Open the bounded post-merge reconciliation PR from this branch. Do not start PR #99 synchronization in the same milestone. On the next resume, resolve the closeout PR exact head and perform one consolidated exact-head CI/status refresh.
+Post-merge reconciliation PR #104 is open. Do not start PR #99 synchronization in the same milestone. On the next resume, resolve PR #104 exact current head and perform one consolidated exact-head CI/status refresh.
 
 After the closeout lands, synchronize PR #99 with then-current `main` and treat all pre-sync CI as historical only.
