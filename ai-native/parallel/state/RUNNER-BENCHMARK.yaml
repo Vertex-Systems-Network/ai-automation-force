@@ -1,0 +1,157 @@
+version: 1
+benchmark: Runner Benchmark
+repository: Vertex-Systems-Network/ai-automation-force
+policy:
+  registration_grants_execution_authority: false
+  terminal_pass_required_for_pass_status: true
+  pending_running_skipped_deferred_are_not_pass: true
+  stale_head_evidence_is_not_merge_certification: true
+  exact_current_candidate_run_ids_may_be_recorded_on_pr_issue_status_surface_without_mutating_the_certified_head: true
+tasks:
+  - task_id: RB-SEC97-PR99-GOV-001
+    source:
+      issue: 97
+      pr: 99
+      work_package: SEC-97-WORKFLOW-GOVERNANCE
+    command_workflow: Repository Governance
+    exact_source_identity:
+      commit_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: repository-governance
+      trigger: pull_request
+    authorization_state: authorized-security-remediation
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 5m
+    deterministic_dedup_key: github-actions:repository-governance:66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    status: terminal-success-stale-head
+    immutable_evidence:
+      run_id: 34898685806
+      conclusion: success
+    reusable_for_current_merge: false
+
+  - task_id: RB-SEC97-PR99-CORE-001
+    source:
+      issue: 97
+      pr: 99
+      work_package: SEC-97-WORKFLOW-GOVERNANCE
+    command_workflow: Core Domain Contracts
+    exact_source_identity:
+      commit_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: core-domain-contracts
+      trigger: pull_request
+      postgres: "18"
+    authorization_state: authorized-security-remediation
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 15m
+    deterministic_dedup_key: github-actions:core-domain-contracts:66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    status: terminal-success-stale-head
+    immutable_evidence:
+      run_id: 34898685796
+      conclusion: success
+    reusable_for_current_merge: false
+
+  - task_id: RB-SEC97-PR99-DURABLE-001
+    source:
+      issue: 97
+      pr: 99
+      work_package: SEC-97-WORKFLOW-GOVERNANCE
+    command_workflow: Durable Control Plane
+    exact_source_identity:
+      commit_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: durable-control-plane
+      trigger: pull_request
+      postgres: "18"
+      temporal_cli: 1.8.2
+    authorization_state: authorized-security-remediation
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 25m
+    deterministic_dedup_key: github-actions:durable-control-plane:66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    status: terminal-success-stale-head
+    immutable_evidence:
+      run_id: 34898685866
+      conclusion: success
+    reusable_for_current_merge: false
+
+  - task_id: RB-PR102-GOV-001
+    source:
+      issue: 97
+      pr: 102
+      work_package: security-coordination-promotion
+    command_workflow: Repository Governance
+    exact_source_identity:
+      commit_sha: ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: repository-governance
+      trigger: pull_request
+    authorization_state: authorized-governance-coordination
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 5m
+    deterministic_dedup_key: github-actions:repository-governance:ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    status: terminal-success
+    immutable_evidence:
+      run_id: 35626137703
+      conclusion: success
+      merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+
+  - task_id: RB-PR102-CORE-001
+    source:
+      issue: 97
+      pr: 102
+      work_package: security-coordination-promotion
+    command_workflow: Core Domain Contracts
+    exact_source_identity:
+      commit_sha: ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: core-domain-contracts
+      trigger: pull_request
+      postgres: "18"
+    authorization_state: authorized-governance-coordination
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 15m
+    deterministic_dedup_key: github-actions:core-domain-contracts:ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    status: terminal-success
+    immutable_evidence:
+      run_id: 35626137351
+      conclusion: success
+      merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+
+  - task_id: RB-PR102-DURABLE-001
+    source:
+      issue: 97
+      pr: 102
+      work_package: security-coordination-promotion
+    command_workflow: Durable Control Plane
+    exact_source_identity:
+      commit_sha: ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    environment_matrix_input_fixture:
+      runner: github-hosted
+      workflow: durable-control-plane
+      trigger: pull_request
+      postgres: "18"
+      temporal_cli: 1.8.2
+    authorization_state: authorized-governance-coordination
+    security_critical: true
+    merge_blocking: true
+    expected_runner_time: 25m
+    deterministic_dedup_key: github-actions:durable-control-plane:ad4e4362e79f47927c0600b2c21a4ec52765ed96
+    status: terminal-success
+    immutable_evidence:
+      run_id: 35626137753
+      conclusion: success
+      merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+
+rolling_notes:
+  - Future synchronized PR 99 runs require new task IDs or versioned suffixes tied to the new exact head; historical success above cannot be silently reused.
+  - For a candidate whose exact SHA is produced by the same state-changing commit, record exact SHA and run IDs on the PR/Issue status surface, then reconcile terminal evidence into this ledger on the next safe state transition rather than invalidating the certified head with a state-only commit.
