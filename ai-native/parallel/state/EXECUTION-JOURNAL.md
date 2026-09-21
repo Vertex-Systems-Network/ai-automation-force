@@ -262,3 +262,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Frozen owner-scoped repository/service contract, optimistic concurrency, transaction/rollback rules, migration/backfill requirements and cross-workspace security tests.
 - No migration ID was reserved and no executable code/schema/API behavior was changed.
 - README progress and Supervisor durable state were reconciled to show WP1A planning readiness while overall accepted-roadmap progress remains 3/16 until Issue #36 closes.
+
+
+## 2026-09-22 — PR #115 M04-WP1A readiness opened
+
+- Opened PR #115 from `supervisor/m04-wp1a-execution-package` against `main@024aa039ef5ae011b9c78a4a01b38c169607d782`.
+- Substantive code-ready planning is canonical in Issue #114; PR #115 only reconciles Supervisor-owned README/control-plane readiness surfaces.
+- M04-owned `docs/milestones/M04/**` paths were intentionally not modified by Supervisor because the active M04 lane owns them.
+- No migration was reserved and no executable product/schema/API change was made.
+- Milestone moved to `VERIFYING`; after promotion, planning bookkeeping stops and only Issue #36 + explicit scoped M04 consent remain before fresh implementation preflight and WP1A execution.
