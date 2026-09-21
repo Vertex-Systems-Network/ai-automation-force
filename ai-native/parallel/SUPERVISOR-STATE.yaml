@@ -1,19 +1,19 @@
-version: 17
+version: 18
 supervisor:
   role: supervisor
   main_branch: main
   main_sha_last_promotion: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-  main_sha_last_reconciled: 2930eda54527296cb2a54063dffbf21719b3af93
+  main_sha_last_reconciled: 497b4e20e4a5f4e311480e993ebb277a49c83737
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
-  current_mode: durable-resume-post-103-reconciliation
+  current_mode: post-104-handoff-to-security-pr-99
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 103
-  submitted_head_sha: 366d895c48cd9fdbb5e1640accb40a81d5eb7806
-  merged_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+  pr: 104
+  submitted_head_sha: a6b1cd6f449a7c70f0c26ffd3f6d54e55a0f33a2
+  merged_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
   result: success
 
 new_agent_onboarding:
@@ -44,7 +44,7 @@ review_queue:
       - fresh exact-head CI after synchronization
 
 synchronization:
-  latest_broadcast_sequence: 19
+  latest_broadcast_sequence: 20
   agents_with_mandatory_sync:
     - security/workflow-regression-guard-2026-09-15
     - supervisor/m03-governance-hold-current
@@ -72,17 +72,17 @@ last_coordination_merge:
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: durable-resume-post-103-closeout
-  milestone_status: VERIFYING
-  active_branch: supervisor/durable-resume-post-103
+  current_milestone: post-104-handoff
+  milestone_status: RECONCILING
+  active_branch: supervisor/post-104-handoff
   active_issue: 97
-  active_pr: 104
+  active_pr: null
   tracked_security_pr: 99
-  last_completed_milestone: pr-103-durable-resume-runner-governance
-  exact_next_safe_action: resolve PR 104 exact head and perform one consolidated CI refresh; after closeout promotion synchronize PR 99 with current main
+  last_completed_milestone: pr-104-durable-state-closeout
+  exact_next_safe_action: promote post-104 handoff, then synchronize PR 99 with current main and run fresh exact-head CI
   progress:
-    current_module_percent: 95
-    current_module_basis: PR 103 merged with terminal exact-head CI; canonical post-merge state closeout remains
+    current_module_percent: 99
+    current_module_basis: PR 103 and PR 104 merged with terminal exact-head CI; bounded handoff reconciliation remains before PR 99 synchronization
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 source complete but final governance blocked by Issue 36
 
@@ -91,12 +91,12 @@ security_reconciliation:
   pr: 99
   scoped_task_id: SEC-97-WORKFLOW-GOVERNANCE
   coordination_branch: supervisor/sec-97-pr99-coordination
-  observed_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+  observed_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
   submitted_head_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
   shared_file_authorization: landed-on-main-via-pr-102
   current_main_sync: required
   post_sync_exact_head_ci: required
-  next_action: promote the post-PR-103 reconciliation closeout, then synchronize PR 99 with current main
+  next_action: promote the post-104 handoff reconciliation, then synchronize PR 99 with current main
 
 planning_state:
   m04:
