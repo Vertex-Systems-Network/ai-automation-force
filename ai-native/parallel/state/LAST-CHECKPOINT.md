@@ -17,10 +17,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-BROADCAST21-RECONCILE` is `RECONCILING`.
+`SUP-GOV-BROADCAST21-RECONCILE` is `VERIFYING`.
 
 Scope is limited to persisting the completed broadcast-21 synchronization and removing stale PR #106 / pre-sync coordination truth from the AI-Native control plane.
 
 ## Exact next safe action
 
-Promote this bounded coordination reconciliation. After it lands, current lanes may resume only their already-claimed planning/audit work. Executable M04+ remains blocked by the full-project preplanning gate, milestone dependency/consent gates, and Issue #36 where applicable.
+PR #107 is open for this bounded coordination reconciliation. On the next resume, resolve its exact current head and perform one consolidated exact-head CI/status refresh. After promotion, current lanes may resume only their already-claimed planning/audit work. Executable M04+ remains blocked by the full-project preplanning gate, milestone dependency/consent gates, and Issue #36 where applicable.
