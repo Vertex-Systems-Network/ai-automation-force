@@ -21,10 +21,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-M04-WP1A-EXECUTION-PACKAGE` is `RECONCILING`.
+`SUP-GOV-M04-WP1A-EXECUTION-PACKAGE` is `VERIFYING`.
 
 This milestone is planning/governance only. It freezes implementation detail so executable work can start without first-time architecture decisions after the real gates clear.
 
 ## Exact next safe action
 
-Promote this bounded readiness reconciliation. After it lands, no additional M04 planning is required before WP1A start except fresh then-current main/write-ownership/migration/security revalidation. Do not create a migration or executable code until Issue #36 is closed and explicit scoped M04 consent is recorded.
+PR #115 is open for this bounded readiness reconciliation. Resolve its exact current head/base/review state and perform one consolidated exact-head CI/status refresh. If terminal green and mergeable, merge with an expected-head guard. After promotion, no additional M04 planning is required before WP1A start except fresh then-current main/write-ownership/migration/security revalidation. Do not create a migration or executable code until Issue #36 is closed and explicit scoped M04 consent is recorded.
