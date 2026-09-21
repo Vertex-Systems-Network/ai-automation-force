@@ -226,10 +226,10 @@ This is the authoritative human-visible progress snapshot. It must be reconciled
 - **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
 - **M04 execution preflight:** `██████████` **100%** — existing domain/persistence reuse confirmed; minimal early Workspace ownership substrate selected in Issue #111
 - **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
-- **Open PRs at reconciliation start:** `0`
+- **Active PR:** #112 — mandatory README progress reconciliation contract
 - **Open planning/governance Issues:** #36 and #111
-- **Current bounded work:** make README progress reconciliation a mandatory AI-Native operating contract
-- **Exact next product-development path:** promote this progress-contract change; satisfy Issue #36 live protected-main gate; record explicit scoped M04 consent; revalidate ownership/migration state; begin M04-WP1A
+- **Current bounded work:** PR #112 — make README progress reconciliation a mandatory AI-Native operating contract
+- **Exact next product-development path:** verify/guarded-merge PR #112; synchronize this material instruction once; satisfy Issue #36 live protected-main gate; record explicit scoped M04 consent; revalidate ownership/migration state; begin M04-WP1A
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
 
