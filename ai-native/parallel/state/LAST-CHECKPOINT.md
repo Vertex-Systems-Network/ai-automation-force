@@ -19,10 +19,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-POST104-HANDOFF` is `RECONCILING`.
+`SUP-GOV-POST104-HANDOFF` is `VERIFYING`.
 
 Scope is only terminal PR #104 evidence plus compact/queue/broadcast/Supervisor handoff state. PR #99 source synchronization is explicitly deferred to the next bounded milestone.
 
 ## Exact next safe action
 
-Promote the bounded handoff reconciliation. After it lands, synchronize PR #99 with then-current `main` without force-push, then perform one fresh consolidated exact-head CI/status refresh. Historical pre-sync CI must not be reused as merge certification.
+Post-104 handoff PR #105 is open. On the next resume, resolve PR #105 exact current head and perform one consolidated exact-head CI/status refresh. After that handoff lands, synchronize PR #99 with then-current `main` without force-push, then perform one fresh consolidated exact-head CI/status refresh. Historical pre-sync CI must not be reused as merge certification.
