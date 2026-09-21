@@ -5,26 +5,24 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current truth
 
-- Current live `main`: `024aa039ef5ae011b9c78a4a01b38c169607d782`.
-- PR #113 Broadcast 24/README handoff is merged from exact head `7f117a0df3748f9b6b41b2e14d6b8202b5cb9bdf`.
-- PR #113 exact-head CI passed Repository Governance `35654762871`, Core Domain Contracts `35654762869`, and Durable Control Plane `35654762917`.
-- Open pull requests were empty before this bounded planning-readiness reconciliation.
-- Issue #36 remains the sole executable-governance blocker; live main protection remains unverified/unapplied in the connected runtime.
-- M04 execution preflight Issue #111 is completed.
-- Issue #114 is the canonical ready-to-code M04-WP1A execution package.
-- M04-WP1A reuses existing M01 Character/Entity domain models, PostgreSQL tables and aggregate persistence.
-- Frozen first-slice design: minimal early M11-compatible Workspace identity substrate; no users/login/memberships/full RBAC/UI.
-- Proposed owner roots: Project, Character, World, Location, Prop, StyleProfile and VoiceProfile; child versions/looks inherit owner scope through canonical roots.
-- Existing pre-tenancy rows use one deterministic bootstrap Workspace during migration; no migration is reserved until executable authority exists.
-- Initial M04-WP1A API surface remains internal/service-only until owner-scoped repository tests and trusted Workspace context exist.
-- Executable M04 authority remains false until Issue #36 closes and explicit scoped M04 development consent is recorded.
+- Current live `main`: `5efdd3485e24f29f894929d7dcd0bf93369d06dc`.
+- PR #115 M04-WP1A execution-package readiness is merged from exact head `6c8256376471a71174eda8a72d8acf096b85bb8d`.
+- PR #115 exact-head CI passed Repository Governance `35656551389`, Core Domain Contracts `35656551398`, and Durable Control Plane `35656551466`.
+- Issue #114 is the canonical approved M04-WP1A execution ticket.
+- Operator explicitly granted scoped consent: `M04 development approve — start after Issue #36 closes.`
+- Consent is valid for M04-WP1A but executable start is conditional; Issue #36 must close from live protected-main evidence first.
+- Live `main` remains `protected=false` and repository rulesets remain empty in the connected runtime.
+- Open pull requests were empty before this consent-reconciliation branch.
+- No migration is reserved; current landed migration head remains `20260901_0016`.
+- No executable product/schema/API/test change has started.
+- No new broadcast is required yet because all executable work remains blocked by Issue #36; gate closure will trigger fresh synchronization/revalidation before implementation.
 
 ## Current milestone
 
-`SUP-GOV-M04-WP1A-EXECUTION-PACKAGE` is `VERIFYING`.
+`SUP-GOV-M04-CONSENT-RECORDED` is `RECONCILING`.
 
-This milestone is planning/governance only. It freezes implementation detail so executable work can start without first-time architecture decisions after the real gates clear.
+This milestone records authorization state only. It does not satisfy the Issue #36 condition and does not start executable development.
 
 ## Exact next safe action
 
-PR #115 is open for this bounded readiness reconciliation. Resolve its exact current head/base/review state and perform one consolidated exact-head CI/status refresh. If terminal green and mergeable, merge with an expected-head guard. After promotion, no additional M04 planning is required before WP1A start except fresh then-current main/write-ownership/migration/security revalidation. Do not create a migration or executable code until Issue #36 is closed and explicit scoped M04 consent is recorded.
+Promote this bounded consent reconciliation. Then wait only for live Issue #36 protected-main closure. Immediately after Issue #36 closes: re-read compact state and live main, synchronize the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one migration revision, activate M04-WP1A executable ownership, and implement Issue #114 without another consent round.
