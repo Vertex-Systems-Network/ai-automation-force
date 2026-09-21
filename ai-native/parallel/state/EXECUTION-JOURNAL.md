@@ -138,3 +138,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Reverified each active M03/M04/M05/M06/M07/M08/QA branch at `ahead_by=0`, `behind_by=14` relative to new main.
 - Non-force fast-forwarded all seven active branches to `a315ff19300554901d2b55841a5e57151bdc631e`.
 - Began bounded broadcast-22 canonical coordination reconciliation; no executable product work was authorized or performed.
+
+
+## 2026-09-21 — PR #108 broadcast 22 reconciliation opened
+
+- Opened PR #108 from `supervisor/broadcast22-post107-reconcile` against `main@a315ff19300554901d2b55841a5e57151bdc631e`.
+- Bound compact state, Supervisor state, Active Work and checkpoint to PR #108.
+- Milestone moved to `VERIFYING`.
+- No PR #108 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
+- Executable development remains blocked by Issue #36 plus `FULL_PROJECT_PREPLANNING_IN_PROGRESS`.
