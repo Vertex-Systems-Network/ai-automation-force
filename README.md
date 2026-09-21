@@ -221,21 +221,21 @@ This proves the difficult architecture before scaling to longer productions.
 This is the authoritative human-visible progress snapshot. It must be reconciled before every engineering response and updated in the same integration cycle whenever material repository progress/state changes.
 
 - **Last reconciled:** 2026-09-22
-- **Progress snapshot baseline main:** `024aa039ef5ae011b9c78a4a01b38c169607d782` — PR #113 is merged; live main is re-resolved every turn
+- **Progress snapshot baseline main:** `5efdd3485e24f29f894929d7dcd0bf93369d06dc` — PR #115 is merged; live main is re-resolved every turn
 - **Accepted roadmap milestones:** `3/16` — `██░░░░░░░░` **19%**
 - **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
 - **M04 execution preflight:** `██████████` **100%** — Issue #111 completed/closed; existing M01 domain/persistence reuse confirmed and Path A minimal early Workspace ownership substrate selected
 - **M04-WP1A execution package:** `██████████` **100% planning-ready** — Issue #114 freezes the minimal Workspace substrate, legacy backfill, owner-scoped repository contract, transaction/concurrency rules, migration/rollback constraints and targeted security tests
-- **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
+- **M04 executable development:** `░░░░░░░░░░` **0%** — explicit scoped M04-WP1A consent is granted; executable start remains conditionally blocked only by Issue #36 live protected-main closure
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is now canonical
-- **Active PR:** #115 — M04-WP1A executable-ready planning package reconciliation
-- **Open planning/governance Issues:** #36 (blocking) and #114 (M04-WP1A ready-to-code execution package; planning evidence, not a blocker)
-- **Current bounded work:** PR #115 — promote Issue #114 M04-WP1A executable-ready package into canonical README/control-plane readiness state
-- **Exact next product-development path:** close Issue #36 with live protected-main evidence → record explicit scoped M04 development consent → fresh current-main/migration/write-ownership revalidation → reserve one migration → implement Issue #114 M04-WP1A
+- **Active PR:** none at consent-reconciliation start
+- **Open planning/governance Issues:** #36 (sole blocking gate) and #114 (approved M04-WP1A execution ticket)
+- **Current bounded work:** persist scoped M04-WP1A development consent and reduce executable blocker set to Issue #36 only
+- **Exact next product-development path:** close Issue #36 with live protected-main evidence → fresh current-main/migration/write-ownership/security revalidation → reserve exactly one migration → activate and implement approved Issue #114 M04-WP1A
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
 
-Current repository truth: M03 source implementation and WP8 source acceptance are complete, but M03 is **not fully accepted/governed** because Issue #36 still lacks live protected-main enforcement. Full-project preplanning is complete with canonical status `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`; executable M04+ development still requires Issue #36 closure where applicable and explicit scoped development consent.
+Current repository truth: M03 source implementation and WP8 source acceptance are complete, but M03 is **not fully accepted/governed** because Issue #36 still lacks live protected-main enforcement. Full-project preplanning is complete with canonical status `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`; explicit scoped M04-WP1A development consent is now recorded, but executable start remains conditioned on Issue #36 live protected-main closure.
 
 The table below is retained as a **historical 2026-09-01 snapshot**, not current execution truth. Current execution truth comes from `ai-native/parallel/state/CURRENT-STATE.yaml`, live GitHub evidence, and the current Supervisor plan.
 
@@ -262,12 +262,12 @@ The table below tracks the currently active implementation milestone. Completed 
 
 ### Current engineering checkpoint
 
-M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` after PR #113 is `024aa039ef5ae011b9c78a4a01b38c169607d782`.
+M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` after PR #115 is `5efdd3485e24f29f894929d7dcd0bf93369d06dc`.
 
 The remaining M03 governance gate is Issue #36: live GitHub `main` protection is still not verified/applied in an admin-capable context. No additional WP7/WP8 product/API/schema/provider work is authorized merely to create activity.
 
 Current continuation order:
 
-`M04-WP1A execution package ready (#114) -> close Issue #36 live protected-main gate -> record explicit scoped M04 development consent -> fresh current-main/migration/ownership/security revalidation -> reserve migration -> implement M04-WP1A`
+`M04-WP1A consent granted (#114) -> close Issue #36 live protected-main gate -> fresh current-main/migration/ownership/security revalidation -> reserve migration -> implement approved M04-WP1A`
 
 M04–M08 planning is hardened but not executable completion. M09 remains unactivated by implication.
