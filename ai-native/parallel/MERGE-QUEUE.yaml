@@ -39,4 +39,5 @@ rules:
   - Only the Supervisor changes a submission to ready-to-merge or merged.
   - Agent completion order does not override dependency or security priority.
   - Submitted branches are treated as immutable until Supervisor requests fixes or synchronization.
-  - After a merge, Supervisor updates SUPERVISOR-BROADCASTS.yaml before restoring its own paused work.
+  - After a merge that creates material state active agents must observe, Supervisor updates SUPERVISOR-BROADCASTS.yaml before restoring affected work.
+  - A merge that only persists an already-issued broadcast, runner evidence, compact-state handoff, or equivalent bookkeeping does not recursively require another broadcast.
