@@ -15,7 +15,7 @@ active:
     branch: supervisor/broadcast22-post107-reconcile
     base_sha: a315ff19300554901d2b55841a5e57151bdc631e
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - ai-native/parallel/ACTIVE-WORK.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
