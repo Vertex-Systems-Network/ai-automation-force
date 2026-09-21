@@ -13,7 +13,7 @@ Planning synchronization, a green planning PR, deterministic fakes, or conversat
 
 Canonical compact state path: `ai-native/parallel/state/`.
 
-PR #103 promoted the compact durable resume and Runner Benchmark contract to `main@2930eda54527296cb2a54063dffbf21719b3af93`. Its bounded post-merge reconciliation runs on `supervisor/durable-resume-post-103`; that closeout grants no product, provider, deployment, production, migration, destructive, release, or new executable milestone authority.
+PR #103 promoted the compact durable resume and Runner Benchmark contract. PR #106 completed the later Issue #97 / PR #99 security-governance closeout at `main@01ff06fb30714256c16921fc5f644a87aff540cb`. Current coordination remains non-executable: it grants no product, provider, deployment, production, migration, destructive, release, or new executable milestone authority.
 
 Every Supervisor start/resume reads `CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md` first, then resolves exact main, OPEN Issues, OPEN PRs, claims/queue and the Runner Benchmark. Large historical checkpoints are read only for a specific unresolved fact or conflict.
 
@@ -26,13 +26,13 @@ Every engineering response must end with repository name, current-module progres
 
 | Lane | Agent | Branch | State |
 | --- | --- | --- | --- |
-| M03 Governance Hold | `supervisor-agent` | `supervisor/m03-governance-hold-current` | broadcast 19 sync required; governance-only hold |
-| M04 Character | `character-agent` | `agent/m04-character-library-current` | broadcast 19 sync required; planning hardened; executable hold |
-| M05 Content | `content-agent` | `agent/m05-content-memory-current` | broadcast 19 sync required; planning hardened; executable hold |
-| M06 Audio | `audio-agent` | `agent/m06-audio-production-current` | broadcast 19 sync required; planning hardened; executable hold |
-| M07 Timeline | `timeline-agent` | `agent/m07-storyboard-timeline-current` | broadcast 19 sync required; planning hardened; executable hold |
-| M08 Provider | `provider-agent` | `agent/m08-video-provider-router` | broadcast 19 sync required; planning hardened; executable hold |
-| QA / Security | `qa-security-agent` | `agent/cross-cutting-qa-security-current` | broadcast 19 sync required; audit/planning only |
+| M03 Governance Hold | `supervisor-agent` | `supervisor/m03-governance-hold-current` | broadcast 21 synchronized; governance-only external hold |
+| M04 Character | `character-agent` | `agent/m04-character-library-current` | broadcast 21 synchronized; planning hardened; executable hold |
+| M05 Content | `content-agent` | `agent/m05-content-memory-current` | broadcast 21 synchronized; planning hardened; executable hold |
+| M06 Audio | `audio-agent` | `agent/m06-audio-production-current` | broadcast 21 synchronized; planning hardened; executable hold |
+| M07 Timeline | `timeline-agent` | `agent/m07-storyboard-timeline-current` | broadcast 21 synchronized; planning hardened; executable hold |
+| M08 Provider | `provider-agent` | `agent/m08-video-provider-router` | broadcast 21 synchronized; planning hardened; executable hold |
+| QA / Security | `qa-security-agent` | `agent/cross-cutting-qa-security-current` | broadcast 21 synchronized; audit/planning only |
 
 Completed `agent/m04-character-library`, `agent/m05-content-memory`, `agent/m06-audio-production`, and `agent/m07-storyboard-timeline` are retired after their planning promotions and are not force-reset or reused as promotion authority. Fresh current-main planning branches are `agent/m04-character-library-current`, `agent/m05-content-memory-current`, `agent/m06-audio-production-current`, and `agent/m07-storyboard-timeline-current`. Earlier completed QA and M03/WP8 submission/review/closeout branches remain retired.
 
@@ -115,7 +115,7 @@ Future migration IDs are reserved only after executable authority exists and the
 ## Hold order
 
 1. keep Issue #36 `EXTERNAL_NOT_VERIFIED` until live protected-main evidence exists;
-2. preserve broadcasts 12 through 19 governance/adversarial/planning constraints in future milestone acceptance;
+2. preserve broadcasts 12 through 21 governance/adversarial/planning/security constraints in future milestone acceptance;
 3. do not start executable M04 until Issue #36 and explicit M04 executable consent both clear;
 4. do not start executable M05 until executable M04 is accepted and explicit M05 executable consent exists;
 5. do not start executable M06 until its upstream executable chain is accepted and explicit M06 executable consent exists;
@@ -126,7 +126,7 @@ Future migration IDs are reserved only after executable authority exists and the
 
 ## Next safe planning work
 
-No new executable milestone is authorized by the M08 planning promotion. While Issue #36 and upstream executable gates remain closed, current lanes may only perform their already-claimed planning/audit work after broadcast-19 synchronization. M09 is not activated by implication. Any future planning expansion must first receive an explicit collision-free scope and must not introduce provider spend, credentials, schema/product writes or privileged execution authority.
+No new executable milestone is authorized by the M08 planning promotion. The full-project preplanning gate remains `FULL_PROJECT_PREPLANNING_IN_PROGRESS`, so even milestone-local readiness does not authorize implementation. While Issue #36 and upstream executable gates remain closed, current lanes may only perform their already-claimed planning/audit work after broadcast-21 synchronization. All seven active governance/planning lanes were verified `ahead_by=0` and non-force fast-forwarded to current main before this reconciliation. M09 is not activated by implication. Any future planning expansion must first receive an explicit collision-free scope and must not introduce provider spend, credentials, schema/product writes or privileged execution authority.
 
 ## Completion and review
 
