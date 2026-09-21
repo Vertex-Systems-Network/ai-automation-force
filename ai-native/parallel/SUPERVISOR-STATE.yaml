@@ -69,15 +69,15 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: post-pr112-readme-progress-sync
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/post112-readme-progress-sync
   active_issue: 36
-  active_pr: null
+  active_pr: 113
   tracked_security_pr: null
   last_completed_milestone: pr-112-readme-progress-contract
-  exact_next_safe_action: promote one-time Broadcast 24/README progress handoff, then stop governance bookkeeping and wait only on Issue 36 plus explicit scoped M04 development consent before executable M04
+  exact_next_safe_action: resolve PR 113 exact head and perform one consolidated CI/review refresh; if terminal green and clean use expected-head guarded merge, then stop governance bookkeeping and return directly to Issue 36 plus explicit M04 consent
   progress:
-    current_module_percent: 85
+    current_module_percent: 90
     current_module_basis: PR 112 merged green, M04 preflight Issue 111 closed, all seven active lanes synchronized to current main, Broadcast 24/README handoff promotion remains
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
