@@ -5,24 +5,24 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current truth
 
-- Current live `main`: `5efdd3485e24f29f894929d7dcd0bf93369d06dc`.
-- PR #115 M04-WP1A execution-package readiness is merged from exact head `6c8256376471a71174eda8a72d8acf096b85bb8d`.
-- PR #115 exact-head CI passed Repository Governance `35656551389`, Core Domain Contracts `35656551398`, and Durable Control Plane `35656551466`.
-- Issue #114 is the canonical approved M04-WP1A execution ticket.
-- Operator explicitly granted scoped consent: `M04 development approve — start after Issue #36 closes.`
-- Consent is valid for M04-WP1A but executable start is conditional; Issue #36 must close from live protected-main evidence first.
-- Live `main` remains `protected=false` and repository rulesets remain empty in the connected runtime.
-- Open pull requests were empty before this consent-reconciliation branch.
-- No migration is reserved; current landed migration head remains `20260901_0016`.
-- No executable product/schema/API/test change has started.
-- No new broadcast is required yet because all executable work remains blocked by Issue #36; gate closure will trigger fresh synchronization/revalidation before implementation.
+- Current live `main`: `5c7af72b1025721b1b8b720a74ae57e883e2ffc4`.
+- PR #116 merged from exact head `575e4946b160776498eeb54910c335c50c72ff1d`.
+- PR #116 exact-head CI passed Repository Governance `35658656645`, Core Domain Contracts `35658656619`, and Durable Control Plane `35658656622`.
+- Open pull requests are empty at this reconciliation start.
+- Issue #36 remains open and live `main` remains `protected=false`; repository plus inherited rulesets are empty.
+- Issue #114 is the canonical **APPROVED** M04-WP1A execution ticket; explicit scoped development consent and safe review/merge authority are recorded and must not be requested again.
+- `agent/m04-character-library-current` is verified identical to `main@5c7af72b1025721b1b8b720a74ae57e883e2ffc4`.
+- M03/M05/M06/M07/M08/QA lane comparisons show no unique commits and merge-base `5c09918e6d1c0f06aa4d0890c58921f94466e509`; their previous `last_synced_main_sha: 5efdd...` claims were not repository-grounded and are being corrected to the physically verified Broadcast 24 sync point.
+- No migration is reserved; landed migration head remains `20260901_0016`.
+- Pre-code M04 review is complete and pinned on Issue #114, including fail-closed Workspace + Project resolution, explicit Workspace fixtures, Style/Voice standalone repository requirements and cross-workspace relationship denial.
+- No executable product/schema/API/test change has started because the operator's consent explicitly conditions start on Issue #36 closure.
 
 ## Current milestone
 
-`SUP-GOV-M04-CONSENT-RECORDED` is `VERIFYING`.
+`SUP-GOV-POST-PR116-STATE-RECONCILE` is `RECONCILING`.
 
-This milestone records authorization state only. It does not satisfy the Issue #36 condition and does not start executable development.
+This bounded milestone repairs durable resume truth. It does not create Broadcast 25 and does not bypass Issue #36.
 
 ## Exact next safe action
 
-PR #116 is open for this bounded consent reconciliation. Resolve its exact head/base/review/mergeability and perform one consolidated exact-head CI/status refresh. If terminal green and clean, merge with an expected-head guard. After promotion, wait only for live Issue #36 protected-main closure. Immediately after Issue #36 closes: re-read compact state and live main, synchronize the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one migration revision, activate M04-WP1A executable ownership, and implement Issue #114 without another consent round.
+Promote this reconciliation after exact-head review/CI. Then wait only for live Issue #36 closure. Immediately after closure: re-read compact/live main, verify the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one revision, activate M04-WP1A executable ownership, and implement Issue #114 without another planning or consent round.

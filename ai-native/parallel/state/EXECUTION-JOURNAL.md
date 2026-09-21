@@ -294,3 +294,14 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Missing consent is removed from the blocker set; Issue #36 is now the sole executable gate.
 - No migration reservation, runtime/schema/API/test/workflow/provider/credential/deployment change is included.
 - Pre-PR review caught and corrected an authorization-state bug so full-project preplanning remains non-executable while only M04 carries conditional-after-Issue36 authority.
+
+
+## 2026-09-22 — Post-PR116 durable truth defect reconciliation
+
+- Live repository truth resolved `main@5c7af72b1025721b1b8b720a74ae57e883e2ffc4`, PR #116 merged, and open PRs empty.
+- Detected stale compact/README/Supervisor surfaces still describing PR #116 as active/verifying and old `main@5efdd...`.
+- Verified M04 execution branch is identical to current main.
+- Verified M03/M05/M06/M07/M08/QA lanes have no unique commits and are physically based at Broadcast 24 `5c09918e6d1c0f06aa4d0890c58921f94466e509`, 42 commits behind current main; prior `last_synced_main_sha: 5efdd...` claims were false and are corrected rather than silently fast-forwarded.
+- Issue #114 is already APPROVED, scoped consent and safe review/merge authority are durable, and pre-code implementation review is complete.
+- Issue #36 remains the sole executable-start gate; no migration reservation or executable M04 code is introduced.
+- No Broadcast 25 is created because PR #115/#116 and this reconciliation do not introduce new active-agent working instructions requiring synchronization.
