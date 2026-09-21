@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
 active_issue: 36
-active_pr: null
+active_pr: 116
 tracked_security_pr: null
 active_branch: supervisor/m04-consent-recorded
 current_milestone: SUP-GOV-M04-CONSENT-RECORDED
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-115-M04-WP1A-EXECUTION-PACKAGE
   merged_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
-exact_next_safe_action: promote scoped M04-WP1A consent reconciliation; executable start remains blocked only by Issue 36, after which fresh live-main/write-ownership/migration/security revalidation and one migration reservation precede direct WP1A implementation
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 116 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 start still waits on Issue 36
+pending_runner_ids:
+  - RB-PR116-GOV-001
+  - RB-PR116-CORE-001
+  - RB-PR116-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -31,8 +34,8 @@ timeout_control:
 progress:
   current_module:
     name: M04-WP1A consent reconciliation
-    percent: 80
-    basis: scoped M04-WP1A consent is durably recorded on Issue 114 and README/Active Work are reconciled; bounded promotion remains while Issue 36 is the sole executable gate
+    percent: 90
+    basis: PR 116 is open with scoped M04-WP1A consent bound to README/control-plane state; exact-head verification remains while Issue 36 is the sole executable gate
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
