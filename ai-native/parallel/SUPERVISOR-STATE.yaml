@@ -1,12 +1,12 @@
-version: 14
+version: 15
 supervisor:
   role: supervisor
   main_branch: main
   main_sha_last_promotion: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
-  main_sha_last_reconciled: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
+  main_sha_last_reconciled: 78b181c0eb08dd52271aa620a90725f5e7daa294
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
-  current_mode: external-governance-hold
+  current_mode: security-pr-reconciliation
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
@@ -32,7 +32,16 @@ pause_checkpoint:
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
   reason: M03 source acceptance and closeout are complete; final governance truth state depends on external GitHub administration
 
-review_queue: []
+review_queue:
+  - pr: 99
+    issue: 97
+    task_id: SEC-97-WORKFLOW-GOVERNANCE
+    submitted_head_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+    status: approved-awaiting-main-sync
+    priority: security-or-data-loss-blocker
+    blockers:
+      - current-main synchronization
+      - fresh exact-head CI after synchronization
 
 synchronization:
   latest_broadcast_sequence: 17
@@ -44,6 +53,19 @@ external_gates:
   status: not-verified
   live_ruleset_readback: []
   effect: M03 source acceptance complete; final protected-main governance/promotion remains blocked
+
+
+security_reconciliation:
+  issue: 97
+  pr: 99
+  scoped_task_id: SEC-97-WORKFLOW-GOVERNANCE
+  coordination_branch: supervisor/sec-97-pr99-coordination
+  observed_main_sha: 78b181c0eb08dd52271aa620a90725f5e7daa294
+  submitted_head_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
+  shared_file_authorization: recorded-on-coordination-branch
+  current_main_sync: required
+  post_sync_exact_head_ci: required
+  next_action: promote the bounded coordination record, then synchronize PR 99 with current main
 
 planning_state:
   m04:
