@@ -69,16 +69,16 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: mandatory-readme-progress-contract
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/readme-progress-contract
   active_issue: 36
-  active_pr: null
+  active_pr: 112
   tracked_security_pr: null
   last_completed_milestone: pr-110-broadcast23-and-m04-consent-readiness
-  exact_next_safe_action: promote mandatory README progress reconciliation contract; then return to Issue 36 live main-protection gate and M04 consent path
+  exact_next_safe_action: resolve PR 112 exact head and perform one consolidated CI/review refresh; if terminal green and mergeable use expected-head guarded merge, then broadcast this material instruction once
   progress:
-    current_module_percent: 75
-    current_module_basis: README dashboard and canonical reporting rules patched on bounded Supervisor branch; PR/CI promotion remains
+    current_module_percent: 90
+    current_module_basis: PR 112 is open and bound to the README dashboard/canonical reporting rules; exact-head verification remains
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
 
