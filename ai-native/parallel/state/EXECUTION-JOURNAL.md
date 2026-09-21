@@ -271,3 +271,16 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - M04-owned `docs/milestones/M04/**` paths were intentionally not modified by Supervisor because the active M04 lane owns them.
 - No migration was reserved and no executable product/schema/API change was made.
 - Milestone moved to `VERIFYING`; after promotion, planning bookkeeping stops and only Issue #36 + explicit scoped M04 consent remain before fresh implementation preflight and WP1A execution.
+
+
+## 2026-09-22 — Scoped M04-WP1A consent granted
+
+- Operator explicitly approved: `M04 development approve — start after Issue #36 closes.`
+- Recorded the approval durably on Issue #114.
+- Consent scope is exactly M04-WP1A as defined by the approved Development Consent Brief and execution package.
+- The approval is conditional: executable development still must not start until Issue #36 closes from live protected-main evidence.
+- Live baseline at consent: `main@5efdd3485e24f29f894929d7dcd0bf93369d06dc`, open PRs `0`, branch protection false, rulesets empty, active migration reservations `0`.
+- README progress now distinguishes consent granted from executable start blocked.
+- Active M04 lane moves to `consent-granted-waiting-issue36`.
+- No migration reservation, code, schema, test, workflow, provider, credential or deployment change was made.
+- No broadcast is emitted while Issue #36 still blocks all executable M04 work; fresh synchronization/revalidation is mandatory immediately after gate closure.
