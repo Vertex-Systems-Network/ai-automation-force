@@ -108,3 +108,14 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Bound compact state and Supervisor state to PR #106.
 - Milestone moved to `VERIFYING`.
 - No PR #106 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
+
+
+## 2026-09-21 — AI-Native broadcast 21 planning-lane synchronization
+
+- Re-read compact state, exact main, open Issues/PRs, Supervisor plan, development consent gate, full-project preplanning gate, Active Work, merge queue and broadcasts.
+- Live repository truth outranked stale compact entries: PR #106 is merged at `main@01ff06fb30714256c16921fc5f644a87aff540cb`, open PRs are empty, and Issue #36 remains the active protected-main governance gate.
+- Full-project preplanning remains `FULL_PROJECT_PREPLANNING_IN_PROGRESS`; generic continuation grants no executable development authority.
+- Verified each active M03/M04/M05/M06/M07/M08/QA branch had `ahead_by=0` and was 75 commits behind current main.
+- Non-force fast-forwarded all seven active branches to `01ff06fb30714256c16921fc5f644a87aff540cb`.
+- No product/runtime/provider/schema/migration/credential/spend/deployment behavior was changed.
+- Started bounded shared-state reconciliation on `supervisor/ai-native-broadcast21-reconcile`.
