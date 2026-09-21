@@ -2,27 +2,24 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
+observed_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
 active_issue: 36
-active_pr: 107
+active_pr: null
 tracked_security_pr: null
-active_branch: supervisor/ai-native-broadcast21-reconcile
-current_milestone: SUP-GOV-BROADCAST21-RECONCILE
-milestone_status: VERIFYING
+active_branch: supervisor/broadcast22-post107-reconcile
+current_milestone: SUP-GOV-BROADCAST22-RECONCILE
+milestone_status: RECONCILING
 last_completed_milestone:
-  id: PR-106-SECURITY-CLOSEOUT
-  merged_main_sha: 01ff06fb30714256c16921fc5f644a87aff540cb
-exact_next_safe_action: resolve PR 107 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave guarded merge for the next bounded milestone; executable development remains blocked by full-project preplanning and applicable Issue 36/consent/dependency gates
-pending_runner_ids:
-  - RB-PR107-GOV-001
-  - RB-PR107-CORE-001
-  - RB-PR107-DURABLE-001
+  id: PR-107-AI-NATIVE-BROADCAST21-RECONCILIATION
+  merged_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+exact_next_safe_action: promote the bounded broadcast-22 post-PR107 coordination reconciliation; after it lands continue only already-claimed planning/audit work while Issue 36 and FULL_PROJECT_PREPLANNING_IN_PROGRESS block executable development
+pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence
   - full-project preplanning gate remains FULL_PROJECT_PREPLANNING_IN_PROGRESS
 coordination:
-  latest_broadcast_sequence: 21
+  latest_broadcast_sequence: 22
   merge_queue_pr: null
   merge_queue_state: empty
   runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
@@ -34,9 +31,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: AI-Native broadcast 21 planning-lane reconciliation
+    name: Broadcast 22 post-PR107 lane synchronization
     percent: 85
-    basis: all seven active governance/planning branches were verified ahead_by=0 and non-force fast-forwarded to current main; shared coordination state promotion remains
+    basis: all seven active governance/planning branches were reverified ahead_by=0 and non-force fast-forwarded to main@a315ff19300554901d2b55841a5e57151bdc631e; canonical coordination promotion remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
