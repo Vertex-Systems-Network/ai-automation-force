@@ -69,13 +69,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: broadcast-21-planning-lane-reconciliation
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/ai-native-broadcast21-reconcile
   active_issue: 36
-  active_pr: null
+  active_pr: 107
   tracked_security_pr: null
   last_completed_milestone: pr-106-security-closeout
-  exact_next_safe_action: promote broadcast-21 coordination reconciliation, then continue only already-claimed planning/audit work while Issue 36 and full-project preplanning block executable development
+  exact_next_safe_action: resolve PR 107 exact head and perform one consolidated CI refresh; after promotion continue only already-claimed planning/audit work while full-project preplanning and applicable Issue 36/consent/dependency gates block executable development
   progress:
     current_module_percent: 85
     current_module_basis: all active governance/planning branches synchronized to current main and broadcast 21; shared control-plane reconciliation remains
