@@ -10,11 +10,27 @@ This gate is stricter than milestone-local readiness. A milestone being individu
 
 Before development resumes, the repository must contain enough canonical documentation that an implementation team can build Milestones 1–15 without needing to invent a missing product system, user flow, permission model, business rule, operational policy, AI-governance rule, data lifecycle or platform contract during coding.
 
+## Current repository status
+
+Current repository state is:
+
+`FULL_PROJECT_PLANNING_READY_FOR_CONSENT`
+
+This is supported by:
+- `docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`;
+- `docs/product/FINAL-PREDEVELOPMENT-GAP-AUDIT-2026-08-29.md` with verdict `PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND`;
+- `checkpoints/2026-08-29-full-project-preplanning-complete.md`.
+
+The `FULL_PROJECT_PREPLANNING_IN_PROGRESS` text below defines the lifecycle state that applies before this gate is satisfied; it is not the current repository status.
+
+Planning completion does not grant executable-development authority. The Development Consent Gate and milestone-specific dependency/governance gates still apply.
+
+
 Implementation-time revalidation of mutable external facts is expected and does not count as deferred product planning. Examples include current provider API versions, model availability, pricing, OAuth scopes, app-review rules, platform terms, SDK versions, browser support, tax/legal facts and security advisories.
 
 ## Global development rule
 
-Until this gate is satisfied, repository state is:
+For a repository that has not yet satisfied this gate, repository state is:
 
 `FULL_PROJECT_PREPLANNING_IN_PROGRESS`
 
