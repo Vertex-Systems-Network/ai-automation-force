@@ -1,4 +1,4 @@
-version: 18
+version: 19
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,13 +8,13 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-POST104-HANDOFF
-    title: PR 104 terminal evidence and security PR 99 handoff reconciliation
+  - task_id: SUP-GOV-POST99-SECURITY-CLOSEOUT
+    title: Issue 97 / PR 99 terminal security promotion reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/post-104-handoff
-    base_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
-    module: supervisor_governance
+    branch: supervisor/post-99-security-closeout
+    base_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
+    module: repository_governance
     status: verifying
     writes:
       - ai-native/parallel/ACTIVE-WORK.yaml
@@ -26,7 +26,7 @@ active:
       - ai-native/parallel/**
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-handoff-only; no PR 99 source synchronization in this task
+    consent_scope: post-security-promotion-governance-closeout-only
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -35,52 +35,11 @@ active:
       reviewed_at: 2026-09-21
       material_delta: false
       readme_sync_required: false
-      notes: Records PR 104 terminal evidence and hands off to the already-authorized Issue 97 / PR 99 security synchronization path.
+      notes: Records PR 99 terminal evidence, Issue 97 completion, empty merge queue and broadcast 21. No new executable product authority.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
-    last_acknowledged_broadcast: 20
+    last_synced_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
+    last_acknowledged_broadcast: 21
     required_broadcast: null
-
-  - task_id: SEC-97-WORKFLOW-GOVERNANCE
-    title: Workflow trust-boundary regression guard for Issue 97 / PR 99
-    role: security-integration
-    assigned_agent: workflow-security-agent
-    branch: security/workflow-regression-guard-2026-09-15
-    base_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
-    module: repository_governance
-    status: sync-required-submitted-awaiting-main-sync
-    writes:
-      - .github/workflows/repository-governance.yml
-      - scripts/validate_workflow_security.py
-    shared_requests:
-      - .github/workflows/repository-governance.yml
-    depends_on: []
-    migration_reservation: null
-    consent_scope: security-remediation-issue-97-only; no product/provider/runtime behavior expansion
-    required_checks:
-      - Repository Governance
-      - Core Domain Contracts
-      - Durable Control Plane
-      - exact-head-promotion-ci-after-current-main-sync
-    working_instruction_review:
-      reviewed_at: 2026-09-21
-      material_delta: true
-      readme_sync_required: false
-      notes: Supervisor task record created to authorize the intrinsic shared workflow edit already submitted in PR 99; no unrelated shared-file authority granted.
-    completion_signal: Work Done and Submitted
-    last_synced_main_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
-    last_acknowledged_broadcast: 17
-    required_broadcast: null
-    submission:
-      state: submitted
-      submitted_head_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
-      pull_request: 99
-      known_risks:
-        - current-main synchronization required before promotion
-    sync_state:
-      state: current-main-sync-required
-      required_broadcast: null
-      semantic_conflicts: []
 
   - task_id: M03-GOV-HOLD
     title: M03 post-WP8 governance hold

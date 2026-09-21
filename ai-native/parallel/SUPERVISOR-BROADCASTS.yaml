@@ -1,5 +1,5 @@
-version: 16
-latest_sequence: 20
+version: 17
+latest_sequence: 21
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -358,6 +358,36 @@ broadcasts:
       - agent/cross-cutting-qa-security-current
     mandatory: true
 
+
+  - sequence: 21
+    trigger: security-promotion-merge
+    merged_pr: 99
+    merged_branch: security/workflow-regression-guard-2026-09-15
+    submitted_head_sha: fdbbf89284e1ff76daab1232430d6bc0030e6e1c
+    merged_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-workflow-security-governance-sync
+    changed_areas:
+      - repository governance now fails closed on mutable external Action refs
+      - checkout credential persistence and explicit checkout tokens are rejected
+      - provider-scout trust boundaries are regression-guarded
+      - Issue 97 is closed completed
+      - merge queue is empty after PR 99 promotion
+      - Issue 36 live protected-main administrator gate remains unresolved
+    contract_changes:
+      - future workflow changes must preserve immutable external Action pins and no persisted privileged checkout credentials
+      - stale-head CI cannot certify a changed security candidate
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
 recipient_states:
   security/workflow-regression-guard-2026-09-15:
     state: sync-required
@@ -366,37 +396,37 @@ recipient_states:
     last_synced_main_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
   supervisor/m03-governance-hold-current:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m04-character-library-current:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m05-content-memory-current:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m06-audio-production-current:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m07-storyboard-timeline-current:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/m08-video-provider-router:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
   agent/cross-cutting-qa-security-current:
     state: sync-required
-    required_sequence: 20
+    required_sequence: 21
     last_acknowledged_sequence: 17
     last_synced_main_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
 

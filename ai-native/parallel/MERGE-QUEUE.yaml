@@ -2,31 +2,7 @@ version: 1
 owner_role: supervisor
 submission_signal: Work Done and Submitted
 
-queue:
-  - pr: 99
-    issue: 97
-    task_id: SEC-97-WORKFLOW-GOVERNANCE
-    branch: security/workflow-regression-guard-2026-09-15
-    submitted_head_sha: 66ebd664dc726bea54c342e0f611a5ce31fcb0ce
-    observed_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
-    priority: security-or-data-loss-blocker
-    state: approved-awaiting-main-sync
-    blockers:
-      - synchronize submitted branch with current main
-      - run one fresh consolidated exact-head promotion CI refresh after synchronization
-    review_evidence:
-      shared_file_authorization_task: SEC-97-WORKFLOW-GOVERNANCE
-      changed_file_scope_reviewed: true
-      dependency_state_reviewed: true
-      migration_required: false
-      consent_scope_reviewed: true
-      prior_exact_head_ci_green: true
-      shared_file_authorization_landed_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
-      durable_governance_bootstrap_landed_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
-      durable_state_closeout_landed_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
-      current_main_synchronization: false
-      fresh_post_sync_exact_head_ci: false
-
+queue: []
 
 states:
   - waiting
