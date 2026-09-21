@@ -21,6 +21,8 @@ One operator turn defaults to one bounded logical milestone. One consolidated CI
 
 Every engineering response must end with repository name, current-module progress bar/percentage, and overall roadmap progress bar/percentage. Progress is evidence-derived; the roadmap denominator is M0-M15 and only accepted milestones count as complete.
 
+Before every engineering response, the Supervisor must also reconcile the root README `Live development progress` snapshot. Any material change to accepted milestone/governance state, active blocker/Issue, module status/percentage, accepted-milestone count, or exact next product action must be reflected in README in the same integration cycle. Exact main/PR state remains a mandatory live verification input, but a README/progress bookkeeping PR does not recursively require another README-only PR merely to record its own merge SHA/closure. A read-only turn with no material progress change verifies the snapshot without creating artificial progress or timestamp-only churn. README staleness on material progress is a reconciliation defect, not optional documentation debt.
+
 
 ## Current branch matrix
 

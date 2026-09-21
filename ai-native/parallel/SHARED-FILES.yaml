@@ -31,4 +31,5 @@ rules:
   - Supervisor may grant scoped temporary ownership when the shared edit is inseparable from the feature.
   - A temporary grant does not permit unrelated cleanup or refactoring.
   - README working-instruction summary is synchronized whenever material agent instructions change.
+  - README Live development progress is verified before every engineering response and updated in the same integration cycle when material milestone/governance/module/progress/blocker/next-product-action truth changes; exact main/PR state is verified live but the progress bookkeeping PR's own merge SHA/closure does not recursively require a README-only PR.
   - Supervisor coordination files are updated after every relevant submission, merge, and broadcast event.

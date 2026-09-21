@@ -1,4 +1,4 @@
-version: 23
+version: 24
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,33 +8,37 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-POST109-MATERIAL-SYNC
-    title: Broadcast 23 planning-ready handoff and M04 consent readiness
+  - task_id: SUP-GOV-README-PROGRESS-CONTRACT
+    title: Mandatory README live progress reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/post109-material-sync
-    base_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    branch: supervisor/readme-progress-contract
+    base_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     module: supervisor_governance
     status: verifying
     writes:
+      - README.md
+      - AGENTS.md
+      - ai-native/parallel/SUPERVISOR-PLAN.md
+      - ai-native/parallel/SHARED-FILES.yaml
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
-      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
     shared_requests:
+      - README.md
+      - AGENTS.md
+      - ai-native/parallel/SUPERVISOR-PLAN.md
+      - ai-native/parallel/SHARED-FILES.yaml
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
-      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-and-planning-coordination-only; no executable product authority
+    consent_scope: governance-and-progress-reporting-only; no executable product authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -42,10 +46,10 @@ active:
     working_instruction_review:
       reviewed_at: 2026-09-22
       material_delta: true
-      readme_sync_required: false
-      notes: Records PR 109 material planning-ready instructions and non-recursive broadcast policy; active lanes already fast-forwarded to current main.
+      readme_sync_required: true
+      notes: Makes README Live development progress mandatory before every engineering response and same-cycle updates mandatory on material progress/state changes.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -65,7 +69,7 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -85,7 +89,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -105,7 +109,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -125,7 +129,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -147,7 +151,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -168,7 +172,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 
@@ -188,7 +192,7 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
     last_acknowledged_broadcast: 23
     required_broadcast: null
 

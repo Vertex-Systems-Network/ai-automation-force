@@ -137,6 +137,8 @@ Current rules:
 - persist `VERIFYING`/`WAITING_EXTERNAL` before final exact-head observation when remote checks are expected; if CI is still running, record run IDs on the PR/Issue status surface without creating a state-only source commit that invalidates the tested head;
 - register material remote/container/browser/runtime/full-regression/performance work in `ai-native/parallel/state/RUNNER-BENCHMARK.yaml`; runner registration never grants execution authority;
 - every engineering response ends with repository name, evidence-based current-module progress bar, and evidence-based overall roadmap progress bar; unknown progress is reported as unknown rather than guessed;
+- before every engineering response, reconcile the README `Live development progress` snapshot against live repository truth; whenever accepted product/governance milestone state, active blocker/Issue, current module/status/percentage, accepted-milestone count, or exact next product action materially changes, update that README snapshot in the same integration cycle; exact main/PR state must still be verified live but the progress-update PR's own merge SHA does not require a recursive README-only PR;
+- a strictly read-only turn with no material progress/state change must verify the README snapshot but must not fabricate percentage movement or create a timestamp-only commit solely to look active;
 - on **every start or resume**, including `continue`/`next`/`resume`, perform a working-instruction audit before proceeding;
 - read current repository/PR/checkpoint state rather than relying on chat memory;
 - in multi-agent Supervisor mode, the agent controlling the main integration lane is the **Supervisor** and owns assignment/review/merge authority;
@@ -156,7 +158,7 @@ Current rules:
 - when another agent submits, the Supervisor checkpoints/pauses its own module work, reviews the submission, promotes only after required synchronization and exact-head gates, records the merge, then resumes its saved checkpoint;
 - after a promotion merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
 - a broadcast bookkeeping/reconciliation merge does not recursively create another broadcast unless that merge itself introduces new material state active agents must observe;
-- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume; as of broadcast 22 the active M03/M04/M05/M06/M07/M08/QA branches have been reverified `ahead_by=0` and non-force fast-forwarded to `main@a315ff19300554901d2b55841a5e57151bdc631e`;
+- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume; as of broadcast 23 the active M03/M04/M05/M06/M07/M08/QA branches were reverified `ahead_by=0` and non-force fast-forwarded to `main@94160c21e2f7a6511c6d4fd58c6db9cbad168a5b`; PR #110 subsequently promoted the Broadcast 23/M04 consent-readiness handoff to `main@c4671a83173f84da058d82f28da2d4ee3d58229f`;
 - an unacknowledged mandatory merge broadcast places a branch in `sync-required` and blocks submission/promotion;
 - parallel readiness does not bypass development consent;
 - scoped CI may accelerate feedback, but required exact-head full promotion CI remains mandatory before merge;
@@ -214,6 +216,23 @@ This proves the difficult architecture before scaling to longer productions.
 
 ## Milestone progress
 
+### Live development progress
+
+This is the authoritative human-visible progress snapshot. It must be reconciled before every engineering response and updated in the same integration cycle whenever material repository progress/state changes.
+
+- **Last reconciled:** 2026-09-22
+- **Progress snapshot baseline main:** `c4671a83173f84da058d82f28da2d4ee3d58229f` — live main is re-resolved every turn; this dashboard does not recursively update solely for its own merge SHA
+- **Accepted roadmap milestones:** `3/16` — `██░░░░░░░░` **19%**
+- **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
+- **M04 execution preflight:** `██████████` **100%** — existing domain/persistence reuse confirmed; minimal early Workspace ownership substrate selected in Issue #111
+- **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
+- **README progress contract:** PR #112 promotion candidate — once landed, README progress reconciliation is mandatory for future material engineering state changes
+- **Open planning/governance Issues:** #36 and #111
+- **Current bounded work:** promote the mandatory README progress contract, then return to the real Issue #36 → M04 critical path
+- **Exact next product-development path:** satisfy Issue #36 live protected-main gate; record explicit scoped M04 consent; revalidate ownership/migration state; begin M04-WP1A. PR #112 only installs the reporting contract and must not create a recursive README/broadcast loop
+
+README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
+
 Current repository truth: M03 source implementation and WP8 source acceptance are complete, but M03 is **not fully accepted/governed** because Issue #36 still lacks live protected-main enforcement. Full-project preplanning is complete with canonical status `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`; executable M04+ development still requires Issue #36 closure where applicable and explicit scoped development consent.
 
 The table below is retained as a **historical 2026-09-01 snapshot**, not current execution truth. Current execution truth comes from `ai-native/parallel/state/CURRENT-STATE.yaml`, live GitHub evidence, and the current Supervisor plan.
@@ -241,12 +260,12 @@ The table below tracks the currently active implementation milestone. Completed 
 
 ### Current engineering checkpoint
 
-M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, and PR #107 AI-Native control-plane reconciliation are complete. Current `main` is `a315ff19300554901d2b55841a5e57151bdc631e`.
+M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` before this progress-contract branch is `c4671a83173f84da058d82f28da2d4ee3d58229f`.
 
 The remaining M03 governance gate is Issue #36: live GitHub `main` protection is still not verified/applied in an admin-capable context. No additional WP7/WP8 product/API/schema/provider work is authorized merely to create activity.
 
 Current continuation order:
 
-`planning-ready state reconciliation -> prepare scoped M04 Development Consent Brief -> close Issue #36 live protected-main gate -> obtain explicit M04 development consent -> executable M04 work only after fresh ownership/migration/security revalidation`
+`README progress-contract promotion -> close Issue #36 live protected-main gate -> record explicit scoped M04 development consent -> fresh ownership/migration/security revalidation -> M04-WP1A minimal Workspace ownership substrate + standalone Character/Entity repository boundary`
 
 M04–M08 planning is hardened but not executable completion. M09 remains unactivated by implication.

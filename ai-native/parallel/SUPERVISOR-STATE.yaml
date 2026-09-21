@@ -1,19 +1,19 @@
-version: 23
+version: 24
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
-  main_sha_last_reconciled: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+  main_sha_last_promotion: c4671a83173f84da058d82f28da2d4ee3d58229f
+  main_sha_last_reconciled: c4671a83173f84da058d82f28da2d4ee3d58229f
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
-  current_mode: m04-consent-ready-and-m03-admin-hold
+  current_mode: readme-progress-contract-and-m03-admin-hold
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 109
-  submitted_head_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
-  merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+  pr: 110
+  submitted_head_sha: 7815b72872d04d6ac8c1186631b08158b14a56bb
+  merged_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+  head_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -61,26 +61,26 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 109
-  submitted_head_sha: 66c636701167b7228007f4ad05d8f69d88fc919c
-  merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+  pr: 110
+  submitted_head_sha: 7815b72872d04d6ac8c1186631b08158b14a56bb
+  merged_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
   result: success
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: post-109-material-sync-and-m04-consent-readiness
+  current_milestone: mandatory-readme-progress-contract
   milestone_status: VERIFYING
-  active_branch: supervisor/post109-material-sync
+  active_branch: supervisor/readme-progress-contract
   active_issue: 36
-  active_pr: 110
+  active_pr: 112
   tracked_security_pr: null
-  last_completed_milestone: pr-109-planning-ready-reconciliation
-  exact_next_safe_action: resolve PR 110 exact head and perform one consolidated CI/review refresh; if terminal green use expected-head guarded merge, then hold executable M04 until Issue 36 closes and explicit scoped operator consent is recorded
+  last_completed_milestone: pr-110-broadcast23-and-m04-consent-readiness
+  exact_next_safe_action: resolve PR 112 exact head and perform one consolidated CI/review refresh; if terminal green and mergeable use expected-head guarded merge, then broadcast this material instruction once
   progress:
-    current_module_percent: 85
-    current_module_basis: PR 109 merged green, all active lanes synchronized to current main, Broadcast 23 and M04 consent-readiness handoff are being persisted
+    current_module_percent: 90
+    current_module_basis: PR 112 is open and bound to the README dashboard/canonical reporting rules; exact-head verification remains
     overall_roadmap_percent: 19
-    overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked solely by Issue 36
+    overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
 
 security_reconciliation:
   issue: 97
@@ -167,3 +167,4 @@ rules:
   - A successful merge produces a new broadcast only when it introduces new material state affected agents must observe before resuming; broadcast/runner/compact-state bookkeeping does not recursively create another broadcast.
   - Main SHA, slot state, migration state, write ownership, and broadcast state are reconciled after every promotion.
   - Planning promotion or branch synchronization does not grant executable milestone authority.
+  - README Live development progress is reconciled before every engineering response; material main/PR/Issue/module/progress/blocker/next-action changes must update README in the same integration cycle without inventing progress on unchanged read-only turns.
