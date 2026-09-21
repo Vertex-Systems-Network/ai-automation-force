@@ -14,9 +14,9 @@ last_completed_milestone:
   merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
 exact_next_safe_action: resolve PR 109 exact current head and perform one consolidated exact-head CI/status/review refresh; if clean and terminal green leave guarded merge for the next bounded milestone; after promotion prepare the scoped M04 Development Consent Brief
 pending_runner_ids:
-  - RB-PR109-GOV-001
-  - RB-PR109-CORE-001
-  - RB-PR109-DURABLE-001
+  - RB-PR109-GOV-002
+  - RB-PR109-CORE-002
+  - RB-PR109-DURABLE-002
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
