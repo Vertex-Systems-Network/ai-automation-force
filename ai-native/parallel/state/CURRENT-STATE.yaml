@@ -2,21 +2,21 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+observed_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
 active_issue: 36
-active_pr: 116
+active_pr: 117
 tracked_security_pr: null
-active_branch: supervisor/m04-consent-recorded
-current_milestone: SUP-GOV-M04-CONSENT-RECORDED
+active_branch: supervisor/post-pr116-state-reconcile
+current_milestone: SUP-GOV-POST-PR116-STATE-RECONCILE
 milestone_status: VERIFYING
 last_completed_milestone:
-  id: PR-115-M04-WP1A-EXECUTION-PACKAGE
-  merged_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
-exact_next_safe_action: resolve PR 116 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 start still waits on Issue 36
+  id: PR-116-M04-SCOPED-CONSENT
+  merged_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
+exact_next_safe_action: resolve PR 117 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 still waits only for Issue 36
 pending_runner_ids:
-  - RB-PR116-GOV-001
-  - RB-PR116-CORE-001
-  - RB-PR116-DURABLE-001
+  - RB-PR117-GOV-001
+  - RB-PR117-CORE-001
+  - RB-PR117-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -33,9 +33,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: M04-WP1A consent reconciliation
+    name: Post-PR116 durable-state reconciliation
     percent: 90
-    basis: PR 116 is open with scoped M04-WP1A consent bound to README/control-plane state; exact-head verification remains while Issue 36 is the sole executable gate
+    basis: PR 117 is open with stale compact/README truth and false lane-sync SHA claims corrected; exact-head verification remains before promotion
   overall_roadmap:
     percent: 19
     accepted_milestones: 3

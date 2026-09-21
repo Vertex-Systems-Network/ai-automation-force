@@ -221,16 +221,16 @@ This proves the difficult architecture before scaling to longer productions.
 This is the authoritative human-visible progress snapshot. It must be reconciled before every engineering response and updated in the same integration cycle whenever material repository progress/state changes.
 
 - **Last reconciled:** 2026-09-22
-- **Progress snapshot baseline main:** `5efdd3485e24f29f894929d7dcd0bf93369d06dc` — PR #115 is merged; live main is re-resolved every turn
+- **Progress snapshot baseline main:** `5c7af72b1025721b1b8b720a74ae57e883e2ffc4` — PR #116 merged; live main is re-resolved every turn
 - **Accepted roadmap milestones:** `3/16` — `██░░░░░░░░` **19%**
 - **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
 - **M04 execution preflight:** `██████████` **100%** — Issue #111 completed/closed; existing M01 domain/persistence reuse confirmed and Path A minimal early Workspace ownership substrate selected
-- **M04-WP1A execution package:** `██████████` **100% planning-ready** — Issue #114 freezes the minimal Workspace substrate, legacy backfill, owner-scoped repository contract, transaction/concurrency rules, migration/rollback constraints and targeted security tests
+- **M04-WP1A execution package:** `██████████` **100% approved/ready** — Issue #114 is the canonical approved execution ticket; pre-code review is complete and consent/merge authority are already recorded
 - **M04 executable development:** `░░░░░░░░░░` **0%** — explicit scoped M04-WP1A consent is granted; executable start remains conditionally blocked only by Issue #36 live protected-main closure
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is now canonical
-- **Active PR:** #116 — scoped M04-WP1A consent reconciliation; executable start still waits on Issue #36
-- **Open planning/governance Issues:** #36 (sole blocking gate) and #114 (approved M04-WP1A execution ticket)
-- **Current bounded work:** PR #116 — promote scoped M04-WP1A consent state; Issue #36 remains the sole executable gate
+- **Active PR:** #117 — post-PR116 durable truth reconciliation
+- **Open planning/governance Issues:** #36 (sole executable gate) and #114 (approved M04-WP1A execution ticket)
+- **Current bounded work:** PR #117 — promote repaired post-PR116 compact/README truth and corrected physical branch-sync evidence; no executable M04 code before Issue #36
 - **Exact next product-development path:** close Issue #36 with live protected-main evidence → fresh current-main/migration/write-ownership/security revalidation → reserve exactly one migration → activate and implement approved Issue #114 M04-WP1A
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
@@ -262,12 +262,12 @@ The table below tracks the currently active implementation milestone. Completed 
 
 ### Current engineering checkpoint
 
-M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` after PR #115 is `5efdd3485e24f29f894929d7dcd0bf93369d06dc`.
+M03 source work, WP8 source acceptance, Issue #97 security remediation, PR #106 security-governance closeout, PR #109 planning-ready reconciliation, and PR #110 Broadcast 23/M04 consent-readiness handoff are complete. Current live `main` after PR #116 is `5c7af72b1025721b1b8b720a74ae57e883e2ffc4`.
 
 The remaining M03 governance gate is Issue #36: live GitHub `main` protection is still not verified/applied in an admin-capable context. No additional WP7/WP8 product/API/schema/provider work is authorized merely to create activity.
 
 Current continuation order:
 
-`M04-WP1A consent granted (#114) -> close Issue #36 live protected-main gate -> fresh current-main/migration/ownership/security revalidation -> reserve migration -> implement approved M04-WP1A`
+`M04-WP1A approved (#114) -> close Issue #36 live protected-main gate -> fresh current-main/migration/ownership/security revalidation -> reserve exactly one migration -> implement approved M04-WP1A`
 
 M04–M08 planning is hardened but not executable completion. M09 remains unactivated by implication.

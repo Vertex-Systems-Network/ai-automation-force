@@ -1,4 +1,4 @@
-version: 27
+version: 28
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,12 +8,12 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-M04-CONSENT-RECORDED
-    title: Persist scoped M04-WP1A consent pending Issue 36
+  - task_id: SUP-GOV-POST-PR116-STATE-RECONCILE
+    title: Reconcile post-PR116 durable truth
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/m04-consent-recorded
-    base_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    branch: supervisor/post-pr116-state-reconcile
+    base_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
     module: supervisor_governance
     status: verifying
     writes:
@@ -32,7 +32,7 @@ active:
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
     depends_on: []
     migration_reservation: null
-    consent_scope: M04-WP1A explicitly approved; executable start conditioned on Issue 36 closure
+    consent_scope: governance/state reconciliation only; M04-WP1A executable consent already granted but start remains conditioned on Issue 36
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -41,9 +41,9 @@ active:
       reviewed_at: 2026-09-22
       material_delta: false
       readme_sync_required: true
-      notes: Operator explicitly approved M04-WP1A development to start after Issue 36 closes; no migration or executable product change occurs in this reconciliation.
+      notes: Repairs stale post-PR116 resume truth and false lane synchronization claims; no executable product change and no Broadcast 25.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -63,7 +63,7 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -86,7 +86,7 @@ active:
     migration_reservation: null
     consent_scope: M04-WP1A executable scope approved; start only after Issue 36 closes
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -106,7 +106,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -126,7 +126,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -148,7 +148,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -169,7 +169,7 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
@@ -189,7 +189,7 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     last_acknowledged_broadcast: 24
     required_broadcast: null
 
