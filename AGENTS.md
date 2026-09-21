@@ -74,10 +74,11 @@ On every engineering start/resume/continue, and again before the final engineeri
 
 1. compare the README progress snapshot with exact live repository truth;
 2. verify exact main SHA, active/open PRs and Issues, current module/status, evidence-based module percentage, accepted roadmap count/percentage, genuine blockers, and exact next action;
-3. if any of those materially changed during the turn, update README in the same integration cycle before reporting completion/verifying/waiting status;
-4. if repository work is already being submitted, the README progress delta is part of that same bounded branch/PR rather than a later cleanup task;
-5. if the turn is strictly read-only and none of those facts changed, verify the snapshot as unchanged and do not manufacture percentage movement or a timestamp-only commit;
-6. historical README tables never override this live snapshot or repository/runtime evidence.
+3. update README in the same integration cycle when the **material progress surface** changes: accepted milestone/governance state, active blocker/Issue, current module/status/percentage, accepted roadmap count/percentage, or exact next product action;
+4. exact main/PR state is always verified live, but a README/progress bookkeeping PR does not require a second README-only PR merely to record the merge SHA or its own closure;
+5. if repository work is already being submitted, the README progress delta is part of that same bounded branch/PR rather than a later cleanup task;
+6. if the turn is strictly read-only and no material progress-surface fact changed, verify the snapshot as unchanged and do not manufacture percentage movement or a timestamp-only commit;
+7. historical README tables never override this live snapshot or repository/runtime evidence.
 
 A stale README progress snapshot is a reconciliation defect. Do not report a changed milestone/progress state as fully reconciled while knowingly leaving the README dashboard stale.
 
