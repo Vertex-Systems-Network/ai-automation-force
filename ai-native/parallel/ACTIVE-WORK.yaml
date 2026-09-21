@@ -1,4 +1,4 @@
-version: 16
+version: 17
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,17 +8,15 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-DURABLE-BOOTSTRAP
-    title: Durable resume state, runner benchmark and reporting governance bootstrap
+  - task_id: SUP-GOV-DURABLE-CLOSEOUT
+    title: PR 103 durable resume and Runner Benchmark post-merge reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/durable-resume-runner-bootstrap
-    base_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+    branch: supervisor/durable-resume-post-103
+    base_sha: 2930eda54527296cb2a54063dffbf21719b3af93
     module: supervisor_governance
     status: verifying
     writes:
-      - AGENTS.md
-      - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml
       - ai-native/parallel/MERGE-QUEUE.yaml
       - ai-native/parallel/SUPERVISOR-PLAN.md
@@ -26,25 +24,22 @@ active:
       - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/state/**
     shared_requests:
-      - AGENTS.md
-      - README.md
       - ai-native/parallel/**
-    depends_on:
-      - SEC-97-WORKFLOW-GOVERNANCE
+    depends_on: []
     migration_reservation: null
-    consent_scope: governance-only; no product/provider/runtime/deployment/destructive authority
+    consent_scope: governance-closeout-only; no product/provider/runtime/deployment/destructive authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
       - Durable Control Plane
     working_instruction_review:
       reviewed_at: 2026-09-21
-      material_delta: true
-      readme_sync_required: true
-      notes: Introduces compact durable resume state, bounded-turn/timeout rules, Runner Benchmark, and mandatory evidence-based response progress footer.
+      material_delta: false
+      readme_sync_required: false
+      notes: Records the already-merged PR 103 terminal evidence and reconciles compact state, queue, broadcast and Supervisor state.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
-    last_acknowledged_broadcast: 18
+    last_synced_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+    last_acknowledged_broadcast: 19
     required_broadcast: null
 
   - task_id: SEC-97-WORKFLOW-GOVERNANCE
