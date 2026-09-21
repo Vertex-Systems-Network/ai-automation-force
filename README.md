@@ -131,6 +131,7 @@ This is the concise human-visible summary. Canonical details live in `AGENTS.md`
 Current rules:
 - canonical compact resume state lives under `ai-native/parallel/state/`; on every start/resume read `CURRENT-STATE.yaml` and `LAST-CHECKPOINT.md` first, then resolve exact main, OPEN Issues, OPEN PRs, claims/queue, and Runner Benchmark before broad historical reading;
 - compact resume state is an index only and never overrides live repository/runtime evidence;
+- full-project preplanning is currently `FULL_PROJECT_PREPLANNING_IN_PROGRESS`; no new executable development may begin or resume until the full foreseeable product planning gate is complete and explicit scoped development consent is separately granted;
 - one operator `continue`/`resume` turn defaults to one bounded logical milestone; do not chain unrelated development, repeated CI polling, merge, post-merge work, and another task in the same turn;
 - perform at most one consolidated CI/status refresh per milestone by default and never tight-poll remote checks;
 - persist `VERIFYING`/`WAITING_EXTERNAL` before final exact-head observation when remote checks are expected; if CI is still running, record run IDs on the PR/Issue status surface without creating a state-only source commit that invalidates the tested head;
@@ -154,7 +155,7 @@ Current rules:
 - every agent must announce exactly **`Work Done and Submitted`** when its bounded branch submission is ready for Supervisor review;
 - when another agent submits, the Supervisor checkpoints/pauses its own module work, reviews the submission, promotes only after required synchronization and exact-head gates, records the merge, then resumes its saved checkpoint;
 - after a promotion merge that active agents must observe, the Supervisor emits and records exactly: **`New changes have been merged — please merge these changes into your branch first, then resume your own work.`**;
-- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume;
+- affected agents must synchronize the new `main`, rerun the working-instruction audit, revalidate contracts/dependencies/migration state, acknowledge the broadcast, and only then resume; as of broadcast 21 the active M03/M04/M05/M06/M07/M08/QA branches have been verified `ahead_by=0` and non-force fast-forwarded to `main@01ff06fb30714256c16921fc5f644a87aff540cb`;
 - an unacknowledged mandatory merge broadcast places a branch in `sync-required` and blocks submission/promotion;
 - parallel readiness does not bypass development consent;
 - scoped CI may accelerate feedback, but required exact-head full promotion CI remains mandatory before merge;
@@ -197,7 +198,7 @@ Governance:
 - `config/provider-sources.json`
 - `docs/operations/DAILY-PROVIDER-SCOUT.md`
 
-The scout can auto-merge only low-risk evidence/high-confidence provider fact changes when repository rules allow. New provider integrations, executable code, schemas, security, budget and publishing behavior require review.
+The scout does not auto-merge. It may prepare bounded evidence updates, while provider integrations, executable code, schemas, security, budget, publishing behavior, credentials, paid calls and production changes require the applicable review/consent gates.
 
 ## Development plan
 
@@ -212,7 +213,11 @@ This proves the difficult architecture before scaling to longer productions.
 
 ## Milestone progress
 
-Last repository-history review: **2026-09-01**.
+Current repository truth: M03 source implementation and WP8 source acceptance are complete, but M03 is **not fully accepted/governed** because Issue #36 still lacks live protected-main enforcement. The full-project preplanning gate is also `FULL_PROJECT_PREPLANNING_IN_PROGRESS`, so no new executable M04+ development is authorized by generic continuation.
+
+The table below is retained as a **historical 2026-09-01 snapshot**, not current execution truth. Current execution truth comes from `ai-native/parallel/state/CURRENT-STATE.yaml`, live GitHub evidence, and the current Supervisor plan.
+
+Last historical repository review represented below: **2026-09-01**.
 
 The table below tracks the currently active implementation milestone. Completed dates are derived from repository/PR history. Active or not-yet-started packages keep `TBD` end dates until completion is evidenced; progress is based on landed work packages rather than speculative estimates.
 
@@ -235,10 +240,12 @@ The table below tracks the currently active implementation milestone. Completed 
 
 ### Current engineering checkpoint
 
-The active development frontier is **M03-WP7 — Retention/archive/delete/export primitives**. WP6 is fully promoted to `main`: PR #43 landed the authorization/signing foundation, PR #44 landed durable share-link authority with atomic use accounting, and PR #46 landed the signed-delivery API plus explicit access policy and Range acceptance after fresh Repository Governance, Core Domain Contracts and Durable Control Plane verification.
+M03 source work, WP8 source acceptance, Issue #97 security remediation, and PR #106 security-governance closeout are complete. Current `main` is `01ff06fb30714256c16921fc5f644a87aff540cb`.
 
-WP7 must preserve canonical media safety while adding lifecycle transitions: temporary cleanup must be bounded, archive/restore must be reversible, soft deletion must precede destructive deletion, hard-delete propagation must be explicit and auditable, export staging must not widen delivery authority, and vector/index cleanup must be represented as deterministic hooks rather than hidden side effects.
+The remaining M03 governance gate is Issue #36: live GitHub `main` protection is still not verified/applied in an admin-capable context. No additional WP7/WP8 product/API/schema/provider work is authorized merely to create activity.
 
 Current continuation order:
 
-`WP7 lifecycle foundation promotion -> deletion propagation -> temp cleanup -> export staging -> vector/index cleanup hooks -> exact-head CI -> WP7 promotion -> WP8`
+`broadcast-21 planning-lane synchronization -> bounded coordination reconciliation -> continue already-claimed planning/audit work -> complete full-project preplanning -> obtain explicit scoped development consent -> executable milestone work only after its dependency/governance gates clear`
+
+M04–M08 planning is hardened but not executable completion. M09 remains unactivated by implication.
