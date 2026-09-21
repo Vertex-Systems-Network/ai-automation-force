@@ -4,14 +4,15 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
 active_issue: 97
-active_pr: 99
+active_pr: 103
+tracked_security_pr: 99
 active_branch: supervisor/durable-resume-runner-bootstrap
 current_milestone: SUP-GOV-DURABLE-BOOTSTRAP
 milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-102-SECURITY-COORDINATION
   merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
-exact_next_safe_action: open the durable-resume bootstrap PR, perform one exact-head consolidated CI refresh, and promote only if review-clean and green; after promotion synchronize PR 99 with current main
+exact_next_safe_action: resolve PR 103 exact head and perform one consolidated exact-head CI/status refresh; if checks are running record run IDs on the PR and stop; if green leave the guarded merge decision for the next bounded milestone; after bootstrap promotion synchronize PR 99 with current main
 pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
