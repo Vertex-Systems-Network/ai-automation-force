@@ -228,9 +228,9 @@ This is the authoritative human-visible progress snapshot. It must be reconciled
 - **M04-WP1A execution package:** `██████████` **100% planning-ready** — Issue #114 freezes the minimal Workspace substrate, legacy backfill, owner-scoped repository contract, transaction/concurrency rules, migration/rollback constraints and targeted security tests
 - **M04 executable development:** `░░░░░░░░░░` **0%** — blocked by Issue #36 and explicit scoped M04 executable consent
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is now canonical
-- **Active PR:** none at reconciliation start
+- **Active PR:** #115 — M04-WP1A executable-ready planning package reconciliation
 - **Open planning/governance Issues:** #36 (blocking) and #114 (M04-WP1A ready-to-code execution package; planning evidence, not a blocker)
-- **Current bounded work:** freeze M04-WP1A executable-ready schema/repository/security package in Issue #114 and reconcile durable readiness state
+- **Current bounded work:** PR #115 — promote Issue #114 M04-WP1A executable-ready package into canonical README/control-plane readiness state
 - **Exact next product-development path:** close Issue #36 with live protected-main evidence → record explicit scoped M04 development consent → fresh current-main/migration/write-ownership revalidation → reserve one migration → implement Issue #114 M04-WP1A
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
