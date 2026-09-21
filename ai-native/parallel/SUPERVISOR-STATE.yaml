@@ -69,15 +69,15 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: m04-scoped-consent-recorded
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/m04-consent-recorded
   active_issue: 36
-  active_pr: null
+  active_pr: 116
   tracked_security_pr: null
   last_completed_milestone: pr-115-m04-wp1a-execution-package
-  exact_next_safe_action: promote scoped M04-WP1A consent reconciliation; executable start remains blocked only by Issue 36, then fresh migration/write-ownership/security revalidation plus one migration reservation precede direct WP1A implementation
+  exact_next_safe_action: resolve PR 116 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 start still waits on Issue 36
   progress:
-    current_module_percent: 80
+    current_module_percent: 90
     current_module_basis: scoped consent is recorded and README/control-plane state is being reconciled; Issue 36 is the sole remaining executable gate
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
