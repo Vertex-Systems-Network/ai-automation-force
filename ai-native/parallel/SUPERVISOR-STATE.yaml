@@ -76,9 +76,10 @@ compact_state:
   milestone_status: VERIFYING
   active_branch: supervisor/durable-resume-runner-bootstrap
   active_issue: 97
-  active_pr: 99
+  active_pr: 103
+  tracked_security_pr: 99
   last_completed_milestone: pr-102-security-coordination-merge
-  exact_next_safe_action: verify and promote durable resume bootstrap; then synchronize PR 99 with current main
+  exact_next_safe_action: resolve PR 103 exact head and perform one consolidated CI refresh; if green/review-clean, leave merge decision for the next bounded milestone; then synchronize PR 99 after bootstrap promotion
   progress:
     current_module_percent: 80
     current_module_basis: governance bootstrap implementation complete; exact-head PR verification remains
