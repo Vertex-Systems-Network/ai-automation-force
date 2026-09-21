@@ -15,7 +15,7 @@ active:
     branch: supervisor/m04-consent-recorded
     base_sha: 5efdd3485e24f29f894929d7dcd0bf93369d06dc
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml
