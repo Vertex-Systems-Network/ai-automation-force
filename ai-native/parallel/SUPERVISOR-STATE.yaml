@@ -101,12 +101,12 @@ planning_state:
     master_index: docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md
     final_gap_audit: PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND
     completion_checkpoint: checkpoints/2026-08-29-full-project-preplanning-complete.md
-    executable_authority: conditional-after-issue36
+    executable_authority: false
   m04:
     status: wp1a-consent-granted-waiting-issue36
     promotion_pr: 78
     active_branch: agent/m04-character-library-current
-    executable_authority: false
+    executable_authority: conditional-after-issue36
     consent_brief: approved
     consent_granted: true
     consent_condition: start only after Issue 36 closes
