@@ -203,3 +203,14 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Milestone moved to `VERIFYING`.
 - PR #110 is a bookkeeping handoff for the already-issued material Broadcast 23 and must not recursively create Broadcast 24 unless new material agent-facing state is added.
 - No PR #110 CI/status refresh is performed in this turn; next resume must resolve the final exact head first.
+
+
+## 2026-09-22 — Mandatory README progress contract
+
+- Live repository truth at start: `main@c4671a83173f84da058d82f28da2d4ee3d58229f`, PR #110 merged, open planning/governance Issues #36 and #111, no open PR.
+- Operator requested that README progress be updated as a permanent AI-Native rule rather than left stale.
+- Added a root README `Live development progress` dashboard with exact main, accepted milestones, current module progress, blockers and next product-development path.
+- Added mandatory README progress reconciliation to `AGENTS.md`, `SUPERVISOR-PLAN.md`, `SUPERVISOR-STATE.yaml` and shared-file governance.
+- Rule is evidence-based: material main/PR/Issue/module/progress/blocker/next-action changes require same-cycle README sync; unchanged read-only turns verify but do not create fake percentage movement or timestamp-only churn.
+- Opened PR #112 on `supervisor/readme-progress-contract`.
+- This working-instruction change is material and will require one post-merge synchronization broadcast if promoted; bookkeeping must remain non-recursive.
