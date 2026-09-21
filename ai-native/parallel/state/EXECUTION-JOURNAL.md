@@ -223,3 +223,15 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Exact main/PR state remains mandatory live verification input.
 - A README/progress bookkeeping PR's own merge SHA/closure does not recursively require another README-only PR.
 - This is a material governance safety correction; prior exact-head CI cannot certify the new head, so a fresh exact-head verification is required.
+
+
+## 2026-09-22 — PR #112 promotion, #111 closure and Broadcast 24 sync
+
+- PR #112 exact head `599712cca20ac5b8a4da950b1503580854de1575` passed Repository Governance `35653723665`, Core Domain Contracts `35653723656`, and Durable Control Plane `35653723587`.
+- PR #112 merged with expected-head guard to `main@5c09918e6d1c0f06aa4d0890c58921f94466e509`.
+- Closed M04 preflight Issue #111 as completed planning; closure grants no executable authority.
+- Reverified seven active M03/M04/M05/M06/M07/M08/QA branches at `ahead_by=0`, `behind_by=32` and non-force fast-forwarded them to current main.
+- Issued one material Broadcast 24 for the landed README progress contract and synchronized all seven recipients.
+- README Live development progress now reflects #111 closed, PR #112 landed, M04 preflight complete, and Issue #36 as the only open planning/governance Issue.
+- This handoff is bookkeeping for the already-issued Broadcast 24 and must not recursively create Broadcast 25.
+- Executable M04 remains blocked only by live Issue #36 plus explicit scoped M04 consent, followed by fresh migration/ownership/security revalidation.
