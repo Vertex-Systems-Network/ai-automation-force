@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
 active_issue: 36
-active_pr: null
+active_pr: 106
 tracked_security_pr: null
 active_branch: supervisor/post-99-security-closeout
 current_milestone: SUP-GOV-POST99-SECURITY-CLOSEOUT
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-99-SECURITY-PROMOTION
   merged_main_sha: 2d9edb021e8025431bd9506c1c2c660df6bac1da
-exact_next_safe_action: promote the bounded post-99 security closeout; after it lands the only known roadmap blocker is Issue 36 live protected-main administrator evidence
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 106 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave guarded merge for the next bounded milestone; after closeout promotion the only known roadmap blocker is Issue 36 live protected-main administrator evidence
+pending_runner_ids:
+  - RB-PR106-GOV-001
+  - RB-PR106-CORE-001
+  - RB-PR106-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - post-99 security closeout reconciliation has not yet been promoted
