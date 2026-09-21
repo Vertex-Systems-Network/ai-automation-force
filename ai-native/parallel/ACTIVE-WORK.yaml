@@ -1,4 +1,4 @@
-version: 17
+version: 18
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,18 +8,17 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-DURABLE-CLOSEOUT
-    title: PR 103 durable resume and Runner Benchmark post-merge reconciliation
+  - task_id: SUP-GOV-POST104-HANDOFF
+    title: PR 104 terminal evidence and security PR 99 handoff reconciliation
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/durable-resume-post-103
-    base_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+    branch: supervisor/post-104-handoff
+    base_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
     module: supervisor_governance
     status: verifying
     writes:
       - ai-native/parallel/ACTIVE-WORK.yaml
       - ai-native/parallel/MERGE-QUEUE.yaml
-      - ai-native/parallel/SUPERVISOR-PLAN.md
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/state/**
@@ -27,7 +26,7 @@ active:
       - ai-native/parallel/**
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-closeout-only; no product/provider/runtime/deployment/destructive authority
+    consent_scope: governance-handoff-only; no PR 99 source synchronization in this task
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -36,10 +35,10 @@ active:
       reviewed_at: 2026-09-21
       material_delta: false
       readme_sync_required: false
-      notes: Records the already-merged PR 103 terminal evidence and reconciles compact state, queue, broadcast and Supervisor state.
+      notes: Records PR 104 terminal evidence and hands off to the already-authorized Issue 97 / PR 99 security synchronization path.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
-    last_acknowledged_broadcast: 19
+    last_synced_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
+    last_acknowledged_broadcast: 20
     required_broadcast: null
 
   - task_id: SEC-97-WORKFLOW-GOVERNANCE

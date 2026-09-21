@@ -2,28 +2,28 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+observed_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
 active_issue: 97
-active_pr: 104
+active_pr: 105
 tracked_security_pr: 99
-active_branch: supervisor/durable-resume-post-103
-current_milestone: SUP-GOV-DURABLE-CLOSEOUT
+active_branch: supervisor/post-104-handoff
+current_milestone: SUP-GOV-POST104-HANDOFF
 milestone_status: VERIFYING
 last_completed_milestone:
-  id: PR-103-DURABLE-RESUME-RUNNER-GOVERNANCE
-  merged_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
-exact_next_safe_action: resolve PR 104 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave the guarded merge decision for the next bounded milestone; after closeout promotion synchronize PR 99 with current main
+  id: PR-104-DURABLE-STATE-CLOSEOUT
+  merged_main_sha: 497b4e20e4a5f4e311480e993ebb277a49c83737
+exact_next_safe_action: resolve PR 105 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave the guarded merge decision for the next bounded milestone; after handoff promotion synchronize PR 99 with current main
 pending_runner_ids:
-  - RB-PR104-GOV-001
-  - RB-PR104-CORE-001
-  - RB-PR104-DURABLE-001
+  - RB-PR105-GOV-001
+  - RB-PR105-CORE-001
+  - RB-PR105-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
-  - PR 103 post-merge compact-state and runner-evidence reconciliation has not yet been promoted
-  - PR 99 submitted head 66ebd664dc726bea54c342e0f611a5ce31fcb0ce requires current-main synchronization
+  - post-104 handoff reconciliation has not yet been promoted
+  - PR 99 submitted head 66ebd664dc726bea54c342e0f611a5ce31fcb0ce requires synchronization with current main 497b4e20e4a5f4e311480e993ebb277a49c83737
   - Issue 36 requires live protected-main administrator evidence
 coordination:
-  latest_broadcast_sequence: 19
+  latest_broadcast_sequence: 20
   merge_queue_pr: 99
   merge_queue_state: approved-awaiting-main-sync
   runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
@@ -36,8 +36,8 @@ timeout_control:
 progress:
   current_module:
     name: Supervisor durable resume and runner governance closeout
-    percent: 95
-    basis: PR 103 merged with all exact-head checks green; canonical post-merge state and terminal runner evidence still require promotion
+    percent: 99
+    basis: PR 103 and PR 104 are merged with terminal exact-head CI; only the bounded post-104 handoff reconciliation remains before PR 99 synchronization
   overall_roadmap:
     percent: 19
     accepted_milestones: 3

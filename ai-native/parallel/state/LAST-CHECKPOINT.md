@@ -5,25 +5,24 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current truth
 
-- Current observed `main`: `2930eda54527296cb2a54063dffbf21719b3af93`.
-- PR #103 merged the compact durable resume layer and Runner Benchmark from exact submitted head `366d895c48cd9fdbb5e1640accb40a81d5eb7806`.
-- PR #103 exact-head terminal CI was green:
-  - Repository Governance run `35627312007`;
-  - Core Domain Contracts run `35627311991`;
-  - Durable Control Plane run `35627312137`.
-- PR #99 remains open on submitted head `66ebd664dc726bea54c342e0f611a5ce31fcb0ce` and still requires synchronization with current main before fresh exact-head CI.
+- Current observed `main`: `497b4e20e4a5f4e311480e993ebb277a49c83737`.
+- PR #104 merged the mandatory post-PR-103 durable-state reconciliation from exact head `a6b1cd6f449a7c70f0c26ffd3f6d54e55a0f33a2`.
+- PR #104 exact-head terminal CI was green:
+  - Repository Governance run `35628267014`;
+  - Core Domain Contracts run `35628267084`;
+  - Durable Control Plane run `35628267027`.
+- PR #99 is now the only open PR and remains the accepted Issue #97 security path.
+- PR #99 submitted head `66ebd664dc726bea54c342e0f611a5ce31fcb0ce` is stale and must synchronize with current main before fresh exact-head CI.
 - Issue #36 remains the external live protected-main administrator gate.
-- Broadcast 19 is the post-PR-103 durable-governance synchronization event; pre-existing lanes remain `sync-required`.
-- Current bounded closeout branch: `supervisor/durable-resume-post-103`.
+- Broadcast 20 records the PR #104 state-closeout merge for active lanes.
+- Current bounded handoff branch: `supervisor/post-104-handoff`.
 
 ## Current milestone
 
-`SUP-GOV-DURABLE-CLOSEOUT` is `VERIFYING`.
+`SUP-GOV-POST104-HANDOFF` is `VERIFYING`.
 
-Scope is limited to post-merge durable state, terminal Runner Benchmark evidence, broadcast/queue/Supervisor-state reconciliation, and no product/runtime/provider behavior.
+Scope is only terminal PR #104 evidence plus compact/queue/broadcast/Supervisor handoff state. PR #99 source synchronization is explicitly deferred to the next bounded milestone.
 
 ## Exact next safe action
 
-Post-merge reconciliation PR #104 is open. Do not start PR #99 synchronization in the same milestone. On the next resume, resolve PR #104 exact current head and perform one consolidated exact-head CI/status refresh.
-
-After the closeout lands, synchronize PR #99 with then-current `main` and treat all pre-sync CI as historical only.
+Post-104 handoff PR #105 is open. On the next resume, resolve PR #105 exact current head and perform one consolidated exact-head CI/status refresh. After that handoff lands, synchronize PR #99 with then-current `main` without force-push, then perform one fresh consolidated exact-head CI/status refresh. Historical pre-sync CI must not be reused as merge certification.
