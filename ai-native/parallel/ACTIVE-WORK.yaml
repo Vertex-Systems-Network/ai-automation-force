@@ -15,7 +15,7 @@ active:
     branch: supervisor/post109-material-sync
     base_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - ai-native/parallel/ACTIVE-WORK.yaml
       - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
