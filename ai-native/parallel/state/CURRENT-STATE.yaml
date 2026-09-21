@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
 active_issue: 36
-active_pr: null
+active_pr: 113
 tracked_security_pr: null
 active_branch: supervisor/post112-readme-progress-sync
 current_milestone: SUP-GOV-POST112-PROGRESS-SYNC
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-112-README-PROGRESS-CONTRACT
   merged_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-exact_next_safe_action: promote one-time Broadcast 24/README progress handoff; after promotion do not create Broadcast 25 from bookkeeping and return directly to Issue 36 plus explicit M04 consent
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 113 exact current head and perform one consolidated exact-head CI/status/review refresh; if terminal green and clean use expected-head guarded merge; after merge do not create Broadcast 25 and return directly to Issue 36 plus explicit M04 consent
+pending_runner_ids:
+  - RB-PR113-GOV-001
+  - RB-PR113-CORE-001
+  - RB-PR113-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -32,8 +35,8 @@ timeout_control:
 progress:
   current_module:
     name: Broadcast 24 + README progress handoff
-    percent: 85
-    basis: PR 112 merged, Issue 111 closed, and seven active lanes non-force synchronized to main@5c09918e6d1c0f06aa4d0890c58921f94466e509; handoff promotion remains
+    percent: 90
+    basis: PR 113 is open with Broadcast 24, PR 112 runner evidence, Issue 111 closure, seven-lane sync, and README progress reconciliation bound to the live submission; exact-head verification remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
