@@ -62,7 +62,7 @@ The Supervisor also works on its own feature/module branch. When another agent a
 6. if approved, synchronize candidate with current main where required and obtain exact-head promotion CI;
 7. merge using expected-head protection where available;
 8. update canonical registries/checkpoints;
-9. emit the mandatory post-merge broadcast;
+9. emit the mandatory post-merge broadcast when the merge introduces material state that active agents must observe; do not emit a new broadcast solely because a prior broadcast/bookkeeping reconciliation was merged;
 10. restore the Supervisor checkpoint and resume its own module work.
 
 ## Mandatory post-merge alert
@@ -72,6 +72,8 @@ After every merge that active agents must observe, Supervisor records and sends 
 **New changes have been merged — please merge these changes into your branch first, then resume your own work.**
 
 `SUPERVISOR-BROADCASTS.yaml` is the canonical durable copy of the alert. The record includes new main SHA, merged PR/branch, affected contracts/migrations/shared files, recipients, and whether synchronization is mandatory.
+
+A merge whose only purpose is to persist an already-issued broadcast, terminal runner evidence, compact-state handoff, or equivalent bookkeeping does **not** recursively create another broadcast. A fresh broadcast is required only when the merge itself introduces new material working instructions, contracts, migrations, ownership/dependency state, executable behavior, or other state that affected agents must observe before resuming.
 
 ## Agent response to an alert
 
@@ -124,7 +126,7 @@ Before merging an executable PR:
 7. verify required checks are green, not skipped or stale;
 8. merge using expected-head protection where available;
 9. update registries/checkpoints and unblock dependents;
-10. emit a synchronization broadcast before feature work resumes.
+10. emit a synchronization broadcast before feature work resumes when the merge creates new material state for affected agents; do not recursively broadcast a broadcast-only/bookkeeping reconciliation.
 
 ## Working instructions
 
