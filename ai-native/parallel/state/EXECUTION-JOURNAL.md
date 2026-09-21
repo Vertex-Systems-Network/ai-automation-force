@@ -128,3 +128,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Milestone moved to `VERIFYING`.
 - No PR #107 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
 - Executable development remains blocked by `FULL_PROJECT_PREPLANNING_IN_PROGRESS` plus applicable consent/dependency/governance gates.
+
+
+## 2026-09-21 — Broadcast 22 post-PR107 lane synchronization
+
+- PR #107 exact head `a68a5e74020598e8a2b6e98a1c9e100e06b9154a` passed Repository Governance `35640682708`, Core Domain Contracts `35640682647`, and Durable Control Plane `35640682688`.
+- PR #107 merged with expected-head guard to `main@a315ff19300554901d2b55841a5e57151bdc631e`.
+- Re-read live repo truth: open PRs are empty; Issue #36 remains the sole live protected-main governance gate; full-project preplanning remains in progress.
+- Reverified each active M03/M04/M05/M06/M07/M08/QA branch at `ahead_by=0`, `behind_by=14` relative to new main.
+- Non-force fast-forwarded all seven active branches to `a315ff19300554901d2b55841a5e57151bdc631e`.
+- Began bounded broadcast-22 canonical coordination reconciliation; no executable product work was authorized or performed.
