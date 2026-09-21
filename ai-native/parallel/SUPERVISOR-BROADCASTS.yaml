@@ -461,5 +461,6 @@ recipient_states:
     last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
 
 rules:
-  - Supervisor increments latest_sequence after every successful promotion merge to main that active agents must observe.
+  - Supervisor increments latest_sequence after a successful merge to main only when that merge introduces new material state active agents must observe before resuming.
+  - A merge whose only purpose is to persist an already-issued broadcast, terminal runner evidence, compact-state handoff, or equivalent bookkeeping does not recursively create a new broadcast sequence.
   - Mandatory recipients become sync-required until synchronization is recorded.
