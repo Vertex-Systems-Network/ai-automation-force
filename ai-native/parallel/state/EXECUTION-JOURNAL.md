@@ -70,3 +70,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Open PR reconciliation now leaves only PR #99.
 - PR #99 was intentionally not synchronized in the same milestone.
 - Post-merge handoff continues on `supervisor/post-104-handoff`.
+
+
+## 2026-09-21 — PR #105 post-104 handoff opened
+
+- Opened PR #105 from `supervisor/post-104-handoff` against `main@497b4e20e4a5f4e311480e993ebb277a49c83737`.
+- Bound compact state and Supervisor state to PR #105.
+- Milestone moved to `VERIFYING`.
+- PR #99 source branch remains untouched in this milestone.
+- No PR #105 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
