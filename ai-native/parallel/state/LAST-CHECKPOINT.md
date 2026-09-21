@@ -5,24 +5,22 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current truth
 
-- Current observed `main`: `52728f827a253e5d4217c77ee0eeb2fb49ab29ac`.
-- PR #108 broadcast-22 reconciliation merged from exact head `8fceaf150eb547f5d283ae95b6c430f2a9a5f06b`.
-- PR #108 exact-head terminal CI was green: Repository Governance `35641722775`, Core Domain Contracts `35641722539`, Durable Control Plane `35641722681`.
-- Open pull requests were empty before this bounded reconciliation.
-- Issue #36 remains the sole live protected-main governance blocker; current main is still reported unprotected.
-- Full-project preplanning is complete. Canonical repository status is `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`.
-- Evidence: the master index states READY_FOR_CONSENT, the 2026-08-29 final gap audit passed with no material first-time planning gap, and the completion checkpoint closes P0.
-- Generic `continue` still does not authorize executable development.
-- M04 executable entry remains blocked by Issue #36 plus explicit scoped M04 consent.
-- Broadcast sequence remains 22; PR #108/bookkeeping completion does not recursively create a new broadcast.
-- No product/runtime/provider/schema/migration/credential/spend/deployment work was performed.
+- Current observed `main`: `94160c21e2f7a6511c6d4fd58c6db9cbad168a5b`.
+- PR #109 planning-ready reconciliation merged from exact head `66c636701167b7228007f4ad05d8f69d88fc919c`.
+- PR #109 repaired-head terminal CI is green: Repository Governance `35648380753`, Core Domain Contracts `35648380476`, Durable Control Plane `35648380579`.
+- Full-project planning prerequisite is complete: `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`.
+- PR #109 materially changed working instructions, so Broadcast 23 is required exactly once.
+- M03, M04, M05, M06, M07, M08 and cross-cutting QA branches were each verified `ahead_by=0`, `behind_by=38`, then non-force fast-forwarded to `main@94160c21e2f7a6511c6d4fd58c6db9cbad168a5b`.
+- The post-merge broadcast rule is non-recursive: the PR that merely persists this already-issued Broadcast 23 handoff will not itself require Broadcast 24 unless it adds new material agent-facing state.
+- Issue #36 remains the sole live protected-main administrator gate.
+- M04 planning is consent-ready, but executable authority remains false until Issue #36 closes and the operator explicitly approves the scoped M04 development brief.
 
 ## Current milestone
 
-`SUP-GOV-PREPLANNING-STATE-RECONCILE` is `VERIFYING`.
+`SUP-GOV-POST109-MATERIAL-SYNC` is `RECONCILING`.
 
-Scope is limited to correcting stale AI-Native control-plane preplanning truth and hardening post-merge broadcast rules against recursive bookkeeping loops.
+Scope is limited to canonical Broadcast 23, active-lane synchronization evidence, PR #109 terminal runner evidence and M04 consent-readiness handoff. No executable product/schema/provider/deployment behavior is changed.
 
 ## Exact next safe action
 
-PR #109 is open for this bounded reconciliation. Initial exact-head Repository Governance run `35648015768` failed because the Supervisor task claimed `ai-native/parallel/**`, overlapping existing lane checkpoint ownership. The claim was narrowed to the exact files actually touched; a fresh exact-head CI attempt is required. After promotion, prepare the scoped M04 Development Consent Brief. Do not begin executable M04 work until Issue #36 is closed with live protected-main evidence and the operator explicitly approves the M04 development scope.
+Promote this bounded handoff. After it lands, do not create another broadcast/state-only PR. Hold executable M04 until live Issue #36 protection evidence closes the dependency and explicit scoped M04 development consent is recorded.
