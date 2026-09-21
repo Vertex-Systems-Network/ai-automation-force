@@ -147,3 +147,38 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Milestone moved to `VERIFYING`.
 - No PR #108 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
 - Executable development remains blocked by Issue #36 plus `FULL_PROJECT_PREPLANNING_IN_PROGRESS`.
+
+
+## 2026-09-22 — Planning-ready stale-state correction
+
+- PR #108 exact head `8fceaf150eb547f5d283ae95b6c430f2a9a5f06b` passed Repository Governance `35641722775`, Core Domain Contracts `35641722539`, and Durable Control Plane `35641722681`.
+- PR #108 merged with expected-head guard to `main@52728f827a253e5d4217c77ee0eeb2fb49ab29ac`.
+- A repository truth audit found that compact/Supervisor state incorrectly treated the lifecycle template token `FULL_PROJECT_PREPLANNING_IN_PROGRESS` as current state.
+- Canonical evidence predating the stale control-plane wording proves P0 complete:
+  - `docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md` -> `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`;
+  - `docs/product/FINAL-PREDEVELOPMENT-GAP-AUDIT-2026-08-29.md` -> `PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND`;
+  - `checkpoints/2026-08-29-full-project-preplanning-complete.md` -> P0 complete.
+- Corrected the gate/consent/compact/Supervisor/README truth without granting executable authority.
+- Added an anti-recursion rule: a merge that only persists an already-issued broadcast, terminal runner evidence, compact-state handoff, or equivalent bookkeeping does not create another broadcast unless the merge itself introduces new material state active agents must observe.
+- Broadcast sequence intentionally remains 22.
+- Next real path after this reconciliation is the scoped M04 Development Consent Brief; M04 implementation remains blocked by Issue #36 and explicit operator consent.
+
+
+## 2026-09-22 — PR #109 planning-ready reconciliation opened
+
+- Opened PR #109 from `supervisor/preplanning-state-ready-reconcile` against `main@52728f827a253e5d4217c77ee0eeb2fb49ab29ac`.
+- Bound compact state, Supervisor state, Active Work and checkpoint to PR #109.
+- Milestone moved to `VERIFYING`.
+- Broadcast sequence remains 22; this correction intentionally does not manufacture a recursive broadcast.
+- No PR #109 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
+- Full-project planning prerequisite is satisfied; executable M04 remains blocked by Issue #36 plus explicit scoped operator consent.
+
+
+## 2026-09-22 — PR #109 governance ownership collision repaired
+
+- Initial PR #109 exact head `79549588db1af2b39ceeae1ab92b59a80dc8e57a` reached Repository Governance run `35648015768`, which failed in `Validate Supervisor multi-agent governance`.
+- Exact failure: the Supervisor task write claim `ai-native/parallel/**` overlapped active M03/M04/M05/M06/M07/M08/QA checkpoint ownership.
+- This was a coordination-manifest defect, not product/runtime code failure.
+- Narrowed the Supervisor task write/shared-file claims to the exact governance/state files actually modified; no active lane checkpoint path is claimed.
+- Versioned the PR #109 Runner Benchmark attempt IDs to `RB-PR109-*-002` so stale-head evidence cannot certify the repaired head.
+- A second same-turn consolidated CI refresh is explicitly permitted for this material CI-failure -> source-fix transition; no tight polling or blind rerun is used.

@@ -10,6 +10,9 @@ This rule is mandatory for every AI/engineer working in this repository and over
 
 `ai-native/FULL-PROJECT-PREPLANNING-GATE.md` is a mandatory prerequisite to this consent gate.
 
+Current repository preplanning status: `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`, backed by the canonical master index, final predevelopment gap audit, and 2026-08-29 completion checkpoint. This means the full-project planning prerequisite is satisfied; it does **not** mean executable development is approved.
+
+
 The operator requires the entire foreseeable project to be preplanned before any new executable development starts or resumes. Therefore milestone-local readiness is not enough.
 
 While the full-project preplanning gate is open, repository status is:

@@ -36,6 +36,19 @@ Every engineering response must end with repository name, current-module progres
 
 Completed `agent/m04-character-library`, `agent/m05-content-memory`, `agent/m06-audio-production`, and `agent/m07-storyboard-timeline` are retired after their planning promotions and are not force-reset or reused as promotion authority. Fresh current-main planning branches are `agent/m04-character-library-current`, `agent/m05-content-memory-current`, `agent/m06-audio-production-current`, and `agent/m07-storyboard-timeline-current`. Earlier completed QA and M03/WP8 submission/review/closeout branches remain retired.
 
+## Full-project preplanning truth
+
+The canonical full-project planning state is `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`.
+
+Evidence:
+- `docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md`;
+- `docs/product/FINAL-PREDEVELOPMENT-GAP-AUDIT-2026-08-29.md` with verdict `PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND`;
+- `checkpoints/2026-08-29-full-project-preplanning-complete.md`.
+
+The earlier `FULL_PROJECT_PREPLANNING_IN_PROGRESS` compact/Supervisor wording was stale control-plane state, not current planning truth. Planning completion grants no executable authority. M04 still requires Issue #36 closure, explicit scoped M04 development consent, and fresh ownership/migration revalidation before implementation.
+
+Broadcast sequencing is non-recursive: a bookkeeping merge that only persists an already-issued broadcast, terminal runner evidence, or compact-state handoff does not create another broadcast unless it introduces new material state active agents must observe.
+
 ## M03 source completion and external hold
 
 M03 implementation, WP8 source acceptance, and source-side closeout are complete. Issue #36 remains the final M03 protected-main governance blocker because live GitHub enforcement is not verified.
@@ -126,7 +139,7 @@ Future migration IDs are reserved only after executable authority exists and the
 
 ## Next safe planning work
 
-No new executable milestone is authorized by the M08 planning promotion. The full-project preplanning gate remains `FULL_PROJECT_PREPLANNING_IN_PROGRESS`, so even milestone-local readiness does not authorize implementation. While Issue #36 and upstream executable gates remain closed, current lanes may only perform their already-claimed planning/audit work after broadcast-22 synchronization. All seven active governance/planning lanes were reverified `ahead_by=0` and non-force fast-forwarded to `main@a315ff19300554901d2b55841a5e57151bdc631e` before this reconciliation. M09 is not activated by implication. Any future planning expansion must first receive an explicit collision-free scope and must not introduce provider spend, credentials, schema/product writes or privileged execution authority.
+No new executable milestone is authorized by the M08 planning promotion. Full-project preplanning is complete and the repository is `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`, but planning readiness does not authorize implementation. While Issue #36 and explicit executable-consent/dependency gates remain closed, current lanes may only perform their already-claimed planning/audit work after broadcast-22 synchronization. All seven active governance/planning lanes were reverified `ahead_by=0` and non-force fast-forwarded to `main@a315ff19300554901d2b55841a5e57151bdc631e` before this reconciliation. M09 is not activated by implication. Any future planning expansion must first receive an explicit collision-free scope and must not introduce provider spend, credentials, schema/product writes or privileged execution authority.
 
 ## Completion and review
 

@@ -1,26 +1,28 @@
 # Last Compact Checkpoint
 
-Date: 2026-09-21
+Date: 2026-09-22
 Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current truth
 
-- Current observed `main`: `a315ff19300554901d2b55841a5e57151bdc631e`.
-- PR #107 AI-Native broadcast-21 reconciliation merged from exact head `a68a5e74020598e8a2b6e98a1c9e100e06b9154a`.
-- PR #107 exact-head terminal CI was green: Repository Governance `35640682708`, Core Domain Contracts `35640682647`, Durable Control Plane `35640682688`.
-- Open pull requests are empty before this bounded reconciliation.
-- Issue #36 remains the sole live protected-main governance blocker; current main remains reported unprotected.
-- Full-project preplanning remains `FULL_PROJECT_PREPLANNING_IN_PROGRESS`; generic continuation does not authorize executable development.
-- Broadcast 22 records the PR #107 coordination promotion.
-- M03, M04, M05, M06, M07, M08 and cross-cutting QA active branches were each reverified `ahead_by=0` and non-force fast-forwarded to `main@a315ff19300554901d2b55841a5e57151bdc631e`.
+- Current observed `main`: `52728f827a253e5d4217c77ee0eeb2fb49ab29ac`.
+- PR #108 broadcast-22 reconciliation merged from exact head `8fceaf150eb547f5d283ae95b6c430f2a9a5f06b`.
+- PR #108 exact-head terminal CI was green: Repository Governance `35641722775`, Core Domain Contracts `35641722539`, Durable Control Plane `35641722681`.
+- Open pull requests were empty before this bounded reconciliation.
+- Issue #36 remains the sole live protected-main governance blocker; current main is still reported unprotected.
+- Full-project preplanning is complete. Canonical repository status is `FULL_PROJECT_PLANNING_READY_FOR_CONSENT`.
+- Evidence: the master index states READY_FOR_CONSENT, the 2026-08-29 final gap audit passed with no material first-time planning gap, and the completion checkpoint closes P0.
+- Generic `continue` still does not authorize executable development.
+- M04 executable entry remains blocked by Issue #36 plus explicit scoped M04 consent.
+- Broadcast sequence remains 22; PR #108/bookkeeping completion does not recursively create a new broadcast.
 - No product/runtime/provider/schema/migration/credential/spend/deployment work was performed.
 
 ## Current milestone
 
-`SUP-GOV-BROADCAST22-RECONCILE` is `VERIFYING`.
+`SUP-GOV-PREPLANNING-STATE-RECONCILE` is `VERIFYING`.
 
-Scope is limited to canonical broadcast 22, PR #107 terminal runner evidence, active-lane synchronization state, and removal of stale PR #107 verification state.
+Scope is limited to correcting stale AI-Native control-plane preplanning truth and hardening post-merge broadcast rules against recursive bookkeeping loops.
 
 ## Exact next safe action
 
-PR #108 is open for this bounded coordination reconciliation. On the next resume, resolve its exact current head and perform one consolidated exact-head CI/status refresh. After promotion, current lanes may resume only their already-claimed planning/audit work. Executable M04+ remains blocked by the full-project preplanning gate, milestone dependency/consent gates, and Issue #36 where applicable.
+PR #109 is open for this bounded reconciliation. Initial exact-head Repository Governance run `35648015768` failed because the Supervisor task claimed `ai-native/parallel/**`, overlapping existing lane checkpoint ownership. The claim was narrowed to the exact files actually touched; a fresh exact-head CI attempt is required. After promotion, prepare the scoped M04 Development Consent Brief. Do not begin executable M04 work until Issue #36 is closed with live protected-main evidence and the operator explicitly approves the M04 development scope.
