@@ -1,19 +1,19 @@
-version: 21
+version: 22
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: a315ff19300554901d2b55841a5e57151bdc631e
-  main_sha_last_reconciled: a315ff19300554901d2b55841a5e57151bdc631e
+  main_sha_last_promotion: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+  main_sha_last_reconciled: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
-  current_mode: full-project-preplanning-and-m03-admin-hold
+  current_mode: planning-ready-for-consent-and-m03-admin-hold
   completion_signal: Work Done and Submitted
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 107
-  submitted_head_sha: a68a5e74020598e8a2b6e98a1c9e100e06b9154a
-  merged_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+  pr: 108
+  submitted_head_sha: 8fceaf150eb547f5d283ae95b6c430f2a9a5f06b
+  merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: a315ff19300554901d2b55841a5e57151bdc631e
+  head_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -61,26 +61,26 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 107
-  submitted_head_sha: a68a5e74020598e8a2b6e98a1c9e100e06b9154a
-  merged_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
+  pr: 108
+  submitted_head_sha: 8fceaf150eb547f5d283ae95b6c430f2a9a5f06b
+  merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
   result: success
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: broadcast-22-post-pr107-reconciliation
-  milestone_status: VERIFYING
-  active_branch: supervisor/broadcast22-post107-reconcile
+  current_milestone: preplanning-state-ready-reconciliation
+  milestone_status: RECONCILING
+  active_branch: supervisor/preplanning-state-ready-reconcile
   active_issue: 36
-  active_pr: 108
+  active_pr: null
   tracked_security_pr: null
-  last_completed_milestone: pr-107-ai-native-broadcast21-reconciliation
-  exact_next_safe_action: resolve PR 108 exact head and perform one consolidated CI refresh; after promotion continue only already-claimed planning/audit work while full-project preplanning and applicable Issue 36/consent/dependency gates block executable development
+  last_completed_milestone: pr-108-broadcast22-reconciliation
+  exact_next_safe_action: promote planning-ready state reconciliation, then prepare the scoped M04 Development Consent Brief; executable M04 remains blocked by Issue 36 and explicit operator consent
   progress:
     current_module_percent: 85
-    current_module_basis: all active governance/planning branches re-synchronized to current main and broadcast 22; canonical coordination promotion remains
+    current_module_basis: canonical preplanning evidence is complete and READY_FOR_CONSENT; AI-Native control-plane reconciliation remains
     overall_roadmap_percent: 19
-    overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance blocked by Issue 36 and executable development additionally blocked by full-project preplanning gate
+    overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
 
 security_reconciliation:
   issue: 97
@@ -96,6 +96,12 @@ security_reconciliation:
   result: completed
 
 planning_state:
+  full_project_preplanning:
+    status: FULL_PROJECT_PLANNING_READY_FOR_CONSENT
+    master_index: docs/product/FULL-PROJECT-PREPLANNING-MASTER-INDEX.md
+    final_gap_audit: PASS — NO MATERIAL FIRST-TIME PLANNING GAP FOUND
+    completion_checkpoint: checkpoints/2026-08-29-full-project-preplanning-complete.md
+    executable_authority: false
   m04:
     status: planning-hardened-only
     promotion_pr: 78
@@ -157,6 +163,6 @@ rules:
   - Completed submission branches are retired or replaced before the next bounded executable slice.
   - New agents begin from main and may not self-assign.
   - If no eligible open slot exists, respond exactly Go Home Come Back Next Time and assign no work.
-  - Every successful promotion merge produces a broadcast before affected planning or feature work resumes.
+  - A successful merge produces a new broadcast only when it introduces new material state affected agents must observe before resuming; broadcast/runner/compact-state bookkeeping does not recursively create another broadcast.
   - Main SHA, slot state, migration state, write ownership, and broadcast state are reconciled after every promotion.
   - Planning promotion or branch synchronization does not grant executable milestone authority.
