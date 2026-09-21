@@ -34,3 +34,25 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Recorded exact-head Runner Benchmark task registrations on the PR status surface.
 - Detected compact-state drift caused by the PR transition and reconciled it before final CI observation.
 - Source head must remain frozen after the final state reconciliation and consolidated status refresh.
+
+
+## 2026-09-21 — PR #103 durable-governance promotion
+
+- Final candidate head `366d895c48cd9fdbb5e1640accb40a81d5eb7806` was review-clean and mergeable.
+- Exact-head terminal CI passed:
+  - Repository Governance `35627312007`;
+  - Core Domain Contracts `35627311991`;
+  - Durable Control Plane `35627312137`.
+- PR #103 merged with expected-head guard.
+- New observed main: `2930eda54527296cb2a54063dffbf21719b3af93`.
+- A GitHub secondary-rate-limit response interrupted the first batched post-merge readback; no merge or irreversible action was repeated.
+- Lightweight readback confirmed the merge commit, then mandatory post-merge reconciliation continued on `supervisor/durable-resume-post-103`.
+
+
+## 2026-09-21 — PR #104 post-merge reconciliation opened
+
+- Opened PR #104 from `supervisor/durable-resume-post-103` against `main@2930eda54527296cb2a54063dffbf21719b3af93`.
+- Bound compact state and Supervisor state to PR #104.
+- Milestone moved to `VERIFYING`.
+- No PR #104 CI/status refresh was performed in this turn because the earlier PR #103 exact-head refresh and merge already consumed the bounded milestone's status/transition budget.
+- Next resume must resolve the final PR #104 head first, then perform one consolidated exact-head refresh.

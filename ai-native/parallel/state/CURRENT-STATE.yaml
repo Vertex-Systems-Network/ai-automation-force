@@ -2,25 +2,28 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+observed_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
 active_issue: 97
-active_pr: 103
+active_pr: 104
 tracked_security_pr: 99
-active_branch: supervisor/durable-resume-runner-bootstrap
-current_milestone: SUP-GOV-DURABLE-BOOTSTRAP
+active_branch: supervisor/durable-resume-post-103
+current_milestone: SUP-GOV-DURABLE-CLOSEOUT
 milestone_status: VERIFYING
 last_completed_milestone:
-  id: PR-102-SECURITY-COORDINATION
-  merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
-exact_next_safe_action: resolve PR 103 exact head and perform one consolidated exact-head CI/status refresh; if checks are running record run IDs on the PR and stop; if green leave the guarded merge decision for the next bounded milestone; after bootstrap promotion synchronize PR 99 with current main
-pending_runner_ids: []
+  id: PR-103-DURABLE-RESUME-RUNNER-GOVERNANCE
+  merged_main_sha: 2930eda54527296cb2a54063dffbf21719b3af93
+exact_next_safe_action: resolve PR 104 exact current head and perform one consolidated exact-head CI/status refresh; if review-clean and green leave the guarded merge decision for the next bounded milestone; after closeout promotion synchronize PR 99 with current main
+pending_runner_ids:
+  - RB-PR104-GOV-001
+  - RB-PR104-CORE-001
+  - RB-PR104-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
-  - durable-resume bootstrap exact-head promotion evidence not yet observed
+  - PR 103 post-merge compact-state and runner-evidence reconciliation has not yet been promoted
   - PR 99 submitted head 66ebd664dc726bea54c342e0f611a5ce31fcb0ce requires current-main synchronization
   - Issue 36 requires live protected-main administrator evidence
 coordination:
-  latest_broadcast_sequence: 18
+  latest_broadcast_sequence: 19
   merge_queue_pr: 99
   merge_queue_state: approved-awaiting-main-sync
   runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
@@ -32,9 +35,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Supervisor durable resume and runner governance
-    percent: 80
-    basis: governance files and coordination reconciliation are implemented on the bounded branch; exact-head promotion verification remains
+    name: Supervisor durable resume and runner governance closeout
+    percent: 95
+    basis: PR 103 merged with all exact-head checks green; canonical post-merge state and terminal runner evidence still require promotion
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
