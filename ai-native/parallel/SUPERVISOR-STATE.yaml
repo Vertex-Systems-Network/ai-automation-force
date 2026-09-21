@@ -69,13 +69,13 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: broadcast-22-post-pr107-reconciliation
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/broadcast22-post107-reconcile
   active_issue: 36
-  active_pr: null
+  active_pr: 108
   tracked_security_pr: null
   last_completed_milestone: pr-107-ai-native-broadcast21-reconciliation
-  exact_next_safe_action: promote broadcast-22 post-PR107 coordination reconciliation; after it lands continue only already-claimed planning/audit work while full-project preplanning and applicable Issue 36/consent/dependency gates block executable development
+  exact_next_safe_action: resolve PR 108 exact head and perform one consolidated CI refresh; after promotion continue only already-claimed planning/audit work while full-project preplanning and applicable Issue 36/consent/dependency gates block executable development
   progress:
     current_module_percent: 85
     current_module_basis: all active governance/planning branches re-synchronized to current main and broadcast 22; canonical coordination promotion remains
