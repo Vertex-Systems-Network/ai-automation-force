@@ -69,16 +69,16 @@ last_coordination_merge:
 compact_state:
   path: ai-native/parallel/state
   current_milestone: post-pr116-state-reconcile
-  milestone_status: RECONCILING
+  milestone_status: VERIFYING
   active_branch: supervisor/post-pr116-state-reconcile
   active_issue: 36
-  active_pr: null
+  active_pr: 117
   tracked_security_pr: null
   last_completed_milestone: pr-116-m04-scoped-consent
-  exact_next_safe_action: promote bounded post-PR116 truth reconciliation; then wait only for Issue 36 closure before fresh migration/write-ownership/security revalidation and direct approved M04-WP1A implementation
+  exact_next_safe_action: resolve PR 117 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 still waits only for Issue 36
   progress:
-    current_module_percent: 80
-    current_module_basis: stale PR116/main/branch-sync durable state is being repaired against live repository evidence; Issue 36 remains the sole executable gate
+    current_module_percent: 90
+    current_module_basis: PR 117 is open with repaired post-PR116 durable truth and corrected physical branch-sync evidence; exact-head verification remains
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
 

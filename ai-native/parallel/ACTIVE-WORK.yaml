@@ -15,7 +15,7 @@ active:
     branch: supervisor/post-pr116-state-reconcile
     base_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
     module: supervisor_governance
-    status: reconciling
+    status: verifying
     writes:
       - README.md
       - ai-native/parallel/ACTIVE-WORK.yaml

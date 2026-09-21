@@ -228,9 +228,9 @@ This is the authoritative human-visible progress snapshot. It must be reconciled
 - **M04-WP1A execution package:** `██████████` **100% approved/ready** — Issue #114 is the canonical approved execution ticket; pre-code review is complete and consent/merge authority are already recorded
 - **M04 executable development:** `░░░░░░░░░░` **0%** — explicit scoped M04-WP1A consent is granted; executable start remains conditionally blocked only by Issue #36 live protected-main closure
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is now canonical
-- **Active PR:** none at post-PR116 reconciliation start
+- **Active PR:** #117 — post-PR116 durable truth reconciliation
 - **Open planning/governance Issues:** #36 (sole executable gate) and #114 (approved M04-WP1A execution ticket)
-- **Current bounded work:** reconcile stale post-PR116 compact/README truth and correct unverified branch-sync SHA claims; no executable M04 code before Issue #36
+- **Current bounded work:** PR #117 — promote repaired post-PR116 compact/README truth and corrected physical branch-sync evidence; no executable M04 code before Issue #36
 - **Exact next product-development path:** close Issue #36 with live protected-main evidence → fresh current-main/migration/write-ownership/security revalidation → reserve exactly one migration → activate and implement approved Issue #114 M04-WP1A
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.

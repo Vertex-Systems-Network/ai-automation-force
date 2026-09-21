@@ -4,16 +4,19 @@ repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
 observed_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
 active_issue: 36
-active_pr: null
+active_pr: 117
 tracked_security_pr: null
 active_branch: supervisor/post-pr116-state-reconcile
 current_milestone: SUP-GOV-POST-PR116-STATE-RECONCILE
-milestone_status: RECONCILING
+milestone_status: VERIFYING
 last_completed_milestone:
   id: PR-116-M04-SCOPED-CONSENT
   merged_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
-exact_next_safe_action: promote bounded post-PR116 truth reconciliation; then wait only for Issue 36 live protected-main closure, after which fresh main/write-ownership/migration/security revalidation, one migration reservation and direct approved M04-WP1A implementation follow
-pending_runner_ids: []
+exact_next_safe_action: resolve PR 117 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 still waits only for Issue 36
+pending_runner_ids:
+  - RB-PR117-GOV-001
+  - RB-PR117-CORE-001
+  - RB-PR117-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -31,8 +34,8 @@ timeout_control:
 progress:
   current_module:
     name: Post-PR116 durable-state reconciliation
-    percent: 80
-    basis: live main/open-work/Issue 114/M04 branch truth is resolved and stale compact plus false lane-sync SHA claims are being corrected; no executable M04 code starts before Issue 36
+    percent: 90
+    basis: PR 117 is open with stale compact/README truth and false lane-sync SHA claims corrected; exact-head verification remains before promotion
   overall_roadmap:
     percent: 19
     accepted_milestones: 3

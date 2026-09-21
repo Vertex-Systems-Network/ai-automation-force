@@ -305,3 +305,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Issue #114 is already APPROVED, scoped consent and safe review/merge authority are durable, and pre-code implementation review is complete.
 - Issue #36 remains the sole executable-start gate; no migration reservation or executable M04 code is introduced.
 - No Broadcast 25 is created because PR #115/#116 and this reconciliation do not introduce new active-agent working instructions requiring synchronization.
+
+
+## 2026-09-22 — PR #117 post-PR116 truth reconciliation opened
+
+- Opened PR #117 from `supervisor/post-pr116-state-reconcile` against `main@5c7af72b1025721b1b8b720a74ae57e883e2ffc4`.
+- Scope is strictly durable-state/README truth repair after PR #116 plus correction of false branch-sync SHA claims.
+- M04 branch remains current-main synchronized; M03/M05/M06/M07/M08/QA remain physically at Broadcast 24 `5c09918e6d1c0f06aa4d0890c58921f94466e509`.
+- No migration reservation, executable product/schema/API/test change, CI weakening, or Broadcast 25 is included.
+- Milestone moved to `VERIFYING`; next action is one exact-head review/CI refresh and guarded merge if all checks succeed.

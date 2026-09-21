@@ -19,10 +19,10 @@ Repository: `Vertex-Systems-Network/ai-automation-force`
 
 ## Current milestone
 
-`SUP-GOV-POST-PR116-STATE-RECONCILE` is `RECONCILING`.
+`SUP-GOV-POST-PR116-STATE-RECONCILE` is `VERIFYING`.
 
 This bounded milestone repairs durable resume truth. It does not create Broadcast 25 and does not bypass Issue #36.
 
 ## Exact next safe action
 
-Promote this reconciliation after exact-head review/CI. Then wait only for live Issue #36 closure. Immediately after closure: re-read compact/live main, verify the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one revision, activate M04-WP1A executable ownership, and implement Issue #114 without another planning or consent round.
+PR #117 is open for this bounded reconciliation. Resolve its exact head/base/review/mergeability and perform one consolidated exact-head CI refresh. If terminal green and clean, merge with an expected-head guard. Then wait only for live Issue #36 closure. Immediately after closure: re-read compact/live main, verify the M04 execution branch, revalidate write ownership/collisions and migration registry, reserve exactly one revision, activate M04-WP1A executable ownership, and implement Issue #114 without another planning or consent round.
