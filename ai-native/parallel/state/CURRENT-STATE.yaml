@@ -1,0 +1,51 @@
+version: 1
+compact_state_path: ai-native/parallel/state
+repository: Vertex-Systems-Network/ai-automation-force
+observed_default_branch: main
+observed_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+active_issue: 97
+active_pr: 99
+active_branch: supervisor/durable-resume-runner-bootstrap
+current_milestone: SUP-GOV-DURABLE-BOOTSTRAP
+milestone_status: VERIFYING
+last_completed_milestone:
+  id: PR-102-SECURITY-COORDINATION
+  merged_main_sha: 296c1199ca65b1c8d5978bb3e4e09e6f51dccfaa
+exact_next_safe_action: open the durable-resume bootstrap PR, perform one exact-head consolidated CI refresh, and promote only if review-clean and green; after promotion synchronize PR 99 with current main
+pending_runner_ids: []
+blocked_runner_ids: []
+current_blockers:
+  - durable-resume bootstrap exact-head promotion evidence not yet observed
+  - PR 99 submitted head 66ebd664dc726bea54c342e0f611a5ce31fcb0ce requires current-main synchronization
+  - Issue 36 requires live protected-main administrator evidence
+coordination:
+  latest_broadcast_sequence: 18
+  merge_queue_pr: 99
+  merge_queue_state: approved-awaiting-main-sync
+  runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
+timeout_control:
+  one_logical_milestone_per_turn: true
+  default_consolidated_status_refresh_limit: 1
+  tight_polling_forbidden: true
+  rerun_on_message_timeout_forbidden: true
+  second_refresh_requires_material_transition_and_durable_exception: true
+progress:
+  current_module:
+    name: Supervisor durable resume and runner governance
+    percent: 80
+    basis: governance files and coordination reconciliation are implemented on the bounded branch; exact-head promotion verification remains
+  overall_roadmap:
+    percent: 19
+    accepted_milestones: 3
+    denominator_milestones: 16
+    basis: M0-M2 accepted from M0-M15; M03 source acceptance is complete but final governance remains blocked by Issue 36
+limits:
+  current_state_max_bytes: 12288
+  last_checkpoint_max_bytes: 16384
+  execution_journal_max_bytes: 32768
+truth_precedence:
+  - current repository/runtime evidence
+  - exact current branch/PR/Issue evidence
+  - compact durable resume state
+  - historical checkpoints
+  - chat memory
