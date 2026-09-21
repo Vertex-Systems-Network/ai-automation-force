@@ -1,4 +1,4 @@
-version: 24
+version: 25
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,37 +8,35 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-README-PROGRESS-CONTRACT
-    title: Mandatory README live progress reconciliation
+  - task_id: SUP-GOV-POST112-PROGRESS-SYNC
+    title: Broadcast 24 README progress contract synchronization
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/readme-progress-contract
-    base_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
+    branch: supervisor/post112-readme-progress-sync
+    base_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
     module: supervisor_governance
-    status: verifying
+    status: reconciling
     writes:
       - README.md
-      - AGENTS.md
-      - ai-native/parallel/SUPERVISOR-PLAN.md
-      - ai-native/parallel/SHARED-FILES.yaml
       - ai-native/parallel/ACTIVE-WORK.yaml
+      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
+      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
     shared_requests:
       - README.md
-      - AGENTS.md
-      - ai-native/parallel/SUPERVISOR-PLAN.md
-      - ai-native/parallel/SHARED-FILES.yaml
       - ai-native/parallel/ACTIVE-WORK.yaml
+      - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
+      - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-and-progress-reporting-only; no executable product authority
+    consent_scope: governance-and-progress-reporting-sync-only; no executable product authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -47,10 +45,10 @@ active:
       reviewed_at: 2026-09-22
       material_delta: true
       readme_sync_required: true
-      notes: Makes README Live development progress mandatory before every engineering response and same-cycle updates mandatory on material progress/state changes.
+      notes: One-time Broadcast 24 synchronization of PR 112 README progress contract; bookkeeping promotion must not create Broadcast 25.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: M03-GOV-HOLD
@@ -69,8 +67,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -89,8 +87,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
@@ -109,8 +107,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -129,8 +127,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -151,8 +149,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -172,8 +170,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -192,8 +190,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: c4671a83173f84da058d82f28da2d4ee3d58229f
-    last_acknowledged_broadcast: 23
+    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    last_acknowledged_broadcast: 24
     required_broadcast: null
 
 rules:
