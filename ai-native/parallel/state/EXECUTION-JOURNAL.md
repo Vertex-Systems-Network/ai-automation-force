@@ -182,3 +182,24 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Narrowed the Supervisor task write/shared-file claims to the exact governance/state files actually modified; no active lane checkpoint path is claimed.
 - Versioned the PR #109 Runner Benchmark attempt IDs to `RB-PR109-*-002` so stale-head evidence cannot certify the repaired head.
 - A second same-turn consolidated CI refresh is explicitly permitted for this material CI-failure -> source-fix transition; no tight polling or blind rerun is used.
+
+
+## 2026-09-22 — PR #109 promotion and Broadcast 23 material sync
+
+- Repaired PR #109 exact head `66c636701167b7228007f4ad05d8f69d88fc919c` passed Repository Governance `35648380753`, Core Domain Contracts `35648380476`, and Durable Control Plane `35648380579`.
+- PR #109 merged with expected-head guard to `main@94160c21e2f7a6511c6d4fd58c6db9cbad168a5b`.
+- PR #109 introduced material agent-facing working-instruction changes, so one mandatory Broadcast 23 is required.
+- Reverified all seven active M03/M04/M05/M06/M07/M08/QA branches at `ahead_by=0`, `behind_by=38` and non-force fast-forwarded them to current main.
+- Broadcast 23 records planning-ready truth, non-recursive broadcast semantics, collision-free write ownership and M04 consent-readiness.
+- This handoff is bookkeeping for an already-issued material broadcast and therefore must not recursively create Broadcast 24 unless it itself introduces new material state.
+- M04 executable work remains blocked by Issue #36 plus explicit scoped operator consent.
+
+
+## 2026-09-22 — PR #110 Broadcast 23 handoff opened
+
+- Opened PR #110 from `supervisor/post109-material-sync` against `main@94160c21e2f7a6511c6d4fd58c6db9cbad168a5b`.
+- Scope is canonical Broadcast 23, active-lane synchronization evidence, PR #109 terminal Runner Benchmark evidence and M04 consent-readiness state.
+- Bound compact state, Supervisor state, Active Work and checkpoint to PR #110.
+- Milestone moved to `VERIFYING`.
+- PR #110 is a bookkeeping handoff for the already-issued material Broadcast 23 and must not recursively create Broadcast 24 unless new material agent-facing state is added.
+- No PR #110 CI/status refresh is performed in this turn; next resume must resolve the final exact head first.

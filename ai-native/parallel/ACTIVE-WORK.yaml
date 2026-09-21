@@ -1,4 +1,4 @@
-version: 22
+version: 23
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,43 +8,33 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-PREPLANNING-STATE-RECONCILE
-    title: Reconcile canonical full-project planning-ready state
+  - task_id: SUP-GOV-POST109-MATERIAL-SYNC
+    title: Broadcast 23 planning-ready handoff and M04 consent readiness
     role: supervisor-governance
     assigned_agent: supervisor-agent
-    branch: supervisor/preplanning-state-ready-reconcile
-    base_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+    branch: supervisor/post109-material-sync
+    base_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
     module: supervisor_governance
     status: verifying
     writes:
-      - ai-native/FULL-PROJECT-PREPLANNING-GATE.md
-      - ai-native/DEVELOPMENT-CONSENT-GATE.md
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/INTEGRATION-PROTOCOL.md
-      - ai-native/parallel/MERGE-QUEUE.yaml
       - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
-      - ai-native/parallel/SUPERVISOR-PLAN.md
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
       - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
-      - README.md
     shared_requests:
       - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/INTEGRATION-PROTOCOL.md
-      - ai-native/parallel/MERGE-QUEUE.yaml
       - ai-native/parallel/SUPERVISOR-BROADCASTS.yaml
-      - ai-native/parallel/SUPERVISOR-PLAN.md
       - ai-native/parallel/SUPERVISOR-STATE.yaml
       - ai-native/parallel/state/CURRENT-STATE.yaml
       - ai-native/parallel/state/LAST-CHECKPOINT.md
       - ai-native/parallel/state/EXECUTION-JOURNAL.md
       - ai-native/parallel/state/RUNNER-BENCHMARK.yaml
-      - README.md
     depends_on: []
     migration_reservation: null
-    consent_scope: governance-and-planning-documentation-only; no executable product authority
+    consent_scope: governance-and-planning-coordination-only; no executable product authority
     required_checks:
       - Repository Governance
       - Core Domain Contracts
@@ -52,11 +42,11 @@ active:
     working_instruction_review:
       reviewed_at: 2026-09-22
       material_delta: true
-      readme_sync_required: true
-      notes: Corrects stale preplanning state to canonical READY_FOR_CONSENT evidence and prevents recursive broadcast bookkeeping loops.
+      readme_sync_required: false
+      notes: Records PR 109 material planning-ready instructions and non-recursive broadcast policy; active lanes already fast-forwarded to current main.
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: M03-GOV-HOLD
@@ -75,8 +65,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -95,8 +85,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
@@ -115,8 +105,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -135,8 +125,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -157,8 +147,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -178,8 +168,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -198,8 +188,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: a315ff19300554901d2b55841a5e57151bdc631e
-    last_acknowledged_broadcast: 22
+    last_synced_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+    last_acknowledged_broadcast: 23
     required_broadcast: null
 
 rules:

@@ -2,27 +2,27 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
+observed_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
 active_issue: 36
-active_pr: 109
+active_pr: 110
 tracked_security_pr: null
-active_branch: supervisor/preplanning-state-ready-reconcile
-current_milestone: SUP-GOV-PREPLANNING-STATE-RECONCILE
+active_branch: supervisor/post109-material-sync
+current_milestone: SUP-GOV-POST109-MATERIAL-SYNC
 milestone_status: VERIFYING
 last_completed_milestone:
-  id: PR-108-BROADCAST22-RECONCILIATION
-  merged_main_sha: 52728f827a253e5d4217c77ee0eeb2fb49ab29ac
-exact_next_safe_action: resolve PR 109 exact current head and perform one consolidated exact-head CI/status/review refresh; if clean and terminal green leave guarded merge for the next bounded milestone; after promotion prepare the scoped M04 Development Consent Brief
+  id: PR-109-PLANNING-READY-RECONCILIATION
+  merged_main_sha: 94160c21e2f7a6511c6d4fd58c6db9cbad168a5b
+exact_next_safe_action: resolve PR 110 exact current head and perform one consolidated exact-head CI/status/review refresh; if clean and terminal green use expected-head guarded merge; after merge do not create Broadcast 24 from bookkeeping and hold executable M04 until Issue 36 plus explicit scoped approval are satisfied
 pending_runner_ids:
-  - RB-PR109-GOV-002
-  - RB-PR109-CORE-002
-  - RB-PR109-DURABLE-002
+  - RB-PR110-GOV-001
+  - RB-PR110-CORE-001
+  - RB-PR110-DURABLE-001
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
   - explicit scoped M04 executable development consent has not been granted
 coordination:
-  latest_broadcast_sequence: 22
+  latest_broadcast_sequence: 23
   merge_queue_pr: null
   merge_queue_state: empty
   runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
@@ -34,9 +34,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Full-project preplanning state reconciliation
+    name: Broadcast 23 handoff + M04 consent readiness
     percent: 85
-    basis: canonical master index, final gap audit, and completion checkpoint already prove FULL_PROJECT_PLANNING_READY_FOR_CONSENT; compact/Supervisor state promotion remains
+    basis: PR 109 merged green and all seven active lanes were verified ahead_by=0 then non-force synchronized to main@94160c21e2f7a6511c6d4fd58c6db9cbad168a5b; canonical handoff promotion remains
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
