@@ -100,3 +100,11 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - PR #99 merged with expected-head guard to `main@2d9edb021e8025431bd9506c1c2c660df6bac1da`.
 - Issue #97 was closed completed after live-main source readback verified the required controls.
 - Issue #36 remains separate and unresolved.
+
+
+## 2026-09-21 — PR #106 security closeout opened
+
+- Opened PR #106 from `supervisor/post-99-security-closeout` against `main@2d9edb021e8025431bd9506c1c2c660df6bac1da`.
+- Bound compact state and Supervisor state to PR #106.
+- Milestone moved to `VERIFYING`.
+- No PR #106 CI/status refresh is performed in this turn; next resume must resolve the final exact head first, then perform one consolidated exact-head refresh.
