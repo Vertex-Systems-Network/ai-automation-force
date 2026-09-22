@@ -1,4 +1,4 @@
-version: 28
+version: 29
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -8,45 +8,6 @@ supervisor:
   own_branch: supervisor/m03-governance-hold-current
 
 active:
-  - task_id: SUP-GOV-POST-PR116-STATE-RECONCILE
-    title: Reconcile post-PR116 durable truth
-    role: supervisor-governance
-    assigned_agent: supervisor-agent
-    branch: supervisor/post-pr116-state-reconcile
-    base_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
-    module: supervisor_governance
-    status: verifying
-    writes:
-      - README.md
-      - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-STATE.yaml
-      - ai-native/parallel/state/CURRENT-STATE.yaml
-      - ai-native/parallel/state/LAST-CHECKPOINT.md
-      - ai-native/parallel/state/EXECUTION-JOURNAL.md
-    shared_requests:
-      - README.md
-      - ai-native/parallel/ACTIVE-WORK.yaml
-      - ai-native/parallel/SUPERVISOR-STATE.yaml
-      - ai-native/parallel/state/CURRENT-STATE.yaml
-      - ai-native/parallel/state/LAST-CHECKPOINT.md
-      - ai-native/parallel/state/EXECUTION-JOURNAL.md
-    depends_on: []
-    migration_reservation: null
-    consent_scope: governance/state reconciliation only; M04-WP1A executable consent already granted but start remains conditioned on Issue 36
-    required_checks:
-      - Repository Governance
-      - Core Domain Contracts
-      - Durable Control Plane
-    working_instruction_review:
-      reviewed_at: 2026-09-22
-      material_delta: false
-      readme_sync_required: true
-      notes: Repairs stale post-PR116 resume truth and false lane synchronization claims; no executable product change and no Broadcast 25.
-    completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
-    last_acknowledged_broadcast: 24
-    required_broadcast: null
-
   - task_id: M03-GOV-HOLD
     title: M03 post-WP8 governance hold
     role: supervisor-governance
@@ -54,7 +15,7 @@ active:
     branch: supervisor/m03-governance-hold-current
     base_sha: 9bc9e5f7e3ebda5166dca42a04be27dc9c3096bc
     module: m03_governance_hold
-    status: active-governance-hold
+    status: waiting-external-admin
     writes:
       - ai-native/parallel/checkpoints/M03-GOV-HOLD.md
     shared_requests: []
