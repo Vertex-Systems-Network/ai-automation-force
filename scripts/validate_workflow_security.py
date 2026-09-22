@@ -12,6 +12,15 @@ import sys
 from pathlib import Path
 
 WORKFLOW_ROOT = Path(".github/workflows")
+PROVIDER_SCOUT_REQUIREMENTS = Path("automation/requirements-scout.txt")
+PROVIDER_SCOUT_INSTALL = (
+    "python -m pip install --disable-pip-version-check --require-hashes "
+    "--only-binary=:all: -r automation/requirements-scout.txt"
+)
+PROVIDER_SCOUT_PIN = (
+    "PyYAML==6.0.3 \\\n"
+    "    --hash=sha256:ba1cc08a7ccde2d2ec775841541641e4548226580ab850948cbfda66a1befcdc"
+)
 SHA40 = re.compile(r"^[0-9a-fA-F]{40}$")
 USES = re.compile(r"^\s*-?\s*uses:\s*([^\s#]+)")
 CHECKOUT = re.compile(r"^actions/checkout@([0-9a-fA-F]{40})$")
@@ -106,6 +115,20 @@ def provider_scout_errors(path: Path, text: str) -> list[str]:
         errors.append(
             f"{path}: provider scout must stay on the reviewed GitHub-hosted ubuntu-24.04 runner"
         )
+    if PROVIDER_SCOUT_INSTALL not in text:
+        errors.append(
+            f"{path}: provider scout dependencies must use --require-hashes and binary-only installation"
+        )
+    if not PROVIDER_SCOUT_REQUIREMENTS.is_file():
+        errors.append(
+            f"{PROVIDER_SCOUT_REQUIREMENTS}: provider scout requirements file is missing"
+        )
+    else:
+        requirement_text = PROVIDER_SCOUT_REQUIREMENTS.read_text(encoding="utf-8").strip()
+        if requirement_text != PROVIDER_SCOUT_PIN:
+            errors.append(
+                f"{PROVIDER_SCOUT_REQUIREMENTS}: secret-bearing provider scout dependency must match the reviewed exact version and SHA-256 hash"
+            )
     return errors
 
 

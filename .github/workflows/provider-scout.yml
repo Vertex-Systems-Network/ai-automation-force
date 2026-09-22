@@ -37,7 +37,7 @@ jobs:
           cache-dependency-path: automation/requirements-scout.txt
 
       - name: Install scout dependencies
-        run: python -m pip install --disable-pip-version-check -r automation/requirements-scout.txt
+        run: python -m pip install --disable-pip-version-check --require-hashes --only-binary=:all: -r automation/requirements-scout.txt
 
       - name: Unit tests
         run: python -m unittest discover -s automation/tests -p "test_*.py" -v
