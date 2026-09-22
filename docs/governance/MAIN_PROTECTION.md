@@ -16,8 +16,9 @@ The governance hardening therefore establishes stable distinct job contexts:
 
 - `core-domain-contracts`
 - `durable-control-plane`
+- `repository-governance`
 
-Both workflows are configured to run on **every pull request**, so required checks cannot remain permanently `Expected` on documentation/governance-only PRs.
+All three workflows are configured to run on **every pull request**, so required checks cannot remain permanently `Expected` on documentation/governance-only PRs. Repository Governance is included because current promotion policy already treats it as a mandatory exact-head gate.
 
 ## Target live policy
 
@@ -25,7 +26,7 @@ The idempotent applicator `scripts/apply_main_protection.ps1` configures:
 
 - pull-request-only integration;
 - strict/up-to-date required checks;
-- required contexts `core-domain-contracts` and `durable-control-plane`;
+- required contexts `core-domain-contracts`, `durable-control-plane`, and `repository-governance`, each bound to the GitHub Actions app;
 - administrator enforcement;
 - stale-review dismissal;
 - required conversation resolution;
@@ -85,7 +86,7 @@ pwsh scripts/verify_main_protection.ps1 -ReviewMode independent
 
 or the matching solo mode.
 
-The verifier reads live GitHub protection and fails unless it observes the expected policy, including both distinct required contexts. It also rejects the legacy ambiguous required context `validate`.
+The verifier reads live GitHub protection and fails unless it observes the expected policy, including all three required GitHub Actions checks. It also rejects the legacy ambiguous required context `validate`, any pull-request bypass allowance, any review-dismissal actor allowance, and any push-restriction actor list that would make the effective policy differ from the documented PR-only boundary.
 
 `ABD-265` must remain open until live read-back passes and the effective protection is independently re-read through GitHub evidence.
 

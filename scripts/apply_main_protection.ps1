@@ -33,7 +33,8 @@ $payload = [ordered]@{
         contexts = @()
         checks = @(
             [ordered]@{ context = "core-domain-contracts"; app_id = $GitHubActionsAppId },
-            [ordered]@{ context = "durable-control-plane"; app_id = $GitHubActionsAppId }
+            [ordered]@{ context = "durable-control-plane"; app_id = $GitHubActionsAppId },
+            [ordered]@{ context = "repository-governance"; app_id = $GitHubActionsAppId }
         )
     }
     enforce_admins = $true
@@ -73,7 +74,7 @@ finally {
 }
 
 Write-Host "Applied protected-$Branch policy to $Repository."
-Write-Host "Required GitHub Actions checks: core-domain-contracts, durable-control-plane (app_id=$GitHubActionsAppId)"
+Write-Host "Required GitHub Actions checks: core-domain-contracts, durable-control-plane, repository-governance (app_id=$GitHubActionsAppId)"
 if ($ReviewMode -eq "independent") {
     Write-Host "Review mode: at least one independent approving review; stale approvals dismissed; last-push approval enforced."
 }
