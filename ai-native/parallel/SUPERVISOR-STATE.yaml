@@ -1,9 +1,9 @@
-version: 28
+version: 29
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
-  main_sha_last_reconciled: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
+  main_sha_last_promotion: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
+  main_sha_last_reconciled: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: m04-consent-granted-and-m03-admin-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 116
-  submitted_head_sha: 575e4946b160776498eeb54910c335c50c72ff1d
-  merged_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
+  pr: 117
+  submitted_head_sha: 6a9b9b52650ffc1ff2b75b32beadbbc028966e95
+  merged_main_sha: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
   result: success
 
 new_agent_onboarding:
@@ -61,24 +61,24 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 116
-  submitted_head_sha: 575e4946b160776498eeb54910c335c50c72ff1d
-  merged_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
+  pr: 117
+  submitted_head_sha: 6a9b9b52650ffc1ff2b75b32beadbbc028966e95
+  merged_main_sha: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
   result: success
 
 compact_state:
   path: ai-native/parallel/state
-  current_milestone: post-pr116-state-reconcile
-  milestone_status: VERIFYING
-  active_branch: supervisor/post-pr116-state-reconcile
+  current_milestone: m03-governance-hold
+  milestone_status: WAITING_EXTERNAL
+  active_branch: supervisor/m03-governance-hold-current
   active_issue: 36
-  active_pr: 117
+  active_pr: null
   tracked_security_pr: null
-  last_completed_milestone: pr-116-m04-scoped-consent
-  exact_next_safe_action: resolve PR 117 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 still waits only for Issue 36
+  last_completed_milestone: pr-117-post-pr116-state-reconcile
+  exact_next_safe_action: verify Issue 36 live protected-main evidence from an admin-capable context; current connector cannot write protection; after closure revalidate ownership/migration/security and implement approved Issue 114
   progress:
-    current_module_percent: 90
-    current_module_basis: PR 117 is open with repaired post-PR116 durable truth and corrected physical branch-sync evidence; exact-head verification remains
+    current_module_percent: 80
+    current_module_basis: M03 source/closeout complete; live protected-main administrator gate remains
     overall_roadmap_percent: 19
     overall_roadmap_basis: 3 of 16 M0-M15 milestones accepted; M03 final governance remains blocked by Issue 36
 
