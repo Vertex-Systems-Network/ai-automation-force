@@ -314,3 +314,13 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - M04 branch remains current-main synchronized; M03/M05/M06/M07/M08/QA remain physically at Broadcast 24 `5c09918e6d1c0f06aa4d0890c58921f94466e509`.
 - No migration reservation, executable product/schema/API/test change, CI weakening, or Broadcast 25 is included.
 - Milestone moved to `VERIFYING`; next action is one exact-head review/CI refresh and guarded merge if all checks succeed.
+
+
+## 2026-09-22 — Post-PR117 closeout correction
+
+- Verified live `main@8b94172e6548170fbea245a8efd2f1aa58ba8e39`, PR #117 merged, open PRs empty, and Issue #36 still the sole executable M04 gate.
+- Detected that PR #117's merged compact/README surfaces still described PR #117 itself as active/verifying; this self-referential state caused unnecessary reconciliation churn.
+- Corrected compact state to `M03-GOV-HOLD / WAITING_EXTERNAL`, removed the completed transient reconciliation task from ACTIVE-WORK, and recorded PR #117 as the last completed reconciliation milestone.
+- Live branch summary still reports `protected=false`; repository/inherited rulesets are empty and the connected GitHub App cannot write protection.
+- M04 remains approved and consented but executable start stays blocked by Issue #36. No migration reservation or product/schema/API/test change is introduced.
+- Future resumes must re-resolve live GitHub truth first and must not create another state-only PR merely because this closeout PR's own merge SHA is not recursively written into compact state.

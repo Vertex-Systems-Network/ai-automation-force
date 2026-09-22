@@ -2,21 +2,18 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
+observed_main_sha: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
 active_issue: 36
-active_pr: 117
+active_pr: null
 tracked_security_pr: null
-active_branch: supervisor/post-pr116-state-reconcile
-current_milestone: SUP-GOV-POST-PR116-STATE-RECONCILE
-milestone_status: VERIFYING
+active_branch: supervisor/m03-governance-hold-current
+current_milestone: M03-GOV-HOLD
+milestone_status: WAITING_EXTERNAL
 last_completed_milestone:
-  id: PR-116-M04-SCOPED-CONSENT
-  merged_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
-exact_next_safe_action: resolve PR 117 exact head/base/review/mergeability and perform one consolidated exact-head CI refresh; if terminal green and clean use expected-head guarded merge; executable M04 still waits only for Issue 36
-pending_runner_ids:
-  - RB-PR117-GOV-001
-  - RB-PR117-CORE-001
-  - RB-PR117-DURABLE-001
+  id: PR-117-POST-PR116-STATE-RECONCILE
+  merged_main_sha: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
+exact_next_safe_action: verify Issue 36 live protected-main evidence from an admin-capable context; current connector cannot write branch protection; after closure re-read live main, revalidate M04 ownership/migration/security, reserve exactly one revision, and implement approved Issue 114 without another consent round
+pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
@@ -33,9 +30,9 @@ timeout_control:
   second_refresh_requires_material_transition_and_durable_exception: true
 progress:
   current_module:
-    name: Post-PR116 durable-state reconciliation
-    percent: 90
-    basis: PR 117 is open with stale compact/README truth and false lane-sync SHA claims corrected; exact-head verification remains before promotion
+    name: M03 Protected Main Governance
+    percent: 80
+    basis: source implementation and repository-native closeout are complete; live GitHub main protection is the sole remaining gate
   overall_roadmap:
     percent: 19
     accepted_milestones: 3
