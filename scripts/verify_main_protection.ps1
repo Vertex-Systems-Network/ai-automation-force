@@ -40,7 +40,7 @@ if ($protection.required_status_checks.strict -ne $true) {
 
 $contexts = @($protection.required_status_checks.contexts)
 $checks = @($protection.required_status_checks.checks)
-foreach ($required in @("core-domain-contracts", "durable-control-plane")) {
+foreach ($required in @("core-domain-contracts", "durable-control-plane", "repository-governance")) {
     $bound = @($checks | Where-Object {
         $_.context -eq $required -and [int]$_.app_id -eq $GitHubActionsAppId
     })
@@ -74,6 +74,25 @@ if ($reviews.dismiss_stale_reviews -ne $true) {
     Fail "stale review dismissal is disabled."
 }
 
+foreach ($policy in @(
+    @{ Name = "review dismissal restrictions"; Value = $reviews.dismissal_restrictions },
+    @{ Name = "pull-request bypass allowances"; Value = $reviews.bypass_pull_request_allowances }
+)) {
+    if ($null -ne $policy.Value) {
+        $subjects = @($policy.Value.users) + @($policy.Value.teams) + @($policy.Value.apps)
+        if (@($subjects | Where-Object { $null -ne $_ }).Count -gt 0) {
+            Fail "$($policy.Name) must be empty; no user, team, or app bypass/dismissal actors are permitted."
+        }
+    }
+}
+
+if ($null -ne $protection.restrictions) {
+    $pushSubjects = @($protection.restrictions.users) + @($protection.restrictions.teams) + @($protection.restrictions.apps)
+    if (@($pushSubjects | Where-Object { $null -ne $_ }).Count -gt 0) {
+        Fail "push restrictions must be empty; PR-only integration must not depend on an undocumented actor allowlist."
+    }
+}
+
 if ($ReviewMode -eq "independent") {
     if ([int]$reviews.required_approving_review_count -lt 1) {
         Fail "independent review mode requires at least one approving review."
@@ -90,7 +109,7 @@ else {
 }
 
 Write-Host "PASS: live main protection is effective for $Repository/$Branch."
-Write-Host "Strict required GitHub Actions checks: core-domain-contracts, durable-control-plane (app_id=$GitHubActionsAppId)"
+Write-Host "Strict required GitHub Actions checks: core-domain-contracts, durable-control-plane, repository-governance (app_id=$GitHubActionsAppId)"
 Write-Host "PR-only integration: enforced"
 Write-Host "Admin enforcement: enabled"
 Write-Host "Conversation resolution: required"
