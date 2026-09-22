@@ -52,24 +52,60 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $core = Get-Content '.github/workflows/core-contracts.yml' -Raw
           $durable = Get-Content '.github/workflows/control-plane.yml' -Raw
+          $governance = Get-Content '.github/workflows/repository-governance.yml' -Raw
           $apply = Get-Content 'scripts/apply_main_protection.ps1' -Raw
           $verify = Get-Content 'scripts/verify_main_protection.ps1' -Raw
 
           foreach ($pair in @(
             @{ Text = $core; Marker = 'name: core-domain-contracts'; Label = 'core workflow' },
             @{ Text = $durable; Marker = 'name: durable-control-plane'; Label = 'durable workflow' },
+            @{ Text = $governance; Marker = 'name: repository-governance'; Label = 'governance workflow' },
             @{ Text = $apply; Marker = 'core-domain-contracts'; Label = 'apply script core context' },
             @{ Text = $apply; Marker = 'durable-control-plane'; Label = 'apply script durable context' },
+            @{ Text = $apply; Marker = 'repository-governance'; Label = 'apply script governance context' },
             @{ Text = $verify; Marker = 'core-domain-contracts'; Label = 'verify script core context' },
-            @{ Text = $verify; Marker = 'durable-control-plane'; Label = 'verify script durable context' }
+            @{ Text = $verify; Marker = 'durable-control-plane'; Label = 'verify script durable context' },
+            @{ Text = $verify; Marker = 'repository-governance'; Label = 'verify script governance context' },
+            @{ Text = $verify; Marker = 'bypass_pull_request_allowances'; Label = 'verify script bypass validation' }
           )) {
             if (-not $pair.Text.Contains($pair.Marker)) {
               throw "$($pair.Label) missing marker: $($pair.Marker)"
             }
           }
 
-          if ($core -notmatch '(?m)^  pull_request:\s*$') { throw 'Core Domain Contracts must run on every pull request.' }
-          if ($durable -notmatch '(?m)^  pull_request:\s*$') { throw 'Durable Control Plane must run on every pull request.' }
+          if ($core -notmatch '(?m)^  pull_request:\s*
+          if ($apply.Contains('"validate"')) { throw 'Protection applicator must not require ambiguous legacy validate context.' }
+
+          Write-Host 'Repository governance static contract PASS.'
+
+      - name: Self-test parallel governance validator
+        run: python3 scripts/validate_parallel_governance.py --self-test
+
+      - name: Validate Supervisor multi-agent governance
+        run: python3 scripts/validate_parallel_governance.py
+) { throw 'Core Domain Contracts must run on every pull request.' }
+          if ($durable -notmatch '(?m)^  pull_request:\s*
+          if ($apply.Contains('"validate"')) { throw 'Protection applicator must not require ambiguous legacy validate context.' }
+
+          Write-Host 'Repository governance static contract PASS.'
+
+      - name: Self-test parallel governance validator
+        run: python3 scripts/validate_parallel_governance.py --self-test
+
+      - name: Validate Supervisor multi-agent governance
+        run: python3 scripts/validate_parallel_governance.py
+) { throw 'Durable Control Plane must run on every pull request.' }
+          if ($governance -notmatch '(?m)^  pull_request:\s*
+          if ($apply.Contains('"validate"')) { throw 'Protection applicator must not require ambiguous legacy validate context.' }
+
+          Write-Host 'Repository governance static contract PASS.'
+
+      - name: Self-test parallel governance validator
+        run: python3 scripts/validate_parallel_governance.py --self-test
+
+      - name: Validate Supervisor multi-agent governance
+        run: python3 scripts/validate_parallel_governance.py
+) { throw 'Repository Governance must run on every pull request.' }
           if ($apply.Contains('"validate"')) { throw 'Protection applicator must not require ambiguous legacy validate context.' }
 
           Write-Host 'Repository governance static contract PASS.'
