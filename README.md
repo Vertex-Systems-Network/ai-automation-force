@@ -221,15 +221,16 @@ This proves the difficult architecture before scaling to longer productions.
 This is the authoritative human-visible progress snapshot. It must be reconciled before every engineering response and updated in the same integration cycle whenever material repository progress/state changes.
 
 - **Last reconciled:** 2026-09-23
-- **Progress snapshot baseline main:** `99680ba3beb4da26f7a4bd5f1afa548910bcdaec` — PR #119 merged; live main is re-resolved every turn
+- **Progress snapshot baseline main:** `7ed8a2e755c80834a0b3b10a7445a81ea4c4ba9c` — PR #122 merged; live main is re-resolved every turn
 - **Accepted roadmap milestones:** `3/16` — `██░░░░░░░░` **19%**
 - **M03 Protected Main Governance:** `████████░░` **80%** — source/closeout complete; Issue #36 live GitHub admin protection remains
-- **Protected-main enforcement tooling:** ✅ PR #119 merged — applicator/verifier now require `repository-governance`, `core-domain-contracts`, and `durable-control-plane` bound to GitHub Actions and fail closed on undocumented bypass/dismissal/push actors
+- **Protected-main enforcement tooling:** ✅ PR #119 merged — applicator/verifier require `repository-governance`, `core-domain-contracts`, and `durable-control-plane` bound to GitHub Actions and fail closed on undocumented bypass/dismissal/push actors
+- **Provider Scout supply-chain security:** ✅ PR #122 merged / Issue #121 completed — secret-bearing scout dependency is exact-version/hash pinned, binary-only, and guarded by Repository Governance
 - **M04 execution preflight:** `██████████` **100%** — Issue #111 completed/closed; existing M01 domain/persistence reuse confirmed and Path A minimal early Workspace ownership substrate selected
 - **M04-WP1A execution package:** `██████████` **100% approved/ready** — Issue #114 is the canonical approved execution ticket; pre-code review is complete and consent/merge authority are already recorded
 - **M04 executable development:** `░░░░░░░░░░` **0%** — explicit scoped M04-WP1A consent is granted; executable start remains conditionally blocked only by Issue #36 live protected-main closure
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is canonical
-- **Active executable/source PR:** none — PR #119 governance hardening merged; no M04 executable source PR is active
+- **Active executable/source PR:** none — PR #122 security hardening merged; no M04 executable source PR is active
 - **Open planning/governance Issues:** #36 (sole executable gate) and #114 (approved M04-WP1A execution ticket)
 - **Current bounded work:** M03 governance hold — apply and verify live protected-main administrator policy for Issue #36; all seven active lanes are synchronized to current main and no executable M04 code starts before the gate closes
 - **Exact next product-development path:** close Issue #36 with live protected-main evidence → fresh current-main/migration/write-ownership/security revalidation → reserve exactly one migration → activate and implement approved Issue #114 M04-WP1A
