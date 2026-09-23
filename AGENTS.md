@@ -364,3 +364,10 @@ Human/independent approval remains required when configured or materially necess
 - Class C/D automated self-update changes.
 
 Routine research, planning, audits, non-executable documentation and analysis may proceed without unnecessary per-step questions. Executable implementation may proceed only inside an explicitly approved development scope.
+
+
+## VSN organization next-action handoff
+
+Before every user-facing development handoff, read and follow `.ai/NEXT-ACTION-OPTIONS.md`.
+
+If the user sends only this repository's GitHub URL, perform the policy's read-only bootstrap and return shuffled numbered next-action options. A URL-only message never authorizes a repository mutation. A later numeric selection must revalidate live repository state before acting.
