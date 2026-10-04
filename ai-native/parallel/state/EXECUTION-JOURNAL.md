@@ -324,3 +324,14 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Live branch summary still reports `protected=false`; repository/inherited rulesets are empty and the connected GitHub App cannot write protection.
 - M04 remains approved and consented but executable start stays blocked by Issue #36. No migration reservation or product/schema/API/test change is introduced.
 - Future resumes must re-resolve live GitHub truth first and must not create another state-only PR merely because this closeout PR's own merge SHA is not recursively written into compact state.
+
+## 2026-10-05 — bounded delivery batch mode requested
+
+- Operator explicitly reported that micro-batches were slowing development and requested a larger-batch execution model.
+- Created Issue #129 to track the governance change.
+- Started `supervisor/bounded-delivery-batch-mode` from exact live `main@72430d396eaf1c00d2213049d5c4f422f45d24a3`.
+- Replaced one-turn/one-logical-milestone semantics with one-turn/one-bounded-delivery-batch semantics across AGENTS, schedule governance, next-action handoff, multi-agent protocol, README summary and compact resume state.
+- Default target: one approved work package or 2–5 tightly related sub-slices; PR/CI/merge/post-merge boundaries no longer force a stop.
+- Preserved exact-head CI, security, migration, consent, external evidence, write ownership and Issue #36 gates.
+- CI refresh budget is now per exact candidate head: one normal consolidated refresh plus one later terminal recheck after useful work/material transition; no tight polling.
+
