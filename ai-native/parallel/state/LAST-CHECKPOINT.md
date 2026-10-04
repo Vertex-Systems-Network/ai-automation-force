@@ -26,3 +26,14 @@ The post-PR116/117 durable-state reconciliation is complete. The repository must
 ## Exact next safe action
 
 Apply and verify effective `main` protection from an admin-capable GitHub context, attach repository-native live evidence, and close Issue #36. Immediately after closure: re-read compact/live main, synchronize and revalidate the M04 execution lane, re-check write ownership/collisions and migration registry, reserve exactly one revision, activate M04-WP1A executable ownership, and implement Issue #114 without another planning or consent round.
+
+## 2026-10-05 — bounded delivery batch governance transition
+
+- Operator identified micro-batching as a throughput problem and explicitly requested larger batches.
+- Governance Issue #129 records the change from one-turn/one-logical-milestone to **one-turn/one-bounded-delivery-batch**.
+- Default delivery target is now one whole approved work package or 2–5 tightly related sub-slices inside the same approved milestone/dependency chain.
+- A batch may continue through implementation, tests, security review, PR creation, exact-head CI, evidence-backed fixes, guarded merge, post-merge synchronization and the next immediately dependent in-scope slice.
+- PR/CI/merge boundaries no longer force an operator round-trip by themselves.
+- Exact-head status budget is one normal consolidated refresh plus at most one later terminal recheck after other useful work/material transition; tight polling remains forbidden.
+- Batching does not expand consent and does not bypass Issue #36, security, migration/data-safety, write-ownership, provider/production or external-evidence gates.
+- Live baseline at transition: `main@72430d396eaf1c00d2213049d5c4f422f45d24a3`; Issue #36 remains `EXTERNAL_NOT_VERIFIED`; M04-WP1A remains approved/ready but blocked from executable start by #36.
