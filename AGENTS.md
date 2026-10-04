@@ -37,11 +37,35 @@ Keep the compact layer bounded:
 
 Before reporting a meaningful milestone as complete, blocked, verifying, or waiting, reconcile the compact state, rolling journal when a meaningful transition occurred, coordination queue when changed, and Runner Benchmark when changed. If durable state cannot be written, do not claim full completion.
 
-## One operator turn = one logical milestone
+## One operator turn = one bounded delivery batch
 
-By default, one operator `continue`/`resume` turn performs one bounded logical engineering milestone. Do not chain a broad audit, multiple unrelated implementations, repeated CI polling, merge, post-merge audit, and unrelated next task into one turn.
+By default, one operator `continue` / `resume` turn executes the **largest safe contiguous delivery batch** inside the currently approved scope and dependency chain.
 
-Security/incident work may contain tightly coupled actions only when splitting them would reduce safety.
+Default batch target:
+- one whole approved work package; or
+- **2–5 tightly related sub-slices** inside the same approved milestone when that is the natural delivery unit.
+
+A batch may carry the same scope through:
+- live-state / instruction reconciliation;
+- implementation of related sub-slices;
+- targeted tests and security/adversarial review;
+- PR creation and exact-head review;
+- CI observation and evidence-backed fixes;
+- guarded merge;
+- post-merge state/branch synchronization;
+- the next immediately dependent sub-slice when it remains inside the same approved scope.
+
+Do **not** end a batch merely because a branch, PR, CI, merge, or post-merge boundary was reached. Those are lifecycle stages, not automatic operator-stop points.
+
+Stop or split the batch only when continuing would cross a real boundary, including:
+- a new consent scope or materially different milestone;
+- an unresolved external/admin/provider/production evidence gate;
+- a destructive or newly risky migration/data operation requiring separate authority;
+- a security incident or invariant that requires isolation;
+- a write-ownership/dependency conflict;
+- required remote checks that remain non-terminal after the allowed refresh budget and no other safe in-scope work remains.
+
+Do not combine unrelated modules merely to make the batch larger. Batching increases throughput; it never expands authorization or weakens exact-head, security, migration, review, rights, budget, or external-evidence gates.
 
 ## Remote-call and CI budget
 
