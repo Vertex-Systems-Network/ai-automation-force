@@ -69,9 +69,18 @@ Do not combine unrelated modules merely to make the batch larger. Batching incre
 
 ## Remote-call and CI budget
 
-Batch related read-only calls where supported and read only evidence required for the active milestone. Perform at most one consolidated CI/status refresh per milestone by default. Never tight-poll workflows, deployments, providers, or status endpoints, and never rerun a workflow merely because a chat/UI response timed out.
+Batch related read-only calls where supported and read only evidence required for the active delivery batch.
 
-Before final exact-head CI observation, persist the milestone as `VERIFYING` or `WAITING_EXTERNAL` when remote checks are expected. If required CI is still running after the consolidated refresh, do not create another source commit solely to record that CI is pending. Record run IDs on the PR/Issue status surface when possible and end the milestone. A second same-turn refresh is allowed only after a material security/merge/incident/provider transition that makes it necessary for a safe decision; record the exception durably.
+For each **exact candidate head**:
+- perform one normal consolidated CI/status refresh;
+- if required checks are queued/running, continue other useful non-conflicting in-scope work rather than ending the whole batch immediately;
+- allow one later terminal recheck in the same operator turn after other useful work or a material transition;
+- default maximum: **2 consolidated status refreshes per exact head per turn**;
+- a materially changed/fixed head receives a fresh exact-head verification budget because prior CI cannot certify the new head.
+
+Never tight-poll workflows, deployments, providers, or status endpoints. Never rerun a workflow merely because a chat/UI response timed out.
+
+If the second exact-head observation is still non-terminal and no other safe in-scope work remains, persist that surface as `VERIFYING` / `WAITING_EXTERNAL`, record run IDs on the PR/Issue where possible, and stop only that blocked surface. Other independent work inside the same approved delivery batch may continue.
 
 ## Runner Benchmark
 
