@@ -28,6 +28,19 @@ Before mutation:
 4. Revalidate any active lease/single-writer state before touching a shared mutation surface.
 5. Continue accepted existing work before inventing unrelated work unless the repository's own roadmap says otherwise.
 
+## Bounded delivery batch mode
+Scheduled and interactive development should optimize for **completed delivery units**, not chat-sized micro-steps.
+
+Within an already-authorized scope, the default batch is:
+- one whole approved work package; or
+- 2–5 tightly related sub-slices in the same milestone/dependency chain.
+
+A single batch may continue through implementation, targeted tests, security review, PR creation, exact-head CI, evidence-backed fixes, guarded merge, post-merge reconciliation and the next immediately dependent in-scope slice. A PR/CI/merge boundary is not by itself a reason to stop.
+
+When remote checks are non-terminal, use the exact-head refresh budget from `AGENTS.md`: continue useful non-conflicting work, then perform at most one later terminal recheck for that same head in the turn. Never tight-poll.
+
+Batching does not expand standing consent and does not cross a new development-consent scope, external/admin/provider gate, destructive migration boundary, security isolation boundary, or write-ownership conflict. Unrelated modules must not be grouped merely to increase batch size.
+
 ## Continuous forward progress — no idle/pause behavior
 Scheduled AI must keep advancing authorized actionable work during the run. A pending CI/runner, open review, external dependency, blocked PR/MR, unresolved Issue or one failed action is not completion and must not make the scheduled program idle.
 
