@@ -53,7 +53,7 @@ class PostgresProductionRepository:
             )
         try:
             with self.engine.begin() as connection:
-                existing = self.database.row_by_external(
+                existing = self.database.row_by_external_in_workspace(
                     connection,
                     "projects",
                     project_id,
