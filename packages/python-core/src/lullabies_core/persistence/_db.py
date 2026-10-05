@@ -101,6 +101,7 @@ REQUIRED_TABLES = {
     "timeline_tracks",
     "timelines",
     "voice_profiles",
+    "workspaces",
     "world_reference_assets",
     "worlds",
 }
