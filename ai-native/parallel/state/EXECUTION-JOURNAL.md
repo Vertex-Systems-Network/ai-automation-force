@@ -335,3 +335,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Preserved exact-head CI, security, migration, consent, external evidence, write ownership and Issue #36 gates.
 - CI refresh budget is now per exact candidate head: one normal consolidated refresh plus one later terminal recheck after useful work/material transition; no tight polling.
 
+## 2026-10-05 — PR #130 merge and Broadcast 25
+
+- PR #130 exact head `9801ebcaee8f2c67279e44f61beff5d90c353901` reached terminal green on all three required workflows and merged with expected-head protection to `main@26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff`.
+- Issue #129 closed completed.
+- Seven active lanes were verified zero-ahead and non-force synchronized to the new main.
+- Issued material Broadcast 25 because PR #130 changes active-agent execution semantics from micro-milestones to bounded delivery batches.
+- Broadcast 25 records one approved work package / 2-5 tightly related sub-slices as the default batch target while preserving consent, exact-head CI, security, migration, external-evidence and write-ownership gates.
+- Post-merge reconciliation is non-recursive and must not create Broadcast 26.
+
