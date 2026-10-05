@@ -536,6 +536,7 @@ class BundleWriter:
         return {
             "id": ids.require("characters", character.character_id),
             "external_id": character.character_id,
+            "workspace_id": character.workspace_id,
             "schema_version": character.schema_version,
             "name": character.name,
             "active_version_id": ids.require(
@@ -630,6 +631,7 @@ class BundleWriter:
         return {
             "id": ids.require("worlds", world.world_id),
             "external_id": world.world_id,
+            "workspace_id": world.workspace_id,
             "schema_version": world.schema_version,
             "name": world.name,
             "description": world.description,
@@ -643,6 +645,7 @@ class BundleWriter:
         return {
             "id": ids.require("locations", location.location_id),
             "external_id": location.location_id,
+            "workspace_id": location.workspace_id,
             "schema_version": location.schema_version,
             "world_id": ids.optional("worlds", location.world_id),
             "name": location.name,
@@ -655,6 +658,7 @@ class BundleWriter:
         return {
             "id": ids.require("props", prop.prop_id),
             "external_id": prop.prop_id,
+            "workspace_id": prop.workspace_id,
             "schema_version": prop.schema_version,
             "name": prop.name,
             "description": prop.description,
