@@ -486,6 +486,7 @@ class BundleWriter:
         return {
             "id": ids.require("projects", project.project_id),
             "external_id": project.project_id,
+            "workspace_id": project.workspace_id,
             "schema_version": project.schema_version,
             "title": project.title,
             "status": project.status.value,
