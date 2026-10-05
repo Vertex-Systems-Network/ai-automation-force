@@ -6,7 +6,11 @@ from uuid import UUID
 from sqlalchemy import select
 from sqlalchemy.engine import Connection, RowMapping
 
-from ._db import DatabaseMap, PersistenceNotFoundError
+from ._db import (
+    DatabaseMap,
+    PersistenceNotFoundError,
+    PersistenceShapeError,
+)
 
 WorkspaceRootTable = Literal[
     "characters",
@@ -54,6 +58,30 @@ class PostgresWorkspaceRepository:
                 f"{table_name} {external_id} was not found in workspace {workspace_id}"
             )
         return row
+
+    def create_root(
+        self,
+        connection: Connection,
+        table_name: WorkspaceRootTable,
+        workspace_id: UUID,
+        values: dict[str, object],
+    ) -> RowMapping:
+        """Create a root only after enforcing its canonical workspace scope."""
+        self.get_workspace(connection, workspace_id)
+        supplied_workspace = values.get("workspace_id")
+        if supplied_workspace is not None and supplied_workspace != workspace_id:
+            raise PersistenceShapeError(
+                f"{table_name} workspace does not match requested workspace"
+            )
+        create_values = dict(values)
+        create_values["workspace_id"] = workspace_id
+        self.database.insert(connection, table_name, create_values)
+        external_id = create_values.get("external_id")
+        if not isinstance(external_id, str):
+            raise PersistenceShapeError(
+                f"{table_name} root creation requires an external_id"
+            )
+        return self.get_root(connection, table_name, external_id, workspace_id)
 
     def list_roots(
         self,
