@@ -13,6 +13,7 @@ from .common import (
     StrictModel,
     StyleProfileId,
     VoiceProfileId,
+    DEFAULT_WORKSPACE_ID,
     WorkspaceId,
     WorldId,
 )
@@ -21,7 +22,7 @@ from .common import (
 class World(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     world_id: WorldId
-    workspace_id: WorkspaceId
+    workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID
     name: str = Field(min_length=1, max_length=160)
     description: str = ""
     style_profile_id: StyleProfileId | None = None
