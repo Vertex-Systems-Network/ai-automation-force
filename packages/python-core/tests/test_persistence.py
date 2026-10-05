@@ -308,9 +308,11 @@ def test_workspace_repository_rejects_unknown_workspace(
     )
     unknown_workspace = UUID("00000000-0000-4000-8000-000000000099")
 
-    with migrated_engine.connect() as connection:
-        with pytest.raises(PersistenceNotFoundError, match="workspace"):
-            workspace_repository.get_workspace(connection, unknown_workspace)
+    with (
+        migrated_engine.connect() as connection,
+        pytest.raises(PersistenceNotFoundError, match="workspace"),
+    ):
+        workspace_repository.get_workspace(connection, unknown_workspace)
 
 
 def test_long_form_fixture_is_valid_domain_data() -> None:
