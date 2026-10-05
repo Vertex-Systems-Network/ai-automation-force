@@ -65,20 +65,31 @@ A QA agent independently evaluates implementation assumptions, race conditions, 
 
 A planning/contract agent may prepare future dependency-ready work without touching executable behavior unless applicable development consent exists. Contract changes that affect executable behavior follow the consent gate.
 
-## Supervisor bounded delivery batches
+## Supervisor adaptive delivery trains
 
-The Supervisor should optimize the integration lane for **completed dependency-safe batches**, not one-message micro-milestones.
+The Supervisor optimizes the integration lane for **maximum dependency-safe completion per operator turn**, not a fixed number of sub-slices.
 
-Inside one already-approved milestone/work package, the Supervisor may in one operator turn:
-- review and integrate multiple tightly related agent submissions;
-- apply evidence-backed fixes;
-- advance PRs through exact-head CI and guarded merge;
-- synchronize affected branches after each material merge;
-- continue the next immediately dependent sub-slice when write ownership, contracts, migration state and consent remain valid.
+At every material transition the Supervisor recomputes the ready frontier from live:
+- consent state;
+- dependency graph;
+- active write claims;
+- public contract state;
+- migration reservations;
+- shared-file ownership;
+- PR/check/merge state.
 
-Default target is one whole approved work package or 2–5 tightly related sub-slices. Do not create artificial PR boundaries solely to force another operator round-trip, but keep commits/PRs logically reviewable and reversible.
+Within one already-approved work package/dependency train, the Supervisor may in one turn:
+- coordinate multiple independent agent/read/review lanes;
+- review and integrate multiple related submissions;
+- apply evidence-backed fixes and re-review changed exact heads;
+- park a CI/runner-waiting lane while advancing another safe in-scope lane;
+- perform multiple logically reviewable PR/merge cycles;
+- synchronize affected branches after material merges;
+- continue newly unblocked dependent work without an operator round-trip.
 
-This does not permit overlapping writers, duplicate migration reservations, stale-base promotion, unrelated module bundling, bypass of required CI/review/security gates, or execution beyond approved consent.
+There is no fixed sub-slice-count target. Stop only when the eligible frontier is empty or every remaining path is blocked by a real consent, external-evidence, migration/data-safety, security, ownership/contract, or runtime/tool boundary.
+
+The Supervisor must still keep each commit/PR reviewable and reversible. Adaptive delivery trains do not permit overlapping writers, duplicate migration reservations, stale-base promotion, unrelated module bundling, exact-head CI/review bypass, or execution beyond approved consent.
 
 ## Write ownership rule
 
