@@ -101,6 +101,7 @@ REQUIRED_TABLES = {
     "timeline_tracks",
     "timelines",
     "voice_profiles",
+    "workspaces",
     "world_reference_assets",
     "worlds",
 }
@@ -147,6 +148,20 @@ class DatabaseMap:
         table = self.table(table_name)
         return connection.execute(
             select(table).where(table.c.external_id == external_id)
+        ).mappings().one_or_none()
+
+    def row_by_external_in_workspace(
+        self,
+        connection: Connection,
+        table_name: str,
+        external_id: str,
+        workspace_id: UUID,
+    ) -> RowMapping | None:
+        table = self.table(table_name)
+        return connection.execute(
+            select(table)
+            .where(table.c.external_id == external_id)
+            .where(table.c.workspace_id == workspace_id)
         ).mappings().one_or_none()
 
     def require_row_by_external(

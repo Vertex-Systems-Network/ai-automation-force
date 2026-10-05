@@ -275,6 +275,12 @@
           },
           "title": "Tags",
           "type": "array"
+        },
+        "workspace_id": {
+          "default": "00000000-0000-4000-8000-000000000017",
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
         }
       },
       "required": [
@@ -771,6 +777,12 @@
           "title": "Schema Version",
           "type": "integer"
         },
+        "workspace_id": {
+          "default": "00000000-0000-4000-8000-000000000017",
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
         "world_id": {
           "anyOf": [
             {
@@ -985,6 +997,12 @@
           "title": "Title",
           "type": "string"
         },
+        "workspace_id": {
+          "default": "00000000-0000-4000-8000-000000000017",
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
+        },
         "world_ids": {
           "items": {
             "pattern": "^WRL-[0-9]{6,20}$",
@@ -1062,6 +1080,12 @@
           "default": 1,
           "title": "Schema Version",
           "type": "integer"
+        },
+        "workspace_id": {
+          "default": "00000000-0000-4000-8000-000000000017",
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
         }
       },
       "required": [
@@ -1726,6 +1750,12 @@
           ],
           "default": null,
           "title": "Style Profile Id"
+        },
+        "workspace_id": {
+          "default": "00000000-0000-4000-8000-000000000017",
+          "format": "uuid",
+          "title": "Workspace Id",
+          "type": "string"
         },
         "world_id": {
           "pattern": "^WRL-[0-9]{6,20}$",

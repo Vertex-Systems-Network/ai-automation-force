@@ -4,6 +4,7 @@ import json
 import os
 from collections.abc import Iterator
 from pathlib import Path
+from uuid import UUID
 
 import pytest
 from alembic import command
@@ -18,7 +19,9 @@ from lullabies_core import (
     PersistenceConflictError,
     PersistenceError,
     PersistenceNotFoundError,
+    PersistenceShapeError,
     PostgresProductionRepository,
+    PostgresWorkspaceRepository,
     ProductionLineageBundle,
     Scene,
     Sequence,
@@ -237,6 +240,187 @@ def test_legacy_import_create_then_noop_without_duplicate_rows(
     assert content_count == 1
     assert version_count == 1
     assert ledger_count == 1
+
+
+@pytest.mark.postgres
+def test_repository_denies_cross_workspace_save_and_load(
+    migrated_engine: Engine,
+) -> None:
+    bundle = full_lineage_bundle().model_copy(deep=True)
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+    bundle.project_bundle.project.workspace_id = foreign_workspace
+
+    default_repository = PostgresProductionRepository(migrated_engine)
+    with pytest.raises(PersistenceError, match="not repository workspace"):
+        default_repository.save_bundle(bundle)
+
+    bundle.project_bundle.project.workspace_id = UUID(
+        "00000000-0000-4000-8000-000000000017"
+    )
+    default_repository.save_bundle(bundle)
+    foreign_repository = PostgresProductionRepository(
+        migrated_engine,
+        workspace_id=foreign_workspace,
+    )
+    with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+        foreign_repository.load_bundle(bundle.project_bundle.project.project_id)
+
+
+@pytest.mark.postgres
+def test_workspace_repository_scopes_root_reads_and_lists(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    bundle = full_lineage_bundle()
+    production_repository.save_bundle(bundle)
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        workspace = workspace_repository.get_workspace(connection, workspace_id)
+        character = workspace_repository.get_root(
+            connection, "characters", "CHR-000500", workspace_id
+        )
+        characters = workspace_repository.list_roots(
+            connection, "characters", workspace_id
+        )
+        foreign_characters = workspace_repository.list_roots(
+            connection, "characters", foreign_workspace
+        )
+
+        assert workspace["external_id"] == "workspace-bootstrap-legacy"
+        assert character["external_id"] == "CHR-000500"
+        assert [row["external_id"] for row in characters] == ["CHR-000500"]
+        assert foreign_characters == []
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.get_root(
+                connection, "characters", "CHR-000500", foreign_workspace
+            )
+
+
+@pytest.mark.postgres
+def test_workspace_repository_rejects_unknown_workspace(
+    migrated_engine: Engine,
+) -> None:
+    workspace_repository = PostgresWorkspaceRepository(
+        PostgresProductionRepository(migrated_engine).database
+    )
+    unknown_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with (
+        migrated_engine.connect() as connection,
+        pytest.raises(PersistenceNotFoundError, match="workspace"),
+    ):
+        workspace_repository.get_workspace(connection, unknown_workspace)
+
+
+@pytest.mark.postgres
+def test_workspace_repository_create_root_fails_closed_for_foreign_scope(
+    migrated_engine: Engine,
+) -> None:
+    workspace_repository = PostgresWorkspaceRepository(
+        PostgresProductionRepository(migrated_engine).database
+    )
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        with pytest.raises(PersistenceShapeError, match="does not match"):
+            workspace_repository.create_root(
+                connection,
+                "characters",
+                workspace_id,
+                {
+                    "external_id": "CHR-FOREIGN-0001",
+                    "workspace_id": foreign_workspace,
+                },
+            )
+        with pytest.raises(PersistenceNotFoundError, match="workspace"):
+            workspace_repository.create_root(
+                connection,
+                "characters",
+                foreign_workspace,
+                {"external_id": "CHR-UNKNOWN-0001"},
+            )
+
+
+@pytest.mark.postgres
+def test_workspace_repository_update_is_scoped_to_requested_workspace(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    production_repository.save_bundle(full_lineage_bundle())
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        updated = workspace_repository.update_root(
+            connection,
+            "characters",
+            "CHR-000500",
+            workspace_id,
+            {"name": "Updated in scope"},
+        )
+        assert updated["name"] == "Updated in scope"
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.update_root(
+                connection,
+                "characters",
+                "CHR-000500",
+                foreign_workspace,
+                {"name": "Must not update"},
+            )
+
+
+@pytest.mark.postgres
+def test_character_version_reads_are_parent_workspace_scoped(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    production_repository.save_bundle(full_lineage_bundle())
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        version = workspace_repository.get_character_version(
+            connection, "CHV-000500", workspace_id
+        )
+
+        assert version["external_id"] == "CHV-000500"
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.get_character_version(
+                connection, "CHV-000500", foreign_workspace
+            )
+
+
+
+@pytest.mark.postgres
+def test_active_character_version_pointer_is_workspace_scoped(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    production_repository.save_bundle(full_lineage_bundle())
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        updated = workspace_repository.set_active_character_version(
+            connection, "CHR-000500", "CHV-000500", workspace_id
+        )
+        assert updated["active_version_id"] is not None
+        with pytest.raises(PersistenceNotFoundError, match="workspace"):
+            workspace_repository.set_active_character_version(
+                connection, "CHR-000500", "CHV-000501", foreign_workspace
+            )
+        restored = workspace_repository.get_root(
+            connection, "characters", "CHR-000500", workspace_id
+        )
+        assert restored["active_version_id"] == updated["active_version_id"]
+
 
 
 def test_long_form_fixture_is_valid_domain_data() -> None:

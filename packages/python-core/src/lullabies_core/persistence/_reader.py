@@ -227,6 +227,7 @@ class BundleReader:
         return Project(
             schema_version=row["schema_version"],
             project_id=row["external_id"],
+            workspace_id=row["workspace_id"],
             title=row["title"],
             status=row["status"],
             audience=AudienceProfile.model_validate(row["audience"]),
@@ -795,6 +796,7 @@ class BundleReader:
         return Character(
             schema_version=row["schema_version"],
             character_id=row["external_id"],
+            workspace_id=row["workspace_id"],
             name=row["name"],
             active_version_id=self.db.require_external_for_internal(
                 connection,
@@ -920,6 +922,7 @@ class BundleReader:
         return World(
             schema_version=row["schema_version"],
             world_id=row["external_id"],
+            workspace_id=row["workspace_id"],
             name=row["name"],
             description=row["description"],
             style_profile_id=self.db.external_for_internal(
@@ -957,6 +960,7 @@ class BundleReader:
         return Prop(
             schema_version=row["schema_version"],
             prop_id=row["external_id"],
+            workspace_id=row["workspace_id"],
             name=row["name"],
             description=row["description"],
             canonical_reference_asset_ids=self.db.ordered_external_ids(
@@ -997,6 +1001,7 @@ class BundleReader:
         return Location(
             schema_version=row["schema_version"],
             location_id=row["external_id"],
+            workspace_id=row["workspace_id"],
             world_id=self.db.external_for_internal(
                 connection,
                 "worlds",

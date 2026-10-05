@@ -116,6 +116,7 @@ from .persistence import (
     PostgresProviderAsyncRepository,
     PostgresShareLinkRepository,
     PostgresWorkflowExecutionRepository,
+    PostgresWorkspaceRepository,
     ProviderAsyncConflictError,
     ProviderAsyncVersionConflictError,
     ProviderCallbackConflictError,
@@ -123,6 +124,7 @@ from .persistence import (
     ShareLinkPersistenceConflictError,
     ShareLinkPersistResult,
     WorkflowPersistResult,
+    WorkspaceRootTable,
 )
 from .production import (
     Approval,
@@ -179,6 +181,7 @@ from .timeline import (
     TimelineTrack,
 )
 from .workflow_runtime import WorkflowExecutionRef
+from .workspace import Workspace
 
 __all__ = [
     "ASSET_LIFECYCLE_TRANSITIONS",
@@ -291,6 +294,7 @@ __all__ = [
     "PostgresProviderAsyncRepository",
     "PostgresShareLinkRepository",
     "PostgresWorkflowExecutionRepository",
+    "PostgresWorkspaceRepository",
     "ProductionLineageBundle",
     "Project",
     "ProjectBundle",
@@ -328,7 +332,9 @@ __all__ = [
     "TimelineTrack",
     "VoiceProfile",
     "WorkflowExecutionRef",
+    "Workspace",
     "WorkflowPersistResult",
+    "WorkspaceRootTable",
     "World",
     "assert_job_transition",
     "assert_provider_async_transition",

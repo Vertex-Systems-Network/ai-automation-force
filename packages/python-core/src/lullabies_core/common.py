@@ -3,6 +3,7 @@ from __future__ import annotations
 from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated, Final, Literal
+from uuid import UUID
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
@@ -13,12 +14,7 @@ NonNegativeDecimal = Annotated[Decimal, Field(ge=0)]
 
 
 def external_id_pattern(prefix: str) -> str:
-    """Return the stable external-ID pattern for a canonical entity.
-
-    Six digits remain the minimum for backwards compatibility with repository fixtures,
-    while allowing the namespace to scale without a later contract-breaking widening.
-    Database primary keys remain a separate persistence concern.
-    """
+    """Return the stable external-ID pattern for a canonical entity."""
 
     return rf"^{prefix}-[0-9]{{6,20}}$"
 
@@ -34,6 +30,8 @@ LocationId = Annotated[str, Field(pattern=external_id_pattern("LOC"))]
 PropId = Annotated[str, Field(pattern=external_id_pattern("PRP"))]
 StyleProfileId = Annotated[str, Field(pattern=external_id_pattern("STY"))]
 VoiceProfileId = Annotated[str, Field(pattern=external_id_pattern("VOC"))]
+WorkspaceId = UUID
+DEFAULT_WORKSPACE_ID: Final[WorkspaceId] = UUID("00000000-0000-4000-8000-000000000017")
 ActId = Annotated[str, Field(pattern=external_id_pattern("ACT"))]
 SequenceId = Annotated[str, Field(pattern=external_id_pattern("SEQ"))]
 SceneId = Annotated[str, Field(pattern=external_id_pattern("SCN"))]
@@ -57,12 +55,6 @@ class StrictModel(BaseModel):
 
 
 class AudienceKind(StrEnum):
-    """Built-in audience taxonomy values.
-
-    Registry-owned taxonomy fields accept strings so future configured values do not
-    require a core-schema release. This enum is a convenience set for built-ins.
-    """
-
     BABY = "baby"
     TODDLER = "toddler"
     PRESCHOOL = "preschool"

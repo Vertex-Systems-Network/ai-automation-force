@@ -14,6 +14,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 ALEMBIC_INI = Path(__file__).parents[1] / "alembic.ini"
 
 EXPECTED_CORE_TABLES = {
+    "workspaces",
     "rights_records",
     "style_profiles",
     "projects",
@@ -96,6 +97,7 @@ M03_WP6_SHARE_TABLES = {"delivery_share_links"}
 M03_WP6_POLICY_TABLES = {"asset_delivery_policies"}
 M03_WP7_LIFECYCLE_TABLES = {"asset_lifecycle_states", "asset_lifecycle_events"}
 M03_WP7_EXPORT_TABLES = {"export_staging_objects"}
+M04_WP1A_TABLES = {"workspaces"}
 
 
 def alembic_config() -> Config:
@@ -340,7 +342,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260901_0016"
+        assert revision == "20261005_0017"
 
         project_id = uuid4()
         with engine.begin() as connection:
@@ -463,7 +465,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
 
         command.downgrade(config, "20260901_0015")
         m15_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_export_tables = EXPECTED_CORE_TABLES - M03_WP7_EXPORT_TABLES
+        pre_export_tables = EXPECTED_CORE_TABLES - M03_WP7_EXPORT_TABLES - M04_WP1A_TABLES
         assert m15_tables == pre_export_tables
 
         command.downgrade(config, "20260901_0014")

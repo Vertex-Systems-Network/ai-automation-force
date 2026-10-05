@@ -8,7 +8,7 @@ from sqlalchemy import select
 from sqlalchemy.engine import Connection, Engine
 from sqlalchemy.exc import IntegrityError
 
-from ..common import AuditFields
+from ..common import DEFAULT_WORKSPACE_ID, AuditFields, WorkspaceId
 from ..content import Content, ContentVersion
 from ..legacy_import import (
     LegacyContentImportResult,
@@ -20,6 +20,7 @@ from ._db import (
     DatabaseMap,
     PersistenceConflictError,
     PersistenceError,
+    PersistenceNotFoundError,
     PersistenceShapeError,
     PersistResult,
 )
@@ -34,8 +35,9 @@ class PostgresProductionRepository:
     all public repository identity is expressed through stable external IDs.
     """
 
-    def __init__(self, engine: Engine) -> None:
+    def __init__(self, engine: Engine, workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID) -> None:
         self.engine = engine
+        self.workspace_id = workspace_id
         self.database = DatabaseMap(engine)
         self.reader = BundleReader(self.database)
         self.writer = BundleWriter(self.database)
@@ -43,12 +45,19 @@ class PostgresProductionRepository:
     def save_bundle(self, bundle: ProductionLineageBundle) -> PersistResult:
         canonical = ProductionLineageBundle.model_validate(bundle.model_dump())
         project_id = canonical.project_bundle.project.project_id
+        if canonical.project_bundle.project.workspace_id != self.workspace_id:
+            raise PersistenceShapeError(
+                f"project {project_id} belongs to workspace "
+                f"{canonical.project_bundle.project.workspace_id}, "
+                f"not repository workspace {self.workspace_id}"
+            )
         try:
             with self.engine.begin() as connection:
-                existing = self.database.row_by_external(
+                existing = self.database.row_by_external_in_workspace(
                     connection,
                     "projects",
                     project_id,
+                    self.workspace_id,
                 )
                 if existing is not None:
                     restored = self.reader.load(connection, project_id)
@@ -68,6 +77,13 @@ class PostgresProductionRepository:
 
     def load_bundle(self, project_id: str) -> ProductionLineageBundle:
         with self.engine.connect() as connection:
+            project_row = self.database.row_by_external_in_workspace(
+                connection, "projects", project_id, self.workspace_id
+            )
+            if project_row is None:
+                raise PersistenceNotFoundError(
+                    f"project {project_id} was not found in workspace {self.workspace_id}"
+                )
             return self.reader.load(connection, project_id)
 
     def import_legacy_content(

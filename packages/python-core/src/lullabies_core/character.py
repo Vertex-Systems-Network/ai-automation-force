@@ -5,6 +5,7 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
+    DEFAULT_WORKSPACE_ID,
     SCHEMA_VERSION,
     AssetId,
     AuditFields,
@@ -19,6 +20,7 @@ from .common import (
     SchemaVersion,
     StrictModel,
     VoiceProfileId,
+    WorkspaceId,
 )
 
 
@@ -79,6 +81,7 @@ class CharacterLock(StrictModel):
 class Character(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     character_id: CharacterId
+    workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID
     name: str = Field(min_length=1, max_length=160)
     active_version_id: CharacterVersionId
     lock: CharacterLock

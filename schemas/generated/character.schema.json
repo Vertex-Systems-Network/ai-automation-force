@@ -172,6 +172,12 @@
       },
       "title": "Tags",
       "type": "array"
+    },
+    "workspace_id": {
+      "default": "00000000-0000-4000-8000-000000000017",
+      "format": "uuid",
+      "title": "Workspace Id",
+      "type": "string"
     }
   },
   "required": [
