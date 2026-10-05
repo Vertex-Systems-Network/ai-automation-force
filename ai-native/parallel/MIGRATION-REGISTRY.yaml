@@ -7,7 +7,14 @@ policy:
   migration_dependency_must_match_landed_or_declared_parent: true
   merge_alert_requires_migration_revalidation: true
 
-reservations: []
+reservations:
+  - revision: 20261005_0017
+    task_id: M04-WP1A
+    branch: m04-wp1a-workspace-ownership
+    parent_revision: 20260901_0016
+    purpose: stable Workspace ownership substrate and fail-closed Character/entity repository scope
+    status: reserved
+    reserved_from_main_sha: df0f5e695f0dac69154b2e1293dd86b1204b35e1
 
 landed:
   - revision: 20260901_0015
@@ -39,3 +46,4 @@ notes:
   - Never infer the next revision only from the current branch; inspect current main plus active reservations.
   - Landed revisions are history, not active reservations.
   - The current vector/index cleanup slice has no migration reservation.
+  - 20261005_0017 is reserved exclusively for approved M04-WP1A Workspace ownership work.
