@@ -49,3 +49,16 @@ Apply and verify effective `main` protection from an admin-capable GitHub contex
 - This reconciliation is bookkeeping for already-issued Broadcast 25 and must not recursively create Broadcast 26.
 - Issue #36 remains the sole M04 executable gate; live `main` protection remains externally unverified and cannot be bypassed by batch mode.
 
+## 2026-10-05 — adaptive delivery train enhancement
+
+- Operator requested a second throughput enhancement because the fixed 2–5 sub-slice target remained too conservative.
+- Governance Issue #132 upgrades the execution unit from a counted bounded batch to a frontier-driven **adaptive delivery train**.
+- The fixed sub-slice cap is removed.
+- Each turn repeatedly computes the authorized dependency-safe ready frontier and consumes all non-conflicting eligible work.
+- Soft-blocked lanes (queued CI/runner/review state) may be parked while other in-scope lanes advance.
+- Fixable test/CI failures caused by current changes are repaired and reverified in the same turn instead of becoming automatic handoff points.
+- Multiple logically reviewable PR/merge/post-merge cycles may occur within one approved work package/dependency train.
+- Checkpointing remains material-transition-only; status-only commits and tight polling remain forbidden.
+- Consent, security, migration/data-safety, write-ownership/contracts, provider/production, rights/budget and external-evidence gates remain fail-closed.
+- Live baseline at the enhancement start: `main@7e426d52839648af0087f91bef6c39a42abf2c16`; Issue #36 remains the sole M04 executable gate.
+
