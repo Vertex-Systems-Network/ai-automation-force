@@ -101,7 +101,7 @@ def long_form_bundle() -> ProductionLineageBundle:
         shot_id="SHT-000501",
         scene_id=second_scene.scene_id,
         order=1,
-        time_range=TimeRange(start_seconds=2700, duration=8),
+        time_range=TimeRange(start_seconds=2700, duration_seconds=8),
         purpose="Prove long-form hierarchy ordering",
         action="Mira continues the story in the second half.",
         character_ids=["CHR-000500"],
