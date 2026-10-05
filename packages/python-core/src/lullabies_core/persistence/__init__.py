@@ -60,6 +60,7 @@ from .share_link import (
 from .storage_object import PostgresStorageObjectRepository, StorageObjectPersistResult
 from .upload_session import PostgresUploadSessionRepository, UploadPersistenceConflictError
 from .workflow_execution import PostgresWorkflowExecutionRepository, WorkflowPersistResult
+from .workspace_access import PostgresWorkspaceRepository, WorkspaceRootTable
 
 __all__ = [
     "ApprovalWaitConflictError",
@@ -99,6 +100,7 @@ __all__ = [
     "PostgresStorageObjectRepository",
     "PostgresUploadSessionRepository",
     "PostgresWorkflowExecutionRepository",
+    "PostgresWorkspaceRepository",
     "ProviderAsyncConflictError",
     "ProviderAsyncVersionConflictError",
     "ProviderCallbackConflictError",
@@ -111,4 +113,5 @@ __all__ = [
     "StorageObjectPersistResult",
     "UploadPersistenceConflictError",
     "WorkflowPersistResult",
+    "WorkspaceRootTable",
 ]
