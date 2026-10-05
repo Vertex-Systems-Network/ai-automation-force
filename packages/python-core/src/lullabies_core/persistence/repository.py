@@ -18,8 +18,8 @@ from ..legacy_import import (
 from ..lineage import ProductionLineageBundle
 from ._db import (
     DatabaseMap,
-    PersistenceNotFoundError,
     PersistenceConflictError,
+    PersistenceNotFoundError,
     PersistenceError,
     PersistenceShapeError,
     PersistResult,
@@ -47,7 +47,9 @@ class PostgresProductionRepository:
         project_id = canonical.project_bundle.project.project_id
         if canonical.project_bundle.project.workspace_id != self.workspace_id:
             raise PersistenceShapeError(
-                f"project {project_id} belongs to workspace {canonical.project_bundle.project.workspace_id}, not repository workspace {self.workspace_id}"
+                f"project {project_id} belongs to workspace "
+                f"{canonical.project_bundle.project.workspace_id}, "
+                f"not repository workspace {self.workspace_id}"
             )
         try:
             with self.engine.begin() as connection:
