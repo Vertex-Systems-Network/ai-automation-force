@@ -375,6 +375,40 @@ def test_workspace_repository_update_is_scoped_to_requested_workspace(
             )
 
 
+@pytest.mark.postgres
+def test_character_version_and_look_reads_are_parent_workspace_scoped(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    production_repository.save_bundle(full_lineage_bundle())
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        version = workspace_repository.get_character_version(
+            connection, "CHV-000500", workspace_id
+        )
+        look_table = production_repository.database.table("character_looks")
+        look_id = connection.execute(
+            select(look_table.c.external_id).limit(1)
+        ).scalar_one()
+        look = workspace_repository.get_character_look(
+            connection, str(look_id), workspace_id
+        )
+
+        assert version["external_id"] == "CHV-000500"
+        assert look["external_id"] == look_id
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.get_character_version(
+                connection, "CHV-000500", foreign_workspace
+            )
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.get_character_look(
+                connection, str(look_id), foreign_workspace
+            )
+
+
 def test_long_form_fixture_is_valid_domain_data() -> None:
     try:
         bundle = long_form_bundle()
