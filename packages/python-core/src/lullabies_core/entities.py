@@ -3,6 +3,7 @@ from __future__ import annotations
 from pydantic import Field
 
 from .common import (
+    DEFAULT_WORKSPACE_ID,
     SCHEMA_VERSION,
     AssetId,
     AuditFields,
@@ -13,7 +14,6 @@ from .common import (
     StrictModel,
     StyleProfileId,
     VoiceProfileId,
-    DEFAULT_WORKSPACE_ID,
     WorkspaceId,
     WorldId,
 )
