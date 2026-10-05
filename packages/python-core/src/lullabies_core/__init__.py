@@ -117,7 +117,6 @@ from .persistence import (
     PostgresShareLinkRepository,
     PostgresWorkflowExecutionRepository,
     PostgresWorkspaceRepository,
-    WorkspaceRootTable,
     ProviderAsyncConflictError,
     ProviderAsyncVersionConflictError,
     ProviderCallbackConflictError,
