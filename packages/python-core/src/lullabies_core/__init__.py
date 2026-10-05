@@ -179,6 +179,7 @@ from .timeline import (
     TimelineTrack,
 )
 from .workflow_runtime import WorkflowExecutionRef
+from .workspace import Workspace
 
 __all__ = [
     "ASSET_LIFECYCLE_TRANSITIONS",
@@ -328,6 +329,7 @@ __all__ = [
     "TimelineTrack",
     "VoiceProfile",
     "WorkflowExecutionRef",
+    "Workspace",
     "WorkflowPersistResult",
     "World",
     "assert_job_transition",
