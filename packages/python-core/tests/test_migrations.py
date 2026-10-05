@@ -14,6 +14,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 ALEMBIC_INI = Path(__file__).parents[1] / "alembic.ini"
 
 EXPECTED_CORE_TABLES = {
+    "workspaces",
     "rights_records",
     "style_profiles",
     "projects",
