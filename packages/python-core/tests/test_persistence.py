@@ -4,6 +4,7 @@ import json
 import os
 from collections.abc import Iterator
 from pathlib import Path
+from uuid import UUID
 
 import pytest
 from alembic import command
@@ -237,6 +238,31 @@ def test_legacy_import_create_then_noop_without_duplicate_rows(
     assert content_count == 1
     assert version_count == 1
     assert ledger_count == 1
+
+
+
+@pytest.mark.postgres
+def test_repository_denies_cross_workspace_save_and_load(
+    migrated_engine: Engine,
+) -> None:
+    bundle = full_lineage_bundle().model_copy(deep=True)
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+    bundle.project_bundle.project.workspace_id = foreign_workspace
+
+    default_repository = PostgresProductionRepository(migrated_engine)
+    with pytest.raises(PersistenceError, match="not repository workspace"):
+        default_repository.save_bundle(bundle)
+
+    bundle.project_bundle.project.workspace_id = UUID(
+        "00000000-0000-4000-8000-000000000017"
+    )
+    default_repository.save_bundle(bundle)
+    foreign_repository = PostgresProductionRepository(
+        migrated_engine,
+        workspace_id=foreign_workspace,
+    )
+    with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+        foreign_repository.load_bundle(bundle.project_bundle.project.project_id)
 
 
 def test_long_form_fixture_is_valid_domain_data() -> None:
