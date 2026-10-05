@@ -99,6 +99,12 @@
       "default": null,
       "title": "Style Profile Id"
     },
+    "workspace_id": {
+      "default": "00000000-0000-4000-8000-000000000017",
+      "format": "uuid",
+      "title": "Workspace Id",
+      "type": "string"
+    },
     "world_id": {
       "pattern": "^WRL-[0-9]{6,20}$",
       "title": "World Id",
