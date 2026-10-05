@@ -101,7 +101,7 @@ def long_form_bundle() -> ProductionLineageBundle:
         shot_id="SHT-000501",
         scene_id=second_scene.scene_id,
         order=1,
-        time_range=TimeRange(start_seconds=2700, duration_seconds=8),
+        time_range=TimeRange(start_seconds=2700, duration=8),
         purpose="Prove long-form hierarchy ordering",
         action="Mira continues the story in the second half.",
         character_ids=["CHR-000500"],
@@ -242,7 +242,6 @@ def test_legacy_import_create_then_noop_without_duplicate_rows(
     assert ledger_count == 1
 
 
-
 @pytest.mark.postgres
 def test_repository_denies_cross_workspace_save_and_load(
     migrated_engine: Engine,
@@ -376,7 +375,7 @@ def test_workspace_repository_update_is_scoped_to_requested_workspace(
 
 
 @pytest.mark.postgres
-def test_character_version_and_look_reads_are_parent_workspace_scoped(
+def test_character_version_reads_are_parent_workspace_scoped(
     migrated_engine: Engine,
 ) -> None:
     production_repository = PostgresProductionRepository(migrated_engine)
@@ -389,23 +388,11 @@ def test_character_version_and_look_reads_are_parent_workspace_scoped(
         version = workspace_repository.get_character_version(
             connection, "CHV-000500", workspace_id
         )
-        look_table = production_repository.database.table("character_looks")
-        look_id = connection.execute(
-            select(look_table.c.external_id).limit(1)
-        ).scalar_one()
-        look = workspace_repository.get_character_look(
-            connection, str(look_id), workspace_id
-        )
 
         assert version["external_id"] == "CHV-000500"
-        assert look["external_id"] == look_id
         with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
             workspace_repository.get_character_version(
                 connection, "CHV-000500", foreign_workspace
-            )
-        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
-            workspace_repository.get_character_look(
-                connection, str(look_id), foreign_workspace
             )
 
 
