@@ -24,8 +24,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
