@@ -352,3 +352,12 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Added soft-blocked lane parking, same-turn repair/reverification, multiple related PR/merge cycles, batched evidence reads, parallel safe reviews, and material-transition-only checkpointing.
 - No authorization gate is weakened or expanded by the throughput change.
 
+## 2026-10-05 — PR #133 merge and Broadcast 26
+
+- PR #133 exact head `3fdb564c271500d83456e476148c9a6f78422b86` reached terminal green on all three required workflows and merged with expected-head guard to `main@b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d`.
+- Issue #132 closed completed.
+- Seven active lanes were verified zero-ahead and non-force synchronized to the new main.
+- Issued material Broadcast 26 because PR #133 changes active-agent execution semantics to adaptive delivery trains with no fixed sub-slice count.
+- Broadcast 26 preserves all existing consent, exact-head CI, security, migration/data-safety, external-evidence and write-ownership gates.
+- Post-merge reconciliation is non-recursive and must not create Broadcast 27.
+
