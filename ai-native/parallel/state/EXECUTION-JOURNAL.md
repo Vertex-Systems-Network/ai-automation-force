@@ -344,3 +344,11 @@ This journal is intentionally compact and rolling. Archive older detail to histo
 - Broadcast 25 records one approved work package / 2-5 tightly related sub-slices as the default batch target while preserving consent, exact-head CI, security, migration, external-evidence and write-ownership gates.
 - Post-merge reconciliation is non-recursive and must not create Broadcast 26.
 
+## 2026-10-05 — adaptive delivery train requested
+
+- Operator requested larger/more capable batches beyond the existing bounded delivery batch policy.
+- Created Issue #132 and branch `supervisor/adaptive-delivery-train` from `main@7e426d52839648af0087f91bef6c39a42abf2c16`.
+- New policy removes the fixed 2–5 sub-slice cap and replaces it with repeated ready-frontier execution inside the existing approved scope/dependency graph.
+- Added soft-blocked lane parking, same-turn repair/reverification, multiple related PR/merge cycles, batched evidence reads, parallel safe reviews, and material-transition-only checkpointing.
+- No authorization gate is weakened or expanded by the throughput change.
+
