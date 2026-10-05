@@ -3,6 +3,7 @@ from __future__ import annotations
 from decimal import Decimal
 from enum import StrEnum
 from typing import Annotated, Final, Literal
+from uuid import UUID
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
 
@@ -29,7 +30,8 @@ LocationId = Annotated[str, Field(pattern=external_id_pattern("LOC"))]
 PropId = Annotated[str, Field(pattern=external_id_pattern("PRP"))]
 StyleProfileId = Annotated[str, Field(pattern=external_id_pattern("STY"))]
 VoiceProfileId = Annotated[str, Field(pattern=external_id_pattern("VOC"))]
-WorkspaceId = Annotated[str, Field(pattern=external_id_pattern("WSP"))]
+WorkspaceId = UUID
+DEFAULT_WORKSPACE_ID: Final[WorkspaceId] = UUID("00000000-0000-4000-8000-000000000017")
 ActId = Annotated[str, Field(pattern=external_id_pattern("ACT"))]
 SequenceId = Annotated[str, Field(pattern=external_id_pattern("SEQ"))]
 SceneId = Annotated[str, Field(pattern=external_id_pattern("SCN"))]
