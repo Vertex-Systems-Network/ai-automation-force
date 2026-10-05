@@ -20,6 +20,7 @@ from lullabies_core import (
     PersistenceError,
     PersistenceNotFoundError,
     PostgresProductionRepository,
+    PostgresWorkspaceRepository,
     ProductionLineageBundle,
     Scene,
     Sequence,
@@ -263,6 +264,53 @@ def test_repository_denies_cross_workspace_save_and_load(
     )
     with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
         foreign_repository.load_bundle(bundle.project_bundle.project.project_id)
+
+
+@pytest.mark.postgres
+def test_workspace_repository_scopes_root_reads_and_lists(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    bundle = full_lineage_bundle()
+    production_repository.save_bundle(bundle)
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        workspace = workspace_repository.get_workspace(connection, workspace_id)
+        character = workspace_repository.get_root(
+            connection, "characters", "CHR-000500", workspace_id
+        )
+        characters = workspace_repository.list_roots(
+            connection, "characters", workspace_id
+        )
+        foreign_characters = workspace_repository.list_roots(
+            connection, "characters", foreign_workspace
+        )
+
+        assert workspace["external_id"] == "workspace-bootstrap-legacy"
+        assert character["external_id"] == "CHR-000500"
+        assert [row["external_id"] for row in characters] == ["CHR-000500"]
+        assert foreign_characters == []
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.get_root(
+                connection, "characters", "CHR-000500", foreign_workspace
+            )
+
+
+@pytest.mark.postgres
+def test_workspace_repository_rejects_unknown_workspace(
+    migrated_engine: Engine,
+) -> None:
+    workspace_repository = PostgresWorkspaceRepository(
+        PostgresProductionRepository(migrated_engine).database
+    )
+    unknown_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        with pytest.raises(PersistenceNotFoundError, match="workspace"):
+            workspace_repository.get_workspace(connection, unknown_workspace)
 
 
 def test_long_form_fixture_is_valid_domain_data() -> None:
