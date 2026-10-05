@@ -346,6 +346,35 @@ def test_workspace_repository_create_root_fails_closed_for_foreign_scope(
             )
 
 
+@pytest.mark.postgres
+def test_workspace_repository_update_is_scoped_to_requested_workspace(
+    migrated_engine: Engine,
+) -> None:
+    production_repository = PostgresProductionRepository(migrated_engine)
+    production_repository.save_bundle(full_lineage_bundle())
+    workspace_repository = PostgresWorkspaceRepository(production_repository.database)
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        updated = workspace_repository.update_root(
+            connection,
+            "characters",
+            "CHR-000500",
+            workspace_id,
+            {"name": "Updated in scope"},
+        )
+        assert updated["name"] == "Updated in scope"
+        with pytest.raises(PersistenceNotFoundError, match="not found in workspace"):
+            workspace_repository.update_root(
+                connection,
+                "characters",
+                "CHR-000500",
+                foreign_workspace,
+                {"name": "Must not update"},
+            )
+
+
 def test_long_form_fixture_is_valid_domain_data() -> None:
     try:
         bundle = long_form_bundle()
