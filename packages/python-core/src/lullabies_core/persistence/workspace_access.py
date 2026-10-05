@@ -59,6 +59,50 @@ class PostgresWorkspaceRepository:
             )
         return row
 
+    def get_character_version(
+        self,
+        connection: Connection,
+        external_id: str,
+        workspace_id: UUID,
+    ) -> RowMapping:
+        """Resolve a character version only through its workspace-owned parent."""
+        characters = self.database.table("characters")
+        versions = self.database.table("character_versions")
+        row = connection.execute(
+            select(versions)
+            .join(characters, versions.c.character_id == characters.c.id)
+            .where(versions.c.external_id == external_id)
+            .where(characters.c.workspace_id == workspace_id)
+        ).mappings().one_or_none()
+        if row is None:
+            raise PersistenceNotFoundError(
+                f"character version {external_id} was not found in workspace {workspace_id}"
+            )
+        return row
+
+    def get_character_look(
+        self,
+        connection: Connection,
+        external_id: str,
+        workspace_id: UUID,
+    ) -> RowMapping:
+        """Resolve a look only through its workspace-owned version and character."""
+        characters = self.database.table("characters")
+        versions = self.database.table("character_versions")
+        looks = self.database.table("character_looks")
+        row = connection.execute(
+            select(looks)
+            .join(versions, looks.c.character_version_id == versions.c.id)
+            .join(characters, versions.c.character_id == characters.c.id)
+            .where(looks.c.external_id == external_id)
+            .where(characters.c.workspace_id == workspace_id)
+        ).mappings().one_or_none()
+        if row is None:
+            raise PersistenceNotFoundError(
+                f"character look {external_id} was not found in workspace {workspace_id}"
+            )
+        return row
+
     def create_root(
         self,
         connection: Connection,
