@@ -1,9 +1,9 @@
-version: 30
+version: 31
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-  main_sha_last_reconciled: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+  main_sha_last_promotion: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+  main_sha_last_reconciled: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: m04-consent-granted-and-m03-admin-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 130
-  submitted_head_sha: 9801ebcaee8f2c67279e44f61beff5d90c353901
-  merged_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+  pr: 133
+  submitted_head_sha: 3fdb564c271500d83456e476148c9a6f78422b86
+  merged_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+  head_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,11 +35,11 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 25
+  latest_broadcast_sequence: 26
   agents_with_mandatory_sync: []
   last_completed_branch_sync:
-    broadcast_sequence: 25
-    main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    broadcast_sequence: 26
+    main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
     branches:
       - supervisor/m03-governance-hold-current
       - agent/m04-character-library-current
@@ -61,9 +61,9 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 130
-  submitted_head_sha: 9801ebcaee8f2c67279e44f61beff5d90c353901
-  merged_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+  pr: 133
+  submitted_head_sha: 3fdb564c271500d83456e476148c9a6f78422b86
+  merged_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
   result: success
 
 compact_state:
@@ -74,7 +74,7 @@ compact_state:
   active_issue: 36
   active_pr: null
   tracked_security_pr: null
-  last_completed_milestone: pr-130-bounded-delivery-batch-governance
+  last_completed_milestone: pr-133-adaptive-delivery-train-governance
   exact_next_safe_action: verify Issue 36 live protected-main evidence from an admin-capable context; current connector cannot write protection; after closure revalidate ownership/migration/security and implement approved Issue 114
   progress:
     current_module_percent: 80
@@ -163,8 +163,8 @@ planning_state:
 
 rules:
   - The Supervisor reviews and merges incoming module PRs; module agents do not merge themselves.
-  - Supervisor implementation occurs on its own bounded branch, never directly on main.
-  - Completed submission branches are retired or replaced before the next bounded executable slice.
+  - Supervisor implementation occurs on its own task-scoped branch, never directly on main.
+  - Completed submission branches are retired or replaced before the next adaptive delivery-train executable unit.
   - New agents begin from main and may not self-assign.
   - If no eligible open slot exists, respond exactly Go Home Come Back Next Time and assign no work.
   - A successful merge produces a new broadcast only when it introduces new material state affected agents must observe before resuming; broadcast/runner/compact-state bookkeeping does not recursively create another broadcast.

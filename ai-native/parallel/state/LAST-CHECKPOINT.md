@@ -62,3 +62,14 @@ Apply and verify effective `main` protection from an admin-capable GitHub contex
 - Consent, security, migration/data-safety, write-ownership/contracts, provider/production, rights/budget and external-evidence gates remain fail-closed.
 - Live baseline at the enhancement start: `main@7e426d52839648af0087f91bef6c39a42abf2c16`; Issue #36 remains the sole M04 executable gate.
 
+## 2026-10-05 — PR #133 promoted / Broadcast 26 synchronized
+
+- PR #133 exact head `3fdb564c271500d83456e476148c9a6f78422b86` passed Repository Governance, Core Domain Contracts and Durable Control Plane.
+- PR #133 merged with expected-head guard to `main@b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d`; Issue #132 closed completed.
+- Adaptive delivery train mode is now canonical on `main`; the fixed 2–5 sub-slice cap is removed from active execution policy.
+- Material working-instruction change required Broadcast 26.
+- All seven active M03/M04/M05/M06/M07/M08/QA lanes had zero unique commits and were non-force fast-forwarded to `main@b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d`.
+- Broadcast 26 recipients are recorded synchronized/acknowledged at sequence 26.
+- This reconciliation is bookkeeping for already-issued Broadcast 26 and must not recursively create Broadcast 27.
+- Issue #36 remains the sole M04 executable gate; adaptive delivery trains do not bypass live protected-main evidence.
+

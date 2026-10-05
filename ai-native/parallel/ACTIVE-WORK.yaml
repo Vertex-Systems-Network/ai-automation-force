@@ -1,4 +1,4 @@
-version: 30
+version: 31
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -24,8 +24,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -47,8 +47,8 @@ active:
     migration_reservation: null
     consent_scope: M04-WP1A executable scope approved; start only after Issue 36 closes
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
@@ -67,8 +67,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -87,8 +87,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -109,8 +109,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -130,8 +130,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -150,13 +150,13 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
-    last_acknowledged_broadcast: 25
+    last_synced_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    last_acknowledged_broadcast: 26
     required_broadcast: null
 
 rules:
   - Supervisor owns updates to this registry and all merge decisions.
-  - Completed/merged executable branches are retired or replaced before the next bounded executable slice.
+  - Completed/merged executable branches are retired or replaced before the next adaptive delivery-train executable unit.
   - Overlapping active write claims block parallel execution.
   - Every resume revalidates current main, dependencies, broadcasts, slots, migration state, write ownership, and consent.
   - Every ready submission announces exactly Work Done and Submitted.

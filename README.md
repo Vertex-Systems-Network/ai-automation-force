@@ -233,7 +233,7 @@ This is the authoritative human-visible progress snapshot. It must be reconciled
 - **README progress contract:** ✅ PR #112 merged; mandatory per-turn progress reconciliation is canonical
 - **Active executable/source PR:** none — PR #122 security hardening merged; no M04 executable source PR is active
 - **Open planning/governance Issues:** #36 (sole executable gate) and #114 (approved M04-WP1A execution ticket)
-- **Current bounded work:** M03 governance hold — apply and verify live protected-main administrator policy for Issue #36; all seven active lanes are synchronized to current main and no executable M04 code starts before the gate closes
+- **Current adaptive-train work:** M03 governance hold — apply and verify live protected-main administrator policy for Issue #36; all seven active lanes are synchronized to current main and no executable M04 code starts before the gate closes
 - **Exact next product-development path:** close Issue #36 with live protected-main evidence → fresh current-main/migration/write-ownership/security revalidation → reserve exactly one migration → activate and implement approved Issue #114 M04-WP1A
 
 README progress is evidence, not an activity counter: percentages move only when repository-defined gates move. If a turn is read-only and nothing changes, the snapshot is verified as unchanged rather than artificially incremented.
