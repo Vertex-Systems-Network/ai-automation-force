@@ -315,6 +315,36 @@ def test_workspace_repository_rejects_unknown_workspace(
         workspace_repository.get_workspace(connection, unknown_workspace)
 
 
+@pytest.mark.postgres
+def test_workspace_repository_create_root_fails_closed_for_foreign_scope(
+    migrated_engine: Engine,
+) -> None:
+    workspace_repository = PostgresWorkspaceRepository(
+        PostgresProductionRepository(migrated_engine).database
+    )
+    workspace_id = UUID("00000000-0000-4000-8000-000000000017")
+    foreign_workspace = UUID("00000000-0000-4000-8000-000000000099")
+
+    with migrated_engine.connect() as connection:
+        with pytest.raises(PersistenceShapeError, match="does not match"):
+            workspace_repository.create_root(
+                connection,
+                "characters",
+                workspace_id,
+                {
+                    "external_id": "CHR-FOREIGN-0001",
+                    "workspace_id": foreign_workspace,
+                },
+            )
+        with pytest.raises(PersistenceNotFoundError, match="workspace"):
+            workspace_repository.create_root(
+                connection,
+                "characters",
+                foreign_workspace,
+                {"external_id": "CHR-UNKNOWN-0001"},
+            )
+
+
 def test_long_form_fixture_is_valid_domain_data() -> None:
     try:
         bundle = long_form_bundle()
