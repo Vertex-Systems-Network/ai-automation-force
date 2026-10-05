@@ -124,6 +124,7 @@ from .persistence import (
     ShareLinkPersistenceConflictError,
     ShareLinkPersistResult,
     WorkflowPersistResult,
+    WorkspaceRootTable,
 )
 from .production import (
     Approval,
