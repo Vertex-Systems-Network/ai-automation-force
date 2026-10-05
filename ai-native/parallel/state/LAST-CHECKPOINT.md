@@ -37,3 +37,15 @@ Apply and verify effective `main` protection from an admin-capable GitHub contex
 - Exact-head status budget is one normal consolidated refresh plus at most one later terminal recheck after other useful work/material transition; tight polling remains forbidden.
 - Batching does not expand consent and does not bypass Issue #36, security, migration/data-safety, write-ownership, provider/production or external-evidence gates.
 - Live baseline at transition: `main@72430d396eaf1c00d2213049d5c4f422f45d24a3`; Issue #36 remains `EXTERNAL_NOT_VERIFIED`; M04-WP1A remains approved/ready but blocked from executable start by #36.
+
+## 2026-10-05 — PR #130 promoted / Broadcast 25 synchronized
+
+- PR #130 exact head `9801ebcaee8f2c67279e44f61beff5d90c353901` passed Repository Governance, Core Domain Contracts and Durable Control Plane.
+- PR #130 merged with expected-head guard to `main@26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff`; Issue #129 closed completed.
+- Bounded delivery batch mode is now canonical on `main`.
+- Material working-instruction change required Broadcast 25.
+- All seven active M03/M04/M05/M06/M07/M08/QA lanes had zero unique commits and were non-force fast-forwarded to `main@26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff`.
+- Broadcast 25 recipients are recorded synchronized/acknowledged at sequence 25.
+- This reconciliation is bookkeeping for already-issued Broadcast 25 and must not recursively create Broadcast 26.
+- Issue #36 remains the sole M04 executable gate; live `main` protection remains externally unverified and cannot be bypassed by batch mode.
+

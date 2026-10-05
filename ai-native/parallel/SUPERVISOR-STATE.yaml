@@ -1,9 +1,9 @@
-version: 29
+version: 30
 supervisor:
   role: supervisor
   main_branch: main
-  main_sha_last_promotion: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
-  main_sha_last_reconciled: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
+  main_sha_last_promotion: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+  main_sha_last_reconciled: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   own_task_id: M03-GOV-HOLD
   own_branch: supervisor/m03-governance-hold-current
   current_mode: m04-consent-granted-and-m03-admin-hold
@@ -11,9 +11,9 @@ supervisor:
   post_merge_alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 last_promotion:
-  pr: 117
-  submitted_head_sha: 6a9b9b52650ffc1ff2b75b32beadbbc028966e95
-  merged_main_sha: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
+  pr: 130
+  submitted_head_sha: 9801ebcaee8f2c67279e44f61beff5d90c353901
+  merged_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   result: success
 
 new_agent_onboarding:
@@ -26,7 +26,7 @@ new_agent_onboarding:
 pause_checkpoint:
   active: true
   branch: supervisor/m03-governance-hold-current
-  head_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+  head_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   task_id: M03-GOV-HOLD
   subtask: wait-for-live-protected-main-evidence
   next_action: verify Issue 36 live ruleset/protection read-back from an admin-capable context
@@ -35,11 +35,11 @@ pause_checkpoint:
 review_queue: []
 
 synchronization:
-  latest_broadcast_sequence: 24
+  latest_broadcast_sequence: 25
   agents_with_mandatory_sync: []
   last_completed_branch_sync:
-    broadcast_sequence: 24
-    main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    broadcast_sequence: 25
+    main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
     branches:
       - supervisor/m03-governance-hold-current
       - agent/m04-character-library-current
@@ -61,9 +61,9 @@ external_gates:
 
 
 last_coordination_merge:
-  pr: 117
-  submitted_head_sha: 6a9b9b52650ffc1ff2b75b32beadbbc028966e95
-  merged_main_sha: 8b94172e6548170fbea245a8efd2f1aa58ba8e39
+  pr: 130
+  submitted_head_sha: 9801ebcaee8f2c67279e44f61beff5d90c353901
+  merged_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   result: success
 
 compact_state:
@@ -74,7 +74,7 @@ compact_state:
   active_issue: 36
   active_pr: null
   tracked_security_pr: null
-  last_completed_milestone: pr-117-post-pr116-state-reconcile
+  last_completed_milestone: pr-130-bounded-delivery-batch-governance
   exact_next_safe_action: verify Issue 36 live protected-main evidence from an admin-capable context; current connector cannot write protection; after closure revalidate ownership/migration/security and implement approved Issue 114
   progress:
     current_module_percent: 80

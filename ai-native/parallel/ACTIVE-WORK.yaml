@@ -1,4 +1,4 @@
-version: 29
+version: 30
 supervisor:
   role: supervisor
   assigned_agent: supervisor-agent
@@ -24,8 +24,8 @@ active:
     migration_reservation: null
     consent_scope: M03-governance-closeout-only
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: M04-PARALLEL-LANE
@@ -47,8 +47,8 @@ active:
     migration_reservation: null
     consent_scope: M04-WP1A executable scope approved; start only after Issue 36 closes
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c7af72b1025721b1b8b720a74ae57e883e2ffc4
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: M05-PARALLEL-LANE
@@ -67,8 +67,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: M06-PARALLEL-LANE
@@ -87,8 +87,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: M07-PARALLEL-LANE
@@ -109,8 +109,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: M08-PARALLEL-LANE
@@ -130,8 +130,8 @@ active:
     migration_reservation: null
     consent_scope: planning-only-until-new-scope-approved
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
   - task_id: CROSS-CUTTING-QA
@@ -150,8 +150,8 @@ active:
     migration_reservation: null
     consent_scope: audit-planning; executable test changes require applicable scope
     completion_signal: Work Done and Submitted
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
-    last_acknowledged_broadcast: 24
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    last_acknowledged_broadcast: 25
     required_broadcast: null
 
 rules:
