@@ -1,5 +1,5 @@
-version: 21
-latest_sequence: 24
+version: 22
+latest_sequence: 25
 canonical_alert_text: New changes have been merged — please merge these changes into your branch first, then resume your own work.
 
 broadcasts:
@@ -477,6 +477,37 @@ broadcasts:
       - agent/cross-cutting-qa-security-current
     mandatory: true
 
+
+  - sequence: 25
+    trigger: bounded-delivery-batch-governance-promotion
+    merged_pr: 130
+    merged_branch: supervisor/bounded-delivery-batch-mode
+    submitted_head_sha: 9801ebcaee8f2c67279e44f61beff5d90c353901
+    merged_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-bounded-delivery-batch-sync
+    changed_areas:
+      - interactive and scheduled development now default to one bounded delivery batch rather than chat-sized micro-milestones
+      - default target is one approved work package or 2-5 tightly related sub-slices in the same approved dependency chain
+      - implementation, tests, security review, PR, exact-head CI, guarded merge and post-merge synchronization may remain in one operator turn
+      - PR, CI and merge boundaries no longer force an operator stop by themselves
+      - exact-head CI refresh budget is one normal consolidated refresh plus at most one later terminal recheck after useful work or a material transition
+      - Issue 36 and all consent, security, migration/data-safety, write-ownership and external-evidence gates remain fail-closed
+    contract_changes:
+      - one-turn execution unit is now a bounded delivery batch
+      - batching increases throughput but never expands authorization
+      - bookkeeping promotion of this already-issued Broadcast 25 does not recursively create Broadcast 26
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
 recipient_states:
   security/workflow-regression-guard-2026-09-15:
     state: sync-required
@@ -485,39 +516,39 @@ recipient_states:
     last_synced_main_sha: 213cccb1964f33232bf8a3054a0e41f573e75e63
   supervisor/m03-governance-hold-current:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   agent/m04-character-library-current:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   agent/m05-content-memory-current:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   agent/m06-audio-production-current:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   agent/m07-storyboard-timeline-current:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   agent/m08-video-provider-router:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
   agent/cross-cutting-qa-security-current:
     state: synchronized
-    required_sequence: 24
-    last_acknowledged_sequence: 24
-    last_synced_main_sha: 5c09918e6d1c0f06aa4d0890c58921f94466e509
+    required_sequence: 25
+    last_acknowledged_sequence: 25
+    last_synced_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
 
 rules:
   - Supervisor increments latest_sequence after a successful merge to main only when that merge introduces new material state active agents must observe before resuming.
