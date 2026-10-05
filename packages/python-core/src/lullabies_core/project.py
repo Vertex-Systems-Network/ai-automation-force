@@ -17,6 +17,7 @@ from .common import (
     StrictModel,
     TaxonomyValue,
     TimelineId,
+    WorkspaceId,
     WorldId,
 )
 
@@ -78,6 +79,7 @@ class ProviderPolicyRef(StrictModel):
 class Project(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     project_id: ProjectId
+    workspace_id: WorkspaceId
     title: str = Field(min_length=1, max_length=240)
     status: ProjectStatus = ProjectStatus.DRAFT
     audience: AudienceProfile
