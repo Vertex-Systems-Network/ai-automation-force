@@ -28,18 +28,24 @@ Before mutation:
 4. Revalidate any active lease/single-writer state before touching a shared mutation surface.
 5. Continue accepted existing work before inventing unrelated work unless the repository's own roadmap says otherwise.
 
-## Bounded delivery batch mode
-Scheduled and interactive development should optimize for **completed delivery units**, not chat-sized micro-steps.
+## Adaptive delivery train mode
+Scheduled and interactive development optimize for **maximum safe dependency closure**, not a fixed number of sub-slices.
 
-Within an already-authorized scope, the default batch is:
-- one whole approved work package; or
-- 2–5 tightly related sub-slices in the same milestone/dependency chain.
+For every authorized invocation:
+1. resolve the exact live repository state and current consent scope;
+2. build the dependency-safe ready frontier;
+3. execute all non-conflicting ready work;
+4. park soft-blocked lanes and continue independent ready lanes;
+5. integrate reviewable PRs through exact-head gates;
+6. repair current-change test/CI failures in the same invocation when no new authority is required;
+7. recompute the frontier after material transitions;
+8. stop only when no eligible work remains or a hard gate blocks every remaining path.
 
-A single batch may continue through implementation, targeted tests, security review, PR creation, exact-head CI, evidence-backed fixes, guarded merge, post-merge reconciliation and the next immediately dependent in-scope slice. A PR/CI/merge boundary is not by itself a reason to stop.
+There is no fixed 2–5 sub-slice limit. One invocation may carry multiple related PR/CI/merge/post-merge cycles within the same approved work package or dependency train.
 
-When remote checks are non-terminal, use the exact-head refresh budget from `AGENTS.md`: continue useful non-conflicting work, then perform at most one later terminal recheck for that same head in the turn. Never tight-poll.
+A queued runner, pending CI lane, first fixable failure, completed PR, or post-merge synchronization is not by itself a completion condition. Continue other useful authorized work while preserving the exact-head refresh budget and never tight-poll.
 
-Batching does not expand standing consent and does not cross a new development-consent scope, external/admin/provider gate, destructive migration boundary, security isolation boundary, or write-ownership conflict. Unrelated modules must not be grouped merely to increase batch size.
+Hard gates remain fail-closed: new consent scope, external/admin/provider/production evidence, destructive/newly risky migration authority, security isolation, unresolved write ownership/contract conflict, or runtime/tool limits that make further evidence-backed execution unsafe.
 
 ## Continuous forward progress — no idle/pause behavior
 Scheduled AI must keep advancing authorized actionable work during the run. A pending CI/runner, open review, external dependency, blocked PR/MR, unresolved Issue or one failed action is not completion and must not make the scheduled program idle.
