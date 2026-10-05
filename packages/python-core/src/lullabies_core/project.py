@@ -5,6 +5,7 @@ from typing import Annotated
 from pydantic import Field, model_validator
 
 from .common import (
+    DEFAULT_WORKSPACE_ID,
     SCHEMA_VERSION,
     AuditFields,
     CharacterId,
@@ -17,7 +18,6 @@ from .common import (
     StrictModel,
     TaxonomyValue,
     TimelineId,
-    DEFAULT_WORKSPACE_ID,
     WorkspaceId,
     WorldId,
 )
