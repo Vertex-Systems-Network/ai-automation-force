@@ -463,6 +463,12 @@
       "title": "Title",
       "type": "string"
     },
+    "workspace_id": {
+      "default": "00000000-0000-4000-8000-000000000017",
+      "format": "uuid",
+      "title": "Workspace Id",
+      "type": "string"
+    },
     "world_ids": {
       "items": {
         "pattern": "^WRL-[0-9]{6,20}$",
