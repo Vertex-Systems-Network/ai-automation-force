@@ -103,6 +103,35 @@ class PostgresWorkspaceRepository:
             )
         return row
 
+    def set_active_character_version(
+        self,
+        connection: Connection,
+        character_external_id: str,
+        version_external_id: str,
+        workspace_id: UUID,
+    ) -> RowMapping:
+        """Set a character pointer only after both IDs resolve in one workspace."""
+        character = self.get_root(
+            connection, "characters", character_external_id, workspace_id
+        )
+        version = self.get_character_version(
+            connection, version_external_id, workspace_id
+        )
+        if version["character_id"] != character["id"]:
+            raise PersistenceNotFoundError(
+                f"character version {version_external_id} was not found for "
+                f"character {character_external_id} in workspace {workspace_id}"
+            )
+        self.database.update_by_id(
+            connection,
+            "characters",
+            character["id"],
+            {"active_version_id": version["id"]},
+        )
+        return self.get_root(
+            connection, "characters", character_external_id, workspace_id
+        )
+
     def create_root(
         self,
         connection: Connection,
