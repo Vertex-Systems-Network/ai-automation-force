@@ -35,7 +35,7 @@ class World(StrictModel):
 class Location(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     location_id: LocationId
-    workspace_id: WorkspaceId
+    workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID
     world_id: WorldId | None = None
     name: str = Field(min_length=1, max_length=160)
     description: str = ""
@@ -47,7 +47,7 @@ class Location(StrictModel):
 class Prop(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     prop_id: PropId
-    workspace_id: WorkspaceId
+    workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID
     name: str = Field(min_length=1, max_length=160)
     description: str = ""
     canonical_reference_asset_ids: list[AssetId] = Field(default_factory=list)
@@ -58,7 +58,7 @@ class Prop(StrictModel):
 class StyleProfile(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     style_profile_id: StyleProfileId
-    workspace_id: WorkspaceId
+    workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID
     name: str = Field(min_length=1, max_length=160)
     treatment: list[str] = Field(default_factory=list)
     palette: list[str] = Field(default_factory=list)
@@ -73,7 +73,7 @@ class StyleProfile(StrictModel):
 class VoiceProfile(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     voice_profile_id: VoiceProfileId
-    workspace_id: WorkspaceId
+    workspace_id: WorkspaceId = DEFAULT_WORKSPACE_ID
     name: str = Field(min_length=1, max_length=160)
     presentation: str
     language: str = Field(min_length=2, max_length=32)
