@@ -97,6 +97,7 @@ M03_WP6_SHARE_TABLES = {"delivery_share_links"}
 M03_WP6_POLICY_TABLES = {"asset_delivery_policies"}
 M03_WP7_LIFECYCLE_TABLES = {"asset_lifecycle_states", "asset_lifecycle_events"}
 M03_WP7_EXPORT_TABLES = {"export_staging_objects"}
+M04_WP1A_TABLES = {"workspaces"}
 
 
 def alembic_config() -> Config:
@@ -464,7 +465,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
 
         command.downgrade(config, "20260901_0015")
         m15_tables = set(inspect(engine).get_table_names(schema="core"))
-        pre_export_tables = EXPECTED_CORE_TABLES - M03_WP7_EXPORT_TABLES
+        pre_export_tables = EXPECTED_CORE_TABLES - M03_WP7_EXPORT_TABLES - M04_WP1A_TABLES
         assert m15_tables == pre_export_tables
 
         command.downgrade(config, "20260901_0014")
