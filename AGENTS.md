@@ -37,35 +37,49 @@ Keep the compact layer bounded:
 
 Before reporting a meaningful milestone as complete, blocked, verifying, or waiting, reconcile the compact state, rolling journal when a meaningful transition occurred, coordination queue when changed, and Runner Benchmark when changed. If durable state cannot be written, do not claim full completion.
 
-## One operator turn = one bounded delivery batch
+## One operator turn = one adaptive delivery train
 
-By default, one operator `continue` / `resume` turn executes the **largest safe contiguous delivery batch** inside the currently approved scope and dependency chain.
+By default, one operator `continue` / `resume` / `next` turn executes the **maximum safe ready-work frontier** inside the currently approved scope and dependency graph. There is **no fixed sub-slice count cap**.
 
-Default batch target:
-- one whole approved work package; or
-- **2–5 tightly related sub-slices** inside the same approved milestone when that is the natural delivery unit.
+At the start of the turn and after every material transition, recompute the ready frontier:
+1. include only work already authorized by the current consent scope;
+2. include only dependency-satisfied work with valid write ownership/contracts/migration state;
+3. execute all non-conflicting eligible work that can safely advance;
+4. integrate logically reviewable changes through exact-head gates;
+5. recompute and continue until no eligible in-scope work remains.
 
-A batch may carry the same scope through:
-- live-state / instruction reconciliation;
-- implementation of related sub-slices;
-- targeted tests and security/adversarial review;
-- PR creation and exact-head review;
-- CI observation and evidence-backed fixes;
-- guarded merge;
-- post-merge state/branch synchronization;
-- the next immediately dependent sub-slice when it remains inside the same approved scope.
+An adaptive delivery train may contain multiple tightly related implementation, test, security-review, PR, CI, fix, merge, synchronization, and immediately dependent delivery cycles. Multiple PRs are allowed inside the same approved work package/dependency train when keeping them separate improves reviewability or reversibility. A PR/CI/merge boundary is a lifecycle stage, not an operator-stop boundary.
 
-Do **not** end a batch merely because a branch, PR, CI, merge, or post-merge boundary was reached. Those are lifecycle stages, not automatic operator-stop points.
+### Soft blockers do not end the train
 
-Stop or split the batch only when continuing would cross a real boundary, including:
-- a new consent scope or materially different milestone;
-- an unresolved external/admin/provider/production evidence gate;
+When one lane is waiting on CI, a runner, review state, or another non-terminal remote check, park that lane and continue other independent in-scope work. A first test/CI failure caused by the current changes is normally a repair signal: diagnose, patch, run the relevant local/scoped verification, create a fresh exact head, and continue verification in the same turn.
+
+Do not stop merely to report:
+- the first fixable test failure;
+- one queued/running CI lane;
+- one completed PR when additional dependency-safe work in the same approved train is ready;
+- post-merge synchronization that can be completed safely in the same turn.
+
+### Hard-stop conditions
+
+Stop the train only when every remaining in-scope path is blocked by a real boundary, including:
+- a new or materially expanded consent scope;
+- external/admin/provider/production evidence that cannot be obtained from the current authorized context;
 - a destructive or newly risky migration/data operation requiring separate authority;
-- a security incident or invariant that requires isolation;
-- a write-ownership/dependency conflict;
-- required remote checks that remain non-terminal after the allowed refresh budget and no other safe in-scope work remains.
+- a security incident/invariant that requires isolation before further mutation;
+- an unresolved write-ownership/contract/dependency conflict that cannot be safely repaired within scope;
+- an environment/tool execution limit that prevents evidence-backed continuation.
 
-Do not combine unrelated modules merely to make the batch larger. Batching increases throughput; it never expands authorization or weakens exact-head, security, migration, review, rights, budget, or external-evidence gates.
+Do not combine unrelated work merely to make the train larger. The train maximizes completion of the **approved dependency closure**, not arbitrary repository breadth. Adaptive batching never expands authorization or weakens exact-head CI, security, migration/data-safety, review, rights, budget, provider/production, or external-evidence gates.
+
+### Throughput discipline
+
+- Batch compatible read-only evidence calls and repository searches.
+- Parallelize independent read/review/planning operations where the tool/runtime supports it.
+- Serialize canonical mutations when ordering matters.
+- Prefer one coherent implementation commit/PR per reviewable unit, but do not force an operator round-trip between related units.
+- Persist/checkpoint only on material state transitions; status-only commits remain forbidden.
+- After each merge or material fix, refresh only the state needed to compute the next ready frontier.
 
 ## Remote-call and CI budget
 
