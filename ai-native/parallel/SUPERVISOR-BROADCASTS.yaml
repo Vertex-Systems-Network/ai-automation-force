@@ -508,6 +508,38 @@ broadcasts:
       - agent/cross-cutting-qa-security-current
     mandatory: true
 
+
+  - sequence: 26
+    trigger: adaptive-delivery-train-governance-promotion
+    merged_pr: 133
+    merged_branch: supervisor/adaptive-delivery-train
+    submitted_head_sha: 3fdb564c271500d83456e476148c9a6f78422b86
+    merged_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
+    alert: New changes have been merged — please merge these changes into your branch first, then resume your own work.
+    classification: mandatory-adaptive-delivery-train-sync
+    changed_areas:
+      - interactive and scheduled development now use an adaptive delivery train with no fixed sub-slice cap
+      - each turn repeatedly computes the authorized dependency-safe ready frontier
+      - soft-blocked CI/runner/review lanes may be parked while independent in-scope work advances
+      - fixable current-change test/CI failures are repaired and reverified in the same turn
+      - multiple related PR/CI/merge/post-merge cycles may remain inside one approved dependency train
+      - checkpointing is material-transition-only and status-only churn remains forbidden
+      - Issue 36 and all consent, exact-head CI, security, migration/data-safety, write-ownership/contracts, provider/production, budget/rights and external-evidence gates remain fail-closed
+    contract_changes:
+      - fixed 2-5 sub-slice limit is removed from active execution policy
+      - the execution unit is the maximum safe authorized dependency closure available in the current turn
+      - bookkeeping promotion of this already-issued Broadcast 26 does not recursively create Broadcast 27
+    schema_migration_changes: []
+    recipients:
+      - supervisor/m03-governance-hold-current
+      - agent/m04-character-library-current
+      - agent/m05-content-memory-current
+      - agent/m06-audio-production-current
+      - agent/m07-storyboard-timeline-current
+      - agent/m08-video-provider-router
+      - agent/cross-cutting-qa-security-current
+    mandatory: true
+
 recipient_states:
   security/workflow-regression-guard-2026-09-15:
     state: sync-required
