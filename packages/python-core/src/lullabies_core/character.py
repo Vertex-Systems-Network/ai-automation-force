@@ -19,6 +19,7 @@ from .common import (
     SchemaVersion,
     StrictModel,
     VoiceProfileId,
+    WorkspaceId,
 )
 
 
@@ -79,6 +80,7 @@ class CharacterLock(StrictModel):
 class Character(StrictModel):
     schema_version: SchemaVersion = SCHEMA_VERSION
     character_id: CharacterId
+    workspace_id: WorkspaceId
     name: str = Field(min_length=1, max_length=160)
     active_version_id: CharacterVersionId
     lock: CharacterLock
