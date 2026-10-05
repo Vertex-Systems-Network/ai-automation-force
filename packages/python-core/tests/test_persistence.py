@@ -19,6 +19,7 @@ from lullabies_core import (
     PersistenceConflictError,
     PersistenceError,
     PersistenceNotFoundError,
+    PersistenceShapeError,
     PostgresProductionRepository,
     PostgresWorkspaceRepository,
     ProductionLineageBundle,
