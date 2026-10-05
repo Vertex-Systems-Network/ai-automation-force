@@ -83,6 +83,28 @@ class PostgresWorkspaceRepository:
             )
         return self.get_root(connection, table_name, external_id, workspace_id)
 
+    def update_root(
+        self,
+        connection: Connection,
+        table_name: WorkspaceRootTable,
+        external_id: str,
+        workspace_id: UUID,
+        values: dict[str, object],
+    ) -> RowMapping:
+        """Update a root only after resolving it inside the requested workspace."""
+        row = self.get_root(connection, table_name, external_id, workspace_id)
+        supplied_workspace = values.get("workspace_id")
+        if supplied_workspace is not None and supplied_workspace != workspace_id:
+            raise PersistenceShapeError(
+                f"{table_name} workspace does not match requested workspace"
+            )
+        update_values = dict(values)
+        update_values.pop("id", None)
+        update_values.pop("external_id", None)
+        update_values["workspace_id"] = workspace_id
+        self.database.update_by_id(connection, table_name, row["id"], update_values)
+        return self.get_root(connection, table_name, external_id, workspace_id)
+
     def list_roots(
         self,
         connection: Connection,
