@@ -65,6 +65,21 @@ A QA agent independently evaluates implementation assumptions, race conditions, 
 
 A planning/contract agent may prepare future dependency-ready work without touching executable behavior unless applicable development consent exists. Contract changes that affect executable behavior follow the consent gate.
 
+## Supervisor bounded delivery batches
+
+The Supervisor should optimize the integration lane for **completed dependency-safe batches**, not one-message micro-milestones.
+
+Inside one already-approved milestone/work package, the Supervisor may in one operator turn:
+- review and integrate multiple tightly related agent submissions;
+- apply evidence-backed fixes;
+- advance PRs through exact-head CI and guarded merge;
+- synchronize affected branches after each material merge;
+- continue the next immediately dependent sub-slice when write ownership, contracts, migration state and consent remain valid.
+
+Default target is one whole approved work package or 2–5 tightly related sub-slices. Do not create artificial PR boundaries solely to force another operator round-trip, but keep commits/PRs logically reviewable and reversible.
+
+This does not permit overlapping writers, duplicate migration reservations, stale-base promotion, unrelated module bundling, bypass of required CI/review/security gates, or execution beyond approved consent.
+
 ## Write ownership rule
 
 Default rule:
