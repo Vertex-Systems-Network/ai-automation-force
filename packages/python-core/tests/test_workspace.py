@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 from pydantic import ValidationError
@@ -7,7 +7,7 @@ from lullabies_core.workspace import Workspace
 
 
 def test_workspace_accepts_stable_slug_and_identity() -> None:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     workspace = Workspace(
         workspace_id="WSP-000017",
         external_id="workspace-bootstrap-legacy",
@@ -21,7 +21,7 @@ def test_workspace_accepts_stable_slug_and_identity() -> None:
 
 
 def test_workspace_rejects_invalid_slug() -> None:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     with pytest.raises(ValidationError):
         Workspace(
             workspace_id="WSP-000017",
