@@ -2,7 +2,7 @@ version: 1
 compact_state_path: ai-native/parallel/state
 repository: Vertex-Systems-Network/ai-automation-force
 observed_default_branch: main
-observed_main_sha: 7e426d52839648af0087f91bef6c39a42abf2c16
+observed_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
 active_issue: 36
 active_pr: null
 tracked_security_pr: null
@@ -10,15 +10,15 @@ active_branch: supervisor/m03-governance-hold-current
 current_milestone: M03-GOV-HOLD
 milestone_status: WAITING_EXTERNAL
 last_completed_milestone:
-  id: PR-130-BOUNDED-DELIVERY-BATCH-GOVERNANCE
-  merged_main_sha: 26ef394a1f0b00ae4b0dff3f73cf3025d119f9ff
+  id: PR-133-ADAPTIVE-DELIVERY-TRAIN-GOVERNANCE
+  merged_main_sha: b8b0ef32ac67c5bad16dd23a6ed98ee89ef6e03d
 exact_next_safe_action: verify Issue 36 live protected-main evidence from an admin-capable context; current connector cannot write branch protection; after closure re-read live main, revalidate M04 ownership/migration/security, reserve exactly one revision, and implement approved Issue 114 without another consent round
 pending_runner_ids: []
 blocked_runner_ids: []
 current_blockers:
   - Issue 36 requires live protected-main administrator evidence before M03 governance acceptance and M04 executable entry
 coordination:
-  latest_broadcast_sequence: 25
+  latest_broadcast_sequence: 26
   merge_queue_pr: null
   merge_queue_state: empty
   runner_benchmark: ai-native/parallel/state/RUNNER-BENCHMARK.yaml
