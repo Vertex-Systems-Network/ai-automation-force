@@ -28,13 +28,13 @@ VALUES (
 )
 ON CONFLICT (external_id) DO NOTHING;
 
-ALTER TABLE core.projects ADD COLUMN workspace_id uuid;
-ALTER TABLE core.characters ADD COLUMN workspace_id uuid;
-ALTER TABLE core.worlds ADD COLUMN workspace_id uuid;
-ALTER TABLE core.locations ADD COLUMN workspace_id uuid;
-ALTER TABLE core.props ADD COLUMN workspace_id uuid;
-ALTER TABLE core.style_profiles ADD COLUMN workspace_id uuid;
-ALTER TABLE core.voice_profiles ADD COLUMN workspace_id uuid;
+ALTER TABLE core.projects ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
+ALTER TABLE core.characters ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
+ALTER TABLE core.worlds ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
+ALTER TABLE core.locations ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
+ALTER TABLE core.props ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
+ALTER TABLE core.style_profiles ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
+ALTER TABLE core.voice_profiles ADD COLUMN workspace_id uuid DEFAULT '00000000-0000-4000-8000-000000000017';
 
 UPDATE core.projects SET workspace_id = '00000000-0000-4000-8000-000000000017' WHERE workspace_id IS NULL;
 UPDATE core.characters SET workspace_id = '00000000-0000-4000-8000-000000000017' WHERE workspace_id IS NULL;
