@@ -341,7 +341,7 @@ def test_postgresql_migration_chain_is_reversible_and_deterministic() -> None:
         with engine.connect() as connection:
             result = connection.execute(text("SELECT version_num FROM alembic_version"))
             revision = result.scalar_one()
-        assert revision == "20260901_0016"
+        assert revision == "20261005_0017"
 
         project_id = uuid4()
         with engine.begin() as connection:
